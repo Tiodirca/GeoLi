@@ -45,10 +45,10 @@ class _AreaSoltarState extends State<AreaSoltar> {
                   Image(
                     height: 140,
                     width: 140,
-                    image: AssetImage('${estado.nomeImagem}.png'),
+                    image: AssetImage('${estado.caminhoImagem}.png'),
                   ),
                   Visibility(
-                      visible: exibirGestoAcerto,
+                      visible: estado.acerto,
                       child: Positioned(
                         child: Center(
                           child: GestosWidget(
@@ -65,7 +65,7 @@ class _AreaSoltarState extends State<AreaSoltar> {
               // verificando se o data passado e igual ao nome do estado que esta aqui no widget
               if (data.data == estado.nome) {
                 setState(() {
-                  exibirGestoAcerto = true;
+                  estado.acerto = true;
                 });
                 // chamando metodo para passar confirmacao do acerto
                 MetodosAuxiliares.confirmarAcerto(Constantes.msgAcertoGesto);

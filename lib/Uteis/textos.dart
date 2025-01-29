@@ -1,6 +1,13 @@
 class Textos {
   static String nomeApp = "Libras Game";
+  static String txtTelaCarregamento = "Aguarde Carregando";
 
+  static String btnJogarNovamente = "Jogar Novamente";
+  static String btnProximoNivel = "Proximo Nivel";
+
+
+  static String tituloTelaProximoNivel =
+      "Proximo Nivel ou Jogar Novamente";
   static String tituloTelaRegioes = "Seleção de Regiãoes do Brasil";
   static String tituloTelaRegiaoCentro = "Região Centro-Oeste";
 

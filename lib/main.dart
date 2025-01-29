@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 import 'Uteis/rotas.dart';
 
-void main() {
+void main() async{
   runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
 
 class MyApp extends StatelessWidget {

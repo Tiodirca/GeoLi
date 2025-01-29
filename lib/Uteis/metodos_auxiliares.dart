@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elegant_notification/elegant_notification.dart';
 import 'package:elegant_notification/resources/arrays.dart';
 import 'package:flutter/material.dart';
+import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Uteis/constantes.dart';
 
 class MetodosAuxiliares {
@@ -13,6 +15,25 @@ class MetodosAuxiliares {
 
   static Future<String> recuperarAcerto() async {
     return acertou;
+  }
+
+  // metodo para cadastrar item
+ static resetarDadosRegiaoCentroOeste() async {
+    try {
+      // instanciando Firebase
+      var db = FirebaseFirestore.instance;
+      db
+          .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
+          .doc(Constantes
+              .fireBaseDocumentoRegiaoCentroOeste) //passando o documento
+          .set({
+        Constantes.nomeRegiaoCentroGO: false,
+        Constantes.nomeRegiaoCentroMG: false,
+        Constantes.nomeRegiaoCentroMS: false,
+      });
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   static exibirMensagens(String msg, String tipoAlerta, BuildContext context) {

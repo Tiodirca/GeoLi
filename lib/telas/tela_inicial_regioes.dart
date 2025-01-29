@@ -14,19 +14,30 @@ class TelaInicialRegioes extends StatefulWidget {
 class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
   Estado regiaoCentroOeste = Estado(
       nome: Constantes.nomeRegiaoCentroOeste,
-      nomeImagem: Constantes.gestoCentroOesteImagem);
+      caminhoImagem: Constantes.gestoCentroOesteImagem);
   Estado regiaoSul = Estado(
-      nome: Constantes.nomeRegiaoSul, nomeImagem: Constantes.gestoSulImagem);
+      nome: Constantes.nomeRegiaoSul, caminhoImagem: Constantes.gestoSulImagem);
   Estado regiaoSudeste = Estado(
       nome: Constantes.nomeRegiaoCentroOeste,
-      nomeImagem: Constantes.gestoCentroOesteImagem);
+      caminhoImagem: Constantes.gestoCentroOesteImagem);
   Estado regiaoNordeste = Estado(
       nome: Constantes.nomeRegiaoCentroOeste,
-      nomeImagem: Constantes.gestoCentroOesteImagem);
+      caminhoImagem: Constantes.gestoCentroOesteImagem);
   Estado regiaoNorte = Estado(
-      nome: Constantes.nomeRegiaoSul, nomeImagem: Constantes.gestoSulImagem);
+      nome: Constantes.nomeRegiaoSul, caminhoImagem: Constantes.gestoSulImagem);
 
-  Widget cartaoRegiao(String nomeImagem, String nomeRegiao) => SizedBox(
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
+
+
+
+
+  Widget cartaoRegiao(String nomeImagem, String nomeRegiao) =>
+      SizedBox(
         width: 130,
         height: 170,
         child: FloatingActionButton(
@@ -67,8 +78,14 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
 
   @override
   Widget build(BuildContext context) {
-    double alturaTela = MediaQuery.of(context).size.height;
-    double larguraTela = MediaQuery.of(context).size.width;
+    double alturaTela = MediaQuery
+        .of(context)
+        .size
+        .height;
+    double larguraTela = MediaQuery
+        .of(context)
+        .size
+        .width;
 
     return Scaffold(
       appBar: AppBar(
@@ -92,10 +109,8 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
         child: Wrap(
           alignment: WrapAlignment.spaceEvenly,
           children: [
-            cartaoRegiao(regiaoCentroOeste.nomeImagem, regiaoCentroOeste.nome),
-            cartaoRegiao(regiaoSul.nomeImagem, regiaoSul.nome),
-            cartaoRegiao(regiaoCentroOeste.nomeImagem, regiaoCentroOeste.nome),
-            cartaoRegiao(regiaoSul.nomeImagem, regiaoSul.nome)
+            cartaoRegiao(regiaoCentroOeste.caminhoImagem, regiaoCentroOeste.nome),
+            cartaoRegiao(regiaoSul.caminhoImagem, regiaoSul.nome),
           ],
         ),
       ),
