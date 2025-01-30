@@ -8,4 +8,5 @@ class PaletaCores {
   static const Color corMagenta = Color(0xfF2c0640);
   static const Color corAzul = Color(0xff0e4bef);
   static const Color corAzulEscuro = Color(0xff061640);
+  static const Color corVerde = Color(0xff368364);
 }

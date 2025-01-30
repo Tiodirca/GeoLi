@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
+import 'package:geoli/Uteis/constantes_caminhos_imagens.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 
 import '../Uteis/paleta_cores.dart';
@@ -8,7 +9,7 @@ import '../Uteis/textos.dart';
 class TelaProximoNivel extends StatelessWidget {
   const TelaProximoNivel({Key? key, required this.nomeNivel}) : super(key: key);
 
- final String nomeNivel;
+  final String nomeNivel;
 
   Widget cardOpcoes(
           String nomeImagem, String nomeOpcao, BuildContext context) =>
@@ -24,6 +25,18 @@ class TelaProximoNivel extends StatelessWidget {
                 MetodosAuxiliares.resetarDadosRegiaoCentroOeste();
                 Navigator.pushReplacementNamed(
                     context, Constantes.rotaTelaRegiaoCentroOeste);
+              } else if (nomeNivel == Constantes.nomeRegiaoSul) {
+                MetodosAuxiliares.resetarDadosRegiaoSul();
+                Navigator.pushReplacementNamed(
+                    context, Constantes.rotaTelaRegiaoSul);
+              }
+            } else {
+              if (nomeNivel == Constantes.nomeRegiaoCentroOeste) {
+                Navigator.pushReplacementNamed(
+                    context, Constantes.rotaTelaRegiaoSul);
+              } else if (nomeNivel == Constantes.nomeRegiaoSul) {
+                // Navigator.pushReplacementNamed(
+                //     context, Constantes.rotaTelaRegiaoSul);
               }
             }
           },
@@ -57,12 +70,13 @@ class TelaProximoNivel extends StatelessWidget {
         child: Card(
           color: Colors.white,
           shape: const RoundedRectangleBorder(
+            side: BorderSide(color: PaletaCores.corAzulMagenta),
               borderRadius: BorderRadius.all(Radius.circular(30))),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
-                Textos.tituloTelaProximoNivel,
+                Textos.btnProximoNivel,
                 textAlign: TextAlign.center,
                 style:
                     const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -71,9 +85,9 @@ class TelaProximoNivel extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  cardOpcoes(Constantes.btnJogarNovamenteGesto,
+                  cardOpcoes(CaminhosImagens.btnJogarNovamenteGesto,
                       Textos.btnJogarNovamente, context),
-                  cardOpcoes(Constantes.btnProximoNivelGesto,
+                  cardOpcoes(CaminhosImagens.btnProximoNivelGesto,
                       Textos.btnProximoNivel, context)
                 ],
               )

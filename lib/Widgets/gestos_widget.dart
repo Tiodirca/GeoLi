@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geoli/Uteis/paleta_cores.dart';
 
 class GestosWidget extends StatelessWidget {
   const GestosWidget(
@@ -19,7 +20,7 @@ class GestosWidget extends StatelessWidget {
         child: Card(
           color: Colors.white,
             shape: RoundedRectangleBorder(
-                side: BorderSide(color: Colors.black),
+                side: BorderSide(color: PaletaCores.corAzulMagenta),
                 borderRadius: const BorderRadius.all(Radius.circular(10))),
             child: Stack(
               alignment: Alignment.center,

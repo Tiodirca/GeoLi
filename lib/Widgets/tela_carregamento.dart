@@ -14,14 +14,16 @@ class TelaCarregamento extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         width: larguraTela,
         height: alturaTela,
-        color: PaletaCores.corOuro,
+        color: Colors.white,
         child: Center(
           child: SizedBox(
             width: larguraTela * 0.9,
             height: 150,
             child: Card(
-              shape: const RoundedRectangleBorder(
+              shape: RoundedRectangleBorder(
+                  side: BorderSide(color: PaletaCores.corLaranja),
                   borderRadius: BorderRadius.all(Radius.circular(30))),
+              color: Colors.white,
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -36,8 +38,7 @@ class TelaCarregamento extends StatelessWidget {
                       height: 20,
                     ),
                     const CircularProgressIndicator(
-                      valueColor:
-                          AlwaysStoppedAnimation(PaletaCores.corOuro),
+                      valueColor: AlwaysStoppedAnimation(PaletaCores.corOuro),
                       strokeWidth: 3.0,
                     )
                   ],

@@ -3,17 +3,18 @@ class Textos {
   static String txtTelaCarregamento = "Aguarde Carregando";
 
   static String btnJogarNovamente = "Jogar Novamente";
-  static String btnProximoNivel = "Proximo Nivel";
+  static String btnProximoNivel = "Próximo Nivel";
 
-
-  static String tituloTelaProximoNivel =
-      "Proximo Nivel ou Jogar Novamente";
-  static String tituloTelaRegioes = "Seleção de Regiãoes do Brasil";
+  static String tituloTelaRegioes = "Seleção das Regiões do Brasil";
   static String tituloTelaRegiaoCentro = "Região Centro-Oeste";
+  static String tituloTelaRegiaoSul = "Região Sul";
 
-  static String descricaoAreaGestos =
-      "Selecione o gesto e arraste até o Estado correto";
+  static String descricaoTelaRegioes =
+      "Selecione um dos níveis para jogar ou para desbloquear os próximos níveis";
+  static String descricaoAreaEstado =
+      "Clique encima do gesto e arraste até um dos estados";
+  static String descricaoAreaGestos = "Selecione o gesto em libras";
 
-  static String msgAcertou = "Parabens você Acertou";
-  static String msgErrouEstado = "Tente novamente, est não é o estado correto";
+  static String msgAcertou = "Parabéns você Acertou";
+  static String msgErrouEstado = "Errado";
 }

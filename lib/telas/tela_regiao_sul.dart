@@ -12,51 +12,53 @@ import 'package:geoli/Widgets/tela_proximo_nivel.dart';
 
 import '../Uteis/textos.dart';
 
-class TelaRegiaoCentroOeste extends StatefulWidget {
-  const TelaRegiaoCentroOeste({super.key});
+class TelaRegiaoSul extends StatefulWidget {
+  const TelaRegiaoSul({super.key});
 
   @override
-  State<TelaRegiaoCentroOeste> createState() => _TelaRegiaoCentroOesteState();
+  State<TelaRegiaoSul> createState() => _TelaRegiaoSulState();
 }
 
-class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
+class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
-  Estado estadoGO = Estado(
-      nome: Constantes.nomeRegiaoCentroGO,
-      caminhoImagem: CaminhosImagens.regiaoCentroGOImagem,
+
+  Estado estadoPR = Estado(
+      nome: Constantes.nomeRegiaoSulPR,
+      caminhoImagem: CaminhosImagens.regiaoSulPRImagem,
       acerto: false);
-  Estado estadoMG = Estado(
-      nome: Constantes.nomeRegiaoCentroMG,
-      caminhoImagem: CaminhosImagens.regiaoCentroMGImagem,
+  Estado estadoRS = Estado(
+      nome: Constantes.nomeRegiaoSulRS,
+      caminhoImagem: CaminhosImagens.regiaoSulRSImagem,
       acerto: false);
-  Estado estadoMS = Estado(
-      nome: Constantes.nomeRegiaoCentroMS,
-      caminhoImagem: CaminhosImagens.regiaoCentroMSImagem,
+  Estado estadoSC = Estado(
+      nome: Constantes.nomeRegiaoSulSC,
+      caminhoImagem: CaminhosImagens.regiaoSulSCImagem,
       acerto: false);
 
-  Gestos gestoGO = Gestos(
-      nomeGesto: Constantes.nomeRegiaoCentroGO,
-      nomeImagem: CaminhosImagens.gestoCentroGO);
-  Gestos gestoMG = Gestos(
-      nomeGesto: Constantes.nomeRegiaoCentroMG,
-      nomeImagem: CaminhosImagens.gestoCentroMG);
-  Gestos gestoMS = Gestos(
-      nomeGesto: Constantes.nomeRegiaoCentroMS,
-      nomeImagem: CaminhosImagens.gestoCentroMS);
+  Gestos gestoPR = Gestos(
+      nomeGesto: Constantes.nomeRegiaoSulPR,
+      nomeImagem: CaminhosImagens.gestoSulPR);
+  Gestos gestoRS = Gestos(
+      nomeGesto: Constantes.nomeRegiaoSulRS,
+      nomeImagem: CaminhosImagens.gestoSulRS);
+  Gestos gestoSC = Gestos(
+      nomeGesto: Constantes.nomeRegiaoSulSC,
+      nomeImagem: CaminhosImagens.gestoSulSC);
   List<Estado> estadosCentro = [];
   List<Gestos> gestosCentro = [];
   bool exibirTelaCarregamento = true;
   bool exibirTelaProximoNivel = false;
+  String nomeTela = Constantes.nomeRegiaoSul;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     // carregando os estados e gestos nas listas utilizadas para exibicao
-    estadosCentro.addAll([estadoGO, estadoMS, estadoMG]);
-    gestosCentro.addAll([gestoGO, gestoMG, gestoMS]);
+    estadosCentro.addAll([estadoPR, estadoRS, estadoSC]);
+    gestosCentro.addAll([gestoPR, gestoSC, gestoRS]);
     // chamando metodo para fazer busca no banco de dados
-    realizarBuscaDadosFireBase(Constantes.fireBaseDocumentoRegiaoCentroOeste);
+    realizarBuscaDadosFireBase(Constantes.fireBaseDocumentoRegiaoSul);
   }
 
   //metodo para realizar busca no bando de dados
@@ -66,12 +68,11 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
       var db = FirebaseFirestore.instance;
       db
           .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-          .doc(Constantes
-              .fireBaseDocumentoRegiaoCentroOeste) //passando o documento
+          .doc(Constantes.fireBaseDocumentoRegiaoSul) //passando o documento
           .set({
-        Constantes.nomeRegiaoCentroGO: estadoGO.acerto,
-        Constantes.nomeRegiaoCentroMG: estadoMG.acerto,
-        Constantes.nomeRegiaoCentroMS: estadoMS.acerto,
+        Constantes.nomeRegiaoSulPR: estadoPR.acerto,
+        Constantes.nomeRegiaoSulSC: estadoSC.acerto,
+        Constantes.nomeRegiaoSulRS: estadoRS.acerto,
       });
     } catch (e) {
       print(e.toString());
@@ -91,37 +92,37 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
         querySnapshot.data()!.forEach(
           (key, value) {
             // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
-            if (estadoMG.nome == key) {
+            if (estadoSC.nome == key) {
               setState(() {
                 // definindo que a variavel vai receber o seguinte valor
-                estadoMG.acerto = value;
+                estadoSC.acerto = value;
                 if (value) {
                   // caso a variavel for TRUE remover o item da lista
                   gestosCentro.removeWhere(
                     (element) {
-                      return element.nomeGesto == estadoMG.nome;
+                      return element.nomeGesto == estadoSC.nome;
                     },
                   );
                 }
               });
-            } else if (estadoMS.nome == key) {
+            } else if (estadoRS.nome == key) {
               setState(() {
-                estadoMS.acerto = value;
+                estadoRS.acerto = value;
                 if (value) {
                   gestosCentro.removeWhere(
                     (element) {
-                      return element.nomeGesto == estadoMS.nome;
+                      return element.nomeGesto == estadoRS.nome;
                     },
                   );
                 }
               });
-            } else if (estadoGO.nome == key) {
+            } else if (estadoPR.nome == key) {
               setState(() {
-                estadoGO.acerto = value;
+                estadoPR.acerto = value;
                 if (value) {
                   gestosCentro.removeWhere(
                     (element) {
-                      return element.nomeGesto == estadoGO.nome;
+                      return element.nomeGesto == estadoPR.nome;
                     },
                   );
                 }
@@ -188,7 +189,7 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
         appBar: AppBar(
             title: Visibility(
                 visible: !exibirTelaCarregamento,
-                child: Text(Textos.tituloTelaRegiaoCentro)),
+                child: Text(Textos.tituloTelaRegiaoSul)),
             backgroundColor: Colors.white,
             leading: Visibility(
               visible: !exibirTelaCarregamento,
@@ -228,16 +229,16 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
                             ),
                           ),
                           AreaSoltar(
-                            estado: estadoGO,
-                            gesto: gestoGO,
+                            estado: estadoRS,
+                            gesto: gestoRS,
                           ),
                           AreaSoltar(
-                            estado: estadoMG,
-                            gesto: gestoMG,
+                            estado: estadoPR,
+                            gesto: gestoPR,
                           ),
                           AreaSoltar(
-                            estado: estadoMS,
-                            gesto: gestoMS,
+                            estado: estadoSC,
+                            gesto: gestoSC,
                           ),
                         ],
                       ),
@@ -245,8 +246,7 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
                         child: Center(
                             child: Visibility(
                           visible: exibirTelaProximoNivel,
-                          child: TelaProximoNivel(
-                              nomeNivel: Constantes.nomeRegiaoCentroOeste),
+                          child: TelaProximoNivel(nomeNivel: nomeTela),
                         )),
                       )
                     ],

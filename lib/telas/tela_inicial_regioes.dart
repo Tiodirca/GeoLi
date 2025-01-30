@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Uteis/constantes.dart';
+import 'package:geoli/Uteis/constantes_caminhos_imagens.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 
@@ -14,30 +15,33 @@ class TelaInicialRegioes extends StatefulWidget {
 class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
   Estado regiaoCentroOeste = Estado(
       nome: Constantes.nomeRegiaoCentroOeste,
-      caminhoImagem: Constantes.gestoCentroOesteImagem);
+      caminhoImagem: CaminhosImagens.gestoCentroOesteImagem,
+      acerto: true);
   Estado regiaoSul = Estado(
-      nome: Constantes.nomeRegiaoSul, caminhoImagem: Constantes.gestoSulImagem);
+      nome: Constantes.nomeRegiaoSul,
+      caminhoImagem: CaminhosImagens.gestoSulImagem,
+      acerto: true);
   Estado regiaoSudeste = Estado(
-      nome: Constantes.nomeRegiaoCentroOeste,
-      caminhoImagem: Constantes.gestoCentroOesteImagem);
+      nome: Constantes.nomeRegiaoSudeste,
+      caminhoImagem: CaminhosImagens.gestoSudesteImagem,
+      acerto: true);
   Estado regiaoNordeste = Estado(
       nome: Constantes.nomeRegiaoCentroOeste,
-      caminhoImagem: Constantes.gestoCentroOesteImagem);
+      caminhoImagem: CaminhosImagens.gestoCentroOesteImagem,
+      acerto: true);
   Estado regiaoNorte = Estado(
-      nome: Constantes.nomeRegiaoSul, caminhoImagem: Constantes.gestoSulImagem);
+      nome: Constantes.nomeRegiaoSul,
+      caminhoImagem: CaminhosImagens.gestoSulImagem,
+      acerto: true);
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
   }
 
-
-
-
-  Widget cartaoRegiao(String nomeImagem, String nomeRegiao) =>
-      SizedBox(
+  Widget cartaoRegiao(String nomeImagem, String nomeRegiao) => Container(
+    margin: EdgeInsets.only(bottom: 20),
         width: 130,
         height: 170,
         child: FloatingActionButton(
@@ -48,13 +52,16 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
               Navigator.pushReplacementNamed(
                   context, Constantes.rotaTelaRegiaoCentroOeste);
             } else if (nomeRegiao == regiaoSul.nome) {
-              // Navigator.pushReplacementNamed(
-              //     context, Constantes.rotaTelaRegiaoCentroOeste);
+              Navigator.pushReplacementNamed(
+                  context, Constantes.rotaTelaRegiaoSul);
+            } else if (nomeRegiao == regiaoSudeste.nome) {
+              Navigator.pushReplacementNamed(
+                  context, Constantes.rotaTelaRegiaoSul);
             }
           },
           shape: RoundedRectangleBorder(
               side: BorderSide(color: PaletaCores.corOuro, width: 2),
-              borderRadius: const BorderRadius.all(Radius.circular(10))),
+              borderRadius: const BorderRadius.all(Radius.circular(40))),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -78,14 +85,8 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
 
   @override
   Widget build(BuildContext context) {
-    double alturaTela = MediaQuery
-        .of(context)
-        .size
-        .height;
-    double larguraTela = MediaQuery
-        .of(context)
-        .size
-        .width;
+    double alturaTela = MediaQuery.of(context).size.height;
+    double larguraTela = MediaQuery.of(context).size.width;
 
     return Scaffold(
       appBar: AppBar(
@@ -106,18 +107,43 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
         color: Colors.white,
         width: larguraTela,
         height: alturaTela,
-        child: Wrap(
-          alignment: WrapAlignment.spaceEvenly,
+        child: Column(
           children: [
-            cartaoRegiao(regiaoCentroOeste.caminhoImagem, regiaoCentroOeste.nome),
-            cartaoRegiao(regiaoSul.caminhoImagem, regiaoSul.nome),
+            SizedBox(
+                width: larguraTela,
+                child: Text(
+                  Textos.descricaoTelaRegioes,
+                  style: TextStyle(fontSize: 18),
+                  textAlign: TextAlign.center,
+                )),
+            Container(
+              height: alturaTela * 0.74,
+              width: larguraTela,
+              child: SingleChildScrollView(
+                child: Wrap(
+                  alignment: WrapAlignment.spaceAround,
+                  children: [
+                    cartaoRegiao(regiaoCentroOeste.caminhoImagem,
+                        regiaoCentroOeste.nome),
+                    Visibility(
+                        visible: regiaoSul.acerto,
+                        child: cartaoRegiao(
+                            regiaoSul.caminhoImagem, regiaoSul.nome)),
+                    Visibility(
+                        visible: regiaoSudeste.acerto,
+                        child: cartaoRegiao(
+                            regiaoSudeste.caminhoImagem, regiaoSudeste.nome)),
+                  ],
+                ),
+              ),
+            )
           ],
         ),
       ),
       bottomNavigationBar: Container(
         width: larguraTela,
         color: Colors.grey,
-        height: 100,
+        height: 60,
       ),
     );
   }
