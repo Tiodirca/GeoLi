@@ -22,7 +22,6 @@ class _AreaSoltarState extends State<AreaSoltar> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 

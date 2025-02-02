@@ -48,16 +48,16 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
   bool exibirTelaCarregamento = true;
   bool exibirTelaProximoNivel = false;
   Random random = new Random();
+  List<int> auxiliarPosicao = [];
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     // carregando os estados e gestos nas listas utilizadas para exibicao
     estadosCentro.addAll([estadoGO, estadoMS, estadoMG]);
-    int randomNumber = random.nextInt(3);
-    print(randomNumber);
-
     gestosCentro.addAll([gestoGO, gestoMG, gestoMS]);
+    gestosCentro.shuffle();
     // chamando metodo para fazer busca no banco de dados
     realizarBuscaDadosFireBase(Constantes.fireBaseDocumentoRegiaoCentroOeste);
   }
@@ -94,42 +94,18 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
         querySnapshot.data()!.forEach(
           (key, value) {
             // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
-            if (estadoMG.nome == key) {
-              setState(() {
-                // definindo que a variavel vai receber o seguinte valor
-                estadoMG.acerto = value;
-                if (value) {
-                  // caso a variavel for TRUE remover o item da lista
-                  gestosCentro.removeWhere(
-                    (element) {
-                      return element.nomeGesto == estadoMG.nome;
-                    },
-                  );
-                }
-              });
-            } else if (estadoMS.nome == key) {
-              setState(() {
-                estadoMS.acerto = value;
-                if (value) {
-                  gestosCentro.removeWhere(
-                    (element) {
-                      return element.nomeGesto == estadoMS.nome;
-                    },
-                  );
-                }
-              });
-            } else if (estadoGO.nome == key) {
-              setState(() {
-                estadoGO.acerto = value;
-                if (value) {
-                  gestosCentro.removeWhere(
-                    (element) {
-                      return element.nomeGesto == estadoGO.nome;
-                    },
-                  );
-                }
-              });
-            }
+            setState(() {
+              if (estadoMG.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    estadoMG, value, gestosCentro);
+              } else if (estadoMS.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    estadoMS, value, gestosCentro);
+              } else if (estadoGO.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    estadoGO, value, gestosCentro);
+              }
+            });
           },
         );
         setState(

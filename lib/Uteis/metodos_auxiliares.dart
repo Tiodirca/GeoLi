@@ -3,6 +3,7 @@ import 'package:elegant_notification/elegant_notification.dart';
 import 'package:elegant_notification/resources/arrays.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/estado.dart';
+import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 
@@ -26,7 +27,7 @@ class MetodosAuxiliares {
       db
           .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
           .doc(Constantes
-              .fireBaseDocumentoRegiaoCentroOeste) //passando o documento
+          .fireBaseDocumentoRegiaoCentroOeste) //passando o documento
           .set({
         Constantes.nomeRegiaoCentroGO: false,
         Constantes.nomeRegiaoCentroMG: false,
@@ -91,6 +92,23 @@ class MetodosAuxiliares {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  // metodo para remover o gesto ja acertado da lista
+  // de gestos quando voltar a jogar
+  static removerGestoLista(Estado estado, bool value,
+      List<Gestos> gestosCentro) {
+    // definindo que a variavel vai receber o seguinte valor
+    estado.acerto = value;
+    if (value) {
+      // caso a variavel for TRUE remover o item da lista
+      gestosCentro.removeWhere(
+            (element) {
+          return element.nomeGesto == estado.nome;
+        },
+      );
+    }
+    return gestosCentro;
   }
 
   static exibirMensagens(String msg, String tipoAlerta, BuildContext context) {

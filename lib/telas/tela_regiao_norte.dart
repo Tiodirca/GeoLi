@@ -90,6 +90,7 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
         [estadoAC, estadoAP, estadoAM, estadoPA, estadoRO, estadoRR, estadoTO]);
     gestosCentro.addAll(
         [gestoAC, gestoAP, gestoAM, gestoPA, gestoRO, gestoRR, gestoTO]);
+    gestosCentro.shuffle();
     // chamando metodo para fazer busca no banco de dados
     realizarBuscaDadosFireBase(Constantes.fireBaseDocumentoRegiaoNorte);
   }
@@ -129,86 +130,30 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
         querySnapshot.data()!.forEach(
           (key, value) {
             // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
-            if (estadoAC.nome == key) {
-              setState(() {
-                // definindo que a variavel vai receber o seguinte valor
-                estadoAC.acerto = value;
-                if (value) {
-                  // caso a variavel for TRUE remover o item da lista
-                  gestosCentro.removeWhere(
-                    (element) {
-                      return element.nomeGesto == estadoAC.nome;
-                    },
-                  );
-                }
-              });
-            } else if (estadoAP.nome == key) {
-              setState(() {
-                estadoAP.acerto = value;
-                if (value) {
-                  gestosCentro.removeWhere(
-                    (element) {
-                      return element.nomeGesto == estadoAP.nome;
-                    },
-                  );
-                }
-              });
-            } else if (estadoAM.nome == key) {
-              setState(() {
-                estadoAM.acerto = value;
-                if (value) {
-                  gestosCentro.removeWhere(
-                    (element) {
-                      return element.nomeGesto == estadoAM.nome;
-                    },
-                  );
-                }
-              });
-            } else if (estadoPA.nome == key) {
-              setState(() {
-                estadoPA.acerto = value;
-                if (value) {
-                  gestosCentro.removeWhere(
-                    (element) {
-                      return element.nomeGesto == estadoPA.nome;
-                    },
-                  );
-                }
-              });
-            } else if (estadoRO.nome == key) {
-              setState(() {
-                estadoRO.acerto = value;
-                if (value) {
-                  gestosCentro.removeWhere(
-                    (element) {
-                      return element.nomeGesto == estadoRO.nome;
-                    },
-                  );
-                }
-              });
-            } else if (estadoRR.nome == key) {
-              setState(() {
-                estadoRR.acerto = value;
-                if (value) {
-                  gestosCentro.removeWhere(
-                    (element) {
-                      return element.nomeGesto == estadoRR.nome;
-                    },
-                  );
-                }
-              });
-            } else if (estadoTO.nome == key) {
-              setState(() {
-                estadoTO.acerto = value;
-                if (value) {
-                  gestosCentro.removeWhere(
-                    (element) {
-                      return element.nomeGesto == estadoTO.nome;
-                    },
-                  );
-                }
-              });
-            }
+            setState(() {
+              if (estadoAC.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    estadoAC, value, gestosCentro);
+              } else if (estadoAP.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    estadoAP, value, gestosCentro);
+              } else if (estadoAM.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    estadoAM, value, gestosCentro);
+              } else if (estadoPA.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    estadoPA, value, gestosCentro);
+              } else if (estadoRO.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    estadoRO, value, gestosCentro);
+              } else if (estadoRR.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    estadoRR, value, gestosCentro);
+              } else if (estadoTO.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    estadoTO, value, gestosCentro);
+              }
+            });
           },
         );
         setState(
@@ -304,11 +249,11 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         width: Platform.isAndroid || Platform.isIOS
                             ? larguraTela
                             : larguraTela * 0.6,
-                        height: alturaTela*0.6,
+                        height: alturaTela * 0.6,
                         child: SingleChildScrollView(
                           child: Stack(
                             alignment: Alignment.center,

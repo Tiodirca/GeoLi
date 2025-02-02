@@ -62,9 +62,8 @@ class _TelaRegiaoSudesteState extends State<TelaRegiaoSudeste> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // carregando os estados e gestos nas listas utilizadas para exibicao
-    estadosCentro.addAll([estadoMG, estadoES, estadoRJ, estadoSP]);
     gestosCentro.addAll([gestoSP, gestoRJ, gestoMG, gestoES]);
+    gestosCentro.shuffle();
     // chamando metodo para fazer busca no banco de dados
     realizarBuscaDadosFireBase(Constantes.fireBaseDocumentoRegiaoSudeste);
   }
@@ -101,53 +100,21 @@ class _TelaRegiaoSudesteState extends State<TelaRegiaoSudeste> {
         querySnapshot.data()!.forEach(
           (key, value) {
             // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
-            if (estadoRJ.nome == key) {
-              setState(() {
-                // definindo que a variavel vai receber o seguinte valor
-                estadoRJ.acerto = value;
-                if (value) {
-                  // caso a variavel for TRUE remover o item da lista
-                  gestosCentro.removeWhere(
-                    (element) {
-                      return element.nomeGesto == estadoRJ.nome;
-                    },
-                  );
-                }
-              });
-            } else if (estadoSP.nome == key) {
-              setState(() {
-                estadoSP.acerto = value;
-                if (value) {
-                  gestosCentro.removeWhere(
-                    (element) {
-                      return element.nomeGesto == estadoSP.nome;
-                    },
-                  );
-                }
-              });
-            } else if (estadoES.nome == key) {
-              setState(() {
-                estadoES.acerto = value;
-                if (value) {
-                  gestosCentro.removeWhere(
-                    (element) {
-                      return element.nomeGesto == estadoES.nome;
-                    },
-                  );
-                }
-              });
-            } else if (estadoMG.nome == key) {
-              setState(() {
-                estadoMG.acerto = value;
-                if (value) {
-                  gestosCentro.removeWhere(
-                    (element) {
-                      return element.nomeGesto == estadoMG.nome;
-                    },
-                  );
-                }
-              });
-            }
+            setState(() {
+              if (estadoRJ.nome == key) {
+                gestosCentro = MetodosAuxiliares.removerGestoLista(
+                    estadoRJ, value, gestosCentro);
+              } else if (estadoSP.nome == key) {
+                gestosCentro = MetodosAuxiliares.removerGestoLista(
+                    estadoSP, value, gestosCentro);
+              } else if (estadoES.nome == key) {
+                gestosCentro = MetodosAuxiliares.removerGestoLista(
+                    estadoES, value, gestosCentro);
+              } else if (estadoMG.nome == key) {
+                gestosCentro = MetodosAuxiliares.removerGestoLista(
+                    estadoMG, value, gestosCentro);
+              }
+            });
           },
         );
         setState(

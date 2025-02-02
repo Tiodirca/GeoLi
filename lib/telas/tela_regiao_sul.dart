@@ -54,9 +54,8 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // carregando os estados e gestos nas listas utilizadas para exibicao
-    estadosCentro.addAll([estadoPR, estadoRS, estadoSC]);
     gestosCentro.addAll([gestoPR, gestoSC, gestoRS]);
+    gestosCentro.shuffle();
     // chamando metodo para fazer busca no banco de dados
     realizarBuscaDadosFireBase(Constantes.fireBaseDocumentoRegiaoSul);
   }
@@ -92,42 +91,15 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
         querySnapshot.data()!.forEach(
           (key, value) {
             // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
-            if (estadoSC.nome == key) {
-              setState(() {
-                // definindo que a variavel vai receber o seguinte valor
-                estadoSC.acerto = value;
-                if (value) {
-                  // caso a variavel for TRUE remover o item da lista
-                  gestosCentro.removeWhere(
-                    (element) {
-                      return element.nomeGesto == estadoSC.nome;
-                    },
-                  );
-                }
-              });
-            } else if (estadoRS.nome == key) {
-              setState(() {
-                estadoRS.acerto = value;
-                if (value) {
-                  gestosCentro.removeWhere(
-                    (element) {
-                      return element.nomeGesto == estadoRS.nome;
-                    },
-                  );
-                }
-              });
-            } else if (estadoPR.nome == key) {
-              setState(() {
-                estadoPR.acerto = value;
-                if (value) {
-                  gestosCentro.removeWhere(
-                    (element) {
-                      return element.nomeGesto == estadoPR.nome;
-                    },
-                  );
-                }
-              });
-            }
+            setState(() {
+              if (estadoSC.nome == key) {
+                MetodosAuxiliares.removerGestoLista(estadoSC, value,gestosCentro);
+              } else if (estadoRS.nome == key) {
+                MetodosAuxiliares.removerGestoLista(estadoRS, value,gestosCentro);
+              } else if (estadoPR.nome == key) {
+                MetodosAuxiliares.removerGestoLista(estadoPR, value,gestosCentro);
+              }
+            });
           },
         );
         setState(
