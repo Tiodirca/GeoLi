@@ -30,6 +30,23 @@ class Constantes {
 
   //SUDESTE
   static const nomeRegiaoSudeste = "Região Sudeste";
+  static const nomeRegiaoSudesteRJ = "Rio de Janeiro - RJ";
+  static const nomeRegiaoSudesteMG = "Minas Gerais - MG";
+  static const nomeRegiaoSudesteSP = "São Paulo - SP";
+  static const nomeRegiaoSudesteES = "Espirito Santo - ES";
+
+  // Norte
+  static const nomeRegiaoNorte = "Região Norte";
+  static const nomeRegiaoNorteAC = "Acre - AC";
+  static const nomeRegiaoNorteAP = "Amapá - AP";
+  static const nomeRegiaoNorteAM = "Amazonas - AM";
+  static const nomeRegiaoNortePA = "Pará - PA";
+  static const nomeRegiaoNorteRO = "Rondonia - RO";
+  static const nomeRegiaoNorteRR = "Roraima - RR";
+  static const nomeRegiaoNorteTO = "Tocantins - TO";
+
+  // Norte
+  static const nomeRegiaoNordeste = "Região Nordeste";
 
   //
   static const msgErroAcertoGesto = "Errou";

@@ -9,57 +9,64 @@ import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoli/Widgets/tela_carregamento.dart';
 import 'package:geoli/Widgets/tela_proximo_nivel.dart';
-import 'dart:math';
+
 import '../Uteis/textos.dart';
 
-class TelaRegiaoCentroOeste extends StatefulWidget {
-  const TelaRegiaoCentroOeste({super.key});
+class TelaRegiaoSudeste extends StatefulWidget {
+  const TelaRegiaoSudeste({super.key});
 
   @override
-  State<TelaRegiaoCentroOeste> createState() => _TelaRegiaoCentroOesteState();
+  State<TelaRegiaoSudeste> createState() => _TelaRegiaoSudesteState();
 }
 
-class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
+class _TelaRegiaoSudesteState extends State<TelaRegiaoSudeste> {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
-  Estado estadoGO = Estado(
-      nome: Constantes.nomeRegiaoCentroGO,
-      caminhoImagem: CaminhosImagens.regiaoCentroGOImagem,
+
+  Estado estadoSP = Estado(
+      nome: Constantes.nomeRegiaoSudesteSP,
+      caminhoImagem: CaminhosImagens.regiaoSudesteSPImagem,
+      acerto: false);
+  Estado estadoRJ = Estado(
+      nome: Constantes.nomeRegiaoSudesteRJ,
+      caminhoImagem: CaminhosImagens.regiaoSudesteRJImagem,
+      acerto: false);
+  Estado estadoES = Estado(
+      nome: Constantes.nomeRegiaoSudesteES,
+      caminhoImagem: CaminhosImagens.regiaoSudesteESImagem,
       acerto: false);
   Estado estadoMG = Estado(
-      nome: Constantes.nomeRegiaoCentroMG,
-      caminhoImagem: CaminhosImagens.regiaoCentroMGImagem,
-      acerto: false);
-  Estado estadoMS = Estado(
-      nome: Constantes.nomeRegiaoCentroMS,
-      caminhoImagem: CaminhosImagens.regiaoCentroMSImagem,
+      nome: Constantes.nomeRegiaoSudesteMG,
+      caminhoImagem: CaminhosImagens.regiaoSudesteMGImagem,
       acerto: false);
 
-  Gestos gestoGO = Gestos(
-      nomeGesto: Constantes.nomeRegiaoCentroGO,
-      nomeImagem: CaminhosImagens.gestoCentroGO);
+  Gestos gestoSP = Gestos(
+      nomeGesto: Constantes.nomeRegiaoSudesteSP,
+      nomeImagem: CaminhosImagens.gestoSudesteSP);
+  Gestos gestoRJ = Gestos(
+      nomeGesto: Constantes.nomeRegiaoSudesteRJ,
+      nomeImagem: CaminhosImagens.gestoSudesteRJ);
+  Gestos gestoES = Gestos(
+      nomeGesto: Constantes.nomeRegiaoSudesteES,
+      nomeImagem: CaminhosImagens.gestoSudesteES);
   Gestos gestoMG = Gestos(
-      nomeGesto: Constantes.nomeRegiaoCentroMG,
-      nomeImagem: CaminhosImagens.gestoCentroMG);
-  Gestos gestoMS = Gestos(
-      nomeGesto: Constantes.nomeRegiaoCentroMS,
-      nomeImagem: CaminhosImagens.gestoCentroMS);
+      nomeGesto: Constantes.nomeRegiaoSudesteMG,
+      nomeImagem: CaminhosImagens.gestoSudesteMG);
+
   List<Estado> estadosCentro = [];
   List<Gestos> gestosCentro = [];
   bool exibirTelaCarregamento = true;
   bool exibirTelaProximoNivel = false;
-  Random random = new Random();
+  String nomeTela = Constantes.nomeRegiaoSudeste;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     // carregando os estados e gestos nas listas utilizadas para exibicao
-    estadosCentro.addAll([estadoGO, estadoMS, estadoMG]);
-    int randomNumber = random.nextInt(3);
-    print(randomNumber);
-
-    gestosCentro.addAll([gestoGO, gestoMG, gestoMS]);
+    estadosCentro.addAll([estadoMG, estadoES, estadoRJ, estadoSP]);
+    gestosCentro.addAll([gestoSP, gestoRJ, gestoMG, gestoES]);
     // chamando metodo para fazer busca no banco de dados
-    realizarBuscaDadosFireBase(Constantes.fireBaseDocumentoRegiaoCentroOeste);
+    realizarBuscaDadosFireBase(Constantes.fireBaseDocumentoRegiaoSudeste);
   }
 
   //metodo para realizar busca no bando de dados
@@ -69,12 +76,12 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
       var db = FirebaseFirestore.instance;
       db
           .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-          .doc(Constantes
-              .fireBaseDocumentoRegiaoCentroOeste) //passando o documento
+          .doc(Constantes.fireBaseDocumentoRegiaoSudeste) //passando o documento
           .set({
-        Constantes.nomeRegiaoCentroGO: estadoGO.acerto,
-        Constantes.nomeRegiaoCentroMG: estadoMG.acerto,
-        Constantes.nomeRegiaoCentroMS: estadoMS.acerto,
+        Constantes.nomeRegiaoSudesteES: estadoES.acerto,
+        Constantes.nomeRegiaoSudesteRJ: estadoRJ.acerto,
+        Constantes.nomeRegiaoSudesteMG: estadoMG.acerto,
+        Constantes.nomeRegiaoSudesteSP: estadoSP.acerto
       });
     } catch (e) {
       print(e.toString());
@@ -94,37 +101,48 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
         querySnapshot.data()!.forEach(
           (key, value) {
             // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
-            if (estadoMG.nome == key) {
+            if (estadoRJ.nome == key) {
               setState(() {
                 // definindo que a variavel vai receber o seguinte valor
-                estadoMG.acerto = value;
+                estadoRJ.acerto = value;
                 if (value) {
                   // caso a variavel for TRUE remover o item da lista
                   gestosCentro.removeWhere(
                     (element) {
+                      return element.nomeGesto == estadoRJ.nome;
+                    },
+                  );
+                }
+              });
+            } else if (estadoSP.nome == key) {
+              setState(() {
+                estadoSP.acerto = value;
+                if (value) {
+                  gestosCentro.removeWhere(
+                    (element) {
+                      return element.nomeGesto == estadoSP.nome;
+                    },
+                  );
+                }
+              });
+            } else if (estadoES.nome == key) {
+              setState(() {
+                estadoES.acerto = value;
+                if (value) {
+                  gestosCentro.removeWhere(
+                    (element) {
+                      return element.nomeGesto == estadoES.nome;
+                    },
+                  );
+                }
+              });
+            } else if (estadoMG.nome == key) {
+              setState(() {
+                estadoMG.acerto = value;
+                if (value) {
+                  gestosCentro.removeWhere(
+                    (element) {
                       return element.nomeGesto == estadoMG.nome;
-                    },
-                  );
-                }
-              });
-            } else if (estadoMS.nome == key) {
-              setState(() {
-                estadoMS.acerto = value;
-                if (value) {
-                  gestosCentro.removeWhere(
-                    (element) {
-                      return element.nomeGesto == estadoMS.nome;
-                    },
-                  );
-                }
-              });
-            } else if (estadoGO.nome == key) {
-              setState(() {
-                estadoGO.acerto = value;
-                if (value) {
-                  gestosCentro.removeWhere(
-                    (element) {
-                      return element.nomeGesto == estadoGO.nome;
                     },
                   );
                 }
@@ -191,7 +209,7 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
         appBar: AppBar(
             title: Visibility(
                 visible: !exibirTelaCarregamento,
-                child: Text(Textos.tituloTelaRegiaoCentro)),
+                child: Text(Textos.tituloTelaRegiaoSudeste)),
             backgroundColor: Colors.white,
             leading: Visibility(
               visible: !exibirTelaCarregamento,
@@ -231,16 +249,20 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
                             ),
                           ),
                           AreaSoltar(
-                            estado: estadoGO,
-                            gesto: gestoGO,
-                          ),
-                          AreaSoltar(
                             estado: estadoMG,
                             gesto: gestoMG,
                           ),
                           AreaSoltar(
-                            estado: estadoMS,
-                            gesto: gestoMS,
+                            estado: estadoES,
+                            gesto: gestoES,
+                          ),
+                          AreaSoltar(
+                            estado: estadoSP,
+                            gesto: gestoSP,
+                          ),
+                          AreaSoltar(
+                            estado: estadoRJ,
+                            gesto: gestoRJ,
                           ),
                         ],
                       ),
@@ -248,8 +270,7 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
                         child: Center(
                             child: Visibility(
                           visible: exibirTelaProximoNivel,
-                          child: TelaProximoNivel(
-                              nomeNivel: Constantes.nomeRegiaoCentroOeste),
+                          child: TelaProximoNivel(nomeNivel: nomeTela),
                         )),
                       )
                     ],

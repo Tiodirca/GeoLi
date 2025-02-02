@@ -54,6 +54,45 @@ class MetodosAuxiliares {
     }
   }
 
+  static resetarDadosRegiaoSudeste() async {
+    try {
+      // instanciando Firebase
+      var db = FirebaseFirestore.instance;
+      db
+          .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
+          .doc(Constantes.fireBaseDocumentoRegiaoSudeste) //passando o documento
+          .set({
+        Constantes.nomeRegiaoSudesteRJ: false,
+        Constantes.nomeRegiaoSudesteES: false,
+        Constantes.nomeRegiaoSudesteMG: false,
+        Constantes.nomeRegiaoSudesteSP: false,
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  static resetarDadosRegiaoNorte() async {
+    try {
+      // instanciando Firebase
+      var db = FirebaseFirestore.instance;
+      db
+          .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
+          .doc(Constantes.fireBaseDocumentoRegiaoNorte) //passando o documento
+          .set({
+        Constantes.nomeRegiaoNorteAC: false,
+        Constantes.nomeRegiaoNorteAP: false,
+        Constantes.nomeRegiaoNorteAM: false,
+        Constantes.nomeRegiaoNortePA: false,
+        Constantes.nomeRegiaoNorteRO: false,
+        Constantes.nomeRegiaoNorteRR: false,
+        Constantes.nomeRegiaoNorteTO: false,
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   static exibirMensagens(String msg, String tipoAlerta, BuildContext context) {
     if (tipoAlerta == Constantes.msgAcertoGesto) {
       ElegantNotification.success(

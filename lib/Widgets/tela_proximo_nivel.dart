@@ -29,14 +29,25 @@ class TelaProximoNivel extends StatelessWidget {
                 MetodosAuxiliares.resetarDadosRegiaoSul();
                 Navigator.pushReplacementNamed(
                     context, Constantes.rotaTelaRegiaoSul);
+              } else if (nomeNivel == Constantes.nomeRegiaoSudeste) {
+                MetodosAuxiliares.resetarDadosRegiaoSudeste();
+                Navigator.pushReplacementNamed(
+                    context, Constantes.rotaTelaRegiaoSudeste);
+              } else if (nomeNivel == Constantes.nomeRegiaoNorte) {
+                MetodosAuxiliares.resetarDadosRegiaoNorte();
+                Navigator.pushReplacementNamed(
+                    context, Constantes.rotaTelaRegiaoNorte);
               }
             } else {
               if (nomeNivel == Constantes.nomeRegiaoCentroOeste) {
                 Navigator.pushReplacementNamed(
                     context, Constantes.rotaTelaRegiaoSul);
               } else if (nomeNivel == Constantes.nomeRegiaoSul) {
-                // Navigator.pushReplacementNamed(
-                //     context, Constantes.rotaTelaRegiaoSul);
+                Navigator.pushReplacementNamed(
+                    context, Constantes.rotaTelaRegiaoSudeste);
+              } else if (nomeNivel == Constantes.nomeRegiaoSudeste) {
+                Navigator.pushReplacementNamed(
+                    context, Constantes.rotaTelaRegiaoNorte);
               }
             }
           },
@@ -70,7 +81,7 @@ class TelaProximoNivel extends StatelessWidget {
         child: Card(
           color: Colors.white,
           shape: const RoundedRectangleBorder(
-            side: BorderSide(color: PaletaCores.corAzulMagenta),
+              side: BorderSide(color: PaletaCores.corAzulMagenta),
               borderRadius: BorderRadius.all(Radius.circular(30))),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

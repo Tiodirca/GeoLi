@@ -25,13 +25,13 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
       nome: Constantes.nomeRegiaoSudeste,
       caminhoImagem: CaminhosImagens.gestoSudesteImagem,
       acerto: true);
-  Estado regiaoNordeste = Estado(
-      nome: Constantes.nomeRegiaoCentroOeste,
-      caminhoImagem: CaminhosImagens.gestoCentroOesteImagem,
-      acerto: true);
   Estado regiaoNorte = Estado(
-      nome: Constantes.nomeRegiaoSul,
-      caminhoImagem: CaminhosImagens.gestoSulImagem,
+      nome: Constantes.nomeRegiaoNorte,
+      caminhoImagem: CaminhosImagens.gestoNorteImagem,
+      acerto: true);
+  Estado regiaoNordeste = Estado(
+      nome: Constantes.nomeRegiaoNordeste,
+      caminhoImagem: CaminhosImagens.gestoNordesteImagem,
       acerto: true);
 
   @override
@@ -41,8 +41,8 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
   }
 
   Widget cartaoRegiao(String nomeImagem, String nomeRegiao) => Container(
-    margin: EdgeInsets.only(bottom: 20),
-        width: 130,
+        margin: EdgeInsets.only(bottom: 20),
+        width: 150,
         height: 170,
         child: FloatingActionButton(
           heroTag: nomeRegiao,
@@ -56,7 +56,13 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
                   context, Constantes.rotaTelaRegiaoSul);
             } else if (nomeRegiao == regiaoSudeste.nome) {
               Navigator.pushReplacementNamed(
-                  context, Constantes.rotaTelaRegiaoSul);
+                  context, Constantes.rotaTelaRegiaoSudeste);
+            } else if (nomeRegiao == regiaoNorte.nome) {
+              Navigator.pushReplacementNamed(
+                  context, Constantes.rotaTelaRegiaoNorte);
+            } else if (nomeRegiao == regiaoNordeste.nome) {
+              Navigator.pushReplacementNamed(
+                  context, Constantes.rotaTelaRegiaoNordeste);
             }
           },
           shape: RoundedRectangleBorder(
@@ -116,7 +122,7 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
                   style: TextStyle(fontSize: 18),
                   textAlign: TextAlign.center,
                 )),
-            Container(
+            SizedBox(
               height: alturaTela * 0.74,
               width: larguraTela,
               child: SingleChildScrollView(
@@ -133,6 +139,14 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
                         visible: regiaoSudeste.acerto,
                         child: cartaoRegiao(
                             regiaoSudeste.caminhoImagem, regiaoSudeste.nome)),
+                    Visibility(
+                        visible: regiaoNorte.acerto,
+                        child: cartaoRegiao(
+                            regiaoNorte.caminhoImagem, regiaoNorte.nome)),
+                    Visibility(
+                        visible: regiaoNordeste.acerto,
+                        child: cartaoRegiao(
+                            regiaoNordeste.caminhoImagem, regiaoNordeste.nome)),
                   ],
                 ),
               ),
