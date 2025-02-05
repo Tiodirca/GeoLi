@@ -34,7 +34,6 @@ class _TelaProximoNivelState extends State<TelaProximoNivel> {
     for (var element in widget.estados) {
       dados[element.key.nome] = element.key.acerto = false;
       validarRegiao(element.key.nome);
-      print(element.key.nome);
     }
   }
 
