@@ -10,7 +10,6 @@ import 'package:geoli/Widgets/gestos_widget.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoli/Widgets/tela_carregamento.dart';
-import 'package:geoli/Widgets/tela_proximo_nivel.dart';
 
 import '../Uteis/textos.dart';
 
@@ -75,8 +74,9 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
       nomeGesto: Constantes.nomeRegiaoNorteTO,
       nomeImagem: CaminhosImagens.gestoNorteTOImagem);
 
-  List<Estado> estadosCentro = [];
-  List<Gestos> gestosCentro = [];
+  Map<Estado, Gestos> estadosMapAuxiliar = {};
+  List<MapEntry<Estado, Gestos>> estadosSorteio = [];
+  List<Gestos> gestos = [];
   bool exibirTelaCarregamento = true;
   bool exibirTelaProximoNivel = false;
   String nomeTela = Constantes.nomeRegiaoNorte;
@@ -85,14 +85,24 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    // carregando os estados e gestos nas listas utilizadas para exibicao
-    estadosCentro.addAll(
-        [estadoAC, estadoAP, estadoAM, estadoPA, estadoRO, estadoRR, estadoTO]);
-    gestosCentro.addAll(
+    carregarEstados();
+    gestos.addAll(
         [gestoAC, gestoAP, gestoAM, gestoPA, gestoRO, gestoRR, gestoTO]);
-    gestosCentro.shuffle();
+    gestos.shuffle();
     // chamando metodo para fazer busca no banco de dados
     realizarBuscaDadosFireBase(Constantes.fireBaseDocumentoRegiaoNorte);
+  }
+
+  carregarEstados() {
+    estadosMapAuxiliar[estadoAC] = gestoAC;
+    estadosMapAuxiliar[estadoAP] = gestoAP;
+    estadosMapAuxiliar[estadoAM] = gestoAM;
+    estadosMapAuxiliar[estadoPA] = gestoPA;
+    estadosMapAuxiliar[estadoRO] = gestoRO;
+    estadosMapAuxiliar[estadoRR] = gestoRR;
+    estadosMapAuxiliar[estadoTO] = gestoTO;
+    estadosSorteio = estadosMapAuxiliar.entries.toList();
+    estadosSorteio.shuffle();
   }
 
   //metodo para realizar busca no bando de dados
@@ -133,32 +143,32 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
             setState(() {
               if (estadoAC.nome == key) {
                 MetodosAuxiliares.removerGestoLista(
-                    estadoAC, value, gestosCentro);
+                    estadoAC, value, gestos);
               } else if (estadoAP.nome == key) {
                 MetodosAuxiliares.removerGestoLista(
-                    estadoAP, value, gestosCentro);
+                    estadoAP, value, gestos);
               } else if (estadoAM.nome == key) {
                 MetodosAuxiliares.removerGestoLista(
-                    estadoAM, value, gestosCentro);
+                    estadoAM, value, gestos);
               } else if (estadoPA.nome == key) {
                 MetodosAuxiliares.removerGestoLista(
-                    estadoPA, value, gestosCentro);
+                    estadoPA, value, gestos);
               } else if (estadoRO.nome == key) {
                 MetodosAuxiliares.removerGestoLista(
-                    estadoRO, value, gestosCentro);
+                    estadoRO, value, gestos);
               } else if (estadoRR.nome == key) {
                 MetodosAuxiliares.removerGestoLista(
-                    estadoRR, value, gestosCentro);
+                    estadoRR, value, gestos);
               } else if (estadoTO.nome == key) {
                 MetodosAuxiliares.removerGestoLista(
-                    estadoTO, value, gestosCentro);
+                    estadoTO, value, gestos);
               }
             });
           },
         );
         setState(
           () {
-            if (gestosCentro.isEmpty) {
+            if (gestos.isEmpty) {
               exibirTelaProximoNivel = true;
             }
             exibirTelaCarregamento = false;
@@ -177,13 +187,13 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
             // caso tenha acertado ele ira remover da
             // lista de gestos o gesto que foi acertado
             setState(() {
-              gestosCentro.removeWhere(
+              gestos.removeWhere(
                 (element) {
                   return element.nomeGesto == gesto.nomeGesto;
                 },
               );
             });
-            if (gestosCentro.isEmpty) {
+            if (gestos.isEmpty) {
               setState(() {
                 exibirTelaProximoNivel = true;
               });
@@ -254,53 +264,21 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
                             ? larguraTela
                             : larguraTela * 0.6,
                         height: alturaTela * 0.6,
-                        child: SingleChildScrollView(
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Wrap(
-                                alignment: WrapAlignment.center,
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                children: [
-                                  AreaSoltar(
-                                    estado: estadoAC,
-                                    gesto: gestoAC,
-                                  ),
-                                  AreaSoltar(
-                                    estado: estadoAP,
-                                    gesto: gestoAP,
-                                  ),
-                                  AreaSoltar(
-                                    estado: estadoAM,
-                                    gesto: gestoAM,
-                                  ),
-                                  AreaSoltar(
-                                    estado: estadoPA,
-                                    gesto: gestoPA,
-                                  ),
-                                  AreaSoltar(
-                                    estado: estadoRO,
-                                    gesto: gestoRO,
-                                  ),
-                                  AreaSoltar(
-                                    estado: estadoRR,
-                                    gesto: gestoRR,
-                                  ),
-                                  AreaSoltar(
-                                    estado: estadoTO,
-                                    gesto: gestoTO,
-                                  ),
-                                ],
-                              ),
-                              Positioned(
-                                child: Center(
-                                    child: Visibility(
-                                  visible: exibirTelaProximoNivel,
-                                  child: TelaProximoNivel(nomeNivel: nomeTela),
-                                )),
-                              )
-                            ],
-                          ),
+                        child: GridView.builder(
+                          itemCount: estadosSorteio.length,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount:
+                                      Platform.isAndroid || Platform.isIOS
+                                          ? 2
+                                          : 5),
+                          itemBuilder: (context, index) {
+                            return Center(
+                                child: AreaSoltar(
+                                  estado: estadosSorteio.elementAt(index).key,
+                                  gesto: estadosSorteio.elementAt(index).value,
+                            ));
+                          },
                         ),
                       )
                     ],
@@ -331,10 +309,10 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
                         height: 120,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: gestosCentro.length,
+                          itemCount: gestos.length,
                           itemBuilder: (context, index) {
                             return itemSoltar(
-                              gestosCentro.elementAt(index),
+                              gestos.elementAt(index),
                             );
                           },
                         ),

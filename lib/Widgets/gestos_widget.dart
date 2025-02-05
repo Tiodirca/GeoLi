@@ -18,7 +18,7 @@ class GestosWidget extends StatelessWidget {
         width: 120,
         height: 120,
         child: Card(
-          color: Colors.white,
+            color: Colors.white,
             shape: RoundedRectangleBorder(
                 side: BorderSide(color: PaletaCores.corAzulMagenta),
                 borderRadius: const BorderRadius.all(Radius.circular(10))),
@@ -51,15 +51,15 @@ class GestosWidget extends StatelessWidget {
                     visible: exibirAcerto,
                     child: Positioned(
                         child: SizedBox(
-                      width: 110,
-                      height: 110,
-                      child: Icon(
-                        Icons.done_all,
-                        color: Colors.green,
-                        size: 100,
-                      ),
-                    )))
+                          width: 110,
+                          height: 110,
+                          child: Icon(
+                            Icons.done_all,
+                            color: Colors.green,
+                            size: 100,
+                          ),
+                        )))
               ],
-            )));
+            )),);
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Modelos/estado.dart';
@@ -8,7 +10,6 @@ import 'package:geoli/Widgets/gestos_widget.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoli/Widgets/tela_carregamento.dart';
-import 'package:geoli/Widgets/tela_proximo_nivel.dart';
 import 'dart:math';
 import '../Uteis/textos.dart';
 
@@ -44,22 +45,31 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
       nomeGesto: Constantes.nomeRegiaoCentroMS,
       nomeImagem: CaminhosImagens.gestoCentroMS);
   List<Estado> estadosCentro = [];
-  List<Gestos> gestosCentro = [];
+  List<Gestos> gestos = [];
   bool exibirTelaCarregamento = true;
   bool exibirTelaProximoNivel = false;
-  Random random = new Random();
-  List<int> auxiliarPosicao = [];
+  Map<Estado, Gestos> estadosMapAuxiliar = {};
+  List<MapEntry<Estado, Gestos>> estadosSorteio = [];
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // carregando os estados e gestos nas listas utilizadas para exibicao
-    estadosCentro.addAll([estadoGO, estadoMS, estadoMG]);
-    gestosCentro.addAll([gestoGO, gestoMG, gestoMS]);
-    gestosCentro.shuffle();
+    carregarEstados();
+    gestos.addAll([gestoGO, gestoMG, gestoMS]); // adicionando itens na lista
+    gestos.shuffle(); // fazendo sorteio dos gestos na lista
+
     // chamando metodo para fazer busca no banco de dados
     realizarBuscaDadosFireBase(Constantes.fireBaseDocumentoRegiaoCentroOeste);
+  }
+
+  // metodo para adicionar os estados no map auxiliar e depois adicionar numa lista e fazer o sorteio dos itens
+  carregarEstados() {
+    estadosMapAuxiliar[estadoMS] = gestoMS;
+    estadosMapAuxiliar[estadoGO] = gestoGO;
+    estadosMapAuxiliar[estadoMG] = gestoMG;
+    estadosSorteio = estadosMapAuxiliar.entries.toList();
+    estadosSorteio.shuffle();
   }
 
   //metodo para realizar busca no bando de dados
@@ -96,21 +106,18 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
             // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
             setState(() {
               if (estadoMG.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    estadoMG, value, gestosCentro);
+                MetodosAuxiliares.removerGestoLista(estadoMG, value, gestos);
               } else if (estadoMS.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    estadoMS, value, gestosCentro);
+                MetodosAuxiliares.removerGestoLista(estadoMS, value, gestos);
               } else if (estadoGO.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    estadoGO, value, gestosCentro);
+                MetodosAuxiliares.removerGestoLista(estadoGO, value, gestos);
               }
             });
           },
         );
         setState(
           () {
-            if (gestosCentro.isEmpty) {
+            if (gestos.isEmpty) {
               exibirTelaProximoNivel = true;
             }
             exibirTelaCarregamento = false;
@@ -129,13 +136,13 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
             // caso tenha acertado ele ira remover da
             // lista de gestos o gesto que foi acertado
             setState(() {
-              gestosCentro.removeWhere(
+              gestos.removeWhere(
                 (element) {
                   return element.nomeGesto == gesto.nomeGesto;
                 },
               );
             });
-            if (gestosCentro.isEmpty) {
+            if (gestos.isEmpty) {
               setState(() {
                 exibirTelaProximoNivel = true;
               });
@@ -191,42 +198,37 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
                   color: Colors.white,
                   width: larguraTela,
                   height: alturaTela,
-                  child: Stack(
+                  child: Column(
                     children: [
-                      Wrap(
-                        alignment: WrapAlignment.center,
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [
-                          SizedBox(
-                            width: larguraTela,
-                            height: 100,
-                            child: Text(
-                              Textos.descricaoAreaEstado,
-                              style: TextStyle(fontSize: 18),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          AreaSoltar(
-                            estado: estadoGO,
-                            gesto: gestoGO,
-                          ),
-                          AreaSoltar(
-                            estado: estadoMG,
-                            gesto: gestoMG,
-                          ),
-                          AreaSoltar(
-                            estado: estadoMS,
-                            gesto: gestoMS,
-                          ),
-                        ],
+                      SizedBox(
+                        width: larguraTela,
+                        child: Text(
+                          Textos.descricaoAreaEstado,
+                          style: TextStyle(fontSize: 18),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
-                      Positioned(
-                        child: Center(
-                            child: Visibility(
-                          visible: exibirTelaProximoNivel,
-                          child: TelaProximoNivel(
-                              nomeNivel: Constantes.nomeRegiaoCentroOeste),
-                        )),
+                      SizedBox(
+                        width: Platform.isAndroid || Platform.isIOS
+                            ? larguraTela
+                            : larguraTela * 0.6,
+                        height: alturaTela * 0.6,
+                        child: GridView.builder(
+                          itemCount: estadosSorteio.length,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount:
+                                      Platform.isAndroid || Platform.isIOS
+                                          ? 2
+                                          : 5),
+                          itemBuilder: (context, index) {
+                            return Center(
+                                child: AreaSoltar(
+                              estado: estadosSorteio.elementAt(index).key,
+                              gesto: estadosSorteio.elementAt(index).value,
+                            ));
+                          },
+                        ),
                       )
                     ],
                   ));
@@ -256,10 +258,10 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
                         height: 120,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: gestosCentro.length,
+                          itemCount: gestos.length,
                           itemBuilder: (context, index) {
                             return itemSoltar(
-                              gestosCentro.elementAt(index),
+                              gestos.elementAt(index),
                             );
                           },
                         ),
