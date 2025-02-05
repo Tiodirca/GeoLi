@@ -10,6 +10,8 @@ import 'package:geoli/Widgets/gestos_widget.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoli/Widgets/tela_carregamento.dart';
+import 'package:geoli/Widgets/widget_area_gestos.dart';
+import 'package:geoli/Widgets/widget_area_tela.dart';
 
 import '../Uteis/textos.dart';
 
@@ -105,27 +107,6 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
     estadosSorteio.shuffle();
   }
 
-  //metodo para realizar busca no bando de dados
-  atualizarDadosBanco() async {
-    try {
-      // instanciando Firebase
-      var db = FirebaseFirestore.instance;
-      db
-          .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-          .doc(Constantes.fireBaseDocumentoRegiaoNorte) //passando o documento
-          .set({
-        Constantes.nomeRegiaoNorteAC: estadoAC.acerto,
-        Constantes.nomeRegiaoNorteAP: estadoAP.acerto,
-        Constantes.nomeRegiaoNorteAM: estadoAM.acerto,
-        Constantes.nomeRegiaoNortePA: estadoPA.acerto,
-        Constantes.nomeRegiaoNorteRO: estadoRO.acerto,
-        Constantes.nomeRegiaoNorteRR: estadoRR.acerto,
-        Constantes.nomeRegiaoNorteTO: estadoTO.acerto,
-      });
-    } catch (e) {
-      print(e.toString());
-    }
-  }
 
   realizarBuscaDadosFireBase(String nomeDocumentoRegiao) async {
     var db = FirebaseFirestore.instance;
@@ -142,26 +123,19 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
             // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
             setState(() {
               if (estadoAC.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    estadoAC, value, gestos);
+                MetodosAuxiliares.removerGestoLista(estadoAC, value, gestos);
               } else if (estadoAP.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    estadoAP, value, gestos);
+                MetodosAuxiliares.removerGestoLista(estadoAP, value, gestos);
               } else if (estadoAM.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    estadoAM, value, gestos);
+                MetodosAuxiliares.removerGestoLista(estadoAM, value, gestos);
               } else if (estadoPA.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    estadoPA, value, gestos);
+                MetodosAuxiliares.removerGestoLista(estadoPA, value, gestos);
               } else if (estadoRO.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    estadoRO, value, gestos);
+                MetodosAuxiliares.removerGestoLista(estadoRO, value, gestos);
               } else if (estadoRR.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    estadoRR, value, gestos);
+                MetodosAuxiliares.removerGestoLista(estadoRR, value, gestos);
               } else if (estadoTO.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    estadoTO, value, gestos);
+                MetodosAuxiliares.removerGestoLista(estadoTO, value, gestos);
               }
             });
           },
@@ -177,45 +151,6 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
       },
     );
   }
-
-  Widget itemSoltar(Gestos gesto) => Draggable(
-        onDragCompleted: () async {
-          // variavel vai receber o retorno do metodo para poder
-          // verificar se o usuario acertou o gesto no estado correto
-          String retorno = await MetodosAuxiliares.recuperarAcerto();
-          if (retorno == Constantes.msgAcertoGesto) {
-            // caso tenha acertado ele ira remover da
-            // lista de gestos o gesto que foi acertado
-            setState(() {
-              gestos.removeWhere(
-                (element) {
-                  return element.nomeGesto == gesto.nomeGesto;
-                },
-              );
-            });
-            if (gestos.isEmpty) {
-              setState(() {
-                exibirTelaProximoNivel = true;
-              });
-            }
-            atualizarDadosBanco();
-          }
-        },
-        maxSimultaneousDrags: 1,
-        data: gesto.nomeGesto,
-        feedback: GestosWidget(
-          nomeGestoImagem: gesto.nomeImagem,
-          nomeGesto: gesto.nomeGesto,
-          exibirAcerto: false,
-        ),
-        rootOverlay: true,
-        childWhenDragging: Container(),
-        child: GestosWidget(
-          nomeGestoImagem: gesto.nomeImagem,
-          nomeGesto: gesto.nomeGesto,
-          exibirAcerto: false,
-        ),
-      );
 
   @override
   Widget build(BuildContext context) {
@@ -245,80 +180,17 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
             if (exibirTelaCarregamento) {
               return TelaCarregamento();
             } else {
-              return Container(
-                  color: Colors.white,
-                  width: larguraTela,
-                  height: alturaTela,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        width: larguraTela,
-                        child: Text(
-                          Textos.descricaoAreaEstado,
-                          style: TextStyle(fontSize: 18),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      SizedBox(
-                        width: Platform.isAndroid || Platform.isIOS
-                            ? larguraTela
-                            : larguraTela * 0.6,
-                        height: alturaTela * 0.6,
-                        child: GridView.builder(
-                          itemCount: estadosSorteio.length,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount:
-                                      Platform.isAndroid || Platform.isIOS
-                                          ? 2
-                                          : 5),
-                          itemBuilder: (context, index) {
-                            return Center(
-                                child: AreaSoltar(
-                                  estado: estadosSorteio.elementAt(index).key,
-                                  gesto: estadosSorteio.elementAt(index).value,
-                            ));
-                          },
-                        ),
-                      )
-                    ],
-                  ));
+              return WidgetAreaTela(
+                  nomeTela: nomeTela,
+                  estadosSorteio: estadosSorteio,
+                  exibirTelaProximoNivel: exibirTelaProximoNivel);
             }
           },
         ),
-        bottomNavigationBar: Visibility(
-          visible: !exibirTelaCarregamento,
-          child: SizedBox(
-              height: 160,
-              child: Card(
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.black),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(10))),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        Textos.descricaoAreaGestos,
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                        width: larguraTela,
-                        height: 120,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: gestos.length,
-                          itemBuilder: (context, index) {
-                            return itemSoltar(
-                              gestos.elementAt(index),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ))),
+        bottomNavigationBar: WidgetAreaGestos(
+          gestos: gestos,
+          estadosMapAuxiliar: estadosMapAuxiliar,
+          exibirTelaCarregamento: exibirTelaCarregamento,
         ));
   }
 }

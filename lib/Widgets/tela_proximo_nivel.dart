@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geoli/Modelos/estado.dart';
+import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/constantes_caminhos_imagens.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
@@ -6,10 +9,67 @@ import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import '../Uteis/paleta_cores.dart';
 import '../Uteis/textos.dart';
 
-class TelaProximoNivel extends StatelessWidget {
-  const TelaProximoNivel({Key? key, required this.nomeNivel}) : super(key: key);
+class TelaProximoNivel extends StatefulWidget {
+  const TelaProximoNivel({super.key, required this.estados});
 
-  final String nomeNivel;
+  final List<MapEntry<Estado, Gestos>> estados;
+
+  @override
+  State<TelaProximoNivel> createState() => _TelaProximoNivelState();
+}
+
+class _TelaProximoNivelState extends State<TelaProximoNivel> {
+  String nomeColecao = "";
+  String nomeRegiao = "";
+  Map<String, dynamic> dados = {};
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    carregarDados();
+  }
+
+  carregarDados() {
+    for (var element in widget.estados) {
+      dados[element.key.nome] = element.key.acerto = false;
+      validarRegiao(element.key.nome);
+      print(element.key.nome);
+    }
+  }
+
+  // metodo para fazer atualizacao no banco de dado
+  // toda vez que o usuario acertar o estado correto
+  resetarDados() async {
+    try {
+      // instanciando Firebase
+      var db = FirebaseFirestore.instance;
+      db
+          .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
+          .doc(nomeColecao) //passando o documento
+          .set(dados);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  validarRegiao(String nome) {
+    setState(() {
+      if (nome.contains(Constantes.nomeRegiaoCentroMS)) {
+        nomeColecao = Constantes.fireBaseDocumentoRegiaoCentroOeste;
+        nomeRegiao = Constantes.nomeRegiaoCentroOeste;
+      } else if (nome.contains(Constantes.nomeRegiaoSulPR)) {
+        nomeColecao = Constantes.fireBaseDocumentoRegiaoSul;
+        nomeRegiao = Constantes.nomeRegiaoSul;
+      } else if (nome.contains(Constantes.nomeRegiaoSudesteSP)) {
+        nomeColecao = Constantes.fireBaseDocumentoRegiaoSudeste;
+        nomeRegiao = Constantes.nomeRegiaoSudeste;
+      } else if (nome.contains(Constantes.nomeRegiaoNorteAM)) {
+        nomeColecao = Constantes.fireBaseDocumentoRegiaoNorte;
+        nomeRegiao = Constantes.nomeRegiaoNorte;
+      }
+    });
+  }
 
   Widget cardOpcoes(
           String nomeImagem, String nomeOpcao, BuildContext context) =>
@@ -21,33 +81,36 @@ class TelaProximoNivel extends StatelessWidget {
           backgroundColor: Colors.white,
           onPressed: () {
             if (nomeOpcao == Textos.btnJogarNovamente) {
-              if (nomeNivel == Constantes.nomeRegiaoCentroOeste) {
-                MetodosAuxiliares.resetarDadosRegiaoCentroOeste();
+              if (nomeRegiao == Constantes.nomeRegiaoCentroOeste) {
+                resetarDados();
                 Navigator.pushReplacementNamed(
                     context, Constantes.rotaTelaRegiaoCentroOeste);
-              } else if (nomeNivel == Constantes.nomeRegiaoSul) {
-                MetodosAuxiliares.resetarDadosRegiaoSul();
+              } else if (nomeRegiao == Constantes.nomeRegiaoSul) {
+                resetarDados();
                 Navigator.pushReplacementNamed(
                     context, Constantes.rotaTelaRegiaoSul);
-              } else if (nomeNivel == Constantes.nomeRegiaoSudeste) {
-                MetodosAuxiliares.resetarDadosRegiaoSudeste();
+              } else if (nomeRegiao == Constantes.nomeRegiaoSudeste) {
+                resetarDados();
                 Navigator.pushReplacementNamed(
                     context, Constantes.rotaTelaRegiaoSudeste);
-              } else if (nomeNivel == Constantes.nomeRegiaoNorte) {
-                MetodosAuxiliares.resetarDadosRegiaoNorte();
+              } else if (nomeRegiao == Constantes.nomeRegiaoNorte) {
+                resetarDados();
                 Navigator.pushReplacementNamed(
                     context, Constantes.rotaTelaRegiaoNorte);
               }
             } else {
-              if (nomeNivel == Constantes.nomeRegiaoCentroOeste) {
+              if (nomeRegiao == Constantes.nomeRegiaoCentroOeste) {
                 Navigator.pushReplacementNamed(
                     context, Constantes.rotaTelaRegiaoSul);
-              } else if (nomeNivel == Constantes.nomeRegiaoSul) {
+              } else if (nomeRegiao == Constantes.nomeRegiaoSul) {
                 Navigator.pushReplacementNamed(
                     context, Constantes.rotaTelaRegiaoSudeste);
-              } else if (nomeNivel == Constantes.nomeRegiaoSudeste) {
+              } else if (nomeRegiao == Constantes.nomeRegiaoSudeste) {
                 Navigator.pushReplacementNamed(
                     context, Constantes.rotaTelaRegiaoNorte);
+              } else if (nomeRegiao == Constantes.nomeRegiaoNorte) {
+                Navigator.pushReplacementNamed(
+                    context, Constantes.rotaTelaRegiaoNordeste);
               }
             }
           },

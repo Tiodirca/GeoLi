@@ -11,6 +11,8 @@ import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoli/Widgets/tela_carregamento.dart';
 import 'package:geoli/Widgets/tela_proximo_nivel.dart';
+import 'package:geoli/Widgets/widget_area_gestos.dart';
+import 'package:geoli/Widgets/widget_area_tela.dart';
 
 import '../Uteis/textos.dart';
 
@@ -168,8 +170,6 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
 
   @override
   Widget build(BuildContext context) {
-    double alturaTela = MediaQuery.of(context).size.height;
-    double larguraTela = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: AppBar(
             title: Visibility(
@@ -194,80 +194,17 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
             if (exibirTelaCarregamento) {
               return TelaCarregamento();
             } else {
-              return Container(
-                  color: Colors.white,
-                  width: larguraTela,
-                  height: alturaTela,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        width: larguraTela,
-                        child: Text(
-                          Textos.descricaoAreaEstado,
-                          style: TextStyle(fontSize: 18),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      SizedBox(
-                        width: Platform.isAndroid || Platform.isIOS
-                            ? larguraTela
-                            : larguraTela * 0.6,
-                        height: alturaTela * 0.6,
-                        child: GridView.builder(
-                          itemCount: estadosSorteio.length,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount:
-                                      Platform.isAndroid || Platform.isIOS
-                                          ? 2
-                                          : 5),
-                          itemBuilder: (context, index) {
-                            return Center(
-                                child: AreaSoltar(
-                              estado: estadosSorteio.elementAt(index).key,
-                              gesto: estadosSorteio.elementAt(index).value,
-                            ));
-                          },
-                        ),
-                      )
-                    ],
-                  ));
+              return WidgetAreaTela(
+                  nomeTela: nomeTela,
+                  estadosSorteio: estadosSorteio,
+                  exibirTelaProximoNivel: exibirTelaProximoNivel);
             }
           },
         ),
-        bottomNavigationBar: Visibility(
-          visible: !exibirTelaCarregamento,
-          child: SizedBox(
-              height: 160,
-              child: Card(
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.black),
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(10))),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        Textos.descricaoAreaGestos,
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                        width: larguraTela,
-                        height: 120,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: gestos.length,
-                          itemBuilder: (context, index) {
-                            return itemSoltar(
-                              gestos.elementAt(index),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ))),
+        bottomNavigationBar: WidgetAreaGestos(
+          gestos: gestos,
+          estadosMapAuxiliar: estadosMapAuxiliar,
+          exibirTelaCarregamento: exibirTelaCarregamento,
         ));
   }
 }

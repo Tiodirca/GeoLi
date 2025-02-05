@@ -8,6 +8,7 @@ import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 
 class MetodosAuxiliares {
+  static bool exibirAcerto = false;
   static String acertou = "";
 
   static Future<String> confirmarAcerto(String acerto) async {
@@ -27,7 +28,7 @@ class MetodosAuxiliares {
       db
           .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
           .doc(Constantes
-          .fireBaseDocumentoRegiaoCentroOeste) //passando o documento
+              .fireBaseDocumentoRegiaoCentroOeste) //passando o documento
           .set({
         Constantes.nomeRegiaoCentroGO: false,
         Constantes.nomeRegiaoCentroMG: false,
@@ -96,19 +97,24 @@ class MetodosAuxiliares {
 
   // metodo para remover o gesto ja acertado da lista
   // de gestos quando voltar a jogar
-  static removerGestoLista(Estado estado, bool value,
-      List<Gestos> gestosCentro) {
+  static removerGestoLista(
+      Estado estado, bool value, List<Gestos> gestosCentro) {
     // definindo que a variavel vai receber o seguinte valor
     estado.acerto = value;
     if (value) {
       // caso a variavel for TRUE remover o item da lista
       gestosCentro.removeWhere(
-            (element) {
+        (element) {
           return element.nomeGesto == estado.nome;
         },
       );
+      //exibirAcerto = estado.acerto;
     }
     return gestosCentro;
+  }
+
+  static recuperarExibicaoGesto() {
+    return exibirAcerto;
   }
 
   static exibirMensagens(String msg, String tipoAlerta, BuildContext context) {
