@@ -5,6 +5,7 @@ import 'firebase_options.dart';
 
 import 'Uteis/rotas.dart';
 
+
 void main() async{
   runApp(const MyApp());
   WidgetsFlutterBinding.ensureInitialized();
