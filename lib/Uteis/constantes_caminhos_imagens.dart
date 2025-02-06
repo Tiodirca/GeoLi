@@ -5,7 +5,7 @@ class CaminhosImagens {
   //REGIAO CENTRO OESTE
   static const regiaoCentroGOImagem =
       "assets/imagens/estados/regioes/centro_oeste/regiao_centro_oeste_goias";
-  static const regiaoCentroMGImagem =
+  static const regiaoCentroMTImagem =
       "assets/imagens/estados/regioes/centro_oeste/regiao_centro_oeste_mato_grosso";
   static const regiaoCentroMSImagem =
       "assets/imagens/estados/regioes/centro_oeste/regiao_centro_oeste_mato_grosso_do_sul";
@@ -15,7 +15,7 @@ class CaminhosImagens {
       "assets/imagens/estados/gestos_estados/regiao_centro_oeste/gesto_regiao_centro_oeste";
   static const gestoCentroGO =
       "assets/imagens/estados/gestos_estados/regiao_centro_oeste/gesto_centro_goias";
-  static const gestoCentroMG =
+  static const gestoCentroMT =
       "assets/imagens/estados/gestos_estados/regiao_centro_oeste/gesto_centro_mato_grosso";
   static const gestoCentroMS =
       "assets/imagens/estados/gestos_estados/regiao_centro_oeste/gesto_centro_mato_grosso_do_sul";

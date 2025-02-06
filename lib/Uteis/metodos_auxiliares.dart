@@ -19,32 +19,6 @@ class MetodosAuxiliares {
     return acertou;
   }
 
-  // metodo para cadastrar item
-  static resetarDadosRegiaoCentroOeste() async {
-    try {
-      // instanciando Firebase
-      var db = FirebaseFirestore.instance;
-      db
-          .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-          .doc(Constantes
-              .fireBaseDocumentoRegiaoNordeste) //passando o documento
-          .set({
-        Constantes.nomeRegiaoNordesteAL: false,
-        Constantes.nomeRegiaoNordesteBA: false,
-        Constantes.nomeRegiaoNordesteCE: false,
-        Constantes.nomeRegiaoNordesteMA: false,
-        Constantes.nomeRegiaoNordestePB: false,
-        Constantes.nomeRegiaoNordestePE: false,
-        Constantes.nomeRegiaoNordestePI: false,
-        Constantes.nomeRegiaoNordesteRN: false,
-        Constantes.nomeRegiaoNordesteCE: false,
-
-      });
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
   // metodo para remover o gesto ja acertado da lista
   // de gestos quando voltar a jogar
   static removerGestoLista(

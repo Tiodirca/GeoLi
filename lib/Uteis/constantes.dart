@@ -7,6 +7,7 @@ class Constantes {
   static const rotaTelaRegiaoSudeste = "telaRegiaoSudeste";
   static const rotaTelaRegiaoNorte = "telaRegiaoNorte";
   static const rotaTelaRegiaoNordeste = "telaRegiaoNordeste";
+  static const rotaTelaRegiaoTodosEstados = "telaRegiaoTodosEstados";
 
   //NOME DOCUMENTO FIBASE
   static const fireBaseColecaoRegioes = "regioes";
@@ -15,11 +16,12 @@ class Constantes {
   static const fireBaseDocumentoRegiaoSudeste = "regiaoSudeste";
   static const fireBaseDocumentoRegiaoNorte = "regiaoNorte";
   static const fireBaseDocumentoRegiaoNordeste = "regiaoNordeste";
+  static const fireBaseDocumentoRegiaoTodosEstados = "regiaoTodosEstados";
 
   //CENTRO OESTE
   static const nomeRegiaoCentroOeste = "Região Centro-Oeste";
   static const nomeRegiaoCentroMS = "Mato Grosso do Sul - MS";
-  static const nomeRegiaoCentroMG = "Mato Grosso - MG";
+  static const nomeRegiaoCentroMT = "Mato Grosso - MG";
   static const nomeRegiaoCentroGO = "Goias - GO";
 
   //SUL

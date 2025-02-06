@@ -34,6 +34,11 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
       caminhoImagem: CaminhosImagens.gestoNordesteImagem,
       acerto: true);
 
+  Estado todosEstados = Estado(
+      nome: Constantes.nomeRegiaoNordeste,
+      caminhoImagem: CaminhosImagens.gestoNordesteImagem,
+      acerto: true);
+
   @override
   void initState() {
     // TODO: implement initState
@@ -143,6 +148,10 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
                         visible: regiaoNorte.acerto,
                         child: cartaoRegiao(
                             regiaoNorte.caminhoImagem, regiaoNorte.nome)),
+                    Visibility(
+                        visible: regiaoNordeste.acerto,
+                        child: cartaoRegiao(
+                            regiaoNordeste.caminhoImagem, regiaoNordeste.nome)),
                     Visibility(
                         visible: regiaoNordeste.acerto,
                         child: cartaoRegiao(

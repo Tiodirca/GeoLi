@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
-import 'package:geoli/Uteis/constantes_caminhos_imagens.dart';
+import 'package:geoli/Uteis/constantes_estados_gestos.dart';
 import 'package:geoli/Widgets/gestos_widget.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,28 +22,6 @@ class TelaRegiaoSul extends StatefulWidget {
 class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
-  Estado estadoPR = Estado(
-      nome: Constantes.nomeRegiaoSulPR,
-      caminhoImagem: CaminhosImagens.regiaoSulPRImagem,
-      acerto: false);
-  Estado estadoRS = Estado(
-      nome: Constantes.nomeRegiaoSulRS,
-      caminhoImagem: CaminhosImagens.regiaoSulRSImagem,
-      acerto: false);
-  Estado estadoSC = Estado(
-      nome: Constantes.nomeRegiaoSulSC,
-      caminhoImagem: CaminhosImagens.regiaoSulSCImagem,
-      acerto: false);
-
-  Gestos gestoPR = Gestos(
-      nomeGesto: Constantes.nomeRegiaoSulPR,
-      nomeImagem: CaminhosImagens.gestoSulPR);
-  Gestos gestoRS = Gestos(
-      nomeGesto: Constantes.nomeRegiaoSulRS,
-      nomeImagem: CaminhosImagens.gestoSulRS);
-  Gestos gestoSC = Gestos(
-      nomeGesto: Constantes.nomeRegiaoSulSC,
-      nomeImagem: CaminhosImagens.gestoSulSC);
   List<Gestos> gestos = [];
   Map<Estado, Gestos> estadoGestoMap = {};
   List<MapEntry<Estado, Gestos>> estadosSorteio = [];
@@ -55,8 +33,11 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    carregarEstados();
-    gestos.addAll([gestoPR, gestoSC, gestoRS]); // adicionando gestos na lista
+    gestos.addAll([
+      ConstantesEstadosGestos.gestoPR,
+      ConstantesEstadosGestos.gestoSC,
+      ConstantesEstadosGestos.gestoRS
+    ]); // adicionando gestos na lista
     gestos.shuffle(); //fazendo sorteio os itens na lista
     // chamando metodo para fazer busca no banco de dados
     realizarBuscaDadosFireBase(Constantes.fireBaseDocumentoRegiaoSul);
@@ -64,29 +45,11 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
 
   // metodo para adicionar os estados no map auxiliar e depois adicionar numa lista e fazer o sorteio dos itens
   carregarEstados() {
-    estadoGestoMap[estadoRS] = gestoRS;
-    estadoGestoMap[estadoSC] = gestoSC;
-    estadoGestoMap[estadoPR] = gestoPR;
+    estadoGestoMap[ConstantesEstadosGestos.estadoRS] = ConstantesEstadosGestos.gestoRS;
+    estadoGestoMap[ConstantesEstadosGestos.estadoSC] = ConstantesEstadosGestos.gestoSC;
+    estadoGestoMap[ConstantesEstadosGestos.estadoPR] = ConstantesEstadosGestos.gestoPR;
     estadosSorteio = estadoGestoMap.entries.toList();
     estadosSorteio.shuffle();
-  }
-
-  //metodo para realizar busca no bando de dados
-  atualizarDadosBanco() async {
-    try {
-      // instanciando Firebase
-      var db = FirebaseFirestore.instance;
-      db
-          .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-          .doc(Constantes.fireBaseDocumentoRegiaoSul) //passando o documento
-          .set({
-        Constantes.nomeRegiaoSulPR: estadoPR.acerto,
-        Constantes.nomeRegiaoSulSC: estadoSC.acerto,
-        Constantes.nomeRegiaoSulRS: estadoRS.acerto,
-      });
-    } catch (e) {
-      print(e.toString());
-    }
   }
 
   realizarBuscaDadosFireBase(String nomeDocumentoRegiao) async {
@@ -103,18 +66,19 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
           (key, value) {
             // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
             setState(() {
-              if (estadoSC.nome == key) {
-                MetodosAuxiliares.removerGestoLista(estadoSC, value, gestos);
-              } else if (estadoRS.nome == key) {
-                MetodosAuxiliares.removerGestoLista(estadoRS, value, gestos);
-              } else if (estadoPR.nome == key) {
-                MetodosAuxiliares.removerGestoLista(estadoPR, value, gestos);
+              if (ConstantesEstadosGestos.estadoSC.nome == key) {
+                MetodosAuxiliares.removerGestoLista(ConstantesEstadosGestos.estadoSC, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoRS.nome == key) {
+                MetodosAuxiliares.removerGestoLista(ConstantesEstadosGestos.estadoRS, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoPR.nome == key) {
+                MetodosAuxiliares.removerGestoLista(ConstantesEstadosGestos.estadoPR, value, gestos);
               }
             });
           },
         );
         setState(
           () {
+            carregarEstados();
             if (gestos.isEmpty) {
               exibirTelaProximoNivel = true;
             }
@@ -145,7 +109,6 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
                 exibirTelaProximoNivel = true;
               });
             }
-            atualizarDadosBanco();
           }
         },
         maxSimultaneousDrags: 1,

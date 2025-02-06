@@ -3,6 +3,7 @@ import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/constantes_caminhos_imagens.dart';
+import 'package:geoli/Uteis/constantes_estados_gestos.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoli/Widgets/tela_carregamento.dart';
@@ -19,28 +20,6 @@ class TelaRegiaoCentroOeste extends StatefulWidget {
 
 class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
-  Estado estadoGO = Estado(
-      nome: Constantes.nomeRegiaoCentroGO,
-      caminhoImagem: CaminhosImagens.regiaoCentroGOImagem,
-      acerto: false);
-  Estado estadoMG = Estado(
-      nome: Constantes.nomeRegiaoCentroMG,
-      caminhoImagem: CaminhosImagens.regiaoCentroMGImagem,
-      acerto: false);
-  Estado estadoMS = Estado(
-      nome: Constantes.nomeRegiaoCentroMS,
-      caminhoImagem: CaminhosImagens.regiaoCentroMSImagem,
-      acerto: false);
-
-  Gestos gestoGO = Gestos(
-      nomeGesto: Constantes.nomeRegiaoCentroGO,
-      nomeImagem: CaminhosImagens.gestoCentroGO);
-  Gestos gestoMG = Gestos(
-      nomeGesto: Constantes.nomeRegiaoCentroMG,
-      nomeImagem: CaminhosImagens.gestoCentroMG);
-  Gestos gestoMS = Gestos(
-      nomeGesto: Constantes.nomeRegiaoCentroMS,
-      nomeImagem: CaminhosImagens.gestoCentroMS);
 
   List<Estado> estadosCentro = [];
   List<Gestos> gestos = [];
@@ -54,7 +33,11 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    gestos.addAll([gestoGO, gestoMG, gestoMS]); // adicionando itens na lista
+    gestos.addAll([
+      ConstantesEstadosGestos.gestoGO,
+      ConstantesEstadosGestos.gestoMT,
+      ConstantesEstadosGestos.gestoMS
+    ]); // adicionando itens na lista
     gestos.shuffle(); // fazendo sorteio dos gestos na lista
     // chamando metodo para fazer busca no banco de dados
     realizarBuscaDadosFireBase(Constantes.fireBaseDocumentoRegiaoCentroOeste);
@@ -63,9 +46,12 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
   // metodo para adicionar os estados no map auxiliar e
   // depois adicionar numa lista e fazer o sorteio dos itens
   carregarEstados() {
-    estadoGestoMap[estadoMS] = gestoMS;
-    estadoGestoMap[estadoGO] = gestoGO;
-    estadoGestoMap[estadoMG] = gestoMG;
+    estadoGestoMap[ConstantesEstadosGestos.estadoMS] =
+        ConstantesEstadosGestos.gestoMS;
+    estadoGestoMap[ConstantesEstadosGestos.estadoGO] =
+        ConstantesEstadosGestos.gestoGO;
+    estadoGestoMap[ConstantesEstadosGestos.estadoMG] =
+        ConstantesEstadosGestos.gestoMT;
     estadosSorteio = estadoGestoMap.entries.toList();
     estadosSorteio.shuffle();
   }
@@ -84,13 +70,16 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
           (key, value) {
             //caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
             setState(() {
-              if (estadoMG.nome == key) {
-                MetodosAuxiliares.removerGestoLista(estadoMG, value, gestos);
-              } else if (estadoMS.nome == key) {
-                MetodosAuxiliares.removerGestoLista(estadoMS, value, gestos);
-                estadoMS.acerto = value;
-              } else if (estadoGO.nome == key) {
-                MetodosAuxiliares.removerGestoLista(estadoGO, value, gestos);
+              if (ConstantesEstadosGestos.estadoMT.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoMT, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoMS.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoMS, value, gestos);
+                ConstantesEstadosGestos.estadoMS.acerto = value;
+              } else if (ConstantesEstadosGestos.estadoGO.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoGO, value, gestos);
               }
             });
           },

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
-import 'package:geoli/Uteis/constantes_caminhos_imagens.dart';
+import 'package:geoli/Uteis/constantes_estados_gestos.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoli/Widgets/tela_carregamento.dart';
@@ -21,57 +21,6 @@ class TelaRegiaoNorte extends StatefulWidget {
 class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
-  Estado estadoAC = Estado(
-      nome: Constantes.nomeRegiaoNorteAC,
-      caminhoImagem: CaminhosImagens.regiaoNorteACImagem,
-      acerto: false);
-  Estado estadoAP = Estado(
-      nome: Constantes.nomeRegiaoNorteAP,
-      caminhoImagem: CaminhosImagens.regiaoNorteAPImagem,
-      acerto: false);
-  Estado estadoAM = Estado(
-      nome: Constantes.nomeRegiaoNorteAM,
-      caminhoImagem: CaminhosImagens.regiaoNorteAMImagem,
-      acerto: false);
-  Estado estadoPA = Estado(
-      nome: Constantes.nomeRegiaoNortePA,
-      caminhoImagem: CaminhosImagens.regiaoNortePAImagem,
-      acerto: false);
-  Estado estadoRO = Estado(
-      nome: Constantes.nomeRegiaoNorteRO,
-      caminhoImagem: CaminhosImagens.regiaoNorteROImagem,
-      acerto: false);
-  Estado estadoRR = Estado(
-      nome: Constantes.nomeRegiaoNorteRR,
-      caminhoImagem: CaminhosImagens.regiaoNorteRRImagem,
-      acerto: false);
-  Estado estadoTO = Estado(
-      nome: Constantes.nomeRegiaoNorteTO,
-      caminhoImagem: CaminhosImagens.regiaoNorteTOImagem,
-      acerto: false);
-
-  Gestos gestoAC = Gestos(
-      nomeGesto: Constantes.nomeRegiaoNorteAC,
-      nomeImagem: CaminhosImagens.gestoNorteACImagem);
-  Gestos gestoAP = Gestos(
-      nomeGesto: Constantes.nomeRegiaoNorteAP,
-      nomeImagem: CaminhosImagens.gestoNorteACImagem);
-  Gestos gestoAM = Gestos(
-      nomeGesto: Constantes.nomeRegiaoNorteAM,
-      nomeImagem: CaminhosImagens.gestoNorteAMImagem);
-  Gestos gestoPA = Gestos(
-      nomeGesto: Constantes.nomeRegiaoNortePA,
-      nomeImagem: CaminhosImagens.gestoNortePAImagem);
-  Gestos gestoRO = Gestos(
-      nomeGesto: Constantes.nomeRegiaoNorteRO,
-      nomeImagem: CaminhosImagens.gestoNorteROImagem);
-  Gestos gestoRR = Gestos(
-      nomeGesto: Constantes.nomeRegiaoNorteRR,
-      nomeImagem: CaminhosImagens.gestoNorteRRImagem);
-  Gestos gestoTO = Gestos(
-      nomeGesto: Constantes.nomeRegiaoNorteTO,
-      nomeImagem: CaminhosImagens.gestoNorteTOImagem);
-
   Map<Estado, Gestos> estadoGestoMap = {};
   List<MapEntry<Estado, Gestos>> estadosSorteio = [];
   List<Gestos> gestos = [];
@@ -84,24 +33,38 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
     // TODO: implement initState
     super.initState();
     carregarEstados();
-
+    gestos.addAll([
+      ConstantesEstadosGestos.gestoAC,
+      ConstantesEstadosGestos.gestoAP,
+      ConstantesEstadosGestos.gestoAM,
+      ConstantesEstadosGestos.gestoPA,
+      ConstantesEstadosGestos.gestoRO,
+      ConstantesEstadosGestos.gestoRR,
+      ConstantesEstadosGestos.gestoTO,
+    ]);
     gestos.shuffle();
     // chamando metodo para fazer busca no banco de dados
     realizarBuscaDadosFireBase(Constantes.fireBaseDocumentoRegiaoNorte);
   }
 
   carregarEstados() {
-    estadoGestoMap[estadoAC] = gestoAC;
-    estadoGestoMap[estadoAP] = gestoAP;
-    estadoGestoMap[estadoAM] = gestoAM;
-    estadoGestoMap[estadoPA] = gestoPA;
-    estadoGestoMap[estadoRO] = gestoRO;
-    estadoGestoMap[estadoRR] = gestoRR;
-    estadoGestoMap[estadoTO] = gestoTO;
+    estadoGestoMap[ConstantesEstadosGestos.estadoAC] =
+        ConstantesEstadosGestos.gestoAC;
+    estadoGestoMap[ConstantesEstadosGestos.estadoAP] =
+        ConstantesEstadosGestos.gestoAP;
+    estadoGestoMap[ConstantesEstadosGestos.estadoAM] =
+        ConstantesEstadosGestos.gestoAM;
+    estadoGestoMap[ConstantesEstadosGestos.estadoPA] =
+        ConstantesEstadosGestos.gestoPA;
+    estadoGestoMap[ConstantesEstadosGestos.estadoRO] =
+        ConstantesEstadosGestos.gestoRO;
+    estadoGestoMap[ConstantesEstadosGestos.estadoRR] =
+        ConstantesEstadosGestos.gestoRR;
+    estadoGestoMap[ConstantesEstadosGestos.estadoTO] =
+        ConstantesEstadosGestos.gestoTO;
     estadosSorteio = estadoGestoMap.entries.toList();
     estadosSorteio.shuffle();
   }
-
 
   realizarBuscaDadosFireBase(String nomeDocumentoRegiao) async {
     var db = FirebaseFirestore.instance;
@@ -117,20 +80,27 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
           (key, value) {
             // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
             setState(() {
-              if (estadoAC.nome == key) {
-                MetodosAuxiliares.removerGestoLista(estadoAC, value, gestos);
-              } else if (estadoAP.nome == key) {
-                MetodosAuxiliares.removerGestoLista(estadoAP, value, gestos);
-              } else if (estadoAM.nome == key) {
-                MetodosAuxiliares.removerGestoLista(estadoAM, value, gestos);
-              } else if (estadoPA.nome == key) {
-                MetodosAuxiliares.removerGestoLista(estadoPA, value, gestos);
-              } else if (estadoRO.nome == key) {
-                MetodosAuxiliares.removerGestoLista(estadoRO, value, gestos);
-              } else if (estadoRR.nome == key) {
-                MetodosAuxiliares.removerGestoLista(estadoRR, value, gestos);
-              } else if (estadoTO.nome == key) {
-                MetodosAuxiliares.removerGestoLista(estadoTO, value, gestos);
+              if (ConstantesEstadosGestos.estadoAC.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoAC, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoAP.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoAP, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoAM.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoAM, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoPA.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoPA, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoRO.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoRO, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoRR.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoRR, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoTO.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoTO, value, gestos);
               }
             });
           },

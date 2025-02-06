@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
-import 'package:geoli/Uteis/constantes_caminhos_imagens.dart';
+import 'package:geoli/Uteis/constantes_estados_gestos.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoli/Widgets/tela_carregamento.dart';
@@ -21,36 +21,6 @@ class TelaRegiaoSudeste extends StatefulWidget {
 class _TelaRegiaoSudesteState extends State<TelaRegiaoSudeste> {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
-  Estado estadoSP = Estado(
-      nome: Constantes.nomeRegiaoSudesteSP,
-      caminhoImagem: CaminhosImagens.regiaoSudesteSPImagem,
-      acerto: false);
-  Estado estadoRJ = Estado(
-      nome: Constantes.nomeRegiaoSudesteRJ,
-      caminhoImagem: CaminhosImagens.regiaoSudesteRJImagem,
-      acerto: false);
-  Estado estadoES = Estado(
-      nome: Constantes.nomeRegiaoSudesteES,
-      caminhoImagem: CaminhosImagens.regiaoSudesteESImagem,
-      acerto: false);
-  Estado estadoMG = Estado(
-      nome: Constantes.nomeRegiaoSudesteMG,
-      caminhoImagem: CaminhosImagens.regiaoSudesteMGImagem,
-      acerto: false);
-
-  Gestos gestoSP = Gestos(
-      nomeGesto: Constantes.nomeRegiaoSudesteSP,
-      nomeImagem: CaminhosImagens.gestoSudesteSP);
-  Gestos gestoRJ = Gestos(
-      nomeGesto: Constantes.nomeRegiaoSudesteRJ,
-      nomeImagem: CaminhosImagens.gestoSudesteRJ);
-  Gestos gestoES = Gestos(
-      nomeGesto: Constantes.nomeRegiaoSudesteES,
-      nomeImagem: CaminhosImagens.gestoSudesteES);
-  Gestos gestoMG = Gestos(
-      nomeGesto: Constantes.nomeRegiaoSudesteMG,
-      nomeImagem: CaminhosImagens.gestoSudesteMG);
-
   Map<Estado, Gestos> estadoGestoMap = {};
   List<MapEntry<Estado, Gestos>> estadosSorteio = [];
   List<Gestos> gestos = [];
@@ -62,9 +32,13 @@ class _TelaRegiaoSudesteState extends State<TelaRegiaoSudeste> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    carregarEstados();
     // adicionando itens na lista e fazendo o sorteio dos itens na lista
-    gestos.addAll([gestoSP, gestoRJ, gestoMG, gestoES]);
+    gestos.addAll([
+      ConstantesEstadosGestos.gestoSP,
+      ConstantesEstadosGestos.gestoRJ,
+      ConstantesEstadosGestos.gestoMG,
+      ConstantesEstadosGestos.gestoES
+    ]);
     gestos.shuffle();
     // chamando metodo para fazer busca no banco de dados
     realizarBuscaDadosFireBase(Constantes.fireBaseDocumentoRegiaoSudeste);
@@ -72,10 +46,14 @@ class _TelaRegiaoSudesteState extends State<TelaRegiaoSudeste> {
 
   // metodo para adicionar os estados no map auxiliar e depois adicionar numa lista e fazer o sorteio dos itens
   carregarEstados() {
-    estadoGestoMap[estadoMG] = gestoMG;
-    estadoGestoMap[estadoES] = gestoES;
-    estadoGestoMap[estadoSP] = gestoSP;
-    estadoGestoMap[estadoRJ] = gestoRJ;
+    estadoGestoMap[ConstantesEstadosGestos.estadoMG] =
+        ConstantesEstadosGestos.gestoMG;
+    estadoGestoMap[ConstantesEstadosGestos.estadoES] =
+        ConstantesEstadosGestos.gestoES;
+    estadoGestoMap[ConstantesEstadosGestos.estadoSP] =
+        ConstantesEstadosGestos.gestoSP;
+    estadoGestoMap[ConstantesEstadosGestos.estadoRJ] =
+        ConstantesEstadosGestos.gestoRJ;
     estadosSorteio = estadoGestoMap.entries.toList();
     estadosSorteio.shuffle();
   }
@@ -94,24 +72,25 @@ class _TelaRegiaoSudesteState extends State<TelaRegiaoSudeste> {
           (key, value) {
             // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
             setState(() {
-              if (estadoRJ.nome == key) {
+              if (ConstantesEstadosGestos.estadoRJ.nome == key) {
                 gestos = MetodosAuxiliares.removerGestoLista(
-                    estadoRJ, value, gestos);
-              } else if (estadoSP.nome == key) {
+                    ConstantesEstadosGestos.estadoRJ, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoSP.nome == key) {
                 gestos = MetodosAuxiliares.removerGestoLista(
-                    estadoSP, value, gestos);
-              } else if (estadoES.nome == key) {
+                    ConstantesEstadosGestos.estadoSP, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoES.nome == key) {
                 gestos = MetodosAuxiliares.removerGestoLista(
-                    estadoES, value, gestos);
-              } else if (estadoMG.nome == key) {
+                    ConstantesEstadosGestos.estadoES, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoMG.nome == key) {
                 gestos = MetodosAuxiliares.removerGestoLista(
-                    estadoMG, value, gestos);
+                    ConstantesEstadosGestos.estadoMG, value, gestos);
               }
             });
           },
         );
         setState(
           () {
+            carregarEstados();
             if (gestos.isEmpty) {
               exibirTelaProximoNivel = true;
             }

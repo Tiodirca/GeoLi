@@ -4,7 +4,6 @@ import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/constantes_caminhos_imagens.dart';
-import 'package:geoli/Uteis/metodos_auxiliares.dart';
 
 import '../Uteis/paleta_cores.dart';
 import '../Uteis/textos.dart';
