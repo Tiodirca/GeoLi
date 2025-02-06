@@ -21,12 +21,16 @@ class _TelaProximoNivelState extends State<TelaProximoNivel> {
   String nomeColecao = "";
   String nomeRegiao = "";
   Map<String, dynamic> dados = {};
+  bool exibirBtnProximoNivel = true;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     carregarDados();
+    if (nomeRegiao.contains(Constantes.nomeTodosEstados)) {
+      exibirBtnProximoNivel = false;
+    }
   }
 
   carregarDados() {
@@ -166,8 +170,10 @@ class _TelaProximoNivelState extends State<TelaProximoNivel> {
                 children: [
                   cardOpcoes(CaminhosImagens.btnJogarNovamenteGesto,
                       Textos.btnJogarNovamente, context),
-                  cardOpcoes(CaminhosImagens.btnProximoNivelGesto,
-                      Textos.btnProximoNivel, context)
+                  Visibility(
+                      visible: exibirBtnProximoNivel,
+                      child: cardOpcoes(CaminhosImagens.btnProximoNivelGesto,
+                          Textos.btnProximoNivel, context))
                 ],
               )
             ],

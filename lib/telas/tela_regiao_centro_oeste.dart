@@ -50,7 +50,7 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
         ConstantesEstadosGestos.gestoMS;
     estadoGestoMap[ConstantesEstadosGestos.estadoGO] =
         ConstantesEstadosGestos.gestoGO;
-    estadoGestoMap[ConstantesEstadosGestos.estadoMG] =
+    estadoGestoMap[ConstantesEstadosGestos.estadoMT] =
         ConstantesEstadosGestos.gestoMT;
     estadosSorteio = estadoGestoMap.entries.toList();
     estadosSorteio.shuffle();

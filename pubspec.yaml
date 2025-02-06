@@ -31,6 +31,8 @@ flutter:
   assets:
     - assets/imagens/
     #GESTOS
+
+    - assets/imagens/estados/gestos_estados/
     - assets/imagens/estados/gestos_estados/regiao_centro_oeste/
     - assets/imagens/estados/gestos_estados/regiao_sul/
     - assets/imagens/estados/gestos_estados/regiao_sudeste/

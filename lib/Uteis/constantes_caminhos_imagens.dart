@@ -2,6 +2,11 @@ class CaminhosImagens {
   static const btnJogarNovamenteGesto = "assets/imagens/gesto_de_novo";
   static const btnProximoNivelGesto = "assets/imagens/gesto_continuar";
 
+  static const gestoRegioesEstadosImagem =
+      "assets/imagens/estados/gestos_estados/gesto_estados";
+  static const gestoRegioesImagem =
+      "assets/imagens/estados/gestos_estados/gesto_estados_regioes";
+
   //REGIAO CENTRO OESTE
   static const regiaoCentroGOImagem =
       "assets/imagens/estados/regioes/centro_oeste/regiao_centro_oeste_goias";

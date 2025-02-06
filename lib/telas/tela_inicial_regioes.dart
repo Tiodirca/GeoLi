@@ -13,6 +13,7 @@ class TelaInicialRegioes extends StatefulWidget {
 }
 
 class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
+
   Estado regiaoCentroOeste = Estado(
       nome: Constantes.nomeRegiaoCentroOeste,
       caminhoImagem: CaminhosImagens.gestoCentroOesteImagem,
@@ -34,9 +35,9 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
       caminhoImagem: CaminhosImagens.gestoNordesteImagem,
       acerto: true);
 
-  Estado todosEstados = Estado(
-      nome: Constantes.nomeRegiaoNordeste,
-      caminhoImagem: CaminhosImagens.gestoNordesteImagem,
+  Estado todasRegioes = Estado(
+      nome: Constantes.nomeTodosEstados,
+      caminhoImagem: CaminhosImagens.gestoRegioesImagem,
       acerto: true);
 
   @override
@@ -153,9 +154,9 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
                         child: cartaoRegiao(
                             regiaoNordeste.caminhoImagem, regiaoNordeste.nome)),
                     Visibility(
-                        visible: regiaoNordeste.acerto,
+                        visible: todasRegioes.acerto,
                         child: cartaoRegiao(
-                            regiaoNordeste.caminhoImagem, regiaoNordeste.nome)),
+                            todasRegioes.caminhoImagem, todasRegioes.nome)),
                   ],
                 ),
               ),
