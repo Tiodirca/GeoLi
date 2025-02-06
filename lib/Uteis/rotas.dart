@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/telas/tela_inicial_regioes.dart';
+import 'package:geoli/telas/tela_regiao_nordeste.dart';
 import 'package:geoli/telas/tela_regiao_norte.dart';
 import 'package:geoli/telas/tela_regiao_sudeste.dart';
 import 'package:geoli/telas/tela_regiao_sul.dart';
@@ -25,6 +26,8 @@ class Rotas {
         return MaterialPageRoute(builder: (_) => TelaRegiaoSudeste());
       case Constantes.rotaTelaRegiaoNorte:
         return MaterialPageRoute(builder: (_) => TelaRegiaoNorte());
+      case Constantes.rotaTelaRegiaoNordeste:
+        return MaterialPageRoute(builder: (_) => TelaRegiaoNordeste());
 
       // case Constantes.rotaTelaDividirLetraTexto:
       //   return MaterialPageRoute(builder: (_) => const TelaDividirLetraTexto());

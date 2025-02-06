@@ -1,12 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/constantes_caminhos_imagens.dart';
-import 'package:geoli/Widgets/area_soltar.dart';
-import 'package:geoli/Widgets/gestos_widget.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoli/Widgets/tela_carregamento.dart';
@@ -76,7 +72,7 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
       nomeGesto: Constantes.nomeRegiaoNorteTO,
       nomeImagem: CaminhosImagens.gestoNorteTOImagem);
 
-  Map<Estado, Gestos> estadosMapAuxiliar = {};
+  Map<Estado, Gestos> estadoGestoMap = {};
   List<MapEntry<Estado, Gestos>> estadosSorteio = [];
   List<Gestos> gestos = [];
   bool exibirTelaCarregamento = true;
@@ -88,22 +84,21 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
     // TODO: implement initState
     super.initState();
     carregarEstados();
-    gestos.addAll(
-        [gestoAC, gestoAP, gestoAM, gestoPA, gestoRO, gestoRR, gestoTO]);
+
     gestos.shuffle();
     // chamando metodo para fazer busca no banco de dados
     realizarBuscaDadosFireBase(Constantes.fireBaseDocumentoRegiaoNorte);
   }
 
   carregarEstados() {
-    estadosMapAuxiliar[estadoAC] = gestoAC;
-    estadosMapAuxiliar[estadoAP] = gestoAP;
-    estadosMapAuxiliar[estadoAM] = gestoAM;
-    estadosMapAuxiliar[estadoPA] = gestoPA;
-    estadosMapAuxiliar[estadoRO] = gestoRO;
-    estadosMapAuxiliar[estadoRR] = gestoRR;
-    estadosMapAuxiliar[estadoTO] = gestoTO;
-    estadosSorteio = estadosMapAuxiliar.entries.toList();
+    estadoGestoMap[estadoAC] = gestoAC;
+    estadoGestoMap[estadoAP] = gestoAP;
+    estadoGestoMap[estadoAM] = gestoAM;
+    estadoGestoMap[estadoPA] = gestoPA;
+    estadoGestoMap[estadoRO] = gestoRO;
+    estadoGestoMap[estadoRR] = gestoRR;
+    estadoGestoMap[estadoTO] = gestoTO;
+    estadosSorteio = estadoGestoMap.entries.toList();
     estadosSorteio.shuffle();
   }
 
@@ -154,8 +149,6 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
 
   @override
   Widget build(BuildContext context) {
-    double alturaTela = MediaQuery.of(context).size.height;
-    double larguraTela = MediaQuery.of(context).size.width;
     return Scaffold(
         appBar: AppBar(
             title: Visibility(
@@ -189,7 +182,7 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
         ),
         bottomNavigationBar: WidgetAreaGestos(
           gestos: gestos,
-          estadosMapAuxiliar: estadosMapAuxiliar,
+          estadoGestoMap: estadoGestoMap,
           exibirTelaCarregamento: exibirTelaCarregamento,
         ));
   }

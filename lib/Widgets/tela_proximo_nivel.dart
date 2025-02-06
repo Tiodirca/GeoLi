@@ -66,6 +66,9 @@ class _TelaProximoNivelState extends State<TelaProximoNivel> {
       } else if (nome.contains(Constantes.nomeRegiaoNorteAM)) {
         nomeColecao = Constantes.fireBaseDocumentoRegiaoNorte;
         nomeRegiao = Constantes.nomeRegiaoNorte;
+      } else if (nome.contains(Constantes.nomeRegiaoNordesteAL)) {
+        nomeColecao = Constantes.fireBaseDocumentoRegiaoNordeste;
+        nomeRegiao = Constantes.nomeRegiaoNordeste;
       }
     });
   }
@@ -96,6 +99,10 @@ class _TelaProximoNivelState extends State<TelaProximoNivel> {
                 resetarDados();
                 Navigator.pushReplacementNamed(
                     context, Constantes.rotaTelaRegiaoNorte);
+              } else if (nomeRegiao == Constantes.nomeRegiaoNordeste) {
+                resetarDados();
+                Navigator.pushReplacementNamed(
+                    context, Constantes.rotaTelaRegiaoNordeste);
               }
             } else {
               if (nomeRegiao == Constantes.nomeRegiaoCentroOeste) {

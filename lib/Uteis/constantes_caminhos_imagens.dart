@@ -94,7 +94,46 @@ class CaminhosImagens {
   static const gestoNorteTOImagem =
       "assets/imagens/estados/gestos_estados/regiao_norte/gesto_norte_tocantins";
 
-  //GESTOS EM LIBRAS REGIAO SUDESTE
+  // REGIAO NORDESTE
+
+  static const regiaoNordesteALImagem =
+      "assets/imagens/estados/regioes/nordeste/regiao_nordeste_alagoas";
+  static const regiaoNordesteBAImagem =
+      "assets/imagens/estados/regioes/nordeste/regiao_nordeste_bahia";
+  static const regiaoNordesteCEImagem =
+      "assets/imagens/estados/regioes/nordeste/regiao_nordeste_ceara";
+  static const regiaoNordesteMAImagem =
+      "assets/imagens/estados/regioes/nordeste/regiao_nordeste_maranhao";
+  static const regiaoNordestePBImagem =
+      "assets/imagens/estados/regioes/nordeste/regiao_nordeste_paraiba";
+  static const regiaoNordestePEImagem =
+      "assets/imagens/estados/regioes/nordeste/regiao_nordeste_pernambuco";
+  static const regiaoNordestePIImagem =
+      "assets/imagens/estados/regioes/nordeste/regiao_nordeste_piaui";
+  static const regiaoNordesteRNImagem =
+      "assets/imagens/estados/regioes/nordeste/regiao_nordeste_rio_grande_do_norte";
+  static const regiaoNordesteSEImagem =
+      "assets/imagens/estados/regioes/nordeste/regiao_nordeste_sergipe";
+
+  //GESTOS EM LIBRAS REGIAO NORDESTE
   static const gestoNordesteImagem =
       "assets/imagens/estados/gestos_estados/regiao_nordeste/gesto_regiao_nordeste";
+  static const gestoNordesteALImagem =
+      "assets/imagens/estados/gestos_estados/regiao_nordeste/gesto_nordeste_alagoas";
+  static const gestoNordesteBAImagem =
+      "assets/imagens/estados/gestos_estados/regiao_nordeste/gesto_nordeste_bahia";
+  static const gestoNordesteCEImagem =
+      "assets/imagens/estados/gestos_estados/regiao_nordeste/gesto_nordeste_ceara";
+  static const gestoNordesteMAImagem =
+      "assets/imagens/estados/gestos_estados/regiao_nordeste/gesto_nordeste_maranhao";
+  static const gestoNordestePBImagem =
+      "assets/imagens/estados/gestos_estados/regiao_nordeste/gesto_nordeste_paraiba";
+  static const gestoNordestePEImagem =
+      "assets/imagens/estados/gestos_estados/regiao_nordeste/gesto_nordeste_pernambuco";
+  static const gestoNordestePIImagem =
+      "assets/imagens/estados/gestos_estados/regiao_nordeste/gesto_nordeste_piaui";
+  static const gestoNordesteRNImagem =
+      "assets/imagens/estados/gestos_estados/regiao_nordeste/gesto_nordeste_rio_grande_do_norte";
+  static const gestoNordesteSEImagem =
+      "assets/imagens/estados/gestos_estados/regiao_nordeste/gesto_nordeste_sergipe";
 }

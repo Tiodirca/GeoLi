@@ -8,7 +8,6 @@ import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 
 class MetodosAuxiliares {
-  static bool exibirAcerto = false;
   static String acertou = "";
 
   static Future<String> confirmarAcerto(String acerto) async {
@@ -28,67 +27,18 @@ class MetodosAuxiliares {
       db
           .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
           .doc(Constantes
-              .fireBaseDocumentoRegiaoCentroOeste) //passando o documento
+              .fireBaseDocumentoRegiaoNordeste) //passando o documento
           .set({
-        Constantes.nomeRegiaoCentroGO: false,
-        Constantes.nomeRegiaoCentroMG: false,
-        Constantes.nomeRegiaoCentroMS: false,
-      });
-    } catch (e) {
-      print(e.toString());
-    }
-  }
+        Constantes.nomeRegiaoNordesteAL: false,
+        Constantes.nomeRegiaoNordesteBA: false,
+        Constantes.nomeRegiaoNordesteCE: false,
+        Constantes.nomeRegiaoNordesteMA: false,
+        Constantes.nomeRegiaoNordestePB: false,
+        Constantes.nomeRegiaoNordestePE: false,
+        Constantes.nomeRegiaoNordestePI: false,
+        Constantes.nomeRegiaoNordesteRN: false,
+        Constantes.nomeRegiaoNordesteCE: false,
 
-  static resetarDadosRegiaoSul() async {
-    try {
-      // instanciando Firebase
-      var db = FirebaseFirestore.instance;
-      db
-          .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-          .doc(Constantes.fireBaseDocumentoRegiaoSul) //passando o documento
-          .set({
-        Constantes.nomeRegiaoSulRS: false,
-        Constantes.nomeRegiaoSulSC: false,
-        Constantes.nomeRegiaoSulPR: false,
-      });
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
-  static resetarDadosRegiaoSudeste() async {
-    try {
-      // instanciando Firebase
-      var db = FirebaseFirestore.instance;
-      db
-          .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-          .doc(Constantes.fireBaseDocumentoRegiaoSudeste) //passando o documento
-          .set({
-        Constantes.nomeRegiaoSudesteRJ: false,
-        Constantes.nomeRegiaoSudesteES: false,
-        Constantes.nomeRegiaoSudesteMG: false,
-        Constantes.nomeRegiaoSudesteSP: false,
-      });
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
-  static resetarDadosRegiaoNorte() async {
-    try {
-      // instanciando Firebase
-      var db = FirebaseFirestore.instance;
-      db
-          .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-          .doc(Constantes.fireBaseDocumentoRegiaoNorte) //passando o documento
-          .set({
-        Constantes.nomeRegiaoNorteAC: false,
-        Constantes.nomeRegiaoNorteAP: false,
-        Constantes.nomeRegiaoNorteAM: false,
-        Constantes.nomeRegiaoNortePA: false,
-        Constantes.nomeRegiaoNorteRO: false,
-        Constantes.nomeRegiaoNorteRR: false,
-        Constantes.nomeRegiaoNorteTO: false,
       });
     } catch (e) {
       print(e.toString());
@@ -111,10 +61,6 @@ class MetodosAuxiliares {
       //exibirAcerto = estado.acerto;
     }
     return gestosCentro;
-  }
-
-  static recuperarExibicaoGesto() {
-    return exibirAcerto;
   }
 
   static exibirMensagens(String msg, String tipoAlerta, BuildContext context) {

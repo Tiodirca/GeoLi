@@ -8,9 +8,9 @@ import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/gestos_widget.dart';
 
 class AreaSoltar extends StatefulWidget {
-  const AreaSoltar({super.key, required this.estado, required this.gesto});
+   AreaSoltar({super.key, required this.estado, required this.gesto});
 
-  final Estado estado;
+  Estado estado;
   final Gestos gesto;
 
   @override
@@ -18,8 +18,6 @@ class AreaSoltar extends StatefulWidget {
 }
 
 class _AreaSoltarState extends State<AreaSoltar> {
-  bool exibirGestoAcerto = false;
-
   @override
   void initState() {
     super.initState();

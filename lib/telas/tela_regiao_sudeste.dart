@@ -3,7 +3,6 @@ import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/constantes_caminhos_imagens.dart';
-import 'package:geoli/Widgets/gestos_widget.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoli/Widgets/tela_carregamento.dart';
@@ -52,7 +51,7 @@ class _TelaRegiaoSudesteState extends State<TelaRegiaoSudeste> {
       nomeGesto: Constantes.nomeRegiaoSudesteMG,
       nomeImagem: CaminhosImagens.gestoSudesteMG);
 
-  Map<Estado, Gestos> estadosMapAuxiliar = {};
+  Map<Estado, Gestos> estadoGestoMap = {};
   List<MapEntry<Estado, Gestos>> estadosSorteio = [];
   List<Gestos> gestos = [];
   bool exibirTelaCarregamento = true;
@@ -73,11 +72,11 @@ class _TelaRegiaoSudesteState extends State<TelaRegiaoSudeste> {
 
   // metodo para adicionar os estados no map auxiliar e depois adicionar numa lista e fazer o sorteio dos itens
   carregarEstados() {
-    estadosMapAuxiliar[estadoMG] = gestoMG;
-    estadosMapAuxiliar[estadoES] = gestoES;
-    estadosMapAuxiliar[estadoSP] = gestoSP;
-    estadosMapAuxiliar[estadoRJ] = gestoRJ;
-    estadosSorteio = estadosMapAuxiliar.entries.toList();
+    estadoGestoMap[estadoMG] = gestoMG;
+    estadoGestoMap[estadoES] = gestoES;
+    estadoGestoMap[estadoSP] = gestoSP;
+    estadoGestoMap[estadoRJ] = gestoRJ;
+    estadosSorteio = estadoGestoMap.entries.toList();
     estadosSorteio.shuffle();
   }
 
@@ -158,7 +157,7 @@ class _TelaRegiaoSudesteState extends State<TelaRegiaoSudeste> {
         ),
         bottomNavigationBar: WidgetAreaGestos(
           gestos: gestos,
-          estadosMapAuxiliar: estadosMapAuxiliar,
+          estadoGestoMap: estadoGestoMap,
           exibirTelaCarregamento: exibirTelaCarregamento,
         ));
   }

@@ -24,6 +24,7 @@ class WidgetAreaTela extends StatefulWidget {
 }
 
 class _WidgetAreaTelaState extends State<WidgetAreaTela> {
+
   @override
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;
@@ -57,6 +58,12 @@ class _WidgetAreaTelaState extends State<WidgetAreaTela> {
                       crossAxisCount:
                           Platform.isAndroid || Platform.isIOS ? 2 : 5),
                   itemBuilder: (context, index) {
+                    if (widget.exibirTelaProximoNivel) {
+                      for (var element in widget.estadosSorteio) {
+                          element.key.acerto = true;
+                        }
+                    }
+
                     return Center(
                         child: AreaSoltar(
                       estado: widget.estadosSorteio.elementAt(index).key,

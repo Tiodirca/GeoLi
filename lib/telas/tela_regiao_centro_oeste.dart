@@ -46,7 +46,7 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
   List<Gestos> gestos = [];
   bool exibirTelaCarregamento = true;
   bool exibirTelaProximoNivel = false;
-  Map<Estado, Gestos> estadosMapAuxiliar = {};
+  Map<Estado, Gestos> estadoGestoMap = {};
   List<MapEntry<Estado, Gestos>> estadosSorteio = [];
   String nomeTela = Constantes.nomeRegiaoCentroOeste;
 
@@ -60,12 +60,13 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
     realizarBuscaDadosFireBase(Constantes.fireBaseDocumentoRegiaoCentroOeste);
   }
 
-  // metodo para adicionar os estados no map auxiliar e depois adicionar numa lista e fazer o sorteio dos itens
+  // metodo para adicionar os estados no map auxiliar e
+  // depois adicionar numa lista e fazer o sorteio dos itens
   carregarEstados() {
-    estadosMapAuxiliar[estadoMS] = gestoMS;
-    estadosMapAuxiliar[estadoGO] = gestoGO;
-    estadosMapAuxiliar[estadoMG] = gestoMG;
-    estadosSorteio = estadosMapAuxiliar.entries.toList();
+    estadoGestoMap[estadoMS] = gestoMS;
+    estadoGestoMap[estadoGO] = gestoGO;
+    estadoGestoMap[estadoMG] = gestoMG;
+    estadosSorteio = estadoGestoMap.entries.toList();
     estadosSorteio.shuffle();
   }
 
@@ -81,7 +82,7 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
         // verificando cada item que esta gravado no banco de dados
         querySnapshot.data()!.forEach(
           (key, value) {
-            // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
+            //caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
             setState(() {
               if (estadoMG.nome == key) {
                 MetodosAuxiliares.removerGestoLista(estadoMG, value, gestos);
@@ -96,10 +97,10 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
         );
         setState(
           () {
+            carregarEstados();
             if (gestos.isEmpty) {
               exibirTelaProximoNivel = true;
             }
-            carregarEstados();
             exibirTelaCarregamento = false;
           },
         );
@@ -142,7 +143,7 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
         ),
         bottomNavigationBar: WidgetAreaGestos(
           gestos: gestos,
-          estadosMapAuxiliar: estadosMapAuxiliar,
+          estadoGestoMap: estadoGestoMap,
           exibirTelaCarregamento: exibirTelaCarregamento,
         ));
   }

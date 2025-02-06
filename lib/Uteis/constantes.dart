@@ -14,7 +14,7 @@ class Constantes {
   static const fireBaseDocumentoRegiaoSul = "regiaoSul";
   static const fireBaseDocumentoRegiaoSudeste = "regiaoSudeste";
   static const fireBaseDocumentoRegiaoNorte = "regiaoNorte";
-  static const fireBaseDocumentoRegiaoNordeste = "regiaoSul";
+  static const fireBaseDocumentoRegiaoNordeste = "regiaoNordeste";
 
   //CENTRO OESTE
   static const nomeRegiaoCentroOeste = "Região Centro-Oeste";
@@ -47,6 +47,15 @@ class Constantes {
 
   // Norte
   static const nomeRegiaoNordeste = "Região Nordeste";
+  static const nomeRegiaoNordesteAL = "Alagoas - AL";
+  static const nomeRegiaoNordesteBA = "Bahia - BA";
+  static const nomeRegiaoNordesteCE = "Ceará - CE";
+  static const nomeRegiaoNordesteMA = "Maranhão - MA";
+  static const nomeRegiaoNordestePB = "Paraiba - PB";
+  static const nomeRegiaoNordestePE = "Pernambuco - PE";
+  static const nomeRegiaoNordestePI = "Piauí - PI";
+  static const nomeRegiaoNordesteRN = "Rio Grande do Norte - RN";
+  static const nomeRegiaoNordesteSE = "Sergipe - SE";
 
   //
   static const msgErroAcertoGesto = "Errou";

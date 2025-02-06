@@ -11,14 +11,14 @@ import '../Uteis/textos.dart';
 class WidgetAreaGestos extends StatefulWidget {
   WidgetAreaGestos({
     super.key,
+    required this.estadoGestoMap,
     required this.gestos,
-    required this.estadosMapAuxiliar,
     required this.exibirTelaCarregamento,
   });
 
   bool exibirTelaCarregamento;
   List<Gestos> gestos;
-  Map<Estado, Gestos> estadosMapAuxiliar = {};
+  Map<Estado, Gestos> estadoGestoMap;
 
   @override
   State<WidgetAreaGestos> createState() => _WidgetAreaGestosState();
@@ -32,14 +32,13 @@ class _WidgetAreaGestosState extends State<WidgetAreaGestos> {
   // toda vez que o usuario acertar o estado correto
   atualizarDadosBanco() async {
     Map<String, dynamic> dados = {};
-    widget.estadosMapAuxiliar.forEach(
+    widget.estadoGestoMap.forEach(
       (key, value) {
         dados[key.nome] = key.acerto;
         //validando qual regiao o usario esta jogando
         validarRegiao(key.nome);
       },
     );
-
     try {
       // instanciando Firebase
       var db = FirebaseFirestore.instance;
@@ -65,6 +64,9 @@ class _WidgetAreaGestosState extends State<WidgetAreaGestos> {
     } else if (nome.contains(Constantes.nomeRegiaoNorteAM)) {
       nomeColecao = Constantes.fireBaseDocumentoRegiaoNorte;
       nomeRota = Constantes.rotaTelaRegiaoNorte;
+    } else if (nome.contains(Constantes.nomeRegiaoNordesteAL)) {
+      nomeColecao = Constantes.fireBaseDocumentoRegiaoNordeste;
+      nomeRota = Constantes.rotaTelaRegiaoNordeste;
     }
   }
 
@@ -83,10 +85,10 @@ class _WidgetAreaGestosState extends State<WidgetAreaGestos> {
                 },
               );
             });
+            atualizarDadosBanco();
             if (widget.gestos.isEmpty) {
               Navigator.pushReplacementNamed(context, nomeRota);
             }
-            atualizarDadosBanco();
           }
         },
         maxSimultaneousDrags: 1,
