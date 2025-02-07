@@ -26,7 +26,7 @@ class _TelaRegiaoSudesteState extends State<TelaRegiaoSudeste> {
   List<Gestos> gestos = [];
   bool exibirTelaCarregamento = true;
   bool exibirTelaProximoNivel = false;
-  String nomeTela = Constantes.nomeRegiaoSudeste;
+  String nomeColecao = Constantes.fireBaseDocumentoRegiaoSudeste;
 
   @override
   void initState() {
@@ -41,7 +41,7 @@ class _TelaRegiaoSudesteState extends State<TelaRegiaoSudeste> {
     ]);
     gestos.shuffle();
     // chamando metodo para fazer busca no banco de dados
-    realizarBuscaDadosFireBase(Constantes.fireBaseDocumentoRegiaoSudeste);
+    realizarBuscaDadosFireBase(nomeColecao);
   }
 
   // metodo para adicionar os estados no map auxiliar e depois adicionar numa lista e fazer o sorteio dos itens
@@ -128,13 +128,13 @@ class _TelaRegiaoSudesteState extends State<TelaRegiaoSudeste> {
               return TelaCarregamento();
             } else {
               return WidgetAreaTela(
-                  nomeTela: nomeTela,
                   estadosSorteio: estadosSorteio,
                   exibirTelaProximoNivel: exibirTelaProximoNivel);
             }
           },
         ),
         bottomNavigationBar: WidgetAreaGestos(
+          nomeColecao: nomeColecao,
           gestos: gestos,
           estadoGestoMap: estadoGestoMap,
           exibirTelaCarregamento: exibirTelaCarregamento,

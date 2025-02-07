@@ -11,11 +11,9 @@ import 'area_soltar.dart';
 class WidgetAreaTela extends StatefulWidget {
   const WidgetAreaTela(
       {super.key,
-      required this.nomeTela,
       required this.estadosSorteio,
       required this.exibirTelaProximoNivel});
 
-  final String nomeTela;
   final bool exibirTelaProximoNivel;
   final List<MapEntry<Estado, Gestos>> estadosSorteio;
 

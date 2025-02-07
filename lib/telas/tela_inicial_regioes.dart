@@ -69,6 +69,9 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
             } else if (nomeRegiao == regiaoNordeste.nome) {
               Navigator.pushReplacementNamed(
                   context, Constantes.rotaTelaRegiaoNordeste);
+            }else if (nomeRegiao == todasRegioes.nome) {
+              Navigator.pushReplacementNamed(
+                  context, Constantes.rotaTelaRegiaoTodosEstados);
             }
           },
           shape: RoundedRectangleBorder(

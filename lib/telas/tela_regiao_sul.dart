@@ -27,8 +27,7 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
   List<MapEntry<Estado, Gestos>> estadosSorteio = [];
   bool exibirTelaCarregamento = true;
   bool exibirTelaProximoNivel = false;
-  String nomeTela = Constantes.nomeRegiaoSul;
-
+  String nomeColecao = Constantes.fireBaseDocumentoRegiaoSul;
   @override
   void initState() {
     // TODO: implement initState
@@ -40,14 +39,17 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
     ]); // adicionando gestos na lista
     gestos.shuffle(); //fazendo sorteio os itens na lista
     // chamando metodo para fazer busca no banco de dados
-    realizarBuscaDadosFireBase(Constantes.fireBaseDocumentoRegiaoSul);
+    realizarBuscaDadosFireBase(nomeColecao);
   }
 
   // metodo para adicionar os estados no map auxiliar e depois adicionar numa lista e fazer o sorteio dos itens
   carregarEstados() {
-    estadoGestoMap[ConstantesEstadosGestos.estadoRS] = ConstantesEstadosGestos.gestoRS;
-    estadoGestoMap[ConstantesEstadosGestos.estadoSC] = ConstantesEstadosGestos.gestoSC;
-    estadoGestoMap[ConstantesEstadosGestos.estadoPR] = ConstantesEstadosGestos.gestoPR;
+    estadoGestoMap[ConstantesEstadosGestos.estadoRS] =
+        ConstantesEstadosGestos.gestoRS;
+    estadoGestoMap[ConstantesEstadosGestos.estadoSC] =
+        ConstantesEstadosGestos.gestoSC;
+    estadoGestoMap[ConstantesEstadosGestos.estadoPR] =
+        ConstantesEstadosGestos.gestoPR;
     estadosSorteio = estadoGestoMap.entries.toList();
     estadosSorteio.shuffle();
   }
@@ -67,11 +69,14 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
             // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
             setState(() {
               if (ConstantesEstadosGestos.estadoSC.nome == key) {
-                MetodosAuxiliares.removerGestoLista(ConstantesEstadosGestos.estadoSC, value, gestos);
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoSC, value, gestos);
               } else if (ConstantesEstadosGestos.estadoRS.nome == key) {
-                MetodosAuxiliares.removerGestoLista(ConstantesEstadosGestos.estadoRS, value, gestos);
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoRS, value, gestos);
               } else if (ConstantesEstadosGestos.estadoPR.nome == key) {
-                MetodosAuxiliares.removerGestoLista(ConstantesEstadosGestos.estadoPR, value, gestos);
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoPR, value, gestos);
               }
             });
           },
@@ -154,13 +159,13 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
               return TelaCarregamento();
             } else {
               return WidgetAreaTela(
-                  nomeTela: nomeTela,
                   estadosSorteio: estadosSorteio,
                   exibirTelaProximoNivel: exibirTelaProximoNivel);
             }
           },
         ),
         bottomNavigationBar: WidgetAreaGestos(
+          nomeColecao: nomeColecao,
           gestos: gestos,
           estadoGestoMap: estadoGestoMap,
           exibirTelaCarregamento: exibirTelaCarregamento,

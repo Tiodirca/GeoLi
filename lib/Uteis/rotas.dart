@@ -5,6 +5,7 @@ import 'package:geoli/telas/tela_regiao_nordeste.dart';
 import 'package:geoli/telas/tela_regiao_norte.dart';
 import 'package:geoli/telas/tela_regiao_sudeste.dart';
 import 'package:geoli/telas/tela_regiao_sul.dart';
+import 'package:geoli/telas/tela_todas_regioes.dart';
 import '../telas/tela_regiao_centro_oeste.dart';
 
 class Rotas {
@@ -28,6 +29,8 @@ class Rotas {
         return MaterialPageRoute(builder: (_) => TelaRegiaoNorte());
       case Constantes.rotaTelaRegiaoNordeste:
         return MaterialPageRoute(builder: (_) => TelaRegiaoNordeste());
+      case Constantes.rotaTelaRegiaoTodosEstados:
+        return MaterialPageRoute(builder: (_) => TelaTodasRegioes());
 
       // case Constantes.rotaTelaDividirLetraTexto:
       //   return MaterialPageRoute(builder: (_) => const TelaDividirLetraTexto());

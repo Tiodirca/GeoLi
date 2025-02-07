@@ -11,14 +11,14 @@ import 'package:geoli/Widgets/widget_area_tela.dart';
 
 import '../Uteis/textos.dart';
 
-class TelaRegiaoNordeste extends StatefulWidget {
-  const TelaRegiaoNordeste({super.key});
+class TelaTodasRegioes extends StatefulWidget {
+  const TelaTodasRegioes({super.key});
 
   @override
-  State<TelaRegiaoNordeste> createState() => _TelaRegiaoNordesteState();
+  State<TelaTodasRegioes> createState() => _TelaTodasRegioesState();
 }
 
-class _TelaRegiaoNordesteState extends State<TelaRegiaoNordeste> {
+class _TelaTodasRegioesState extends State<TelaTodasRegioes> {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
   Map<Estado, Gestos> estadoGestoMap = {};
@@ -26,13 +26,31 @@ class _TelaRegiaoNordesteState extends State<TelaRegiaoNordeste> {
   List<Gestos> gestos = [];
   bool exibirTelaCarregamento = true;
   bool exibirTelaProximoNivel = false;
-  String nomeColecao = Constantes.fireBaseDocumentoRegiaoNordeste;
+  String nomeColecao = Constantes.fireBaseDocumentoRegiaoTodosEstados;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     carregarEstados();
     gestos.addAll([
+      ConstantesEstadosGestos.gestoGO,
+      ConstantesEstadosGestos.gestoMT,
+      ConstantesEstadosGestos.gestoMS,
+      ConstantesEstadosGestos.gestoPR,
+      ConstantesEstadosGestos.gestoSC,
+      ConstantesEstadosGestos.gestoRS,
+      ConstantesEstadosGestos.gestoSP,
+      ConstantesEstadosGestos.gestoRJ,
+      ConstantesEstadosGestos.gestoMG,
+      ConstantesEstadosGestos.gestoES,
+      ConstantesEstadosGestos.gestoAC,
+      ConstantesEstadosGestos.gestoAP,
+      ConstantesEstadosGestos.gestoAM,
+      ConstantesEstadosGestos.gestoPA,
+      ConstantesEstadosGestos.gestoRO,
+      ConstantesEstadosGestos.gestoRR,
+      ConstantesEstadosGestos.gestoTO,
       ConstantesEstadosGestos.gestoAL,
       ConstantesEstadosGestos.gestoBA,
       ConstantesEstadosGestos.gestoCE,
@@ -44,11 +62,46 @@ class _TelaRegiaoNordesteState extends State<TelaRegiaoNordeste> {
       ConstantesEstadosGestos.gestoSE
     ]);
     gestos.shuffle();
+    //MetodosAuxiliares.addItensBancoDados(Constantes.fireBaseDocumentoRegiaoTodosEstados);
     // chamando metodo para fazer busca no banco de dados
     realizarBuscaDadosFireBase(nomeColecao);
   }
 
   carregarEstados() {
+    estadoGestoMap[ConstantesEstadosGestos.estadoMS] =
+        ConstantesEstadosGestos.gestoMS;
+    estadoGestoMap[ConstantesEstadosGestos.estadoGO] =
+        ConstantesEstadosGestos.gestoGO;
+    estadoGestoMap[ConstantesEstadosGestos.estadoMT] =
+        ConstantesEstadosGestos.gestoMT;
+    estadoGestoMap[ConstantesEstadosGestos.estadoRS] =
+        ConstantesEstadosGestos.gestoRS;
+    estadoGestoMap[ConstantesEstadosGestos.estadoSC] =
+        ConstantesEstadosGestos.gestoSC;
+    estadoGestoMap[ConstantesEstadosGestos.estadoPR] =
+        ConstantesEstadosGestos.gestoPR;
+    estadoGestoMap[ConstantesEstadosGestos.estadoMG] =
+        ConstantesEstadosGestos.gestoMG;
+    estadoGestoMap[ConstantesEstadosGestos.estadoES] =
+        ConstantesEstadosGestos.gestoES;
+    estadoGestoMap[ConstantesEstadosGestos.estadoSP] =
+        ConstantesEstadosGestos.gestoSP;
+    estadoGestoMap[ConstantesEstadosGestos.estadoRJ] =
+        ConstantesEstadosGestos.gestoRJ;
+    estadoGestoMap[ConstantesEstadosGestos.estadoAC] =
+        ConstantesEstadosGestos.gestoAC;
+    estadoGestoMap[ConstantesEstadosGestos.estadoAP] =
+        ConstantesEstadosGestos.gestoAP;
+    estadoGestoMap[ConstantesEstadosGestos.estadoAM] =
+        ConstantesEstadosGestos.gestoAM;
+    estadoGestoMap[ConstantesEstadosGestos.estadoPA] =
+        ConstantesEstadosGestos.gestoPA;
+    estadoGestoMap[ConstantesEstadosGestos.estadoRO] =
+        ConstantesEstadosGestos.gestoRO;
+    estadoGestoMap[ConstantesEstadosGestos.estadoRR] =
+        ConstantesEstadosGestos.gestoRR;
+    estadoGestoMap[ConstantesEstadosGestos.estadoTO] =
+        ConstantesEstadosGestos.gestoTO;
     estadoGestoMap[ConstantesEstadosGestos.estadoAL] =
         ConstantesEstadosGestos.gestoAL;
     estadoGestoMap[ConstantesEstadosGestos.estadoBA] =
@@ -85,7 +138,59 @@ class _TelaRegiaoNordesteState extends State<TelaRegiaoNordeste> {
           (key, value) {
             // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
             setState(() {
-              if (ConstantesEstadosGestos.estadoAL.nome == key) {
+              if (ConstantesEstadosGestos.estadoMT.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoMT, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoMS.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoMS, value, gestos);
+                ConstantesEstadosGestos.estadoMS.acerto = value;
+              } else if (ConstantesEstadosGestos.estadoGO.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoGO, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoSC.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoSC, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoRS.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoRS, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoPR.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoPR, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoRJ.nome == key) {
+                gestos = MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoRJ, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoSP.nome == key) {
+                gestos = MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoSP, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoES.nome == key) {
+                gestos = MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoES, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoMG.nome == key) {
+                gestos = MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoMG, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoAC.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoAC, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoAP.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoAP, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoAM.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoAM, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoPA.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoPA, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoRO.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoRO, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoRR.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoRR, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoTO.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoTO, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoAL.nome == key) {
                 MetodosAuxiliares.removerGestoLista(
                     ConstantesEstadosGestos.estadoAL, value, gestos);
               } else if (ConstantesEstadosGestos.estadoBA.nome == key) {
@@ -134,7 +239,7 @@ class _TelaRegiaoNordesteState extends State<TelaRegiaoNordeste> {
         appBar: AppBar(
             title: Visibility(
                 visible: !exibirTelaCarregamento,
-                child: Text(Textos.tituloTelaRegiaoNordeste)),
+                child: Text(Textos.tituloTelaTodasRegioes)),
             backgroundColor: Colors.white,
             leading: Visibility(
               visible: !exibirTelaCarregamento,

@@ -28,7 +28,7 @@ class _TelaProximoNivelState extends State<TelaProximoNivel> {
     // TODO: implement initState
     super.initState();
     carregarDados();
-    if (nomeRegiao.contains(Constantes.nomeTodosEstados)) {
+    if (widget.estados.length >= 10) {
       exibirBtnProximoNivel = false;
     }
   }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
-import 'package:geoli/Uteis/constantes_caminhos_imagens.dart';
 import 'package:geoli/Uteis/constantes_estados_gestos.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -27,7 +26,7 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
   bool exibirTelaProximoNivel = false;
   Map<Estado, Gestos> estadoGestoMap = {};
   List<MapEntry<Estado, Gestos>> estadosSorteio = [];
-  String nomeTela = Constantes.nomeRegiaoCentroOeste;
+  String nomeColecao = Constantes.fireBaseDocumentoRegiaoCentroOeste;
 
   @override
   void initState() {
@@ -40,7 +39,8 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
     ]); // adicionando itens na lista
     gestos.shuffle(); // fazendo sorteio dos gestos na lista
     // chamando metodo para fazer busca no banco de dados
-    realizarBuscaDadosFireBase(Constantes.fireBaseDocumentoRegiaoCentroOeste);
+    //MetodosAuxiliares.addItensBancoDados(nomeColecao);
+    realizarBuscaDadosFireBase(nomeColecao);
   }
 
   // metodo para adicionar os estados no map auxiliar e
@@ -124,13 +124,13 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
               return TelaCarregamento();
             } else {
               return WidgetAreaTela(
-                  nomeTela: nomeTela,
                   estadosSorteio: estadosSorteio,
                   exibirTelaProximoNivel: exibirTelaProximoNivel);
             }
           },
         ),
         bottomNavigationBar: WidgetAreaGestos(
+          nomeColecao: nomeColecao,
           gestos: gestos,
           estadoGestoMap: estadoGestoMap,
           exibirTelaCarregamento: exibirTelaCarregamento,

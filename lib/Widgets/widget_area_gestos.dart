@@ -13,11 +13,13 @@ class WidgetAreaGestos extends StatefulWidget {
     super.key,
     required this.estadoGestoMap,
     required this.gestos,
+    required this.nomeColecao,
     required this.exibirTelaCarregamento,
   });
 
   bool exibirTelaCarregamento;
   List<Gestos> gestos;
+  String nomeColecao;
   Map<Estado, Gestos> estadoGestoMap;
 
   @override
@@ -25,26 +27,26 @@ class WidgetAreaGestos extends StatefulWidget {
 }
 
 class _WidgetAreaGestosState extends State<WidgetAreaGestos> {
-  String nomeColecao = "";
   String nomeRota = "";
+
 
   // metodo para fazer atualizacao no banco de dado
   // toda vez que o usuario acertar o estado correto
   atualizarDadosBanco() async {
+    validarRegiao(widget.nomeColecao);
     Map<String, dynamic> dados = {};
     widget.estadoGestoMap.forEach(
       (key, value) {
         dados[key.nome] = key.acerto;
-        //validando qual regiao o usario esta jogando
-        validarRegiao(key.nome);
       },
     );
+
     try {
       // instanciando Firebase
       var db = FirebaseFirestore.instance;
       db
           .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-          .doc(nomeColecao) //passando o documento
+          .doc(widget.nomeColecao) //passando o documento
           .set(dados);
     } catch (e) {
       print(e.toString());
@@ -52,21 +54,21 @@ class _WidgetAreaGestosState extends State<WidgetAreaGestos> {
   }
 
   validarRegiao(String nome) {
-    if (nome.contains(Constantes.nomeRegiaoCentroMS)) {
-      nomeColecao = Constantes.fireBaseDocumentoRegiaoCentroOeste;
+    if (widget.nomeColecao == Constantes.fireBaseDocumentoRegiaoCentroOeste) {
       nomeRota = Constantes.rotaTelaRegiaoCentroOeste;
-    } else if (nome.contains(Constantes.nomeRegiaoSulPR)) {
-      nomeColecao = Constantes.fireBaseDocumentoRegiaoSul;
+    } else if (widget.nomeColecao == Constantes.fireBaseDocumentoRegiaoSul) {
       nomeRota = Constantes.rotaTelaRegiaoSul;
-    } else if (nome.contains(Constantes.nomeRegiaoSudesteSP)) {
-      nomeColecao = Constantes.fireBaseDocumentoRegiaoSudeste;
+    } else if (widget.nomeColecao ==
+        Constantes.fireBaseDocumentoRegiaoSudeste) {
       nomeRota = Constantes.rotaTelaRegiaoSudeste;
-    } else if (nome.contains(Constantes.nomeRegiaoNorteAM)) {
-      nomeColecao = Constantes.fireBaseDocumentoRegiaoNorte;
+    } else if (widget.nomeColecao == Constantes.fireBaseDocumentoRegiaoNorte) {
       nomeRota = Constantes.rotaTelaRegiaoNorte;
-    } else if (nome.contains(Constantes.nomeRegiaoNordesteAL)) {
-      nomeColecao = Constantes.fireBaseDocumentoRegiaoNordeste;
+    } else if (widget.nomeColecao ==
+        Constantes.fireBaseDocumentoRegiaoNordeste) {
       nomeRota = Constantes.rotaTelaRegiaoNordeste;
+    } else if (widget.nomeColecao ==
+        Constantes.fireBaseDocumentoRegiaoTodosEstados) {
+      nomeRota = Constantes.rotaTelaRegiaoTodosEstados;
     }
   }
 

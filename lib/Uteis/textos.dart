@@ -11,6 +11,7 @@ class Textos {
   static String tituloTelaRegiaoSudeste = "Região Sudeste";
   static String tituloTelaRegiaoNorte = "Região Norte";
   static String tituloTelaRegiaoNordeste = "Região Nordeste";
+  static String tituloTelaTodasRegioes = "Todas as regioes do Brasil";
 
   static String descricaoTelaRegioes =
       "Selecione um dos níveis para jogar ou para desbloquear os próximos níveis";

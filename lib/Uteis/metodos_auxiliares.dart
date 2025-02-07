@@ -20,19 +20,40 @@ class MetodosAuxiliares {
   }
 
   // metodo para cadastrar item
-  static resetarDadosRegiaoCentroOeste() async {
+  static addItensBancoDados(String fireBaseDocumentoRegiao) async {
     try {
       // instanciando Firebase
       var db = FirebaseFirestore.instance;
       db
           .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-          .doc(Constantes
-              .fireBaseDocumentoRegiaoCentroOeste) //passando o documento
+          .doc(fireBaseDocumentoRegiao) //passando o documento
           .set({
         Constantes.nomeRegiaoCentroGO: false,
         Constantes.nomeRegiaoCentroMT: false,
         Constantes.nomeRegiaoCentroMS: false,
-
+        Constantes.nomeRegiaoSulPR: false,
+        Constantes.nomeRegiaoSulRS: false,
+        Constantes.nomeRegiaoSulSC: false,
+        Constantes.nomeRegiaoSudesteSP: false,
+        Constantes.nomeRegiaoSudesteRJ: false,
+        Constantes.nomeRegiaoSudesteES: false,
+        Constantes.nomeRegiaoSudesteMG: false,
+        Constantes.nomeRegiaoNorteAC: false,
+        Constantes.nomeRegiaoNorteAP: false,
+        Constantes.nomeRegiaoNorteAM: false,
+        Constantes.nomeRegiaoNortePA: false,
+        Constantes.nomeRegiaoNorteRO: false,
+        Constantes.nomeRegiaoNorteRR: false,
+        Constantes.nomeRegiaoNorteTO: false,
+        Constantes.nomeRegiaoNordesteAL: false,
+        Constantes.nomeRegiaoNordesteBA: false,
+        Constantes.nomeRegiaoNordesteCE: false,
+        Constantes.nomeRegiaoNordesteMA: false,
+        Constantes.nomeRegiaoNordestePB: false,
+        Constantes.nomeRegiaoNordestePE: false,
+        Constantes.nomeRegiaoNordestePI: false,
+        Constantes.nomeRegiaoNordesteRN: false,
+        Constantes.nomeRegiaoNordesteSE: false,
       });
     } catch (e) {
       print(e.toString());
