@@ -1,7 +1,7 @@
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
+import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
-import 'package:geoli/Uteis/constantes_caminhos_imagens.dart';
 
 class ConstantesEstadosGestos {
   // REGIAO CENTRO OESTE

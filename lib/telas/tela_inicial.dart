@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
-import 'package:geoli/Uteis/constantes_caminhos_imagens.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 

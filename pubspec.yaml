@@ -31,13 +31,18 @@ flutter:
   assets:
     - assets/imagens/
     #GESTOS
+    #SISTEMA SOLAR
     - assets/imagens/sistema_solar/gestos_planetas/
+    #REGIOES
     - assets/imagens/estados/gestos_estados/
     - assets/imagens/estados/gestos_estados/regiao_centro_oeste/
     - assets/imagens/estados/gestos_estados/regiao_sul/
     - assets/imagens/estados/gestos_estados/regiao_sudeste/
     - assets/imagens/estados/gestos_estados/regiao_norte/
     - assets/imagens/estados/gestos_estados/regiao_nordeste/
+
+    #EMBLEMAS
+    - assets/imagens/estados/
     #REGIOES
     - assets/imagens/estados/regioes/centro_oeste/
     - assets/imagens/estados/regioes/sul/

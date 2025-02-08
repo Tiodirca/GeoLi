@@ -7,6 +7,19 @@ class CaminhosImagens {
   static const btnGestoSistemaSolarImagem =
       "assets/imagens/sistema_solar/gestos_planetas/gesto_sistema_solar";
 
+  static const emblemaEstadosAventureiroum =
+      "assets/imagens/estados/emblema_estados_aventureiro_um";
+  static const emblemaEstadosAventureirodois =
+      "assets/imagens/estados/emblema_estados_aventureiro_dois";
+  static const emblemaEstadosEntusiastaum =
+      "assets/imagens/estados/emblema_estados_entusiasta_um";
+  static const emblemaEstadosEntusiastadois =
+      "assets/imagens/estados/emblema_estados_entusiasta_dois";
+  static const emblemaEstadosColecionador =
+      "assets/imagens/estados/emblema_estados_colecionador";
+  static const emblemaEstadosIndiana =
+      "assets/imagens/estados/emblema_estados_indi_ana";
+
   // TODAS AS REGIOES
   static const gestoRegioesImagem =
       "assets/imagens/estados/gestos_estados/gesto_estados_regioes";

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elegant_notification/elegant_notification.dart';
 import 'package:elegant_notification/resources/arrays.dart';
 import 'package:flutter/material.dart';
@@ -18,49 +17,8 @@ class MetodosAuxiliares {
   static Future<String> recuperarAcerto() async {
     return acertou;
   }
-
-  // metodo para cadastrar item
-  static addItensBancoDados(String fireBaseDocumentoRegiao) async {
-    try {
-      // instanciando Firebase
-      var db = FirebaseFirestore.instance;
-      db
-          .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-          .doc(fireBaseDocumentoRegiao) //passando o documento
-          .set({
-        Constantes.nomeRegiaoCentroGO: false,
-        Constantes.nomeRegiaoCentroMT: false,
-        Constantes.nomeRegiaoCentroMS: false,
-        Constantes.nomeRegiaoSulPR: false,
-        Constantes.nomeRegiaoSulRS: false,
-        Constantes.nomeRegiaoSulSC: false,
-        Constantes.nomeRegiaoSudesteSP: false,
-        Constantes.nomeRegiaoSudesteRJ: false,
-        Constantes.nomeRegiaoSudesteES: false,
-        Constantes.nomeRegiaoSudesteMG: false,
-        Constantes.nomeRegiaoNorteAC: false,
-        Constantes.nomeRegiaoNorteAP: false,
-        Constantes.nomeRegiaoNorteAM: false,
-        Constantes.nomeRegiaoNortePA: false,
-        Constantes.nomeRegiaoNorteRO: false,
-        Constantes.nomeRegiaoNorteRR: false,
-        Constantes.nomeRegiaoNorteTO: false,
-        Constantes.nomeRegiaoNordesteAL: false,
-        Constantes.nomeRegiaoNordesteBA: false,
-        Constantes.nomeRegiaoNordesteCE: false,
-        Constantes.nomeRegiaoNordesteMA: false,
-        Constantes.nomeRegiaoNordestePB: false,
-        Constantes.nomeRegiaoNordestePE: false,
-        Constantes.nomeRegiaoNordestePI: false,
-        Constantes.nomeRegiaoNordesteRN: false,
-        Constantes.nomeRegiaoNordesteSE: false,
-      });
-    } catch (e) {
-      print(e.toString());
-    }
-  }
-
-  // metodo para remover o gesto ja acertado da lista
+  // metodo para remover o gesto ja a
+  // certado da lista
   // de gestos quando voltar a jogar
   static removerGestoLista(
       Estado estado, bool value, List<Gestos> gestosCentro) {

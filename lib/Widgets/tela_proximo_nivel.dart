@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
+import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
-import 'package:geoli/Uteis/constantes_caminhos_imagens.dart';
 
 import '../Uteis/paleta_cores.dart';
 import '../Uteis/textos.dart';
