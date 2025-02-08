@@ -28,7 +28,49 @@ class WidgetAreaGestos extends StatefulWidget {
 
 class _WidgetAreaGestosState extends State<WidgetAreaGestos> {
   String nomeRota = "";
+  int ponto = 0;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    recuperarPontuacao();
+  }
+
+  // metodo para recuperar a pontuacao
+  recuperarPontuacao() async {
+    var db = FirebaseFirestore.instance;
+    //instanciano variavel
+    db
+        .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
+        .doc(Constantes.fireBaseDocumentoPontosJogada) // passando documento
+        .get()
+        .then(
+      (querySnapshot) async {
+        querySnapshot.data()!.forEach(
+          (key, value) {
+            setState(() {
+              ponto = value;
+            });
+          },
+        );
+      },
+    );
+  }
+
+  atualizarPontuacao() async {
+    ponto = ponto + 1;
+    try {
+      // instanciando Firebase
+      var db = FirebaseFirestore.instance;
+      db
+          .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
+          .doc(Constantes.fireBaseDocumentoPontosJogada) //passando o documento
+          .set({Constantes.pontosJogada: ponto});
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 
   // metodo para fazer atualizacao no banco de dado
   // toda vez que o usuario acertar o estado correto
@@ -88,6 +130,7 @@ class _WidgetAreaGestosState extends State<WidgetAreaGestos> {
               );
             });
             atualizarDadosBanco();
+            atualizarPontuacao();
             if (widget.gestos.isEmpty) {
               Navigator.pushReplacementNamed(context, nomeRota);
             }

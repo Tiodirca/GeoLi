@@ -1,9 +1,12 @@
 class Textos {
-  static String nomeApp = "Libras Game";
+  static String nomeApp = "Geo Li";
   static String txtTelaCarregamento = "Aguarde Carregando";
 
   static String btnJogarNovamente = "Jogar Novamente";
   static String btnProximoNivel = "Próximo Nivel";
+  static String btnTodosEstados = "Todos os estados";
+  static String btnEstadoBrasileiros = "Estados Brasileiros";
+  static String btnSistemaSolar = "Sistema Solar";
 
   static String tituloTelaRegioes = "Seleção das Regiões do Brasil";
   static String tituloTelaRegiaoCentro = "Região Centro-Oeste";
@@ -13,6 +16,7 @@ class Textos {
   static String tituloTelaRegiaoNordeste = "Região Nordeste";
   static String tituloTelaTodasRegioes = "Todas as regioes do Brasil";
 
+  static String descricaoTelaInicial = "Selecione qual jogo deseja jogar";
   static String descricaoTelaRegioes =
       "Selecione um dos níveis para jogar ou para desbloquear os próximos níveis";
   static String descricaoAreaEstado =

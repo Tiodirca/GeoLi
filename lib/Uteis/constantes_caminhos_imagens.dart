@@ -2,8 +2,12 @@ class CaminhosImagens {
   static const btnJogarNovamenteGesto = "assets/imagens/gesto_de_novo";
   static const btnProximoNivelGesto = "assets/imagens/gesto_continuar";
 
-  static const gestoRegioesEstadosImagem =
+  static const btnGestoEstadosBrasileiroImagem =
       "assets/imagens/estados/gestos_estados/gesto_estados";
+  static const btnGestoSistemaSolarImagem =
+      "assets/imagens/sistema_solar/gestos_planetas/gesto_sistema_solar";
+
+  // TODAS AS REGIOES
   static const gestoRegioesImagem =
       "assets/imagens/estados/gestos_estados/gesto_estados_regioes";
 

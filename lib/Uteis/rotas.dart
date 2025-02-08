@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
+import 'package:geoli/telas/tela_inicial.dart';
 import 'package:geoli/telas/tela_inicial_regioes.dart';
 import 'package:geoli/telas/tela_regiao_nordeste.dart';
 import 'package:geoli/telas/tela_regiao_norte.dart';
@@ -16,7 +17,7 @@ class Rotas {
     final args = settings.arguments;
     switch (settings.name) {
       case Constantes.rotaTelaInicial:
-        return MaterialPageRoute(builder: (_) => TelaRegiaoCentroOeste());
+        return MaterialPageRoute(builder: (_) => TelaInicial());
       case Constantes.rotaTelaInicialRegioes:
         return MaterialPageRoute(builder: (_) => TelaInicialRegioes());
       case Constantes.rotaTelaRegiaoCentroOeste:

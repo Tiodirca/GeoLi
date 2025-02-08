@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/constantes_caminhos_imagens.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
+import 'package:geoli/Widgets/tela_carregamento.dart';
 
 class TelaInicialRegioes extends StatefulWidget {
   const TelaInicialRegioes({super.key});
@@ -13,7 +15,6 @@ class TelaInicialRegioes extends StatefulWidget {
 }
 
 class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
-
   Estado regiaoCentroOeste = Estado(
       nome: Constantes.nomeRegiaoCentroOeste,
       caminhoImagem: CaminhosImagens.gestoCentroOesteImagem,
@@ -21,29 +22,85 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
   Estado regiaoSul = Estado(
       nome: Constantes.nomeRegiaoSul,
       caminhoImagem: CaminhosImagens.gestoSulImagem,
-      acerto: true);
+      acerto: false);
   Estado regiaoSudeste = Estado(
       nome: Constantes.nomeRegiaoSudeste,
       caminhoImagem: CaminhosImagens.gestoSudesteImagem,
-      acerto: true);
+      acerto: false);
   Estado regiaoNorte = Estado(
       nome: Constantes.nomeRegiaoNorte,
       caminhoImagem: CaminhosImagens.gestoNorteImagem,
-      acerto: true);
+      acerto: false);
   Estado regiaoNordeste = Estado(
       nome: Constantes.nomeRegiaoNordeste,
       caminhoImagem: CaminhosImagens.gestoNordesteImagem,
-      acerto: true);
+      acerto: false);
 
   Estado todasRegioes = Estado(
-      nome: Constantes.nomeTodosEstados,
+      nome: Textos.btnTodosEstados,
       caminhoImagem: CaminhosImagens.gestoRegioesImagem,
-      acerto: true);
+      acerto: false);
+  int pontos = 0;
+  bool exibirTelaCarregamento = true;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    recuperarRegioesLiberadas();
+    recuperarPontuacao();
+  }
+
+  recuperarRegioesLiberadas() async {
+    var db = FirebaseFirestore.instance;
+    //instanciano variavel
+    db
+        .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
+        .doc(Constantes.fireBaseDocumentoLiberarEstados) // passando documento
+        .get()
+        .then(
+      (querySnapshot) async {
+        // verificando cada item que esta gravado no banco de dados
+        querySnapshot.data()!.forEach((key, value) {
+          setState(() {
+            // verificando se o nome da KEY e igual ao nome passado
+            if (regiaoSul.nome == key) {
+              regiaoSul.acerto = value;
+            } else if (regiaoSudeste.nome == key) {
+              regiaoSudeste.acerto = value;
+            } else if (regiaoNorte.nome == key) {
+              regiaoNorte.acerto = value;
+            } else if (regiaoNordeste.nome == key) {
+              regiaoNordeste.acerto = value;
+            } else if (Constantes.nomeTodosEstados == key) {
+              todasRegioes.acerto = value;
+            }
+          });
+        });
+        setState(() {
+          exibirTelaCarregamento = false;
+        });
+      },
+    );
+  }
+
+  recuperarPontuacao() async {
+    var db = FirebaseFirestore.instance;
+    //instanciano variavel
+    db
+        .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
+        .doc(Constantes.fireBaseDocumentoPontosJogada) // passando documento
+        .get()
+        .then(
+      (querySnapshot) async {
+        // verificando cada item que esta gravado no banco de dados
+        querySnapshot.data()!.forEach((key, value) {
+          setState(() {
+            pontos = value;
+          });
+        });
+      },
+    );
   }
 
   Widget cartaoRegiao(String nomeImagem, String nomeRegiao) => Container(
@@ -69,7 +126,7 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
             } else if (nomeRegiao == regiaoNordeste.nome) {
               Navigator.pushReplacementNamed(
                   context, Constantes.rotaTelaRegiaoNordeste);
-            }else if (nomeRegiao == todasRegioes.nome) {
+            } else if (nomeRegiao == todasRegioes.nome) {
               Navigator.pushReplacementNamed(
                   context, Constantes.rotaTelaRegiaoTodosEstados);
             }
@@ -103,75 +160,86 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
     double alturaTela = MediaQuery.of(context).size.height;
     double larguraTela = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Text(Textos.tituloTelaRegioes),
-        leading: IconButton(
-            color: Colors.black,
-            //setando tamanho do icone
-            iconSize: 30,
-            enableFeedback: false,
-            onPressed: () {
-              // Navigator.pushReplacementNamed(
-              //     context, Constantes.rotaTelaInicialRegioes);
-            },
-            icon: const Icon(Icons.arrow_back_ios)),
-      ),
-      body: Container(
-        color: Colors.white,
-        width: larguraTela,
-        height: alturaTela,
-        child: Column(
-          children: [
-            SizedBox(
-                width: larguraTela,
-                child: Text(
-                  Textos.descricaoTelaRegioes,
-                  style: TextStyle(fontSize: 18),
-                  textAlign: TextAlign.center,
-                )),
-            SizedBox(
-              height: alturaTela * 0.74,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (exibirTelaCarregamento) {
+          return TelaCarregamento();
+        } else {
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+              title: Text(Textos.tituloTelaRegioes),
+              leading: IconButton(
+                  color: Colors.black,
+                  //setando tamanho do icone
+                  iconSize: 30,
+                  enableFeedback: false,
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(
+                        context, Constantes.rotaTelaInicial);
+                  },
+                  icon: const Icon(Icons.arrow_back_ios)),
+            ),
+            body: Container(
+              color: Colors.white,
               width: larguraTela,
-              child: SingleChildScrollView(
-                child: Wrap(
-                  alignment: WrapAlignment.spaceAround,
-                  children: [
-                    cartaoRegiao(regiaoCentroOeste.caminhoImagem,
-                        regiaoCentroOeste.nome),
-                    Visibility(
-                        visible: regiaoSul.acerto,
-                        child: cartaoRegiao(
-                            regiaoSul.caminhoImagem, regiaoSul.nome)),
-                    Visibility(
-                        visible: regiaoSudeste.acerto,
-                        child: cartaoRegiao(
-                            regiaoSudeste.caminhoImagem, regiaoSudeste.nome)),
-                    Visibility(
-                        visible: regiaoNorte.acerto,
-                        child: cartaoRegiao(
-                            regiaoNorte.caminhoImagem, regiaoNorte.nome)),
-                    Visibility(
-                        visible: regiaoNordeste.acerto,
-                        child: cartaoRegiao(
-                            regiaoNordeste.caminhoImagem, regiaoNordeste.nome)),
-                    Visibility(
-                        visible: todasRegioes.acerto,
-                        child: cartaoRegiao(
-                            todasRegioes.caminhoImagem, todasRegioes.nome)),
-                  ],
-                ),
+              height: alturaTela,
+              child: Column(
+                children: [
+                  SizedBox(
+                      width: larguraTela,
+                      child: Text(
+                        Textos.descricaoTelaRegioes,
+                        style: TextStyle(fontSize: 18),
+                        textAlign: TextAlign.center,
+                      )),
+                  SizedBox(
+                    height: alturaTela * 0.74,
+                    width: larguraTela,
+                    child: SingleChildScrollView(
+                      child: Wrap(
+                        alignment: WrapAlignment.spaceAround,
+                        children: [
+                          cartaoRegiao(regiaoCentroOeste.caminhoImagem,
+                              regiaoCentroOeste.nome),
+                          Visibility(
+                              visible: regiaoSul.acerto,
+                              child: cartaoRegiao(
+                                  regiaoSul.caminhoImagem, regiaoSul.nome)),
+                          Visibility(
+                              visible: regiaoSudeste.acerto,
+                              child: cartaoRegiao(regiaoSudeste.caminhoImagem,
+                                  regiaoSudeste.nome)),
+                          Visibility(
+                              visible: regiaoNorte.acerto,
+                              child: cartaoRegiao(
+                                  regiaoNorte.caminhoImagem, regiaoNorte.nome)),
+                          Visibility(
+                              visible: regiaoNordeste.acerto,
+                              child: cartaoRegiao(regiaoNordeste.caminhoImagem,
+                                  regiaoNordeste.nome)),
+                          Visibility(
+                              visible: todasRegioes.acerto,
+                              child: cartaoRegiao(todasRegioes.caminhoImagem,
+                                  todasRegioes.nome)),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
               ),
-            )
-          ],
-        ),
-      ),
-      bottomNavigationBar: Container(
-        width: larguraTela,
-        color: Colors.grey,
-        height: 60,
-      ),
+            ),
+            bottomNavigationBar: Container(
+              width: larguraTela,
+              color: Colors.grey,
+              height: 60,
+              child: Row(
+                children: [Text(pontos.toString())],
+              ),
+            ),
+          );
+        }
+      },
     );
   }
 }
