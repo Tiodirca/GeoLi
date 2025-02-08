@@ -18,11 +18,11 @@ class Constantes {
   static const fireBaseDocumentoRegiaoNordeste = "regiaoNordeste";
   static const fireBaseDocumentoRegiaoTodosEstados = "regiaoTodosEstados";
   static const fireBaseDocumentoLiberarEstados = "liberarEstados";
-  static const fireBaseDocumentoPontosJogada = "postosJogada";
+  static const fireBaseDocumentoPontosJogadaRegioes = "postosJogadaRegioes";
 
   static const nomeTodosEstados = "todosEstados";
 
-  static const pontosJogada = "pontosJogada";
+  static const pontosJogadaRegioes = "pontosJogadaRegioes";
 
   //CENTRO OESTE
   static const nomeRegiaoCentroOeste = "Região Centro-Oeste";

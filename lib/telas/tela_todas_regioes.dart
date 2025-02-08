@@ -260,6 +260,7 @@ class _TelaTodasRegioesState extends State<TelaTodasRegioes> {
               return TelaCarregamento();
             } else {
               return WidgetAreaTela(
+                  nomeColecao: nomeColecao,
                   estadosSorteio: estadosSorteio,
                   exibirTelaProximoNivel: exibirTelaProximoNivel);
             }

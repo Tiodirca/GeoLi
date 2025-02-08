@@ -9,20 +9,19 @@ import '../Uteis/paleta_cores.dart';
 import '../Uteis/textos.dart';
 
 class TelaProximoNivel extends StatefulWidget {
-  const TelaProximoNivel({super.key, required this.estados});
+  const TelaProximoNivel(
+      {super.key, required this.estados, required this.nomeColecao});
 
   final List<MapEntry<Estado, Gestos>> estados;
+  final String nomeColecao;
 
   @override
   State<TelaProximoNivel> createState() => _TelaProximoNivelState();
 }
 
 class _TelaProximoNivelState extends State<TelaProximoNivel> {
-  String nomeColecao = "";
-  String nomeRegiao = "";
   Map<String, dynamic> dados = {};
   bool exibirBtnProximoNivel = true;
-
   bool liberarRegiaoSul = false;
   bool liberarRegiaoSudeste = false;
   bool liberarRegiaoNorte = false;
@@ -45,7 +44,6 @@ class _TelaProximoNivelState extends State<TelaProximoNivel> {
     for (var element in widget.estados) {
       // definindo que o estado vai receber o valor de falco
       dados[element.key.nome] = element.key.acerto = false;
-      validarRegiao(element.key.nome);
     }
   }
 
@@ -55,32 +53,11 @@ class _TelaProximoNivelState extends State<TelaProximoNivel> {
       var db = FirebaseFirestore.instance;
       db
           .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-          .doc(nomeColecao) //passando o documento
+          .doc(widget.nomeColecao) //passando o documento
           .set(dados);
     } catch (e) {
       print(e.toString());
     }
-  }
-
-  validarRegiao(String nome) {
-    setState(() {
-      if (nome.contains(Constantes.nomeRegiaoCentroMS)) {
-        nomeColecao = Constantes.fireBaseDocumentoRegiaoCentroOeste;
-        nomeRegiao = Constantes.nomeRegiaoCentroOeste;
-      } else if (nome.contains(Constantes.nomeRegiaoSulPR)) {
-        nomeColecao = Constantes.fireBaseDocumentoRegiaoSul;
-        nomeRegiao = Constantes.nomeRegiaoSul;
-      } else if (nome.contains(Constantes.nomeRegiaoSudesteSP)) {
-        nomeColecao = Constantes.fireBaseDocumentoRegiaoSudeste;
-        nomeRegiao = Constantes.nomeRegiaoSudeste;
-      } else if (nome.contains(Constantes.nomeRegiaoNorteAM)) {
-        nomeColecao = Constantes.fireBaseDocumentoRegiaoNorte;
-        nomeRegiao = Constantes.nomeRegiaoNorte;
-      } else if (nome.contains(Constantes.nomeRegiaoNordesteAL)) {
-        nomeColecao = Constantes.fireBaseDocumentoRegiaoNordeste;
-        nomeRegiao = Constantes.nomeRegiaoNordeste;
-      }
-    });
   }
 
   recuperarRegioesLiberadas() async {
@@ -141,46 +118,61 @@ class _TelaProximoNivelState extends State<TelaProximoNivel> {
           backgroundColor: Colors.white,
           onPressed: () {
             if (nomeOpcao == Textos.btnJogarNovamente) {
-              if (nomeRegiao == Constantes.nomeRegiaoCentroOeste) {
+              if (widget.nomeColecao ==
+                  Constantes.fireBaseDocumentoRegiaoCentroOeste) {
                 resetarDados();
                 Navigator.pushReplacementNamed(
                     context, Constantes.rotaTelaRegiaoCentroOeste);
-              } else if (nomeRegiao == Constantes.nomeRegiaoSul) {
+              } else if (widget.nomeColecao ==
+                  Constantes.fireBaseDocumentoRegiaoSul) {
                 resetarDados();
                 Navigator.pushReplacementNamed(
                     context, Constantes.rotaTelaRegiaoSul);
-              } else if (nomeRegiao == Constantes.nomeRegiaoSudeste) {
+              } else if (widget.nomeColecao ==
+                  Constantes.fireBaseDocumentoRegiaoSudeste) {
                 resetarDados();
                 Navigator.pushReplacementNamed(
                     context, Constantes.rotaTelaRegiaoSudeste);
-              } else if (nomeRegiao == Constantes.nomeRegiaoNorte) {
+              } else if (widget.nomeColecao ==
+                  Constantes.fireBaseDocumentoRegiaoNorte) {
                 resetarDados();
                 Navigator.pushReplacementNamed(
                     context, Constantes.rotaTelaRegiaoNorte);
-              } else if (nomeRegiao == Constantes.nomeRegiaoNordeste) {
+              } else if (widget.nomeColecao ==
+                  Constantes.fireBaseDocumentoRegiaoNordeste) {
                 resetarDados();
                 Navigator.pushReplacementNamed(
                     context, Constantes.rotaTelaRegiaoNordeste);
+              } else if (widget.nomeColecao ==
+                  Constantes.fireBaseDocumentoRegiaoTodosEstados) {
+                resetarDados();
+                Navigator.pushReplacementNamed(
+                    context, Constantes.rotaTelaRegiaoTodosEstados);
               }
             } else {
               setState(() {
-                if (nomeRegiao == Constantes.nomeRegiaoCentroOeste) {
+                if (widget.nomeColecao ==
+                    Constantes.fireBaseDocumentoRegiaoCentroOeste) {
                   liberarRegiaoSul = true;
                   Navigator.pushReplacementNamed(
                       context, Constantes.rotaTelaRegiaoSul);
-                } else if (nomeRegiao == Constantes.nomeRegiaoSul) {
+                } else if (widget.nomeColecao ==
+                    Constantes.fireBaseDocumentoRegiaoSul) {
                   liberarRegiaoSudeste = true;
                   Navigator.pushReplacementNamed(
                       context, Constantes.rotaTelaRegiaoSudeste);
-                } else if (nomeRegiao == Constantes.nomeRegiaoSudeste) {
+                } else if (widget.nomeColecao ==
+                    Constantes.fireBaseDocumentoRegiaoSudeste) {
                   liberarRegiaoNorte = true;
                   Navigator.pushReplacementNamed(
                       context, Constantes.rotaTelaRegiaoNorte);
-                } else if (nomeRegiao == Constantes.nomeRegiaoNorte) {
+                } else if (widget.nomeColecao ==
+                    Constantes.fireBaseDocumentoRegiaoNorte) {
                   liberarRegiaoNordeste = true;
                   Navigator.pushReplacementNamed(
                       context, Constantes.rotaTelaRegiaoNordeste);
-                } else if (nomeRegiao == Constantes.nomeRegiaoNordeste) {
+                } else if (widget.nomeColecao ==
+                    Constantes.fireBaseDocumentoRegiaoNordeste) {
                   liberarTodosEstados = true;
                   Navigator.pushReplacementNamed(
                       context, Constantes.rotaTelaRegiaoTodosEstados);
@@ -232,7 +224,6 @@ class _TelaProximoNivelState extends State<TelaProximoNivel> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   cardOpcoes(CaminhosImagens.btnJogarNovamenteGesto,
                       Textos.btnJogarNovamente, context),

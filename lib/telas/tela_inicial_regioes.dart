@@ -89,7 +89,7 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
     //instanciano variavel
     db
         .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-        .doc(Constantes.fireBaseDocumentoPontosJogada) // passando documento
+        .doc(Constantes.fireBaseDocumentoPontosJogadaRegioes) // passando documento
         .get()
         .then(
       (querySnapshot) async {

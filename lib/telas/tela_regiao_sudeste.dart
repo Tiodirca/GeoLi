@@ -128,6 +128,7 @@ class _TelaRegiaoSudesteState extends State<TelaRegiaoSudeste> {
               return TelaCarregamento();
             } else {
               return WidgetAreaTela(
+                  nomeColecao: nomeColecao,
                   estadosSorteio: estadosSorteio,
                   exibirTelaProximoNivel: exibirTelaProximoNivel);
             }

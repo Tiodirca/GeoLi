@@ -28,6 +28,7 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
   bool exibirTelaCarregamento = true;
   bool exibirTelaProximoNivel = false;
   String nomeColecao = Constantes.fireBaseDocumentoRegiaoSul;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -159,6 +160,7 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
               return TelaCarregamento();
             } else {
               return WidgetAreaTela(
+                  nomeColecao: nomeColecao,
                   estadosSorteio: estadosSorteio,
                   exibirTelaProximoNivel: exibirTelaProximoNivel);
             }

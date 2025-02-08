@@ -12,8 +12,10 @@ class WidgetAreaTela extends StatefulWidget {
   const WidgetAreaTela(
       {super.key,
       required this.estadosSorteio,
-      required this.exibirTelaProximoNivel});
+      required this.exibirTelaProximoNivel,
+      required this.nomeColecao});
 
+  final String nomeColecao;
   final bool exibirTelaProximoNivel;
   final List<MapEntry<Estado, Gestos>> estadosSorteio;
 
@@ -22,7 +24,6 @@ class WidgetAreaTela extends StatefulWidget {
 }
 
 class _WidgetAreaTelaState extends State<WidgetAreaTela> {
-
   @override
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;
@@ -58,8 +59,8 @@ class _WidgetAreaTelaState extends State<WidgetAreaTela> {
                   itemBuilder: (context, index) {
                     if (widget.exibirTelaProximoNivel) {
                       for (var element in widget.estadosSorteio) {
-                          element.key.acerto = true;
-                        }
+                        element.key.acerto = true;
+                      }
                     }
 
                     return Center(
@@ -77,6 +78,7 @@ class _WidgetAreaTelaState extends State<WidgetAreaTela> {
               child: Positioned(
                 child: Center(
                     child: TelaProximoNivel(
+                  nomeColecao: widget.nomeColecao,
                   estados: widget.estadosSorteio,
                 )),
               ))
