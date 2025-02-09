@@ -3,65 +3,54 @@ import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/constantes_estados_gestos.dart';
+import 'package:geoli/Widgets/gestos_widget.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoli/Widgets/tela_carregamento.dart';
 import 'package:geoli/Widgets/widget_area_gestos.dart';
 import 'package:geoli/Widgets/widget_area_tela.dart';
 
-import '../Uteis/textos.dart';
+import '../../Uteis/textos.dart';
 
-class TelaRegiaoNorte extends StatefulWidget {
-  const TelaRegiaoNorte({super.key});
+class TelaRegiaoSul extends StatefulWidget {
+  const TelaRegiaoSul({super.key});
 
   @override
-  State<TelaRegiaoNorte> createState() => _TelaRegiaoNorteState();
+  State<TelaRegiaoSul> createState() => _TelaRegiaoSulState();
 }
 
-class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
+class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
+  List<Gestos> gestos = [];
   Map<Estado, Gestos> estadoGestoMap = {};
   List<MapEntry<Estado, Gestos>> estadosSorteio = [];
-  List<Gestos> gestos = [];
   bool exibirTelaCarregamento = true;
   bool exibirTelaProximoNivel = false;
-  String nomeColecao = Constantes.fireBaseDocumentoRegiaoNorte;
+  String nomeColecao = Constantes.fireBaseDocumentoRegiaoSul;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    carregarEstados();
     gestos.addAll([
-      ConstantesEstadosGestos.gestoAC,
-      ConstantesEstadosGestos.gestoAP,
-      ConstantesEstadosGestos.gestoAM,
-      ConstantesEstadosGestos.gestoPA,
-      ConstantesEstadosGestos.gestoRO,
-      ConstantesEstadosGestos.gestoRR,
-      ConstantesEstadosGestos.gestoTO,
-    ]);
-    gestos.shuffle();
+      ConstantesEstadosGestos.gestoPR,
+      ConstantesEstadosGestos.gestoSC,
+      ConstantesEstadosGestos.gestoRS
+    ]); // adicionando gestos na lista
+    gestos.shuffle(); //fazendo sorteio os itens na lista
     // chamando metodo para fazer busca no banco de dados
     realizarBuscaDadosFireBase(nomeColecao);
   }
 
+  // metodo para adicionar os estados no map auxiliar e depois adicionar numa lista e fazer o sorteio dos itens
   carregarEstados() {
-    estadoGestoMap[ConstantesEstadosGestos.estadoAC] =
-        ConstantesEstadosGestos.gestoAC;
-    estadoGestoMap[ConstantesEstadosGestos.estadoAP] =
-        ConstantesEstadosGestos.gestoAP;
-    estadoGestoMap[ConstantesEstadosGestos.estadoAM] =
-        ConstantesEstadosGestos.gestoAM;
-    estadoGestoMap[ConstantesEstadosGestos.estadoPA] =
-        ConstantesEstadosGestos.gestoPA;
-    estadoGestoMap[ConstantesEstadosGestos.estadoRO] =
-        ConstantesEstadosGestos.gestoRO;
-    estadoGestoMap[ConstantesEstadosGestos.estadoRR] =
-        ConstantesEstadosGestos.gestoRR;
-    estadoGestoMap[ConstantesEstadosGestos.estadoTO] =
-        ConstantesEstadosGestos.gestoTO;
+    estadoGestoMap[ConstantesEstadosGestos.estadoRS] =
+        ConstantesEstadosGestos.gestoRS;
+    estadoGestoMap[ConstantesEstadosGestos.estadoSC] =
+        ConstantesEstadosGestos.gestoSC;
+    estadoGestoMap[ConstantesEstadosGestos.estadoPR] =
+        ConstantesEstadosGestos.gestoPR;
     estadosSorteio = estadoGestoMap.entries.toList();
     estadosSorteio.shuffle();
   }
@@ -80,33 +69,22 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
           (key, value) {
             // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
             setState(() {
-              if (ConstantesEstadosGestos.estadoAC.nome == key) {
+              if (ConstantesEstadosGestos.estadoSC.nome == key) {
                 MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoAC, value, gestos);
-              } else if (ConstantesEstadosGestos.estadoAP.nome == key) {
+                    ConstantesEstadosGestos.estadoSC, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoRS.nome == key) {
                 MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoAP, value, gestos);
-              } else if (ConstantesEstadosGestos.estadoAM.nome == key) {
+                    ConstantesEstadosGestos.estadoRS, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoPR.nome == key) {
                 MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoAM, value, gestos);
-              } else if (ConstantesEstadosGestos.estadoPA.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoPA, value, gestos);
-              } else if (ConstantesEstadosGestos.estadoRO.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoRO, value, gestos);
-              } else if (ConstantesEstadosGestos.estadoRR.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoRR, value, gestos);
-              } else if (ConstantesEstadosGestos.estadoTO.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoTO, value, gestos);
+                    ConstantesEstadosGestos.estadoPR, value, gestos);
               }
             });
           },
         );
         setState(
           () {
+            carregarEstados();
             if (gestos.isEmpty) {
               exibirTelaProximoNivel = true;
             }
@@ -117,13 +95,51 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
     );
   }
 
+  Widget itemSoltar(Gestos gesto) => Draggable(
+        onDragCompleted: () async {
+          // variavel vai receber o retorno do metodo para poder
+          // verificar se o usuario acertou o gesto no estado correto
+          String retorno = await MetodosAuxiliares.recuperarAcerto();
+          if (retorno == Constantes.msgAcertoGesto) {
+            // caso tenha acertado ele ira remover da
+            // lista de gestos o gesto que foi acertado
+            setState(() {
+              gestos.removeWhere(
+                (element) {
+                  return element.nomeGesto == gesto.nomeGesto;
+                },
+              );
+            });
+            if (gestos.isEmpty) {
+              setState(() {
+                exibirTelaProximoNivel = true;
+              });
+            }
+          }
+        },
+        maxSimultaneousDrags: 1,
+        data: gesto.nomeGesto,
+        feedback: GestosWidget(
+          nomeGestoImagem: gesto.nomeImagem,
+          nomeGesto: gesto.nomeGesto,
+          exibirAcerto: false,
+        ),
+        rootOverlay: true,
+        childWhenDragging: Container(),
+        child: GestosWidget(
+          nomeGestoImagem: gesto.nomeImagem,
+          nomeGesto: gesto.nomeGesto,
+          exibirAcerto: false,
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
             title: Visibility(
                 visible: !exibirTelaCarregamento,
-                child: Text(Textos.tituloTelaRegiaoNorte)),
+                child: Text(Textos.tituloTelaRegiaoSul)),
             backgroundColor: Colors.white,
             leading: Visibility(
               visible: !exibirTelaCarregamento,

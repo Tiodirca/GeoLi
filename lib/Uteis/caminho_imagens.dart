@@ -7,6 +7,45 @@ class CaminhosImagens {
   static const btnGestoSistemaSolarImagem =
       "assets/imagens/sistema_solar/gestos_planetas/gesto_sistema_solar";
 
+  // SISTEMA SOLAR
+  // GESTOS
+  static const gestoPlanetaMercurioImagem =
+      "assets/imagens/sistema_solar/gestos_planetas/gesto_planeta_mercurio";
+  static const gestoPlanetaVenusImagem =
+      "assets/imagens/sistema_solar/gestos_planetas/gesto_planeta_venus";
+  static const gestoPlanetaTerraImagem =
+      "assets/imagens/sistema_solar/gestos_planetas/gesto_planeta_terra";
+  static const gestoPlanetaMarteImagem =
+      "assets/imagens/sistema_solar/gestos_planetas/gesto_planeta_marte";
+  static const gestoPlanetaJupiterImagem =
+      "assets/imagens/sistema_solar/gestos_planetas/gesto_planeta_jupiter";
+  static const gestoPlanetaSaturnoImagem =
+      "assets/imagens/sistema_solar/gestos_planetas/gesto_planeta_saturno";
+  static const gestoPlanetaUranoImagem =
+      "assets/imagens/sistema_solar/gestos_planetas/gesto_planeta_urano";
+  static const gestoPlanetaNetunoImagem =
+      "assets/imagens/sistema_solar/gestos_planetas/gesto_planeta_netuno";
+
+  // PLANETAS
+
+  static const planetaMercurioImagem =
+      "assets/imagens/sistema_solar/planetas/planeta_netuno";
+  static const planetaVenusImagem =
+      "assets/imagens/sistema_solar/planetas/planeta_venus";
+  static const planetaTerraImagem =
+      "assets/imagens/sistema_solar/planetas/planeta_terra";
+  static const planetaMarteImagem =
+      "assets/imagens/sistema_solar/planetas/planeta_marte";
+  static const planetaJupiterImagem =
+      "assets/imagens/sistema_solar/planetas/planeta_jupiter";
+  static const planetaSaturnoImagem =
+      "assets/imagens/sistema_solar/planetas/planeta_saturno";
+  static const planetaUranoImagem =
+      "assets/imagens/sistema_solar/planetas/planeta_urano";
+  static const planetaNetunoImagem =
+      "assets/imagens/sistema_solar/planetas/planeta_netuno";
+
+  // EMBLEMAS ESTADOS BRASILEIROS
   static const emblemaEstadosAventureiroum =
       "assets/imagens/estados/emblema_estados_aventureiro_um";
   static const emblemaEstadosAventureirodois =

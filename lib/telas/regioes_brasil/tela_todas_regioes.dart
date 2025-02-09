@@ -9,7 +9,7 @@ import 'package:geoli/Widgets/tela_carregamento.dart';
 import 'package:geoli/Widgets/widget_area_gestos.dart';
 import 'package:geoli/Widgets/widget_area_tela.dart';
 
-import '../Uteis/textos.dart';
+import '../../Uteis/textos.dart';
 
 class TelaTodasRegioes extends StatefulWidget {
   const TelaTodasRegioes({super.key});

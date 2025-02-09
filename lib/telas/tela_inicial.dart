@@ -26,10 +26,13 @@ class _TelaInicialState extends State<TelaInicial> {
         width: 170,
         height: 170,
         child: FloatingActionButton(
+          elevation: 0,
           heroTag: nome,
           backgroundColor: Colors.white,
           onPressed: () {
             if (nome == Textos.btnSistemaSolar) {
+              Navigator.pushReplacementNamed(
+                  context, Constantes.rotaTelaSistemaSolar);
             } else if (nome == Textos.btnEstadoBrasileiros) {
               Navigator.pushReplacementNamed(
                   context, Constantes.rotaTelaInicialRegioes);

@@ -17,8 +17,8 @@ class MetodosAuxiliares {
   static Future<String> recuperarAcerto() async {
     return acertou;
   }
-  // metodo para remover o gesto ja a
-  // certado da lista
+
+  // metodo para remover o gesto ja acertado da lista
   // de gestos quando voltar a jogar
   static removerGestoLista(
       Estado estado, bool value, List<Gestos> gestosCentro) {
@@ -36,6 +36,7 @@ class MetodosAuxiliares {
     return gestosCentro;
   }
 
+  // metodo para exibir mensagem de retorno ao usuario
   static exibirMensagens(String msg, String tipoAlerta, BuildContext context) {
     if (tipoAlerta == Constantes.msgAcertoGesto) {
       ElegantNotification.success(

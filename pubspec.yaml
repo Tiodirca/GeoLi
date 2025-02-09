@@ -33,6 +33,7 @@ flutter:
     #GESTOS
     #SISTEMA SOLAR
     - assets/imagens/sistema_solar/gestos_planetas/
+    - assets/imagens/sistema_solar/planetas/
     #REGIOES
     - assets/imagens/estados/gestos_estados/
     - assets/imagens/estados/gestos_estados/regiao_centro_oeste/

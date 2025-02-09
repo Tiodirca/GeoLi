@@ -4,6 +4,7 @@ import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 
 class ConstantesEstadosGestos {
+
   // REGIAO CENTRO OESTE
   static Estado estadoGO = Estado(
       nome: Constantes.nomeRegiaoCentroGO,

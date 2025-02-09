@@ -166,6 +166,7 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
         width: 150,
         height: 170,
         child: FloatingActionButton(
+          elevation: 0,
           heroTag: nomeRegiao,
           backgroundColor: Colors.white,
           onPressed: () {
@@ -246,7 +247,8 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
                     scrollDirection: Axis.vertical,
                     child: Column(
                       children: [
-                        SizedBox(
+                        Container(
+                            margin: EdgeInsets.only(bottom: 10),
                             width: larguraTela,
                             child: Text(
                               Textos.descricaoTelaRegioes,
@@ -330,7 +332,10 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
                                       );
                                     });
                                   },
-                                  child: Text(Textos.btnEmblemas),
+                                  child: Text(
+                                    Textos.btnEmblemas,
+                                    style: TextStyle(color: Colors.black),
+                                  ),
                                 ),
                               )
                             ],

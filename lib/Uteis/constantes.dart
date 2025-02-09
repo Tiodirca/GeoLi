@@ -1,6 +1,9 @@
 class Constantes {
   //ROTAS
   static const rotaTelaInicial = "telaIncial";
+  static const rotaTelaSistemaSolar = "telaSistemaSolar";
+
+  // ROTA REGIOES
   static const rotaTelaInicialRegioes = "telaIncialRegioes";
   static const rotaTelaRegiaoCentroOeste = "telaRegiaoCentroOeste";
   static const rotaTelaRegiaoSul = "telaRegiaoSul";
@@ -9,7 +12,7 @@ class Constantes {
   static const rotaTelaRegiaoNordeste = "telaRegiaoNordeste";
   static const rotaTelaRegiaoTodosEstados = "telaRegiaoTodosEstados";
 
-  //NOME DOCUMENTO FIBASE
+  //NOME DOCUMENTO FIBASE REGIOES
   static const fireBaseColecaoRegioes = "regioes";
   static const fireBaseDocumentoRegiaoCentroOeste = "regiaoCentroOeste";
   static const fireBaseDocumentoRegiaoSul = "regiaoSul";
@@ -21,7 +24,6 @@ class Constantes {
   static const fireBaseDocumentoPontosJogadaRegioes = "postosJogadaRegioes";
 
   static const nomeTodosEstados = "todosEstados";
-
   static const pontosJogadaRegioes = "pontosJogadaRegioes";
 
   //CENTRO OESTE
@@ -65,7 +67,6 @@ class Constantes {
   static const nomeRegiaoNordesteRN = "Rio Grande do Norte - RN";
   static const nomeRegiaoNordesteSE = "Sergipe - SE";
 
-  //
   static const msgErroAcertoGesto = "Errou";
   static const msgAcertoGesto = "Acertou";
 }

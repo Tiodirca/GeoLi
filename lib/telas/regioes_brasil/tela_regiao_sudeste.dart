@@ -5,53 +5,55 @@ import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/constantes_estados_gestos.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/tela_carregamento.dart';
 import 'package:geoli/Widgets/widget_area_gestos.dart';
 import 'package:geoli/Widgets/widget_area_tela.dart';
-import '../Uteis/textos.dart';
 
-class TelaRegiaoCentroOeste extends StatefulWidget {
-  const TelaRegiaoCentroOeste({super.key});
+
+class TelaRegiaoSudeste extends StatefulWidget {
+  const TelaRegiaoSudeste({super.key});
 
   @override
-  State<TelaRegiaoCentroOeste> createState() => _TelaRegiaoCentroOesteState();
+  State<TelaRegiaoSudeste> createState() => _TelaRegiaoSudesteState();
 }
 
-class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
+class _TelaRegiaoSudesteState extends State<TelaRegiaoSudeste> {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
-  List<Estado> estadosCentro = [];
+  Map<Estado, Gestos> estadoGestoMap = {};
+  List<MapEntry<Estado, Gestos>> estadosSorteio = [];
   List<Gestos> gestos = [];
   bool exibirTelaCarregamento = true;
   bool exibirTelaProximoNivel = false;
-  Map<Estado, Gestos> estadoGestoMap = {};
-  List<MapEntry<Estado, Gestos>> estadosSorteio = [];
-  String nomeColecao = Constantes.fireBaseDocumentoRegiaoCentroOeste;
+  String nomeColecao = Constantes.fireBaseDocumentoRegiaoSudeste;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    // adicionando itens na lista e fazendo o sorteio dos itens na lista
     gestos.addAll([
-      ConstantesEstadosGestos.gestoGO,
-      ConstantesEstadosGestos.gestoMT,
-      ConstantesEstadosGestos.gestoMS
-    ]); // adicionando itens na lista
-    gestos.shuffle(); // fazendo sorteio dos gestos na lista
+      ConstantesEstadosGestos.gestoSP,
+      ConstantesEstadosGestos.gestoRJ,
+      ConstantesEstadosGestos.gestoMG,
+      ConstantesEstadosGestos.gestoES
+    ]);
+    gestos.shuffle();
     // chamando metodo para fazer busca no banco de dados
-    //MetodosAuxiliares.addItensBancoDados(nomeColecao);
     realizarBuscaDadosFireBase(nomeColecao);
   }
 
-  // metodo para adicionar os estados no map auxiliar e
-  // depois adicionar numa lista e fazer o sorteio dos itens
+  // metodo para adicionar os estados no map auxiliar e depois adicionar numa lista e fazer o sorteio dos itens
   carregarEstados() {
-    estadoGestoMap[ConstantesEstadosGestos.estadoMS] =
-        ConstantesEstadosGestos.gestoMS;
-    estadoGestoMap[ConstantesEstadosGestos.estadoGO] =
-        ConstantesEstadosGestos.gestoGO;
-    estadoGestoMap[ConstantesEstadosGestos.estadoMT] =
-        ConstantesEstadosGestos.gestoMT;
+    estadoGestoMap[ConstantesEstadosGestos.estadoMG] =
+        ConstantesEstadosGestos.gestoMG;
+    estadoGestoMap[ConstantesEstadosGestos.estadoES] =
+        ConstantesEstadosGestos.gestoES;
+    estadoGestoMap[ConstantesEstadosGestos.estadoSP] =
+        ConstantesEstadosGestos.gestoSP;
+    estadoGestoMap[ConstantesEstadosGestos.estadoRJ] =
+        ConstantesEstadosGestos.gestoRJ;
     estadosSorteio = estadoGestoMap.entries.toList();
     estadosSorteio.shuffle();
   }
@@ -68,18 +70,20 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
         // verificando cada item que esta gravado no banco de dados
         querySnapshot.data()!.forEach(
           (key, value) {
-            //caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
+            // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
             setState(() {
-              if (ConstantesEstadosGestos.estadoMT.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoMT, value, gestos);
-              } else if (ConstantesEstadosGestos.estadoMS.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoMS, value, gestos);
-                ConstantesEstadosGestos.estadoMS.acerto = value;
-              } else if (ConstantesEstadosGestos.estadoGO.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoGO, value, gestos);
+              if (ConstantesEstadosGestos.estadoRJ.nome == key) {
+                gestos = MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoRJ, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoSP.nome == key) {
+                gestos = MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoSP, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoES.nome == key) {
+                gestos = MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoES, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoMG.nome == key) {
+                gestos = MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoMG, value, gestos);
               }
             });
           },
@@ -103,7 +107,7 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
         appBar: AppBar(
             title: Visibility(
                 visible: !exibirTelaCarregamento,
-                child: Text(Textos.tituloTelaRegiaoCentro)),
+                child: Text(Textos.tituloTelaRegiaoSudeste)),
             backgroundColor: Colors.white,
             leading: Visibility(
               visible: !exibirTelaCarregamento,

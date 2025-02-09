@@ -5,20 +5,20 @@ import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/constantes_estados_gestos.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/tela_carregamento.dart';
 import 'package:geoli/Widgets/widget_area_gestos.dart';
 import 'package:geoli/Widgets/widget_area_tela.dart';
 
-import '../Uteis/textos.dart';
 
-class TelaRegiaoSudeste extends StatefulWidget {
-  const TelaRegiaoSudeste({super.key});
+class TelaRegiaoNorte extends StatefulWidget {
+  const TelaRegiaoNorte({super.key});
 
   @override
-  State<TelaRegiaoSudeste> createState() => _TelaRegiaoSudesteState();
+  State<TelaRegiaoNorte> createState() => _TelaRegiaoNorteState();
 }
 
-class _TelaRegiaoSudesteState extends State<TelaRegiaoSudeste> {
+class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
   GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
 
   Map<Estado, Gestos> estadoGestoMap = {};
@@ -26,34 +26,42 @@ class _TelaRegiaoSudesteState extends State<TelaRegiaoSudeste> {
   List<Gestos> gestos = [];
   bool exibirTelaCarregamento = true;
   bool exibirTelaProximoNivel = false;
-  String nomeColecao = Constantes.fireBaseDocumentoRegiaoSudeste;
+  String nomeColecao = Constantes.fireBaseDocumentoRegiaoNorte;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    // adicionando itens na lista e fazendo o sorteio dos itens na lista
+    carregarEstados();
     gestos.addAll([
-      ConstantesEstadosGestos.gestoSP,
-      ConstantesEstadosGestos.gestoRJ,
-      ConstantesEstadosGestos.gestoMG,
-      ConstantesEstadosGestos.gestoES
+      ConstantesEstadosGestos.gestoAC,
+      ConstantesEstadosGestos.gestoAP,
+      ConstantesEstadosGestos.gestoAM,
+      ConstantesEstadosGestos.gestoPA,
+      ConstantesEstadosGestos.gestoRO,
+      ConstantesEstadosGestos.gestoRR,
+      ConstantesEstadosGestos.gestoTO,
     ]);
     gestos.shuffle();
     // chamando metodo para fazer busca no banco de dados
     realizarBuscaDadosFireBase(nomeColecao);
   }
 
-  // metodo para adicionar os estados no map auxiliar e depois adicionar numa lista e fazer o sorteio dos itens
   carregarEstados() {
-    estadoGestoMap[ConstantesEstadosGestos.estadoMG] =
-        ConstantesEstadosGestos.gestoMG;
-    estadoGestoMap[ConstantesEstadosGestos.estadoES] =
-        ConstantesEstadosGestos.gestoES;
-    estadoGestoMap[ConstantesEstadosGestos.estadoSP] =
-        ConstantesEstadosGestos.gestoSP;
-    estadoGestoMap[ConstantesEstadosGestos.estadoRJ] =
-        ConstantesEstadosGestos.gestoRJ;
+    estadoGestoMap[ConstantesEstadosGestos.estadoAC] =
+        ConstantesEstadosGestos.gestoAC;
+    estadoGestoMap[ConstantesEstadosGestos.estadoAP] =
+        ConstantesEstadosGestos.gestoAP;
+    estadoGestoMap[ConstantesEstadosGestos.estadoAM] =
+        ConstantesEstadosGestos.gestoAM;
+    estadoGestoMap[ConstantesEstadosGestos.estadoPA] =
+        ConstantesEstadosGestos.gestoPA;
+    estadoGestoMap[ConstantesEstadosGestos.estadoRO] =
+        ConstantesEstadosGestos.gestoRO;
+    estadoGestoMap[ConstantesEstadosGestos.estadoRR] =
+        ConstantesEstadosGestos.gestoRR;
+    estadoGestoMap[ConstantesEstadosGestos.estadoTO] =
+        ConstantesEstadosGestos.gestoTO;
     estadosSorteio = estadoGestoMap.entries.toList();
     estadosSorteio.shuffle();
   }
@@ -72,25 +80,33 @@ class _TelaRegiaoSudesteState extends State<TelaRegiaoSudeste> {
           (key, value) {
             // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
             setState(() {
-              if (ConstantesEstadosGestos.estadoRJ.nome == key) {
-                gestos = MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoRJ, value, gestos);
-              } else if (ConstantesEstadosGestos.estadoSP.nome == key) {
-                gestos = MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoSP, value, gestos);
-              } else if (ConstantesEstadosGestos.estadoES.nome == key) {
-                gestos = MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoES, value, gestos);
-              } else if (ConstantesEstadosGestos.estadoMG.nome == key) {
-                gestos = MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoMG, value, gestos);
+              if (ConstantesEstadosGestos.estadoAC.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoAC, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoAP.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoAP, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoAM.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoAM, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoPA.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoPA, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoRO.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoRO, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoRR.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoRR, value, gestos);
+              } else if (ConstantesEstadosGestos.estadoTO.nome == key) {
+                MetodosAuxiliares.removerGestoLista(
+                    ConstantesEstadosGestos.estadoTO, value, gestos);
               }
             });
           },
         );
         setState(
           () {
-            carregarEstados();
             if (gestos.isEmpty) {
               exibirTelaProximoNivel = true;
             }
@@ -107,7 +123,7 @@ class _TelaRegiaoSudesteState extends State<TelaRegiaoSudeste> {
         appBar: AppBar(
             title: Visibility(
                 visible: !exibirTelaCarregamento,
-                child: Text(Textos.tituloTelaRegiaoSudeste)),
+                child: Text(Textos.tituloTelaRegiaoNorte)),
             backgroundColor: Colors.white,
             leading: Visibility(
               visible: !exibirTelaCarregamento,

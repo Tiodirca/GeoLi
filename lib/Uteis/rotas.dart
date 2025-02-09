@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
+import 'package:geoli/telas/regioes_brasil/tela_inicial_regioes.dart';
+import 'package:geoli/telas/regioes_brasil/tela_regiao_centro_oeste.dart';
+import 'package:geoli/telas/regioes_brasil/tela_regiao_nordeste.dart';
+import 'package:geoli/telas/regioes_brasil/tela_regiao_norte.dart';
+import 'package:geoli/telas/regioes_brasil/tela_regiao_sudeste.dart';
 import 'package:geoli/telas/tela_inicial.dart';
-import 'package:geoli/telas/tela_inicial_regioes.dart';
-import 'package:geoli/telas/tela_regiao_nordeste.dart';
-import 'package:geoli/telas/tela_regiao_norte.dart';
-import 'package:geoli/telas/tela_regiao_sudeste.dart';
-import 'package:geoli/telas/tela_regiao_sul.dart';
-import 'package:geoli/telas/tela_todas_regioes.dart';
-import '../telas/tela_regiao_centro_oeste.dart';
+import 'package:geoli/telas/regioes_brasil/tela_regiao_sul.dart';
+import 'package:geoli/telas/regioes_brasil/tela_todas_regioes.dart';
+import 'package:geoli/telas/tela_sistema_solar.dart';
 
 class Rotas {
   static GlobalKey<NavigatorState>? navigatorKey = GlobalKey<NavigatorState>();
@@ -32,7 +33,8 @@ class Rotas {
         return MaterialPageRoute(builder: (_) => TelaRegiaoNordeste());
       case Constantes.rotaTelaRegiaoTodosEstados:
         return MaterialPageRoute(builder: (_) => TelaTodasRegioes());
-
+      case Constantes.rotaTelaSistemaSolar:
+        return MaterialPageRoute(builder: (_) => TelaSistemaSolar());
       // case Constantes.rotaTelaDividirLetraTexto:
       //   return MaterialPageRoute(builder: (_) => const TelaDividirLetraTexto());
       // case Constantes.rotaTelaPesquisa:
