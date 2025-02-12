@@ -1,209 +1,209 @@
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
-import 'package:geoli/Uteis/constantes.dart';
+import 'package:geoli/Uteis/textos.dart';
 
 class ConstantesEstadosGestos {
 
   // REGIAO CENTRO OESTE
   static Estado estadoGO = Estado(
-      nome: Constantes.nomeRegiaoCentroGO,
+      nome: Textos.nomeRegiaoCentroGO,
       caminhoImagem: CaminhosImagens.regiaoCentroGOImagem,
       acerto: false);
   static Estado estadoMT = Estado(
-      nome: Constantes.nomeRegiaoCentroMT,
+      nome: Textos.nomeRegiaoCentroMT,
       caminhoImagem: CaminhosImagens.regiaoCentroMTImagem,
       acerto: false);
   static Estado estadoMS = Estado(
-      nome: Constantes.nomeRegiaoCentroMS,
+      nome: Textos.nomeRegiaoCentroMS,
       caminhoImagem: CaminhosImagens.regiaoCentroMSImagem,
       acerto: false);
 
   //GESTOS CENTRO OESTE
   static Gestos gestoGO = Gestos(
-      nomeGesto: Constantes.nomeRegiaoCentroGO,
+      nomeGesto: Textos.nomeRegiaoCentroGO,
       nomeImagem: CaminhosImagens.gestoCentroGO);
   static Gestos gestoMT = Gestos(
-      nomeGesto: Constantes.nomeRegiaoCentroMT,
+      nomeGesto: Textos.nomeRegiaoCentroMT,
       nomeImagem: CaminhosImagens.gestoCentroMT);
   static Gestos gestoMS = Gestos(
-      nomeGesto: Constantes.nomeRegiaoCentroMS,
+      nomeGesto: Textos.nomeRegiaoCentroMS,
       nomeImagem: CaminhosImagens.gestoCentroMS);
 
   // REGIAO SUL
   static Estado estadoPR = Estado(
-      nome: Constantes.nomeRegiaoSulPR,
+      nome: Textos.nomeRegiaoSulPR,
       caminhoImagem: CaminhosImagens.regiaoSulPRImagem,
       acerto: false);
   static Estado estadoRS = Estado(
-      nome: Constantes.nomeRegiaoSulRS,
+      nome: Textos.nomeRegiaoSulRS,
       caminhoImagem: CaminhosImagens.regiaoSulRSImagem,
       acerto: false);
   static Estado estadoSC = Estado(
-      nome: Constantes.nomeRegiaoSulSC,
+      nome: Textos.nomeRegiaoSulSC,
       caminhoImagem: CaminhosImagens.regiaoSulSCImagem,
       acerto: false);
 
   // GESTOS SUL
   static Gestos gestoPR = Gestos(
-      nomeGesto: Constantes.nomeRegiaoSulPR,
+      nomeGesto: Textos.nomeRegiaoSulPR,
       nomeImagem: CaminhosImagens.gestoSulPR);
   static Gestos gestoRS = Gestos(
-      nomeGesto: Constantes.nomeRegiaoSulRS,
+      nomeGesto: Textos.nomeRegiaoSulRS,
       nomeImagem: CaminhosImagens.gestoSulRS);
   static Gestos gestoSC = Gestos(
-      nomeGesto: Constantes.nomeRegiaoSulSC,
+      nomeGesto: Textos.nomeRegiaoSulSC,
       nomeImagem: CaminhosImagens.gestoSulSC);
 
   //REGIAO SUDESTE
   static Estado estadoSP = Estado(
-      nome: Constantes.nomeRegiaoSudesteSP,
+      nome: Textos.nomeRegiaoSudesteSP,
       caminhoImagem: CaminhosImagens.regiaoSudesteSPImagem,
       acerto: false);
   static Estado estadoRJ = Estado(
-      nome: Constantes.nomeRegiaoSudesteRJ,
+      nome: Textos.nomeRegiaoSudesteRJ,
       caminhoImagem: CaminhosImagens.regiaoSudesteRJImagem,
       acerto: false);
   static Estado estadoES = Estado(
-      nome: Constantes.nomeRegiaoSudesteES,
+      nome: Textos.nomeRegiaoSudesteES,
       caminhoImagem: CaminhosImagens.regiaoSudesteESImagem,
       acerto: false);
   static Estado estadoMG = Estado(
-      nome: Constantes.nomeRegiaoSudesteMG,
+      nome: Textos.nomeRegiaoSudesteMG,
       caminhoImagem: CaminhosImagens.regiaoSudesteMGImagem,
       acerto: false);
 
   // GESTOS SUDESTE
   static Gestos gestoSP = Gestos(
-      nomeGesto: Constantes.nomeRegiaoSudesteSP,
+      nomeGesto: Textos.nomeRegiaoSudesteSP,
       nomeImagem: CaminhosImagens.gestoSudesteSP);
   static Gestos gestoRJ = Gestos(
-      nomeGesto: Constantes.nomeRegiaoSudesteRJ,
+      nomeGesto: Textos.nomeRegiaoSudesteRJ,
       nomeImagem: CaminhosImagens.gestoSudesteRJ);
   static Gestos gestoES = Gestos(
-      nomeGesto: Constantes.nomeRegiaoSudesteES,
+      nomeGesto: Textos.nomeRegiaoSudesteES,
       nomeImagem: CaminhosImagens.gestoSudesteES);
   static Gestos gestoMG = Gestos(
-      nomeGesto: Constantes.nomeRegiaoSudesteMG,
+      nomeGesto: Textos.nomeRegiaoSudesteMG,
       nomeImagem: CaminhosImagens.gestoSudesteMG);
 
   //REGIAO NORTE
   static Estado estadoAC = Estado(
-      nome: Constantes.nomeRegiaoNorteAC,
+      nome: Textos.nomeRegiaoNorteAC,
       caminhoImagem: CaminhosImagens.regiaoNorteACImagem,
       acerto: false);
   static Estado estadoAP = Estado(
-      nome: Constantes.nomeRegiaoNorteAP,
+      nome: Textos.nomeRegiaoNorteAP,
       caminhoImagem: CaminhosImagens.regiaoNorteAPImagem,
       acerto: false);
   static Estado estadoAM = Estado(
-      nome: Constantes.nomeRegiaoNorteAM,
+      nome: Textos.nomeRegiaoNorteAM,
       caminhoImagem: CaminhosImagens.regiaoNorteAMImagem,
       acerto: false);
   static Estado estadoPA = Estado(
-      nome: Constantes.nomeRegiaoNortePA,
+      nome: Textos.nomeRegiaoNortePA,
       caminhoImagem: CaminhosImagens.regiaoNortePAImagem,
       acerto: false);
   static Estado estadoRO = Estado(
-      nome: Constantes.nomeRegiaoNorteRO,
+      nome: Textos.nomeRegiaoNorteRO,
       caminhoImagem: CaminhosImagens.regiaoNorteROImagem,
       acerto: false);
   static Estado estadoRR = Estado(
-      nome: Constantes.nomeRegiaoNorteRR,
+      nome: Textos.nomeRegiaoNorteRR,
       caminhoImagem: CaminhosImagens.regiaoNorteRRImagem,
       acerto: false);
   static Estado estadoTO = Estado(
-      nome: Constantes.nomeRegiaoNorteTO,
+      nome: Textos.nomeRegiaoNorteTO,
       caminhoImagem: CaminhosImagens.regiaoNorteTOImagem,
       acerto: false);
 
   //GESTOS NORTE
   static Gestos gestoAC = Gestos(
-      nomeGesto: Constantes.nomeRegiaoNorteAC,
+      nomeGesto: Textos.nomeRegiaoNorteAC,
       nomeImagem: CaminhosImagens.gestoNorteACImagem);
   static Gestos gestoAP = Gestos(
-      nomeGesto: Constantes.nomeRegiaoNorteAP,
+      nomeGesto: Textos.nomeRegiaoNorteAP,
       nomeImagem: CaminhosImagens.gestoNorteACImagem);
   static Gestos gestoAM = Gestos(
-      nomeGesto: Constantes.nomeRegiaoNorteAM,
+      nomeGesto: Textos.nomeRegiaoNorteAM,
       nomeImagem: CaminhosImagens.gestoNorteAMImagem);
   static Gestos gestoPA = Gestos(
-      nomeGesto: Constantes.nomeRegiaoNortePA,
+      nomeGesto: Textos.nomeRegiaoNortePA,
       nomeImagem: CaminhosImagens.gestoNortePAImagem);
   static Gestos gestoRO = Gestos(
-      nomeGesto: Constantes.nomeRegiaoNorteRO,
+      nomeGesto: Textos.nomeRegiaoNorteRO,
       nomeImagem: CaminhosImagens.gestoNorteROImagem);
   static Gestos gestoRR = Gestos(
-      nomeGesto: Constantes.nomeRegiaoNorteRR,
+      nomeGesto: Textos.nomeRegiaoNorteRR,
       nomeImagem: CaminhosImagens.gestoNorteRRImagem);
   static Gestos gestoTO = Gestos(
-      nomeGesto: Constantes.nomeRegiaoNorteTO,
+      nomeGesto: Textos.nomeRegiaoNorteTO,
       nomeImagem: CaminhosImagens.gestoNorteTOImagem);
 
   //REGIAO NORDESTE
   static Estado estadoAL = Estado(
-      nome: Constantes.nomeRegiaoNordesteAL,
+      nome: Textos.nomeRegiaoNordesteAL,
       caminhoImagem: CaminhosImagens.regiaoNordesteALImagem,
       acerto: false);
   static Estado estadoBA = Estado(
-      nome: Constantes.nomeRegiaoNordesteBA,
+      nome: Textos.nomeRegiaoNordesteBA,
       caminhoImagem: CaminhosImagens.regiaoNordesteBAImagem,
       acerto: false);
   static Estado estadoCE = Estado(
-      nome: Constantes.nomeRegiaoNordesteCE,
+      nome: Textos.nomeRegiaoNordesteCE,
       caminhoImagem: CaminhosImagens.regiaoNordesteCEImagem,
       acerto: false);
   static Estado estadoMA = Estado(
-      nome: Constantes.nomeRegiaoNordesteMA,
+      nome: Textos.nomeRegiaoNordesteMA,
       caminhoImagem: CaminhosImagens.regiaoNordesteMAImagem,
       acerto: false);
   static Estado estadoPB = Estado(
-      nome: Constantes.nomeRegiaoNordestePB,
+      nome: Textos.nomeRegiaoNordestePB,
       caminhoImagem: CaminhosImagens.regiaoNordestePBImagem,
       acerto: false);
   static Estado estadoPE = Estado(
-      nome: Constantes.nomeRegiaoNordestePE,
+      nome: Textos.nomeRegiaoNordestePE,
       caminhoImagem: CaminhosImagens.regiaoNordestePEImagem,
       acerto: false);
   static Estado estadoPI = Estado(
-      nome: Constantes.nomeRegiaoNordestePI,
+      nome: Textos.nomeRegiaoNordestePI,
       caminhoImagem: CaminhosImagens.regiaoNordestePIImagem,
       acerto: false);
   static Estado estadoRN = Estado(
-      nome: Constantes.nomeRegiaoNordesteRN,
+      nome: Textos.nomeRegiaoNordesteRN,
       caminhoImagem: CaminhosImagens.regiaoNordesteRNImagem,
       acerto: false);
   static Estado estadoSE = Estado(
-      nome: Constantes.nomeRegiaoNordesteSE,
+      nome: Textos.nomeRegiaoNordesteSE,
       caminhoImagem: CaminhosImagens.regiaoNordesteSEImagem,
       acerto: false);
 
   //GESTOS NORDESTE
   static Gestos gestoAL = Gestos(
-      nomeGesto: Constantes.nomeRegiaoNordesteAL,
+      nomeGesto: Textos.nomeRegiaoNordesteAL,
       nomeImagem: CaminhosImagens.gestoNordesteALImagem);
   static Gestos gestoBA = Gestos(
-      nomeGesto: Constantes.nomeRegiaoNordesteBA,
+      nomeGesto: Textos.nomeRegiaoNordesteBA,
       nomeImagem: CaminhosImagens.gestoNordesteBAImagem);
   static Gestos gestoCE = Gestos(
-      nomeGesto: Constantes.nomeRegiaoNordesteCE,
+      nomeGesto: Textos.nomeRegiaoNordesteCE,
       nomeImagem: CaminhosImagens.gestoNordesteCEImagem);
   static Gestos gestoMA = Gestos(
-      nomeGesto: Constantes.nomeRegiaoNordesteMA,
+      nomeGesto: Textos.nomeRegiaoNordesteMA,
       nomeImagem: CaminhosImagens.gestoNordesteMAImagem);
   static Gestos gestoPB = Gestos(
-      nomeGesto: Constantes.nomeRegiaoNordestePB,
+      nomeGesto: Textos.nomeRegiaoNordestePB,
       nomeImagem: CaminhosImagens.gestoNordestePBImagem);
   static Gestos gestoPE = Gestos(
-      nomeGesto: Constantes.nomeRegiaoNordestePE,
+      nomeGesto: Textos.nomeRegiaoNordestePE,
       nomeImagem: CaminhosImagens.gestoNordestePEImagem);
   static Gestos gestoPI = Gestos(
-      nomeGesto: Constantes.nomeRegiaoNordestePI,
+      nomeGesto: Textos.nomeRegiaoNordestePI,
       nomeImagem: CaminhosImagens.gestoNordestePIImagem);
   static Gestos gestoRN = Gestos(
-      nomeGesto: Constantes.nomeRegiaoNordesteRN,
+      nomeGesto: Textos.nomeRegiaoNordesteRN,
       nomeImagem: CaminhosImagens.gestoNordesteRNImagem);
   static Gestos gestoSE = Gestos(
-      nomeGesto: Constantes.nomeRegiaoNordesteSE,
+      nomeGesto: Textos.nomeRegiaoNordesteSE,
       nomeImagem: CaminhosImagens.gestoNordesteSEImagem);
 }

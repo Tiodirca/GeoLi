@@ -71,13 +71,13 @@ class _TelaProximoNivelState extends State<TelaProximoNivel> {
       (querySnapshot) async {
         // verificando cada item que esta gravado no banco de dados
         querySnapshot.data()!.forEach((key, value) {
-          if (Constantes.nomeRegiaoSul == key) {
+          if (Textos.nomeRegiaoSul == key) {
             liberarRegiaoSul = value;
-          } else if (Constantes.nomeRegiaoSudeste == key) {
+          } else if (Textos.nomeRegiaoSudeste == key) {
             liberarRegiaoSudeste = value;
-          } else if (Constantes.nomeRegiaoNorte == key) {
+          } else if (Textos.nomeRegiaoNorte == key) {
             liberarRegiaoNorte = value;
-          } else if (Constantes.nomeRegiaoNordeste == key) {
+          } else if (Textos.nomeRegiaoNordeste == key) {
             liberarRegiaoNordeste = value;
           } else if (Constantes.nomeTodosEstados == key) {
             liberarTodosEstados = value;
@@ -97,10 +97,10 @@ class _TelaProximoNivelState extends State<TelaProximoNivel> {
           .doc(
               Constantes.fireBaseDocumentoLiberarEstados) //passando o documento
           .set({
-        Constantes.nomeRegiaoSul: liberarRegiaoSul,
-        Constantes.nomeRegiaoSudeste: liberarRegiaoSudeste,
-        Constantes.nomeRegiaoNorte: liberarRegiaoNorte,
-        Constantes.nomeRegiaoNordeste: liberarRegiaoNordeste,
+        Textos.nomeRegiaoSul: liberarRegiaoSul,
+        Textos.nomeRegiaoSudeste: liberarRegiaoSudeste,
+        Textos.nomeRegiaoNorte: liberarRegiaoNorte,
+        Textos.nomeRegiaoNordeste: liberarRegiaoNordeste,
         Constantes.nomeTodosEstados: liberarTodosEstados,
       });
     } catch (e) {

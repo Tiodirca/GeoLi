@@ -6,6 +6,7 @@ import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
+import 'package:geoli/Widgets/area_exibir_emblemas.dart';
 import 'package:geoli/Widgets/emblema_widget.dart';
 import 'package:geoli/Widgets/tela_carregamento.dart';
 
@@ -18,23 +19,23 @@ class TelaInicialRegioes extends StatefulWidget {
 
 class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
   Estado regiaoCentroOeste = Estado(
-      nome: Constantes.nomeRegiaoCentroOeste,
+      nome: Textos.nomeRegiaoCentroOeste,
       caminhoImagem: CaminhosImagens.gestoCentroOesteImagem,
       acerto: true);
   Estado regiaoSul = Estado(
-      nome: Constantes.nomeRegiaoSul,
+      nome: Textos.nomeRegiaoSul,
       caminhoImagem: CaminhosImagens.gestoSulImagem,
       acerto: false);
   Estado regiaoSudeste = Estado(
-      nome: Constantes.nomeRegiaoSudeste,
+      nome: Textos.nomeRegiaoSudeste,
       caminhoImagem: CaminhosImagens.gestoSudesteImagem,
       acerto: false);
   Estado regiaoNorte = Estado(
-      nome: Constantes.nomeRegiaoNorte,
+      nome: Textos.nomeRegiaoNorte,
       caminhoImagem: CaminhosImagens.gestoNorteImagem,
       acerto: false);
   Estado regiaoNordeste = Estado(
-      nome: Constantes.nomeRegiaoNordeste,
+      nome: Textos.nomeRegiaoNordeste,
       caminhoImagem: CaminhosImagens.gestoNordesteImagem,
       acerto: false);
 
@@ -46,8 +47,6 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
   String caminhaoEmblemaAtual = CaminhosImagens.emblemaEstadosEntusiastaum;
   String nomeEmblema = Textos.emblemaEstadosEntusiastaum;
   bool exibirTelaCarregamento = true;
-  bool exibirTelaEmblemas = false;
-  bool exibirListaEmblemas = false;
   List<Emblemas> emblemasExibir = [];
 
   @override
@@ -141,7 +140,6 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
 
   exibirEmblemaPontuacao() {
     setState(() {
-      print(pontos);
       if (pontos > 5 && pontos <= 10) {
         caminhaoEmblemaAtual = CaminhosImagens.emblemaEstadosEntusiastadois;
         nomeEmblema = Textos.emblemaEstadosEntusiastadois;
@@ -285,122 +283,13 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
                       ],
                     ),
                   )),
-              bottomSheet: AnimatedContainer(
-                  color: Colors.white,
-                  width: larguraTela,
-                  height: exibirTelaEmblemas ? alturaTela * 0.7 : 60,
-                  duration: const Duration(seconds: 1),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        width: larguraTela,
-                        height: 60,
-                        child: Card(
-                          elevation: 0,
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10))),
-                          child: Row(
-                            children: [
-                              EmblemaWidget(
-                                  pontos: pontos,
-                                  caminhoImagem: caminhaoEmblemaAtual,
-                                  nomeEmblema: nomeEmblema),
-                              SizedBox(
-                                width: 100,
-                                height: 40,
-                                child: FloatingActionButton(
-                                  elevation: 0,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10)),
-                                    side: BorderSide(
-                                        color: PaletaCores.corAzulMagenta),
-                                  ),
-                                  enableFeedback: !exibirListaEmblemas,
-                                  backgroundColor: Colors.white,
-                                  onPressed: () {
-                                    setState(() {
-                                      exibirTelaEmblemas = true;
-                                      Future.delayed(Duration(seconds: 1)).then(
-                                        (value) {
-                                          setState(() {
-                                            exibirListaEmblemas = true;
-                                          });
-                                        },
-                                      );
-                                    });
-                                  },
-                                  child: Text(
-                                    Textos.btnEmblemas,
-                                    style: TextStyle(color: Colors.black),
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Visibility(
-                        visible: exibirListaEmblemas,
-                        child: Column(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border(
-                                    top: BorderSide(width: 1),
-                                    left: BorderSide(width: 1),
-                                    right: BorderSide(width: 1),
-                                    bottom: BorderSide(width: 1)),
-                              ),
-                              width: larguraTela * 0.9,
-                              height: 420,
-                              child: ListView.builder(
-                                itemCount: emblemasExibir.length,
-                                itemBuilder: (context, index) {
-                                  return Card(
-                                    color: Colors.white,
-                                    child: EmblemaWidget(
-                                        caminhoImagem: emblemasExibir
-                                            .elementAt(index)
-                                            .caminhoImagem,
-                                        nomeEmblema: emblemasExibir
-                                            .elementAt(index)
-                                            .nomeEmblema,
-                                        pontos: emblemasExibir
-                                            .elementAt(index)
-                                            .pontos),
-                                  );
-                                },
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(top: 10),
-                              width: 40,
-                              height: 40,
-                              child: FloatingActionButton(
-                                heroTag: exibirListaEmblemas.toString(),
-                                backgroundColor: Colors.white,
-                                onPressed: () {
-                                  setState(() {
-                                    exibirTelaEmblemas = false;
-                                    exibirListaEmblemas = false;
-                                  });
-                                },
-                                child: Icon(
-                                  Icons.close,
-                                  size: 30,
-                                  color: PaletaCores.corVermelha,
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  )));
+              bottomSheet: ExibirEmblemas(
+                corBordas: PaletaCores.corAzulEscuro,
+                  listaEmblemas: emblemasExibir,
+                  emblemaWidget: EmblemaWidget(
+                      caminhoImagem: caminhaoEmblemaAtual,
+                      nomeEmblema: nomeEmblema,
+                      pontos: pontos)));
         }
       },
     );

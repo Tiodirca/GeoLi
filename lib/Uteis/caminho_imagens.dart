@@ -8,6 +8,10 @@ class CaminhosImagens {
       "assets/imagens/sistema_solar/gestos_planetas/gesto_sistema_solar";
 
   // SISTEMA SOLAR
+
+  static const balaoCabelaImagem = "assets/imagens/sistema_solar/balao_cabeca";
+  static const balaoCaldaImagem = "assets/imagens/sistema_solar/balao_calda";
+
   // GESTOS
   static const gestoPlanetaMercurioImagem =
       "assets/imagens/sistema_solar/gestos_planetas/gesto_planeta_mercurio";

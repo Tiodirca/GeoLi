@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:elegant_notification/elegant_notification.dart';
 import 'package:elegant_notification/resources/arrays.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +10,7 @@ import 'package:geoli/Uteis/paleta_cores.dart';
 
 class MetodosAuxiliares {
   static String acertou = "";
+  static late final String nomeGestoPlaneta;
 
   static Future<String> confirmarAcerto(String acerto) async {
     acertou = acerto;
@@ -16,6 +19,15 @@ class MetodosAuxiliares {
 
   static Future<String> recuperarAcerto() async {
     return acertou;
+  }
+
+  static Future<String> passarGestoSorteado(String nomeGesto) async {
+    nomeGestoPlaneta = nomeGesto;
+    return nomeGestoPlaneta;
+  }
+
+  static Future<String> recuperarGestoSorteado() async {
+    return nomeGestoPlaneta;
   }
 
   // metodo para remover o gesto ja acertado da lista

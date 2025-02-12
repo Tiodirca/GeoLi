@@ -14,6 +14,20 @@ class Textos {
   static String btnDificuldadeDificil = "Dificil";
 
   static String telaSistemaSolarTitulo = "Sistema Solar";
+  static String descricaoPlanetaSorteado = "Planeta Sorteado";
+  static String descricaoTemporizador = "Tempo";
+
+  static String descricaoTelaInicialSistemaSolar =
+      "Selecione uma dificuldade para começar a jogar";
+
+  static String nomePlanetaMercurio = "Mercúrio";
+  static String nomePlanetaVenus = "Vênus";
+  static String nomePlanetaTerra = "Terra";
+  static String nomePlanetaMarte = "Marte";
+  static String nomePlanetaJupiter = "Júpiter";
+  static String nomePlanetaSaturno = "Saturno";
+  static String nomePlanetaUrano = "Urano";
+  static String nomePlanetaNetuno = "Netuno";
 
   //EMBLEMAS TELA INICIAL ESTADOS
   static String emblemaEstadosAventureiroum = "Aventureiro Um";
@@ -23,6 +37,47 @@ class Textos {
   static String emblemaEstadosColecionador = "Colecionador";
   static String emblemaEstadosIndiana = "Indiana";
   static String emblemasPontos = "Pontos : ";
+
+  //CENTRO OESTE
+  static String nomeRegiaoCentroOeste = "Região Centro-Oeste";
+  static String nomeRegiaoCentroMS = "Mato Grosso do Sul - MS";
+  static String nomeRegiaoCentroMT = "Mato Grosso - MG";
+  static String nomeRegiaoCentroGO = "Goias - GO";
+
+  //SUL
+  static String nomeRegiaoSul = "Região Sul";
+  static String nomeRegiaoSulPR = "Paraná - PR";
+  static String nomeRegiaoSulRS = "Rio Grande do Sul - RS";
+  static String nomeRegiaoSulSC = "Santa Catarina - SC";
+
+  //SUDESTE
+  static String nomeRegiaoSudeste = "Região Sudeste";
+  static String nomeRegiaoSudesteRJ = "Rio de Janeiro - RJ";
+  static String nomeRegiaoSudesteMG = "Minas Gerais - MG";
+  static String nomeRegiaoSudesteSP = "São Paulo - SP";
+  static String nomeRegiaoSudesteES = "Espirito Santo - ES";
+
+  // Norte
+  static String nomeRegiaoNorte = "Região Norte";
+  static String nomeRegiaoNorteAC = "Acre - AC";
+  static String nomeRegiaoNorteAP = "Amapá - AP";
+  static String nomeRegiaoNorteAM = "Amazonas - AM";
+  static String nomeRegiaoNortePA = "Pará - PA";
+  static String nomeRegiaoNorteRO = "Rondonia - RO";
+  static String nomeRegiaoNorteRR = "Roraima - RR";
+  static String nomeRegiaoNorteTO = "Tocantins - TO";
+
+  // Norte
+  static String nomeRegiaoNordeste = "Região Nordeste";
+  static String nomeRegiaoNordesteAL = "Alagoas - AL";
+  static String nomeRegiaoNordesteBA = "Bahia - BA";
+  static String nomeRegiaoNordesteCE = "Ceará - CE";
+  static String nomeRegiaoNordesteMA = "Maranhão - MA";
+  static String nomeRegiaoNordestePB = "Paraiba - PB";
+  static String nomeRegiaoNordestePE = "Pernambuco - PE";
+  static String nomeRegiaoNordestePI = "Piauí - PI";
+  static String nomeRegiaoNordesteRN = "Rio Grande do Norte - RN";
+  static String nomeRegiaoNordesteSE = "Sergipe - SE";
 
   //REGIOES DO BRASIL
   static String tituloTelaRegioes = "Seleção das Regiões do Brasil";
