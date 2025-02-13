@@ -33,7 +33,7 @@ class CaminhosImagens {
   // PLANETAS
 
   static const planetaMercurioImagem =
-      "assets/imagens/sistema_solar/planetas/planeta_netuno";
+      "assets/imagens/sistema_solar/planetas/planeta_mercurio";
   static const planetaVenusImagem =
       "assets/imagens/sistema_solar/planetas/planeta_venus";
   static const planetaTerraImagem =

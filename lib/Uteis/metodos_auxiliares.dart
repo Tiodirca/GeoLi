@@ -10,7 +10,7 @@ import 'package:geoli/Uteis/paleta_cores.dart';
 
 class MetodosAuxiliares {
   static String acertou = "";
-  static late final String nomeGestoPlaneta;
+  static String nomeGestoPlaneta = "";
 
   static Future<String> confirmarAcerto(String acerto) async {
     acertou = acerto;

@@ -1,14 +1,15 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
+import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
-import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/modelos/planeta.dart';
 
 class BalaoWidget extends StatefulWidget {
-  const BalaoWidget({super.key});
+  const BalaoWidget({super.key, required this.planeta});
+
+  final Planeta planeta;
 
   @override
   State<BalaoWidget> createState() => _BalaoWidgetState();
@@ -18,39 +19,12 @@ class _BalaoWidgetState extends State<BalaoWidget> {
   List<Color> listaCorBalao = [];
   Random random = Random();
   late Color corbalao;
-  List<Planeta> planetas = [];
-  late Planeta planetaSorteado;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    planetas.addAll([
-      Planeta(
-          nomePlaneta: Textos.nomePlanetaMercurio,
-          caminhoImagem: CaminhosImagens.planetaMercurioImagem),
-      Planeta(
-          nomePlaneta: Textos.nomePlanetaVenus,
-          caminhoImagem: CaminhosImagens.planetaVenusImagem),
-      Planeta(
-          nomePlaneta: Textos.nomePlanetaTerra,
-          caminhoImagem: CaminhosImagens.planetaTerraImagem),
-      Planeta(
-          nomePlaneta: Textos.nomePlanetaMarte,
-          caminhoImagem: CaminhosImagens.planetaMarteImagem),
-      Planeta(
-          nomePlaneta: Textos.nomePlanetaJupiter,
-          caminhoImagem: CaminhosImagens.planetaJupiterImagem),
-      Planeta(
-          nomePlaneta: Textos.nomePlanetaSaturno,
-          caminhoImagem: CaminhosImagens.planetaSaturnoImagem),
-      Planeta(
-          nomePlaneta: Textos.nomePlanetaUrano,
-          caminhoImagem: CaminhosImagens.planetaUranoImagem),
-      Planeta(
-          nomePlaneta: Textos.nomePlanetaNetuno,
-          caminhoImagem: CaminhosImagens.planetaNetunoImagem),
-    ]);
+
     listaCorBalao.addAll([
       Colors.redAccent,
       Colors.pinkAccent,
@@ -66,11 +40,6 @@ class _BalaoWidgetState extends State<BalaoWidget> {
       Colors.grey,
     ]);
     corbalao = listaCorBalao.elementAt(sortearNumero(listaCorBalao.length));
-    sortearPlanetas();
-  }
-
-  sortearPlanetas() {
-    planetaSorteado = planetas.elementAt(sortearNumero(planetas.length));
   }
 
   sortearNumero(int tamanhoLista) {
@@ -104,26 +73,26 @@ class _BalaoWidgetState extends State<BalaoWidget> {
                             top: 20,
                             left: 15,
                             child: Center(
-                                child: Container(
+                                child: SizedBox(
                               width: 50,
                               height: 50,
                               child: FloatingActionButton(
                                 elevation: 0,
                                 backgroundColor: corbalao,
                                 onPressed: () async {
-                                  String gesto = await MetodosAuxiliares
+                                  String gesto = "";
+                                  gesto = await MetodosAuxiliares
                                       .recuperarGestoSorteado();
-                                  print("R${gesto}");
-                                  // if (gesto.nomeGesto
-                                  //     .contains(planetaSorteado.nomePlaneta)) {
-                                  //   sortearPlanetas();
-                                  // }
+                                  if (gesto
+                                      .contains(widget.planeta.nomePlaneta)) {
+                                    MetodosAuxiliares.confirmarAcerto(Constantes.msgAcertoGesto);
+                                  }
                                 },
                                 child: Image(
                                   height: 50,
                                   width: 50,
                                   image: AssetImage(
-                                      '${planetaSorteado.caminhoImagem}.png'),
+                                      '${widget.planeta.caminhoImagem}.png'),
                                 ),
                               ),
                             ))),

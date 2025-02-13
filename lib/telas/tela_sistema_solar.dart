@@ -12,6 +12,7 @@ import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Widgets/balao_widget.dart';
 import 'package:geoli/Widgets/gestos_widget.dart';
 import 'package:geoli/Widgets/tela_carregamento.dart';
+import 'package:geoli/Widgets/tela_fim_jogo.dart';
 import 'package:geoli/modelos/planeta.dart';
 
 class TelaSistemaSolar extends StatefulWidget {
@@ -30,12 +31,12 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   List<Gestos> gestoPlanetasSistemaSolar = [];
   List<Planeta> planetas = [];
   late Gestos gestoSorteado;
-  int gestoAnterior = 0;
   int tempo = 0;
   Random random = Random();
   List<Color> listaCorBalao = [];
-  late Planeta planetaSorteado;
-  int sortear = 0;
+  bool playPauseJogo = false;
+  bool exibirTelaFimJogo = false;
+  int pontuacao = 0;
   late final AnimationController _controller = AnimationController(vsync: this);
   late final AnimationController _controller2 =
       AnimationController(vsync: this);
@@ -58,6 +59,12 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   late final AnimationController _controller11 =
       AnimationController(vsync: this);
   late final AnimationController _controller12 =
+      AnimationController(vsync: this);
+  late final AnimationController _controller13 =
+      AnimationController(vsync: this);
+  late final AnimationController _controller14 =
+      AnimationController(vsync: this);
+  late final AnimationController _controller15 =
       AnimationController(vsync: this);
 
   @override
@@ -131,45 +138,68 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
           nomeGesto: Textos.nomePlanetaNetuno,
           nomeImagem: CaminhosImagens.gestoPlanetaNetunoImagem),
     ]);
-    gestoAnterior = sortearNumero(gestoPlanetasSistemaSolar.length);
-    gestoSorteado = gestoPlanetasSistemaSolar.elementAt(gestoAnterior);
+    planetas.shuffle();
+    sortearGesto();
+  }
 
+  sortearGesto() {
+    gestoSorteado = gestoPlanetasSistemaSolar
+        .elementAt(sortearNumero(gestoPlanetasSistemaSolar.length));
     MetodosAuxiliares.passarGestoSorteado(gestoSorteado.nomeGesto);
   }
 
-  // sortearPlanetas() {
-  //   int index = 0;
-  //   sortear++;
-  //   if (sortear < 24) {
-  //     index = sortearNumero(planetas.length);
-  //     print(sortear);
-  //     print(planetas.elementAt(index).nomePlaneta);
-  //     return planetas.elementAt(index);
-  //   }
-  //
-  // }
+  retornarEspacamento() {
+    int tamanho = 0;
+    if (Platform.isAndroid || Platform.isIOS) {
+      if (tamanho <= 250) {
+        return tamanho + 50;
+      }
+    } else {
+      return tamanho + 100;
+    }
+  }
 
   @override
   void dispose() {
     // TODO: implement dispose
+    pararAnimacaoBaloes();
     super.dispose();
-    cancelarAnimacaoBalao();
   }
 
-  cancelarAnimacaoBalao() {
-    MetodosAuxiliares.passarGestoSorteado("");
-    _controller.dispose();
-    _controller2.dispose();
-    _controller3.dispose();
-    _controller4.dispose();
-    _controller5.dispose();
-    _controller6.dispose();
-    _controller7.dispose();
-    _controller8.dispose();
-    _controller9.dispose();
-    _controller10.dispose();
-    _controller11.dispose();
-    _controller12.dispose();
+  pararAnimacaoBaloes() {
+    _controller.stop(canceled: false);
+    _controller2.stop(canceled: false);
+    _controller3.stop(canceled: false);
+    _controller4.stop(canceled: false);
+    _controller5.stop(canceled: false);
+    _controller6.stop(canceled: false);
+    _controller7.stop(canceled: false);
+    _controller8.stop(canceled: false);
+    _controller9.stop(canceled: false);
+    _controller10.stop(canceled: false);
+    _controller11.stop(canceled: false);
+    _controller12.stop(canceled: false);
+    _controller13.stop(canceled: false);
+    _controller14.stop(canceled: false);
+    _controller15.stop(canceled: false);
+  }
+
+  retomarAnimacaoBaloes() {
+    _controller.forward();
+    _controller2.forward();
+    _controller3.forward();
+    _controller4.forward();
+    _controller5.forward();
+    _controller6.forward();
+    _controller7.forward();
+    _controller8.forward();
+    _controller9.forward();
+    _controller10.forward();
+    _controller11.forward();
+    _controller12.forward();
+    _controller13.forward();
+    _controller14.forward();
+    _controller15.forward();
   }
 
   // metodo para iniciar a animacao dos baloes
@@ -197,24 +227,50 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
         if (tempo == 0) {
           setState(() {
             timer.cancel();
-            cancelarAnimacaoBalao();
+            exibirTelaFimJogo = true;
+            pararAnimacaoBaloes();
           });
         } else {
-          setState(() {
-            tempo--;
-          });
+          if (this.mounted) {
+            setState(() {
+              tempo--;
+            });
+          }
         }
       },
     );
   }
 
-  Widget baloes(
-    double tamanhoTela,
-    Size biggest,
-    double distacia,
-    AnimationController controle,
-    String nomeBalao,
-  ) =>
+  recuperarAcertoPlaneta() async {
+    String retorno = await MetodosAuxiliares.recuperarAcerto();
+    if (retorno == Constantes.msgAcertoGesto) {
+      // mudando estado da lista para mudar a ordem dos planetas na lista
+      setState(() {
+        planetas.shuffle();
+        sortearGesto();
+        // sobreescrevendo metodo
+        MetodosAuxiliares.confirmarAcerto("");
+      });
+    }
+  }
+
+  iniciarAnimacoesBaloes() {
+    iniciarBalao(_controller, 5, _controller2, 1);
+    iniciarBalao(_controller3, 5, _controller4, 1);
+    iniciarBalao(_controller5, 5, _controller6, 1);
+    Future.delayed(Duration(seconds: 2), () {
+      iniciarBalao(_controller7, 5, _controller8, 1);
+      iniciarBalao(_controller9, 5, _controller10, 1);
+      iniciarBalao(_controller11, 5, _controller12, 1);
+    });
+    Future.delayed(Duration(milliseconds: 4300), () {
+      iniciarBalao(_controller13, 5, _controller14, 0);
+      iniciarBalao(_controller15, 5, _controller15, 0);
+    });
+  }
+
+  Widget baloes(double tamanhoTela, Size biggest, double distacia,
+          AnimationController controle, String nomeBalao, int indexPlaneta) =>
       PositionedTransition(
           rect: RelativeRectTween(
                   begin: RelativeRect.fromSize(
@@ -228,8 +284,8 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
             parent: controle,
             curve: Curves.linear,
           )),
-          child: Column(
-            children: [BalaoWidget(), Text(nomeBalao)],
+          child: BalaoWidget(
+            planeta: planetas.elementAt(indexPlaneta),
           ));
 
   Widget btnDificuldade(String nomeDificuldade) => Container(
@@ -254,23 +310,11 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
               } else if (nomeDificuldade == Textos.btnDificuldadeDificil) {
                 tempo = Constantes.tempoDificl;
               }
-
               comecarTempo();
-              iniciarBalao(_controller, 4, _controller2, 1);
-              iniciarBalao(_controller3, 4, _controller4, 1);
-              iniciarBalao(_controller5, 4, _controller6, 1);
-              Future.delayed(Duration(seconds: 2), () {
-                iniciarBalao(_controller7, 4, _controller8, 1);
-                iniciarBalao(_controller9, 4, _controller10, 1);
-                iniciarBalao(_controller11, 4, _controller12, 1);
-              });
+              iniciarAnimacoesBaloes();
             });
           },
           child: Text(nomeDificuldade)));
-
-  teste() async {
-    await MetodosAuxiliares.recuperarAcerto();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -297,7 +341,6 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                     iconSize: 30,
                     enableFeedback: false,
                     onPressed: () {
-                      cancelarAnimacaoBalao();
                       Navigator.pushReplacementNamed(
                           context, Constantes.rotaTelaInicial);
                     },
@@ -307,6 +350,9 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                 builder: (context, constraints) {
                   if (exibirJogo) {
                     final Size biggest = constraints.biggest;
+                    // chamando metodo para ficar
+                    // verificando a todo o momento se o usuario acertou o planeta
+                    recuperarAcertoPlaneta();
                     return Container(
                       color: Colors.white,
                       width: larguraTela,
@@ -316,19 +362,79 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                           SizedBox(
                             width: larguraTela,
                             height: 60,
-                            child: Column(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Text(
-                                  Textos.descricaoTemporizador,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18),
+                                Column(
+                                  children: [
+                                    Text(
+                                      Textos.telaSistemaSolarPontuacao,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    ),
+                                    Text(
+                                      pontuacao.toString(),
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          color: PaletaCores.corAzul),
+                                    ),
+                                  ],
                                 ),
-                                Text(
-                                  tempo.toString(),
-                                  style: TextStyle(
-                                      fontSize: 18, color: PaletaCores.corAzul),
+                                Column(
+                                  children: [
+                                    Text(
+                                      Textos.telaSistemaSolarVidas,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.favorite),
+                                        Icon(Icons.favorite),
+                                        Icon(Icons.favorite),
+                                      ],
+                                    )
+                                  ],
                                 ),
+                                Column(
+                                  children: [
+                                    Text(
+                                      Textos
+                                          .telaSistemaSolarDescricaoTemporizador,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18),
+                                    ),
+                                    Text(
+                                      tempo.toString(),
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          color: PaletaCores.corAzul),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    IconButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            print("A$playPauseJogo");
+                                            playPauseJogo = !playPauseJogo;
+                                            print("D$playPauseJogo");
+                                            if (playPauseJogo) {
+                                              pararAnimacaoBaloes();
+                                            } else {
+                                              iniciarAnimacoesBaloes();
+                                            }
+                                          });
+                                        },
+                                        icon: Icon(playPauseJogo
+                                            ? Icons.play_arrow
+                                            : Icons.pause))
+                                  ],
+                                )
                               ],
                             ),
                           ),
@@ -337,36 +443,136 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                             height: alturaTela * 0.8,
                             child: Stack(
                               children: [
+                                baloes(alturaTela, biggest, 0, _controller, "1",
+                                    0),
                                 baloes(
-                                    alturaTela, biggest, 0, _controller, "1"),
+                                    alturaTela,
+                                    biggest,
+                                    Platform.isAndroid || Platform.isIOS
+                                        ? 50
+                                        : 100,
+                                    _controller2,
+                                    "2",
+                                    1),
                                 baloes(
-                                    alturaTela, biggest, 50, _controller2, "2"),
-                                baloes(alturaTela, biggest, 100, _controller3,
-                                    "3"),
-                                baloes(alturaTela, biggest, 150, _controller4,
-                                    "4"),
-                                baloes(alturaTela, biggest, 200, _controller5,
-                                    "5"),
-                                baloes(alturaTela, biggest, 250, _controller6,
-                                    "6"),
+                                    alturaTela,
+                                    biggest,
+                                    Platform.isAndroid || Platform.isIOS
+                                        ? 100
+                                        : 200,
+                                    _controller3,
+                                    "3",
+                                    2),
                                 baloes(
-                                    alturaTela, biggest, 0, _controller7, "7"),
+                                    alturaTela,
+                                    biggest,
+                                    Platform.isAndroid || Platform.isIOS
+                                        ? 150
+                                        : 300,
+                                    _controller4,
+                                    "4",
+                                    3),
                                 baloes(
-                                    alturaTela, biggest, 50, _controller8, "8"),
-                                baloes(alturaTela, biggest, 100, _controller9,
-                                    "9"),
-                                baloes(alturaTela, biggest, 150, _controller10,
-                                    "10"),
-                                baloes(alturaTela, biggest, 200, _controller11,
-                                    "11"),
-                                baloes(alturaTela, biggest, 250, _controller12,
-                                    "12"),
+                                    alturaTela,
+                                    biggest,
+                                    Platform.isAndroid || Platform.isIOS
+                                        ? 200
+                                        : 400,
+                                    _controller5,
+                                    "5",
+                                    4),
+                                baloes(
+                                    alturaTela,
+                                    biggest,
+                                    Platform.isAndroid || Platform.isIOS
+                                        ? 250
+                                        : 500,
+                                    _controller6,
+                                    "6",
+                                    5),
+                                baloes(alturaTela, biggest, 0, _controller7,
+                                    "7", 6),
+                                baloes(
+                                    alturaTela,
+                                    biggest,
+                                    Platform.isAndroid || Platform.isIOS
+                                        ? 50
+                                        : 100,
+                                    _controller8,
+                                    "8",
+                                    7),
+                                baloes(
+                                    alturaTela,
+                                    biggest,
+                                    Platform.isAndroid || Platform.isIOS
+                                        ? 100
+                                        : 200,
+                                    _controller9,
+                                    "9",
+                                    0),
+                                baloes(
+                                    alturaTela,
+                                    biggest,
+                                    Platform.isAndroid || Platform.isIOS
+                                        ? 150
+                                        : 300,
+                                    _controller10,
+                                    "10",
+                                    1),
+                                baloes(
+                                    alturaTela,
+                                    biggest,
+                                    Platform.isAndroid || Platform.isIOS
+                                        ? 200
+                                        : 400,
+                                    _controller11,
+                                    "11",
+                                    2),
+                                baloes(
+                                    alturaTela,
+                                    biggest,
+                                    Platform.isAndroid || Platform.isIOS
+                                        ? 250
+                                        : 500,
+                                    _controller12,
+                                    "12",
+                                    3),
+                                baloes(
+                                    alturaTela,
+                                    biggest,
+                                    Platform.isAndroid || Platform.isIOS
+                                        ? 50
+                                        : 100,
+                                    _controller13,
+                                    "13",
+                                    4),
+                                baloes(
+                                    alturaTela,
+                                    biggest,
+                                    Platform.isAndroid || Platform.isIOS
+                                        ? 150
+                                        : 300,
+                                    _controller14,
+                                    "14",
+                                    5),
+                                baloes(
+                                    alturaTela,
+                                    biggest,
+                                    Platform.isAndroid || Platform.isIOS
+                                        ? 250
+                                        : 500,
+                                    _controller15,
+                                    "15",
+                                    6),
                                 baloes(
                                   alturaTela,
                                   biggest,
-                                  300,
+                                  Platform.isAndroid || Platform.isIOS
+                                      ? 300
+                                      : 600,
                                   _controller,
                                   "1s",
+                                  4,
                                 ),
                                 LayoutBuilder(
                                   builder: (context, constraints) {
@@ -375,33 +581,72 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                                     } else {
                                       return Stack(
                                         children: [
-                                          baloes(alturaTela, biggest, 350,
-                                              _controller2, "2"),
-                                          baloes(alturaTela, biggest, 400,
-                                              _controller3, "3s"),
-                                          baloes(alturaTela, biggest, 450,
-                                              _controller4, "4s"),
-                                          baloes(alturaTela, biggest, 500,
-                                              _controller5, "5s"),
-                                          baloes(alturaTela, biggest, 550,
-                                              _controller6, "6s"),
-                                          baloes(alturaTela, biggest, 350,
-                                              _controller8, "8s"),
-                                          baloes(alturaTela, biggest, 400,
-                                              _controller9, "9s"),
-                                          baloes(alturaTela, biggest, 450,
-                                              _controller10, "10s"),
-                                          baloes(alturaTela, biggest, 500,
-                                              _controller11, "11"),
-                                          baloes(alturaTela, biggest, 550,
-                                              _controller12, "12"),
+                                          baloes(alturaTela, biggest, 700,
+                                              _controller2, "2", 5),
+                                          baloes(alturaTela, biggest, 800,
+                                              _controller3, "3s", 6),
+                                          baloes(alturaTela, biggest, 900,
+                                              _controller4, "4s", 7),
+                                          baloes(alturaTela, biggest, 1000,
+                                              _controller5, "5s", 0),
+                                          baloes(alturaTela, biggest, 1100,
+                                              _controller6, "6s", 1),
+                                          baloes(alturaTela, biggest, 700,
+                                              _controller8, "8s", 2),
+                                          baloes(alturaTela, biggest, 800,
+                                              _controller9, "9s", 3),
+                                          baloes(alturaTela, biggest, 900,
+                                              _controller10, "10s", 4),
+                                          baloes(alturaTela, biggest, 1000,
+                                              _controller11, "11", 5),
+                                          baloes(alturaTela, biggest, 1100,
+                                              _controller12, "12", 6),
+                                          baloes(alturaTela, biggest, 700,
+                                              _controller13, "13s", 7),
+                                          baloes(alturaTela, biggest, 900,
+                                              _controller14, "14s", 0),
+                                          baloes(alturaTela, biggest, 1100,
+                                              _controller15, "15s", 1),
+                                          baloes(
+                                            alturaTela,
+                                            biggest,
+                                            1200,
+                                            _controller,
+                                            "1s",
+                                            4,
+                                          ),
+                                          baloes(alturaTela, biggest, 1300,
+                                              _controller2, "2", 5),
+                                          baloes(alturaTela, biggest, 1400,
+                                              _controller3, "3s", 6),
+                                          baloes(alturaTela, biggest, 1200,
+                                              _controller7, "7s", 7),
+                                          baloes(alturaTela, biggest, 1300,
+                                              _controller8, "8s", 2),
+                                          baloes(alturaTela, biggest, 1400,
+                                              _controller9, "9s", 3),
+                                          baloes(alturaTela, biggest, 1300,
+                                              _controller13, "13s", 7),
                                         ],
                                       );
                                     }
                                   },
                                 ),
-                                baloes(alturaTela, biggest, 300, _controller7,
-                                    "7s"),
+                                baloes(
+                                    alturaTela,
+                                    biggest,
+                                    Platform.isAndroid || Platform.isIOS
+                                        ? 300
+                                        : 600,
+                                    _controller7,
+                                    "7s",
+                                    7),
+                                Positioned(
+                                    child: Center(
+                                  child: Visibility(
+                                      visible: exibirTelaFimJogo,
+                                      child: TelaFimJogo()),
+                                )),
                               ],
                             ),
                           ),
@@ -459,7 +704,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                         child: Column(
                           children: [
                             Text(
-                              Textos.descricaoPlanetaSorteado,
+                              Textos.telaSistemaSolarDescricaoPlanetaSorteado,
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold),
@@ -478,124 +723,9 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                       ),
                     );
                   } else {
-                    return AnimatedContainer(
-                        color: Colors.white,
-                        width: larguraTela,
-                        height: exibirTelaEmblemas ? alturaTela * 0.7 : 60,
-                        duration: const Duration(seconds: 1),
-                        child: Column(
-                          children: [
-                            SizedBox(
-                              width: larguraTela,
-                              height: 60,
-                              child: Card(
-                                elevation: 0,
-                                color: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(10))),
-                                child: Row(
-                                  children: [
-                                    // EmblemaWidget(
-                                    //     pontos: pontos,
-                                    //     caminhoImagem: caminhaoEmblemaAtual,
-                                    //     nomeEmblema: nomeEmblema),
-                                    SizedBox(
-                                      width: 100,
-                                      height: 40,
-                                      child: FloatingActionButton(
-                                        elevation: 0,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10)),
-                                          side: BorderSide(
-                                              color:
-                                                  PaletaCores.corAzulMagenta),
-                                        ),
-                                        enableFeedback: !exibirListaEmblemas,
-                                        backgroundColor: Colors.white,
-                                        onPressed: () {
-                                          setState(() {
-                                            exibirTelaEmblemas = true;
-                                            Future.delayed(Duration(seconds: 1))
-                                                .then(
-                                              (value) {
-                                                setState(() {
-                                                  exibirListaEmblemas = true;
-                                                });
-                                              },
-                                            );
-                                          });
-                                        },
-                                        child: Text(
-                                          Textos.btnEmblemas,
-                                          style: TextStyle(color: Colors.black),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Visibility(
-                              visible: exibirListaEmblemas,
-                              child: Column(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border(
-                                          top: BorderSide(width: 1),
-                                          left: BorderSide(width: 1),
-                                          right: BorderSide(width: 1),
-                                          bottom: BorderSide(width: 1)),
-                                    ),
-                                    width: larguraTela * 0.9,
-                                    height: 420,
-                                    // child: ListView.builder(
-                                    //   itemCount: emblemasExibir.length,
-                                    //   itemBuilder: (context, index) {
-                                    //     return Card(
-                                    //       color: Colors.white,
-                                    //       child: EmblemaWidget(
-                                    //           caminhoImagem: emblemasExibir
-                                    //               .elementAt(index)
-                                    //               .caminhoImagem,
-                                    //           nomeEmblema: emblemasExibir
-                                    //               .elementAt(index)
-                                    //               .nomeEmblema,
-                                    //           pontos: emblemasExibir
-                                    //               .elementAt(index)
-                                    //               .pontos),
-                                    //     );
-                                    //   },
-                                    // ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(top: 10),
-                                    width: 40,
-                                    height: 40,
-                                    child: FloatingActionButton(
-                                      heroTag: exibirListaEmblemas.toString(),
-                                      backgroundColor: Colors.white,
-                                      onPressed: () {
-                                        setState(() {
-                                          exibirTelaEmblemas = false;
-                                          exibirListaEmblemas = false;
-                                        });
-                                      },
-                                      child: Icon(
-                                        Icons.close,
-                                        size: 30,
-                                        color: PaletaCores.corVermelha,
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ));
+                    return Container(
+                      height: 60,
+                    );
                   }
                 },
               ));

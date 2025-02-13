@@ -14,8 +14,12 @@ class Textos {
   static String btnDificuldadeDificil = "Dificil";
 
   static String telaSistemaSolarTitulo = "Sistema Solar";
-  static String descricaoPlanetaSorteado = "Planeta Sorteado";
-  static String descricaoTemporizador = "Tempo";
+  static String telaSistemaSolarDescricaoPlanetaSorteado = "Planeta Sorteado";
+  static String telaSistemaSolarDescricaoTemporizador = "Tempo";
+  static String telaSistemaSolarVidas = "Vidas";
+  static String telaSistemaSolarPontuacao = "Pontuação";
+  static String telaSistemaSolarFimJogoTitulo = "Fim de jogo";
+  static String telaSistemaSolarFimJogoDescricao = "Selecione uma opção";
 
   static String descricaoTelaInicialSistemaSolar =
       "Selecione uma dificuldade para começar a jogar";
