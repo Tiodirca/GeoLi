@@ -5,8 +5,8 @@ import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 
-import '../Uteis/paleta_cores.dart';
-import '../Uteis/textos.dart';
+import '../../Uteis/paleta_cores.dart';
+import '../../Uteis/textos.dart';
 
 class TelaProximoNivel extends StatefulWidget {
   const TelaProximoNivel(

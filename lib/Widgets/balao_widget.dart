@@ -47,6 +47,16 @@ class _BalaoWidgetState extends State<BalaoWidget> {
     return randomNumber;
   }
 
+  validarAcerto() async {
+    String gesto = "";
+    gesto = await MetodosAuxiliares.recuperarGestoSorteado();
+    if (gesto.contains(widget.planeta.nomePlaneta)) {
+      MetodosAuxiliares.confirmarAcerto(Constantes.msgAcertoGesto);
+    } else {
+      MetodosAuxiliares.confirmarAcerto(Constantes.msgErroAcertoGesto);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -62,12 +72,25 @@ class _BalaoWidgetState extends State<BalaoWidget> {
                   children: [
                     Stack(
                       children: [
-                        Image(
-                          color: corbalao,
-                          height: 80,
+                        SizedBox(
                           width: 80,
-                          image: AssetImage(
-                              '${CaminhosImagens.balaoCabelaImagem}.png'),
+                          height: 80,
+                          child: FloatingActionButton(
+                            elevation: 0,
+                            backgroundColor: Colors.white,
+                            onPressed: () async {
+                              validarAcerto();
+                            },
+                            hoverElevation: 0,
+                            focusElevation: 0,
+                            child: Image(
+                              color: corbalao,
+                              height: 80,
+                              width: 80,
+                              image: AssetImage(
+                                  '${CaminhosImagens.balaoCabelaImagem}.png'),
+                            ),
+                          ),
                         ),
                         Positioned(
                             top: 20,
@@ -80,14 +103,9 @@ class _BalaoWidgetState extends State<BalaoWidget> {
                                 elevation: 0,
                                 backgroundColor: corbalao,
                                 onPressed: () async {
-                                  String gesto = "";
-                                  gesto = await MetodosAuxiliares
-                                      .recuperarGestoSorteado();
-                                  if (gesto
-                                      .contains(widget.planeta.nomePlaneta)) {
-                                    MetodosAuxiliares.confirmarAcerto(Constantes.msgAcertoGesto);
-                                  }
+                                  validarAcerto();
                                 },
+                                hoverElevation: 0,
                                 child: Image(
                                   height: 50,
                                   width: 50,

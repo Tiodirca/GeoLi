@@ -98,6 +98,6 @@ class Textos {
   static String descricaoAreaGestos = "Selecione o gesto em libras";
 
   static String descricaoTelaInicial = "Selecione qual jogo deseja jogar";
-  static String msgAcertou = "Parabéns você Acertou";
-  static String msgErrouEstado = "Errado";
+  static String msgAcertou = "Acertou";
+  static String msgErrou = "Errado";
 }

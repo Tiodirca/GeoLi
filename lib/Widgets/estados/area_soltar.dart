@@ -69,7 +69,7 @@ class _AreaSoltarState extends State<AreaSoltar> {
                 MetodosAuxiliares.exibirMensagens(
                     Textos.msgAcertou, Constantes.msgAcertoGesto, context);
               } else {
-                MetodosAuxiliares.exibirMensagens(Textos.msgErrouEstado,
+                MetodosAuxiliares.exibirMensagens(Textos.msgErrou,
                     Constantes.msgErroAcertoGesto, context);
                 // chamando metodo para passar confirmacao do erro
                 MetodosAuxiliares.confirmarAcerto(

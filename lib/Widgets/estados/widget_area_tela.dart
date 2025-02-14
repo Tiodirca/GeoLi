@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
-import 'package:geoli/Widgets/tela_proximo_nivel.dart';
+import 'package:geoli/Widgets/estados/tela_proximo_nivel.dart';
 
-import '../Uteis/textos.dart';
+import '../../Uteis/textos.dart';
 import 'area_soltar.dart';
 
 class WidgetAreaTela extends StatefulWidget {

@@ -6,7 +6,7 @@ import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Widgets/gestos_widget.dart';
 
-import '../Uteis/textos.dart';
+import '../../Uteis/textos.dart';
 
 class WidgetAreaGestos extends StatefulWidget {
   WidgetAreaGestos({

@@ -6,8 +6,8 @@ import 'package:geoli/Uteis/constantes_estados_gestos.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoli/Widgets/tela_carregamento.dart';
-import 'package:geoli/Widgets/widget_area_gestos.dart';
-import 'package:geoli/Widgets/widget_area_tela.dart';
+import 'package:geoli/Widgets/estados/widget_area_gestos.dart';
+import 'package:geoli/Widgets/estados/widget_area_tela.dart';
 
 import '../../Uteis/textos.dart';
 
