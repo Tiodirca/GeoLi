@@ -43,7 +43,8 @@ class _WidgetAreaGestosState extends State<WidgetAreaGestos> {
     //instanciano variavel
     db
         .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-        .doc(Constantes.fireBaseDocumentoPontosJogadaRegioes) // passando documento
+        .doc(Constantes
+            .fireBaseDocumentoPontosJogadaRegioes) // passando documento
         .get()
         .then(
       (querySnapshot) async {
@@ -65,8 +66,9 @@ class _WidgetAreaGestosState extends State<WidgetAreaGestos> {
       var db = FirebaseFirestore.instance;
       db
           .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-          .doc(Constantes.fireBaseDocumentoPontosJogadaRegioes) //passando o documento
-          .set({Constantes.pontosJogadaRegioes: ponto});
+          .doc(Constantes
+              .fireBaseDocumentoPontosJogadaRegioes) //passando o documento
+          .set({Constantes.pontosJogada: ponto});
     } catch (e) {
       print(e.toString());
     }

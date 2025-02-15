@@ -42,6 +42,7 @@ class Textos {
   static String emblemaEstadosIndiana = "Indiana";
   static String emblemasPontos = "Pontos : ";
 
+  //EMBLEMAS TELA INICIAL SISTEMA SOLAR
   static String emblemaSistemaSolarNovato = "Novato";
   static String emblemaSistemaSolarAmador = "Amador";
   static String emblemaSistemaSolarMaster = "Master";

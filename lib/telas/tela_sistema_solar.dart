@@ -11,12 +11,11 @@ import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
+import 'package:geoli/Widgets/sistema_solar/area_animacao_baloes.dart';
 import 'package:geoli/Widgets/area_exibir_emblemas.dart';
-import 'package:geoli/Widgets/balao_widget.dart';
 import 'package:geoli/Widgets/emblema_widget.dart';
 import 'package:geoli/Widgets/gestos_widget.dart';
 import 'package:geoli/Widgets/tela_carregamento.dart';
-import 'package:geoli/Widgets/tela_fim_jogo.dart';
 import 'package:geoli/modelos/planeta.dart';
 
 class TelaSistemaSolar extends StatefulWidget {
@@ -28,7 +27,7 @@ class TelaSistemaSolar extends StatefulWidget {
 
 class _TelaSistemaSolarState extends State<TelaSistemaSolar>
     with TickerProviderStateMixin {
-  bool exibirTelaCarregamento = false;
+  bool exibirTelaCarregamento = true;
   bool exibirJogo = false;
   bool exibirTelaEmblemas = false;
   bool exibirListaEmblemas = false;
@@ -38,44 +37,14 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   int tempo = 0;
   Random random = Random();
   bool playPauseJogo = false;
-  bool exibirTelaFimJogo = false;
   int pontuacao = 0;
   int pontuacaoTotal = 0;
   int tamanhoVidas = 3;
-
+  late Timer iniciarTempo;
+  late String iniciarAnimacao;
   String caminhaoEmblemaAtual = CaminhosImagens.emblemaSistemaSolarNovato;
   String nomeEmblema = Textos.emblemaSistemaSolarNovato;
-
   List<Emblemas> emblemasExibir = [];
-  late final AnimationController _controller = AnimationController(vsync: this);
-  late final AnimationController _controller2 =
-      AnimationController(vsync: this);
-  late final AnimationController _controller3 =
-      AnimationController(vsync: this);
-  late final AnimationController _controller4 =
-      AnimationController(vsync: this);
-  late final AnimationController _controller5 =
-      AnimationController(vsync: this);
-  late final AnimationController _controller6 =
-      AnimationController(vsync: this);
-  late final AnimationController _controller7 =
-      AnimationController(vsync: this);
-  late final AnimationController _controller8 =
-      AnimationController(vsync: this);
-  late final AnimationController _controller9 =
-      AnimationController(vsync: this);
-  late final AnimationController _controller10 =
-      AnimationController(vsync: this);
-  late final AnimationController _controller11 =
-      AnimationController(vsync: this);
-  late final AnimationController _controller12 =
-      AnimationController(vsync: this);
-  late final AnimationController _controller13 =
-      AnimationController(vsync: this);
-  late final AnimationController _controller14 =
-      AnimationController(vsync: this);
-  late final AnimationController _controller15 =
-      AnimationController(vsync: this);
 
   @override
   void initState() {
@@ -178,72 +147,14 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
     MetodosAuxiliares.passarGestoSorteado(gestoSorteado.nomeGesto);
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    pararAnimacaoBaloes();
-    super.dispose();
-  }
-
-  pararAnimacaoBaloes() {
-    _controller.stop(canceled: false);
-    _controller2.stop(canceled: false);
-    _controller3.stop(canceled: false);
-    _controller4.stop(canceled: false);
-    _controller5.stop(canceled: false);
-    _controller6.stop(canceled: false);
-    _controller7.stop(canceled: false);
-    _controller8.stop(canceled: false);
-    _controller9.stop(canceled: false);
-    _controller10.stop(canceled: false);
-    _controller11.stop(canceled: false);
-    _controller12.stop(canceled: false);
-    _controller13.stop(canceled: false);
-    _controller14.stop(canceled: false);
-    _controller15.stop(canceled: false);
-  }
-
-  retomarAnimacaoBaloes() {
-    _controller.forward();
-    _controller2.forward();
-    _controller3.forward();
-    _controller4.forward();
-    _controller5.forward();
-    _controller6.forward();
-    _controller7.forward();
-    _controller8.forward();
-    _controller9.forward();
-    _controller10.forward();
-    _controller11.forward();
-    _controller12.forward();
-    _controller13.forward();
-    _controller14.forward();
-    _controller15.forward();
-  }
-
-  // metodo para iniciar a animacao dos baloes
-  iniciarBalao(AnimationController primeiroBalaoControle, int duracaoAnimacao,
-      AnimationController segundoBalaoControle, int delay) {
-    // iniciando a animacao do primeiro controle
-    primeiroBalaoControle.repeat(
-        count: 60, period: Duration(seconds: duracaoAnimacao));
-    // definindo que havera um delay para comecar a animacao do segundo controle
-    Future.delayed(Duration(seconds: delay), () {
-      segundoBalaoControle.repeat(
-          count: 60, period: Duration(seconds: duracaoAnimacao));
-    });
-  }
-
   void comecarTempo() {
     const segundo = const Duration(seconds: 1);
-    Timer iniciarTempo = Timer.periodic(
+    iniciarTempo = Timer.periodic(
       segundo,
-      (Timer timer) {
+      (timer) {
         if (tempo == 0) {
           setState(() {
             timer.cancel();
-            exibirTelaFimJogo = true;
-            pararAnimacaoBaloes();
           });
         } else {
           if (mounted) {
@@ -254,6 +165,11 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
         }
       },
     );
+  }
+
+  //metodo para parar o temporizador
+  pararTempo() {
+    iniciarTempo.cancel();
   }
 
   // metodo para recuperar a pontuacao
@@ -273,6 +189,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
             setState(() {
               pontuacaoTotal = value;
               exibirEmblemaPontuacao();
+              exibirTelaCarregamento = false;
             });
           },
         );
@@ -280,7 +197,9 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
     );
   }
 
+  //atualizar pontuacao no banco de dados
   atualizarPontuacao() async {
+    pontuacaoTotal = pontuacaoTotal + pontuacao;
     try {
       // instanciando Firebase
       var db = FirebaseFirestore.instance;
@@ -289,7 +208,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
               Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
           .doc(Constantes
               .fireBaseDocumentoPontosJogadaSistemaSolar) //passando o documento
-          .set({Constantes.pontosJogada: pontuacao});
+          .set({Constantes.pontosJogada: pontuacaoTotal});
     } catch (e) {
       print(e.toString());
     }
@@ -304,49 +223,26 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
       setState(() {
         planetas.shuffle();
         sortearGesto(); //chamando metodo para sortear um novo gesto
-
-        // definindo que a pontuacao ira aumentar conforme o usuario acerta
-        // chamando metodo para exibir mensagem
         pontuacao++;
         // chamando metodo para exibir mensagem
-        atualizarPontuacao();
         MetodosAuxiliares.exibirMensagens(
             Textos.msgAcertou, Constantes.msgAcertoGesto, context);
       });
     } else if (retorno == Constantes.msgErroAcertoGesto) {
       setState(() {
-        // definindo que a quantidade de vidas ira diminir a cada erro
         tamanhoVidas--;
         // chamando metodo para exibir mensagem
         MetodosAuxiliares.exibirMensagens(
             Textos.msgErrou, Constantes.msgErroAcertoGesto, context);
         // caso a quantide de vidas tenha chegado a 0
         if (tamanhoVidas == 0) {
-          pararAnimacaoBaloes();
-          exibirTelaFimJogo = true;
+          pararTempo();
+          atualizarPontuacao();
         }
       });
     }
     //sobreescrevendo metodo
     MetodosAuxiliares.confirmarAcerto("");
-  }
-
-  // metodo para iniciar a animacao dos baloes
-  iniciarAnimacoesBaloes() {
-    iniciarBalao(_controller, 5, _controller2, 1);
-    iniciarBalao(_controller3, 5, _controller4, 1);
-    iniciarBalao(_controller5, 5, _controller6, 1);
-    // definindo que a animacao ira comecar apos o tempo passado no delay
-    Future.delayed(Duration(seconds: 2), () {
-      iniciarBalao(_controller7, 5, _controller8, 1);
-      iniciarBalao(_controller9, 5, _controller10, 1);
-      iniciarBalao(_controller11, 5, _controller12, 1);
-    });
-    // definindo que a animacao ira comecar apos o tempo passado no delay
-    Future.delayed(Duration(milliseconds: 4300), () {
-      iniciarBalao(_controller13, 5, _controller14, 0);
-      iniciarBalao(_controller15, 5, _controller15, 0);
-    });
   }
 
   exibirEmblemaPontuacao() {
@@ -374,25 +270,6 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
     });
   }
 
-  Widget baloes(double tamanhoTela, Size biggest, double distacia,
-          AnimationController controle, int indexPlaneta) =>
-      PositionedTransition(
-          rect: RelativeRectTween(
-                  begin: RelativeRect.fromSize(
-                      // passando a Distancia um do outro
-                      // o tamanho da tela onde a animacao ira ocorrer
-                      Rect.fromLTWH(distacia, tamanhoTela, 80, tamanhoTela),
-                      biggest),
-                  end: RelativeRect.fromSize(
-                      Rect.fromLTWH(distacia, 0, 80, tamanhoTela), biggest))
-              .animate(CurvedAnimation(
-            parent: controle,
-            curve: Curves.linear,
-          )),
-          child: BalaoWidget(
-            planeta: planetas.elementAt(indexPlaneta),
-          ));
-
   Widget btnDificuldade(String nomeDificuldade) => Container(
       margin: EdgeInsets.all(10),
       width: 100,
@@ -418,7 +295,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                 tempo = Constantes.tempoDificl;
               }
               comecarTempo();
-              iniciarAnimacoesBaloes();
+              iniciarAnimacao = Constantes.statusAnimacaoIniciar;
             });
           },
           child: Text(nomeDificuldade)));
@@ -526,9 +403,13 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                                         setState(() {
                                           playPauseJogo = !playPauseJogo;
                                           if (playPauseJogo) {
-                                            pararAnimacaoBaloes();
+                                            iniciarAnimacao = Constantes
+                                                .statusAnimacaoPausada;
+                                            pararTempo();
                                           } else {
-                                            iniciarAnimacoesBaloes();
+                                            iniciarAnimacao = Constantes
+                                                .statusAnimacaoIniciar;
+                                            comecarTempo();
                                           }
                                         });
                                       },
@@ -568,170 +449,12 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                     // chamando metodo para ficar
                     // verificando a todo o momento se o usuario acertou o planeta
                     recuperarAcertoPlaneta();
-                    return Container(
-                      color: Colors.white,
-                      width: larguraTela,
-                      height: alturaTela,
-                      child: Stack(
-                        children: [
-                          baloes(alturaTela, biggest, 0, _controller, 0),
-                          baloes(
-                              alturaTela,
-                              biggest,
-                              Platform.isAndroid || Platform.isIOS ? 50 : 100,
-                              _controller2,
-                              1),
-                          baloes(
-                              alturaTela,
-                              biggest,
-                              Platform.isAndroid || Platform.isIOS ? 100 : 200,
-                              _controller3,
-                              2),
-                          baloes(
-                              alturaTela,
-                              biggest,
-                              Platform.isAndroid || Platform.isIOS ? 150 : 300,
-                              _controller4,
-                              3),
-                          baloes(
-                              alturaTela,
-                              biggest,
-                              Platform.isAndroid || Platform.isIOS ? 200 : 400,
-                              _controller5,
-                              4),
-                          baloes(
-                              alturaTela,
-                              biggest,
-                              Platform.isAndroid || Platform.isIOS ? 250 : 500,
-                              _controller6,
-                              5),
-                          baloes(alturaTela, biggest, 0, _controller7, 6),
-                          baloes(
-                              alturaTela,
-                              biggest,
-                              Platform.isAndroid || Platform.isIOS ? 50 : 100,
-                              _controller8,
-                              7),
-                          baloes(
-                              alturaTela,
-                              biggest,
-                              Platform.isAndroid || Platform.isIOS ? 100 : 200,
-                              _controller9,
-                              0),
-                          baloes(
-                              alturaTela,
-                              biggest,
-                              Platform.isAndroid || Platform.isIOS ? 150 : 300,
-                              _controller10,
-                              1),
-                          baloes(
-                              alturaTela,
-                              biggest,
-                              Platform.isAndroid || Platform.isIOS ? 200 : 400,
-                              _controller11,
-                              2),
-                          baloes(
-                              alturaTela,
-                              biggest,
-                              Platform.isAndroid || Platform.isIOS ? 250 : 500,
-                              _controller12,
-                              3),
-                          baloes(
-                              alturaTela,
-                              biggest,
-                              Platform.isAndroid || Platform.isIOS ? 50 : 100,
-                              _controller13,
-                              4),
-                          baloes(
-                              alturaTela,
-                              biggest,
-                              Platform.isAndroid || Platform.isIOS ? 150 : 300,
-                              _controller14,
-                              5),
-                          baloes(
-                              alturaTela,
-                              biggest,
-                              Platform.isAndroid || Platform.isIOS ? 250 : 500,
-                              _controller15,
-                              6),
-                          baloes(
-                            alturaTela,
-                            biggest,
-                            Platform.isAndroid || Platform.isIOS ? 300 : 600,
-                            _controller,
-                            4,
-                          ),
-                          LayoutBuilder(
-                            builder: (context, constraints) {
-                              if (Platform.isAndroid || Platform.isIOS) {
-                                return Container();
-                              } else {
-                                return Stack(
-                                  children: [
-                                    baloes(alturaTela, biggest, 700,
-                                        _controller2, 5),
-                                    baloes(alturaTela, biggest, 800,
-                                        _controller3, 6),
-                                    baloes(alturaTela, biggest, 900,
-                                        _controller4, 7),
-                                    baloes(alturaTela, biggest, 1000,
-                                        _controller5, 0),
-                                    baloes(alturaTela, biggest, 1100,
-                                        _controller6, 1),
-                                    baloes(alturaTela, biggest, 700,
-                                        _controller8, 2),
-                                    baloes(alturaTela, biggest, 800,
-                                        _controller9, 3),
-                                    baloes(alturaTela, biggest, 900,
-                                        _controller10, 4),
-                                    baloes(alturaTela, biggest, 1000,
-                                        _controller11, 5),
-                                    baloes(alturaTela, biggest, 1100,
-                                        _controller12, 6),
-                                    baloes(alturaTela, biggest, 700,
-                                        _controller13, 7),
-                                    baloes(alturaTela, biggest, 900,
-                                        _controller14, 0),
-                                    baloes(alturaTela, biggest, 1100,
-                                        _controller15, 1),
-                                    baloes(
-                                      alturaTela,
-                                      biggest,
-                                      1200,
-                                      _controller,
-                                      4,
-                                    ),
-                                    baloes(alturaTela, biggest, 1300,
-                                        _controller2, 5),
-                                    baloes(alturaTela, biggest, 1400,
-                                        _controller3, 6),
-                                    baloes(alturaTela, biggest, 1200,
-                                        _controller7, 7),
-                                    baloes(alturaTela, biggest, 1300,
-                                        _controller8, 2),
-                                    baloes(alturaTela, biggest, 1400,
-                                        _controller9, 3),
-                                    baloes(alturaTela, biggest, 1300,
-                                        _controller13, 7),
-                                  ],
-                                );
-                              }
-                            },
-                          ),
-                          baloes(
-                              alturaTela,
-                              biggest,
-                              Platform.isAndroid || Platform.isIOS ? 300 : 600,
-                              _controller7,
-                              7),
-                          Positioned(
-                              child: Center(
-                            child: Visibility(
-                                visible: exibirTelaFimJogo,
-                                child: TelaFimJogo()),
-                          )),
-                        ],
-                      ),
+                    return AreaAnimacaoBaloes(
+                      biggest: biggest,
+                      planetas: planetas,
+                      statusAnimacao: iniciarAnimacao,
+                      quantidadeVidas: tamanhoVidas,
+                      tempo: tempo,
                     );
                   } else {
                     return Container(

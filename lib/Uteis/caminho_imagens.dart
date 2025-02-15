@@ -63,6 +63,7 @@ class CaminhosImagens {
   static const emblemaEstadosIndiana =
       "assets/imagens/estados/emblema_estados_indi_ana";
 
+  //EMBLEMAS SISTEMA SOLAR
   static const emblemaSistemaSolarNovato =
       "assets/imagens/sistema_solar/emblema_sistema_solar_novato";
   static const emblemaSistemaSolarAmador =

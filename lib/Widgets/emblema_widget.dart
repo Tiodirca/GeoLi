@@ -15,7 +15,7 @@ class EmblemaWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 250,
+      width: 350,
       height: 60,
       child: Row(
         children: [

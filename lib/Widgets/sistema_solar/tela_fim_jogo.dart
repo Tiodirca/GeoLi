@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
+import 'package:geoli/Uteis/constantes.dart';
 
-import '../Uteis/paleta_cores.dart';
-import '../Uteis/textos.dart';
+import '../../Uteis/paleta_cores.dart';
+import '../../Uteis/textos.dart';
 
 class TelaFimJogo extends StatefulWidget {
   const TelaFimJogo({
@@ -14,8 +15,6 @@ class TelaFimJogo extends StatefulWidget {
 }
 
 class _TelaFimJogoState extends State<TelaFimJogo> {
-  Map<String, dynamic> dados = {};
-
   @override
   void initState() {
     // TODO: implement initState
@@ -31,7 +30,10 @@ class _TelaFimJogoState extends State<TelaFimJogo> {
           heroTag: nomeOpcao,
           backgroundColor: Colors.white,
           onPressed: () {
-            if (nomeOpcao == Textos.btnJogarNovamente) {}
+            if (nomeOpcao == Textos.btnJogarNovamente) {
+              Navigator.pushReplacementNamed(
+                  context, Constantes.rotaTelaSistemaSolar);
+            }
           },
           elevation: 0,
           shape: RoundedRectangleBorder(
