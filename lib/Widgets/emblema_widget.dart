@@ -15,8 +15,7 @@ class EmblemaWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 350,
-      height: 60,
+      height: 50,
       child: Row(
         children: [
           Container(
@@ -24,30 +23,32 @@ class EmblemaWidget extends StatelessWidget {
             width: 50,
             height: 50,
             child: Image(
-              height: 140,
-              width: 140,
+              height: 50,
+              width: 50,
               image: AssetImage('$caminhoImagem.png'),
             ),
           ),
-          Text(
-            nomeEmblema,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10),
-            child: Row(
-              children: [
-                Text(
-                  Textos.emblemasPontos,
-                  style: TextStyle(fontSize: 16),
-                ),
-                Text(
-                  pontos.toString(),
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                nomeEmblema,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              Row(
+                children: [
+                  Text(
+                    Textos.emblemasPontos,
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  Text(
+                    pontos.toString(),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ],
+          )
         ],
       ),
     );

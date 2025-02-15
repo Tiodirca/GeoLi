@@ -43,6 +43,7 @@ class _ExibirEmblemasState extends State<ExibirEmblemas> {
                 shape: RoundedRectangleBorder(
                     borderRadius: const BorderRadius.all(Radius.circular(10))),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     EmblemaWidget(
                         pontos: widget.emblemaWidget.pontos,

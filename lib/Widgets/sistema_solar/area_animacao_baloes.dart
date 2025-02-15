@@ -5,7 +5,7 @@ import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Widgets/sistema_solar/balao_widget.dart';
 import 'package:geoli/Widgets/sistema_solar/tela_fim_jogo.dart';
 import 'package:geoli/modelos/planeta.dart';
-
+//ignore: must_be_immutable
 class AreaAnimacaoBaloes extends StatefulWidget {
   AreaAnimacaoBaloes(
       {super.key,
@@ -109,17 +109,18 @@ class _AreaAnimacaoBaloesState extends State<AreaAnimacaoBaloes>
   }
 
   chamarIniciarAnimacaoBalao() {
+    // verificando se o status de animacao e para iniciar a animacao
     if (widget.statusAnimacao == Constantes.statusAnimacaoIniciar) {
+      // verificando se a animacao ja esta acontecendo
       if (_controller.isAnimating || _controller14.isAnimating) {
-        print("JA ANIMADO");
       } else {
-        print("INICIOU ANIMACAO");
         iniciarAnimacoesBaloes();
       }
     }
   }
 
   verificarInformacoes() {
+    //caso os parametros sejam igual a zero parar a animacao
     if (widget.quantidadeVidas == 0 || widget.tempo == 0) {
       setState(() {
         pararAnimacaoBaloes();
@@ -162,13 +163,7 @@ class _AreaAnimacaoBaloesState extends State<AreaAnimacaoBaloes>
       height: alturaTela,
       child: Stack(
         children: [
-          baloes(
-            alturaTela,
-            widget.biggest,
-            0,
-            _controller,
-            0,
-          ),
+          baloes(alturaTela, widget.biggest, 0, _controller, 0),
           baloes(alturaTela, widget.biggest,
               Platform.isAndroid || Platform.isIOS ? 50 : 200, _controller2, 1),
           baloes(
@@ -237,9 +232,15 @@ class _AreaAnimacaoBaloesState extends State<AreaAnimacaoBaloes>
           baloes(
               alturaTela,
               widget.biggest,
+              Platform.isAndroid || Platform.isIOS ? 250 : 550,
+              _controller13,
+              6),
+          baloes(
+              alturaTela,
+              widget.biggest,
               Platform.isAndroid || Platform.isIOS ? 300 : 1200,
               _controller,
-              4),
+              7),
           LayoutBuilder(
             builder: (context, constraints) {
               if (Platform.isAndroid || Platform.isIOS) {
@@ -247,21 +248,46 @@ class _AreaAnimacaoBaloesState extends State<AreaAnimacaoBaloes>
               } else {
                 return Stack(
                   children: [
-                    baloes(alturaTela, widget.biggest, 1400, _controller4, 7),
-                    baloes(alturaTela, widget.biggest, 1300, _controller10, 4),
-                    baloes(alturaTela, widget.biggest, 1050, _controller13, 7),
-                    baloes(alturaTela, widget.biggest, 1400, _controller14, 7),
+                    baloes(
+                      alturaTela,
+                      widget.biggest,
+                      1400,
+                      _controller4,
+                      0,
+                    ),
+                    baloes(
+                      alturaTela,
+                      widget.biggest,
+                      1300,
+                      _controller10,
+                      1,
+                    ),
+                    baloes(
+                      alturaTela,
+                      widget.biggest,
+                      1050,
+                      _controller13,
+                      2,
+                    ),
+                    baloes(
+                      alturaTela,
+                      widget.biggest,
+                      1400,
+                      _controller14,
+                      3,
+                    ),
                   ],
                 );
               }
             },
           ),
           baloes(
-              alturaTela,
-              widget.biggest,
-              Platform.isAndroid || Platform.isIOS ? 300 : 1200,
-              _controller7,
-              7),
+            alturaTela,
+            widget.biggest,
+            Platform.isAndroid || Platform.isIOS ? 300 : 1200,
+            _controller7,
+            4,
+          ),
           Positioned(
               child: Center(
             child: Visibility(visible: exibirTelaFimJogo, child: TelaFimJogo()),

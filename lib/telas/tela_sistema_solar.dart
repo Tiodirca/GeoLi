@@ -494,7 +494,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                 builder: (context, constraints) {
                   if (exibirJogo) {
                     return Container(
-                      color: Colors.white,
+                      color: Colors.transparent,
                       width: Platform.isAndroid || Platform.isIOS
                           ? larguraTela * 0.5
                           : larguraTela * 0.2,
@@ -506,8 +506,8 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                             side: BorderSide(
                                 color: PaletaCores.corAzulMagenta, width: 1),
                             borderRadius: const BorderRadius.only(
-                                topRight: Radius.circular(40),
-                                topLeft: Radius.circular(40))),
+                                topRight: Radius.circular(25),
+                                topLeft: Radius.circular(25))),
                         child: Column(
                           children: [
                             Text(
