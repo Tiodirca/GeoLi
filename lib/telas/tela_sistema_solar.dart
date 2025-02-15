@@ -29,13 +29,10 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
     with TickerProviderStateMixin {
   bool exibirTelaCarregamento = true;
   bool exibirJogo = false;
-  bool exibirTelaEmblemas = false;
-  bool exibirListaEmblemas = false;
   List<Gestos> gestoPlanetasSistemaSolar = [];
   List<Planeta> planetas = [];
   late Gestos gestoSorteado;
   int tempo = 0;
-  Random random = Random();
   bool playPauseJogo = false;
   int pontuacao = 0;
   int pontuacaoTotal = 0;
@@ -141,6 +138,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
 
   //metodo para sortear gesto
   sortearGesto() {
+    Random random = Random();
     gestoSorteado = gestoPlanetasSistemaSolar
         .elementAt(random.nextInt(gestoPlanetasSistemaSolar.length));
     //chamando metodo para passar o nome do gesto sorteado
@@ -284,7 +282,6 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
           ),
           onPressed: () {
             setState(() {
-              exibirJogo = true;
               if (nomeDificuldade == Textos.btnDificuldadeFacil) {
                 tempo = Constantes.tempoFacil;
               } else if (nomeDificuldade == Textos.btnDificuldadeMedio) {
@@ -295,6 +292,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                 tempo = Constantes.tempoDificl;
               }
               comecarTempo();
+              exibirJogo = true;
               iniciarAnimacao = Constantes.statusAnimacaoIniciar;
             });
           },
@@ -401,15 +399,18 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                                   IconButton(
                                       onPressed: () {
                                         setState(() {
-                                          playPauseJogo = !playPauseJogo;
-                                          if (playPauseJogo) {
-                                            iniciarAnimacao = Constantes
-                                                .statusAnimacaoPausada;
-                                            pararTempo();
-                                          } else {
-                                            iniciarAnimacao = Constantes
-                                                .statusAnimacaoIniciar;
-                                            comecarTempo();
+                                          if (tamanhoVidas != 0 && tempo != 0) {
+                                            print("Entrou");
+                                            playPauseJogo = !playPauseJogo;
+                                            if (playPauseJogo) {
+                                              iniciarAnimacao = Constantes
+                                                  .statusAnimacaoPausada;
+                                              pararTempo();
+                                            } else {
+                                              iniciarAnimacao = Constantes
+                                                  .statusAnimacaoIniciar;
+                                              comecarTempo();
+                                            }
                                           }
                                         });
                                       },

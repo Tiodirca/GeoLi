@@ -7,9 +7,11 @@ import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/modelos/planeta.dart';
 
 class BalaoWidget extends StatefulWidget {
-  const BalaoWidget({super.key, required this.planeta});
+  const BalaoWidget(
+      {super.key, required this.planeta, required this.desativarBotao});
 
   final Planeta planeta;
+  final bool desativarBotao;
 
   @override
   State<BalaoWidget> createState() => _BalaoWidgetState();
@@ -72,48 +74,49 @@ class _BalaoWidgetState extends State<BalaoWidget> {
                   children: [
                     Stack(
                       children: [
-                        SizedBox(
-                          width: 80,
+                        Image(
+                          color: corbalao,
                           height: 80,
-                          child: FloatingActionButton(
-                            elevation: 0,
-                            backgroundColor: Colors.white,
-                            onPressed: () async {
-                              validarAcerto();
-                            },
-                            hoverElevation: 0,
-                            focusElevation: 0,
-                            child: Image(
-                              color: corbalao,
-                              height: 80,
-                              width: 80,
-                              image: AssetImage(
-                                  '${CaminhosImagens.balaoCabelaImagem}.png'),
-                            ),
-                          ),
+                          width: 80,
+                          image: AssetImage(
+                              '${CaminhosImagens.balaoCabelaImagem}.png'),
                         ),
                         Positioned(
-                            top: 20,
-                            left: 15,
-                            child: Center(
-                                child: SizedBox(
-                              width: 50,
-                              height: 50,
+                          child: SizedBox(
+                              width: 80,
+                              height: 80,
                               child: FloatingActionButton(
+                                shape: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.transparent),
+                                    borderRadius: BorderRadius.circular(50)),
+                                foregroundColor: Colors.transparent,
                                 elevation: 0,
-                                backgroundColor: corbalao,
-                                onPressed: () async {
-                                  validarAcerto();
-                                },
                                 hoverElevation: 0,
-                                child: Image(
-                                  height: 50,
+                                focusElevation: 0,
+                                disabledElevation: 0,
+                                enableFeedback: false,
+                                hoverColor: Colors.transparent,
+                                splashColor: corbalao,
+                                focusColor: Colors.transparent,
+                                backgroundColor: Colors.transparent,
+                                child: SizedBox(
                                   width: 50,
-                                  image: AssetImage(
-                                      '${widget.planeta.caminhoImagem}.png'),
+                                  height: 50,
+                                  child: Image(
+                                    height: 50,
+                                    width: 50,
+                                    image: AssetImage(
+                                        '${widget.planeta.caminhoImagem}.png'),
+                                  ),
                                 ),
-                              ),
-                            ))),
+                                onPressed: () {
+                                  if (!widget.desativarBotao) {
+                                    validarAcerto();
+                                  }
+                                },
+                              )),
+                        ),
                       ],
                     ),
                     Padding(

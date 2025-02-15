@@ -73,6 +73,7 @@ class _AreaAnimacaoBaloesState extends State<AreaAnimacaoBaloes>
           curve: Curves.linear,
         )),
         child: BalaoWidget(
+          desativarBotao: exibirTelaFimJogo,
           planeta: widget.planetas.elementAt(indexPlaneta),
         ),
       );
