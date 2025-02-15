@@ -63,6 +63,21 @@ class CaminhosImagens {
   static const emblemaEstadosIndiana =
       "assets/imagens/estados/emblema_estados_indi_ana";
 
+  static const emblemaSistemaSolarNovato =
+      "assets/imagens/sistema_solar/emblema_sistema_solar_novato";
+  static const emblemaSistemaSolarAmador =
+      "assets/imagens/sistema_solar/emblema_sistema_solar_amador";
+  static const emblemaSistemaSolarMaster =
+      "assets/imagens/sistema_solar/emblema_sistema_solar_master";
+  static const emblemaSistemaSolarMegaMaster =
+      "assets/imagens/sistema_solar/emblema_sistema_solar_mega_master";
+  static const emblemaSistemaSolarSemiProfissional =
+      "assets/imagens/sistema_solar/emblema_sistema_solar_semi_profissional";
+  static const emblemaSistemaSolarProfissional =
+      "assets/imagens/sistema_solar/emblema_sistema_solar_profissional";
+  static const emblemaSistemaSolarKakarot =
+      "assets/imagens/sistema_solar/emblema_sistema_solar_kakarot";
+
   // TODAS AS REGIOES
   static const gestoRegioesImagem =
       "assets/imagens/estados/gestos_estados/gesto_estados_regioes";

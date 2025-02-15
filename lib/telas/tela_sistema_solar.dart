@@ -2,14 +2,18 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geoli/Modelos/emblemas.dart';
 import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
+import 'package:geoli/Widgets/area_exibir_emblemas.dart';
 import 'package:geoli/Widgets/balao_widget.dart';
+import 'package:geoli/Widgets/emblema_widget.dart';
 import 'package:geoli/Widgets/gestos_widget.dart';
 import 'package:geoli/Widgets/tela_carregamento.dart';
 import 'package:geoli/Widgets/tela_fim_jogo.dart';
@@ -36,7 +40,13 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   bool playPauseJogo = false;
   bool exibirTelaFimJogo = false;
   int pontuacao = 0;
+  int pontuacaoTotal = 0;
   int tamanhoVidas = 3;
+
+  String caminhaoEmblemaAtual = CaminhosImagens.emblemaSistemaSolarNovato;
+  String nomeEmblema = Textos.emblemaSistemaSolarNovato;
+
+  List<Emblemas> emblemasExibir = [];
   late final AnimationController _controller = AnimationController(vsync: this);
   late final AnimationController _controller2 =
       AnimationController(vsync: this);
@@ -124,8 +134,40 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
           nomeGesto: Textos.nomePlanetaNetuno,
           nomeImagem: CaminhosImagens.gestoPlanetaNetunoImagem),
     ]);
+
+    emblemasExibir.addAll({
+      Emblemas(
+          caminhoImagem: CaminhosImagens.emblemaSistemaSolarNovato,
+          nomeEmblema: Textos.emblemaSistemaSolarNovato,
+          pontos: 0),
+      Emblemas(
+          caminhoImagem: CaminhosImagens.emblemaSistemaSolarAmador,
+          nomeEmblema: Textos.emblemaSistemaSolarAmador,
+          pontos: 5),
+      Emblemas(
+          caminhoImagem: CaminhosImagens.emblemaSistemaSolarMaster,
+          nomeEmblema: Textos.emblemaSistemaSolarMaster,
+          pontos: 10),
+      Emblemas(
+          caminhoImagem: CaminhosImagens.emblemaSistemaSolarMegaMaster,
+          nomeEmblema: Textos.emblemaSistemaSolarMegaMaster,
+          pontos: 20),
+      Emblemas(
+          caminhoImagem: CaminhosImagens.emblemaSistemaSolarSemiProfissional,
+          nomeEmblema: Textos.emblemaSistemaSolarSemiProfissional,
+          pontos: 35),
+      Emblemas(
+          caminhoImagem: CaminhosImagens.emblemaSistemaSolarProfissional,
+          nomeEmblema: Textos.emblemaSistemaSolarProfissional,
+          pontos: 50),
+      Emblemas(
+          caminhoImagem: CaminhosImagens.emblemaSistemaSolarKakarot,
+          nomeEmblema: Textos.emblemaSistemaSolarKakarot,
+          pontos: 100),
+    });
     planetas.shuffle();
     sortearGesto();
+    recuperarPontuacao();
   }
 
   //metodo para sortear gesto
@@ -214,6 +256,45 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
     );
   }
 
+  // metodo para recuperar a pontuacao
+  recuperarPontuacao() async {
+    var db = FirebaseFirestore.instance;
+    //instanciano variavel
+    db
+        .collection(
+            Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
+        .doc(Constantes
+            .fireBaseDocumentoPontosJogadaSistemaSolar) // passando documento
+        .get()
+        .then(
+      (querySnapshot) async {
+        querySnapshot.data()!.forEach(
+          (key, value) {
+            setState(() {
+              pontuacaoTotal = value;
+              exibirEmblemaPontuacao();
+            });
+          },
+        );
+      },
+    );
+  }
+
+  atualizarPontuacao() async {
+    try {
+      // instanciando Firebase
+      var db = FirebaseFirestore.instance;
+      db
+          .collection(
+              Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
+          .doc(Constantes
+              .fireBaseDocumentoPontosJogadaSistemaSolar) //passando o documento
+          .set({Constantes.pontosJogada: pontuacao});
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   // metodo para verificar se o usuario acertou o planeta que foi sorteado no gesto
   recuperarAcertoPlaneta() async {
     //recuperando o valor passado pelo metodo
@@ -228,6 +309,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
         // chamando metodo para exibir mensagem
         pontuacao++;
         // chamando metodo para exibir mensagem
+        atualizarPontuacao();
         MetodosAuxiliares.exibirMensagens(
             Textos.msgAcertou, Constantes.msgAcertoGesto, context);
       });
@@ -264,6 +346,31 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
     Future.delayed(Duration(milliseconds: 4300), () {
       iniciarBalao(_controller13, 5, _controller14, 0);
       iniciarBalao(_controller15, 5, _controller15, 0);
+    });
+  }
+
+  exibirEmblemaPontuacao() {
+    setState(() {
+      if (pontuacaoTotal > 5 && pontuacaoTotal <= 10) {
+        caminhaoEmblemaAtual = CaminhosImagens.emblemaSistemaSolarAmador;
+        nomeEmblema = Textos.emblemaSistemaSolarAmador;
+      } else if (pontuacaoTotal > 10 && pontuacaoTotal <= 20) {
+        caminhaoEmblemaAtual = CaminhosImagens.emblemaSistemaSolarMaster;
+        nomeEmblema = Textos.emblemaSistemaSolarMaster;
+      } else if (pontuacaoTotal > 20 && pontuacaoTotal <= 35) {
+        caminhaoEmblemaAtual = CaminhosImagens.emblemaSistemaSolarMegaMaster;
+        nomeEmblema = Textos.emblemaSistemaSolarMegaMaster;
+      } else if (pontuacaoTotal > 35 && pontuacaoTotal <= 50) {
+        nomeEmblema = Textos.emblemaSistemaSolarSemiProfissional;
+        caminhaoEmblemaAtual =
+            CaminhosImagens.emblemaSistemaSolarSemiProfissional;
+      } else if (pontuacaoTotal > 50 && pontuacaoTotal <= 70) {
+        nomeEmblema = Textos.emblemaSistemaSolarProfissional;
+        caminhaoEmblemaAtual = CaminhosImagens.emblemaSistemaSolarProfissional;
+      } else if (pontuacaoTotal > 100) {
+        nomeEmblema = Textos.emblemaSistemaSolarKakarot;
+        caminhaoEmblemaAtual = CaminhosImagens.emblemaSistemaSolarKakarot;
+      }
     });
   }
 
@@ -699,9 +806,13 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                       ),
                     );
                   } else {
-                    return Container(
-                      height: 60,
-                    );
+                    return ExibirEmblemas(
+                        corBordas: PaletaCores.corAzulEscuro,
+                        listaEmblemas: emblemasExibir,
+                        emblemaWidget: EmblemaWidget(
+                            caminhoImagem: caminhaoEmblemaAtual,
+                            nomeEmblema: nomeEmblema,
+                            pontos: pontuacaoTotal));
                   }
                 },
               ));

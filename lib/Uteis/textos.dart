@@ -42,6 +42,14 @@ class Textos {
   static String emblemaEstadosIndiana = "Indiana";
   static String emblemasPontos = "Pontos : ";
 
+  static String emblemaSistemaSolarNovato = "Novato";
+  static String emblemaSistemaSolarAmador = "Amador";
+  static String emblemaSistemaSolarMaster = "Master";
+  static String emblemaSistemaSolarMegaMaster = "Mega Master";
+  static String emblemaSistemaSolarSemiProfissional = "Semi-Profissional";
+  static String emblemaSistemaSolarProfissional = "Profissional";
+  static String emblemaSistemaSolarKakarot = "kakarot";
+
   //CENTRO OESTE
   static String nomeRegiaoCentroOeste = "Região Centro-Oeste";
   static String nomeRegiaoCentroMS = "Mato Grosso do Sul - MS";

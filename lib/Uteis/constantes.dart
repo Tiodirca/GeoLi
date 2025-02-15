@@ -27,6 +27,12 @@ class Constantes {
   static const fireBaseDocumentoLiberarEstados = "liberarEstados";
   static const fireBaseDocumentoPontosJogadaRegioes = "postosJogadaRegioes";
 
+  static const fireBaseColecaoSistemaSolar = "sistemaSolar";
+  static const fireBaseDocumentoPontosJogadaSistemaSolar =
+      "pontosJogadaSistemaSolar";
+
+  static const pontosJogada = "pontosJogada";
+
   static const nomeTodosEstados = "todosEstados";
   static const pontosJogadaRegioes = "pontosJogadaRegioes";
 
