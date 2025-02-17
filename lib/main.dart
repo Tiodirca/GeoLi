@@ -5,8 +5,7 @@ import 'firebase_options.dart';
 
 import 'Uteis/rotas.dart';
 
-
-void main() async{
+void main() async {
   runApp(const MyApp());
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -21,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: Constantes.rotaTelaInicial,
+      initialRoute: Constantes.rotaTelaSplashScreen,
       onGenerateRoute: Rotas.generateRoute,
     );
   }

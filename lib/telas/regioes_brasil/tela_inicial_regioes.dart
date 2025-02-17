@@ -4,10 +4,11 @@ import 'package:geoli/Modelos/emblemas.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
+import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
-import 'package:geoli/Widgets/area_exibir_emblemas.dart';
 import 'package:geoli/Widgets/emblema_widget.dart';
+import 'package:geoli/Widgets/exibir_emblemas.dart';
 import 'package:geoli/Widgets/tela_carregamento.dart';
 
 class TelaInicialRegioes extends StatefulWidget {
@@ -44,8 +45,6 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
       caminhoImagem: CaminhosImagens.gestoRegioesImagem,
       acerto: false);
   int pontos = 0;
-  String caminhaoEmblemaAtual = CaminhosImagens.emblemaEstadosEntusiastaum;
-  String nomeEmblema = Textos.emblemaEstadosEntusiastaum;
   bool exibirTelaCarregamento = true;
   List<Emblemas> emblemasExibir = [];
 
@@ -131,32 +130,11 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
         querySnapshot.data()!.forEach((key, value) {
           setState(() {
             pontos = value;
-            exibirEmblemaPontuacao();
+            MetodosAuxiliares.passarPontuacaoAtual(pontos);
           });
         });
       },
     );
-  }
-
-  exibirEmblemaPontuacao() {
-    setState(() {
-      if (pontos > 5 && pontos <= 10) {
-        caminhaoEmblemaAtual = CaminhosImagens.emblemaEstadosEntusiastadois;
-        nomeEmblema = Textos.emblemaEstadosEntusiastadois;
-      } else if (pontos > 10 && pontos <= 20) {
-        caminhaoEmblemaAtual = CaminhosImagens.emblemaEstadosAventureiroum;
-        nomeEmblema = Textos.emblemaEstadosAventureiroum;
-      } else if (pontos > 20 && pontos <= 35) {
-        caminhaoEmblemaAtual = CaminhosImagens.emblemaEstadosAventureirodois;
-        nomeEmblema = Textos.emblemaEstadosAventureirodois;
-      } else if (pontos > 35 && pontos <= 50) {
-        nomeEmblema = Textos.emblemaEstadosColecionador;
-        caminhaoEmblemaAtual = CaminhosImagens.emblemaEstadosColecionador;
-      } else if (pontos > 50) {
-        nomeEmblema = Textos.emblemaEstadosIndiana;
-        caminhaoEmblemaAtual = CaminhosImagens.emblemaEstadosIndiana;
-      }
-    });
   }
 
   Widget cartaoRegiao(String nomeImagem, String nomeRegiao) => Container(
@@ -284,12 +262,10 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
                     ),
                   )),
               bottomSheet: ExibirEmblemas(
+                pontuacaoAtual: pontos,
                 corBordas: PaletaCores.corAzulEscuro,
-                  listaEmblemas: emblemasExibir,
-                  emblemaWidget: EmblemaWidget(
-                      caminhoImagem: caminhaoEmblemaAtual,
-                      nomeEmblema: nomeEmblema,
-                      pontos: pontos)));
+                listaEmblemas: emblemasExibir,
+              ));
         }
       },
     );

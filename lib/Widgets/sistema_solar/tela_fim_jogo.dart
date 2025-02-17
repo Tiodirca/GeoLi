@@ -71,7 +71,7 @@ class _TelaFimJogoState extends State<TelaFimJogo> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
-                Textos.btnProximoNivel,
+                Textos.telaSistemaSolarFimJogoTitulo,
                 textAlign: TextAlign.center,
                 style:
                     const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

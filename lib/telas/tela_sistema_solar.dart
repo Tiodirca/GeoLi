@@ -11,9 +11,8 @@ import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
+import 'package:geoli/Widgets/exibir_emblemas.dart';
 import 'package:geoli/Widgets/sistema_solar/area_animacao_baloes.dart';
-import 'package:geoli/Widgets/area_exibir_emblemas.dart';
-import 'package:geoli/Widgets/emblema_widget.dart';
 import 'package:geoli/Widgets/gestos_widget.dart';
 import 'package:geoli/Widgets/tela_carregamento.dart';
 import 'package:geoli/modelos/planeta.dart';
@@ -39,8 +38,6 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   int tamanhoVidas = 3;
   late Timer iniciarTempo;
   late String iniciarAnimacao;
-  String caminhaoEmblemaAtual = CaminhosImagens.emblemaSistemaSolarNovato;
-  String nomeEmblema = Textos.emblemaSistemaSolarNovato;
   List<Emblemas> emblemasExibir = [];
 
   @override
@@ -146,7 +143,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   }
 
   void comecarTempo() {
-    const segundo = const Duration(seconds: 1);
+    const segundo = Duration(seconds: 1);
     iniciarTempo = Timer.periodic(
       segundo,
       (timer) {
@@ -186,8 +183,8 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
           (key, value) {
             setState(() {
               pontuacaoTotal = value;
-              exibirEmblemaPontuacao();
               exibirTelaCarregamento = false;
+              MetodosAuxiliares.passarPontuacaoAtual(pontuacaoTotal);
             });
           },
         );
@@ -241,31 +238,6 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
     }
     //sobreescrevendo metodo
     MetodosAuxiliares.confirmarAcerto("");
-  }
-
-  exibirEmblemaPontuacao() {
-    setState(() {
-      if (pontuacaoTotal > 5 && pontuacaoTotal <= 10) {
-        caminhaoEmblemaAtual = CaminhosImagens.emblemaSistemaSolarAmador;
-        nomeEmblema = Textos.emblemaSistemaSolarAmador;
-      } else if (pontuacaoTotal > 10 && pontuacaoTotal <= 20) {
-        caminhaoEmblemaAtual = CaminhosImagens.emblemaSistemaSolarMaster;
-        nomeEmblema = Textos.emblemaSistemaSolarMaster;
-      } else if (pontuacaoTotal > 20 && pontuacaoTotal <= 35) {
-        caminhaoEmblemaAtual = CaminhosImagens.emblemaSistemaSolarMegaMaster;
-        nomeEmblema = Textos.emblemaSistemaSolarMegaMaster;
-      } else if (pontuacaoTotal > 35 && pontuacaoTotal <= 50) {
-        nomeEmblema = Textos.emblemaSistemaSolarSemiProfissional;
-        caminhaoEmblemaAtual =
-            CaminhosImagens.emblemaSistemaSolarSemiProfissional;
-      } else if (pontuacaoTotal > 50 && pontuacaoTotal <= 70) {
-        nomeEmblema = Textos.emblemaSistemaSolarProfissional;
-        caminhaoEmblemaAtual = CaminhosImagens.emblemaSistemaSolarProfissional;
-      } else if (pontuacaoTotal > 100) {
-        nomeEmblema = Textos.emblemaSistemaSolarKakarot;
-        caminhaoEmblemaAtual = CaminhosImagens.emblemaSistemaSolarKakarot;
-      }
-    });
   }
 
   Widget btnDificuldade(String nomeDificuldade) => Container(
@@ -400,7 +372,6 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                                       onPressed: () {
                                         setState(() {
                                           if (tamanhoVidas != 0 && tempo != 0) {
-                                            print("Entrou");
                                             playPauseJogo = !playPauseJogo;
                                             if (playPauseJogo) {
                                               iniciarAnimacao = Constantes
@@ -408,7 +379,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                                               pararTempo();
                                             } else {
                                               iniciarAnimacao = Constantes
-                                                  .statusAnimacaoIniciar;
+                                                  .statusAnimacaoRetomar;
                                               comecarTempo();
                                             }
                                           }
@@ -531,12 +502,9 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                     );
                   } else {
                     return ExibirEmblemas(
+                        pontuacaoAtual: pontuacaoTotal,
                         corBordas: PaletaCores.corAzulEscuro,
-                        listaEmblemas: emblemasExibir,
-                        emblemaWidget: EmblemaWidget(
-                            caminhoImagem: caminhaoEmblemaAtual,
-                            nomeEmblema: nomeEmblema,
-                            pontos: pontuacaoTotal));
+                        listaEmblemas: emblemasExibir);
                   }
                 },
               ));

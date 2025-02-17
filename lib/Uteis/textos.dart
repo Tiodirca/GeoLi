@@ -19,6 +19,7 @@ class Textos {
   static String telaSistemaSolarVidas = "Vidas";
   static String telaSistemaSolarPontuacao = "Pontuação";
   static String telaSistemaSolarFimJogoTitulo = "Fim de jogo";
+  static String telaSistemaSolarPausa = "Pausado";
   static String telaSistemaSolarFimJogoDescricao = "Selecione uma opção";
 
   static String descricaoTelaInicialSistemaSolar =
@@ -50,6 +51,22 @@ class Textos {
   static String emblemaSistemaSolarSemiProfissional = "Semi-Profissional";
   static String emblemaSistemaSolarProfissional = "Profissional";
   static String emblemaSistemaSolarKakarot = "kakarot";
+
+  //EMBLEMAS TELA PRINCIPAL
+  static String emblemaPatenteAspirante = "Aspirante";
+  static String emblemaPatenteCabo = "Cabo";
+  static String emblemaPatenteCapitao = "Capitão";
+  static String emblemaPatenteCoronel = "Coronel";
+  static String emblemaPatenteGeneralBrigada = "General de Brigada";
+  static String emblemaPatenteGeneralDivisao = "Geeneral de Divisão";
+  static String emblemaPatenteGeneralExercito = "General do Exercito";
+  static String emblemaPatenteMajor = "Major";
+  static String emblemaPatenteMarechal = "Marechal";
+  static String emblemaPatenteSargento = "Sargento";
+  static String emblemaPatenteSoldado = "Soldado";
+  static String emblemaPatenteSubTenente = "Sub Tenente";
+  static String emblemaPatenteTenente = "Tenente";
+  static String emblemaPatenteTenenteCoronel = "Tenente Coronel";
 
   //CENTRO OESTE
   static String nomeRegiaoCentroOeste = "Região Centro-Oeste";

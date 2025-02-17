@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/emblemas.dart';
+import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/emblema_widget.dart';
@@ -8,12 +9,12 @@ class ExibirEmblemas extends StatefulWidget {
   const ExibirEmblemas(
       {super.key,
       required this.listaEmblemas,
-      required this.emblemaWidget,
-      required this.corBordas});
+      required this.corBordas,
+      required this.pontuacaoAtual});
 
   final List<Emblemas> listaEmblemas;
-  final EmblemaWidget emblemaWidget;
   final Color corBordas;
+  final int pontuacaoAtual;
 
   @override
   State<ExibirEmblemas> createState() => _ExibirEmblemasState();
@@ -22,6 +23,17 @@ class ExibirEmblemas extends StatefulWidget {
 class _ExibirEmblemasState extends State<ExibirEmblemas> {
   bool exibirTelaEmblemas = false;
   bool exibirListaEmblemas = false;
+  late int indexEmblemaAtual = 0;
+
+  exibirEmblemaAtual(int pontuacaoAtual) {
+    late Emblemas emblemas;
+    for (int i = 0; i < widget.listaEmblemas.length; i++) {
+      if (widget.listaEmblemas.elementAt(i).pontos <= pontuacaoAtual) {
+        emblemas = widget.listaEmblemas.elementAt(i);
+      }
+    }
+    return emblemas;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,10 +57,29 @@ class _ExibirEmblemasState extends State<ExibirEmblemas> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    EmblemaWidget(
-                        pontos: widget.emblemaWidget.pontos,
-                        caminhoImagem: widget.emblemaWidget.caminhoImagem,
-                        nomeEmblema: widget.emblemaWidget.nomeEmblema),
+                    Container(
+                      width: larguraTela * 0.15,
+                      height: 60,
+                      child: ListView.builder(
+                        itemCount: 1,
+                        itemBuilder: (context, index) {
+                          MetodosAuxiliares.recuperarPontuacaoAtual().then(
+                            (value) {
+                              setState(() {
+                                indexEmblemaAtual = value;
+                              });
+                            },
+                          );
+                          return EmblemaWidget(
+                              caminhoImagem:
+                                  exibirEmblemaAtual(indexEmblemaAtual)
+                                      .caminhoImagem,
+                              nomeEmblema: exibirEmblemaAtual(indexEmblemaAtual)
+                                  .nomeEmblema,
+                              pontos: widget.pontuacaoAtual);
+                        },
+                      ),
+                    ),
                     SizedBox(
                       width: 100,
                       height: 40,
@@ -90,10 +121,11 @@ class _ExibirEmblemasState extends State<ExibirEmblemas> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border(
-                          top: BorderSide(width: 1,color: widget.corBordas),
-                          left: BorderSide(width: 1,color: widget.corBordas),
-                          right: BorderSide(width: 1,color: widget.corBordas),
-                          bottom: BorderSide(width: 1,color: widget.corBordas)),
+                          top: BorderSide(width: 1, color: widget.corBordas),
+                          left: BorderSide(width: 1, color: widget.corBordas),
+                          right: BorderSide(width: 1, color: widget.corBordas),
+                          bottom:
+                              BorderSide(width: 1, color: widget.corBordas)),
                     ),
                     width: larguraTela * 0.9,
                     height: 420,

@@ -79,6 +79,33 @@ class CaminhosImagens {
   static const emblemaSistemaSolarKakarot =
       "assets/imagens/sistema_solar/emblema_sistema_solar_kakarot";
 
+  static const emblemaPatenteCabo = "assets/imagens/patentes/patente_cabo";
+  static const emblemaPatenteAspirante =
+      "assets/imagens/patentes/patente_aspirante";
+  static const emblemaPatenteCapitao =
+      "assets/imagens/patentes/patente_capitao";
+  static const emblemaPatenteCoronel =
+      "assets/imagens/patentes/patente_coronel";
+  static const emblemaPatenteGeneralBrigada =
+      "assets/imagens/patentes/patente_general_brigada";
+  static const emblemaPatenteGeneralDivisao =
+      "assets/imagens/patentes/patente_general_divisao";
+  static const emblemaPatenteGeneralExercito =
+      "assets/imagens/patentes/patente_general_exercito";
+  static const emblemaPatenteMajor = "assets/imagens/patentes/patente_major";
+  static const emblemaPatenteMarechal =
+      "assets/imagens/patentes/patente_marechal";
+  static const emblemaPatenteSargento =
+      "assets/imagens/patentes/patente_sargento";
+  static const emblemaPatenteSoldado =
+      "assets/imagens/patentes/patente_soldado";
+  static const emblemaPatenteSubTenente =
+      "assets/imagens/patentes/patente_sub_tenente";
+  static const emblemaPatenteTenente =
+      "assets/imagens/patentes/patente_tenente";
+  static const emblemaPatenteTenenteCoronel =
+      "assets/imagens/patentes/patente_tenente_coronel";
+
   // TODAS AS REGIOES
   static const gestoRegioesImagem =
       "assets/imagens/estados/gestos_estados/gesto_estados_regioes";

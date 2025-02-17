@@ -8,6 +8,7 @@ class Constantes {
   static const int tempoDificl = 25;
 
   // ROTA REGIOES
+  static const rotaTelaSplashScreen = "telaSplashScreen";
   static const rotaTelaInicialRegioes = "telaIncialRegioes";
   static const rotaTelaRegiaoCentroOeste = "telaRegiaoCentroOeste";
   static const rotaTelaRegiaoSul = "telaRegiaoSul";
@@ -36,8 +37,8 @@ class Constantes {
 
   //
   static const statusAnimacaoIniciar = "iniciarAnimacao";
-  static const statusAnimacaoIniciada = "aniciadoAnimacao";
   static const statusAnimacaoPausada = "pausarAnimacao";
+  static const statusAnimacaoRetomar = "RetomarAnimacao";
 
   static const msgErroAcertoGesto = "Errou";
   static const msgAcertoGesto = "Acertou";

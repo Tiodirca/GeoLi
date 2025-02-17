@@ -11,6 +11,7 @@ import 'package:geoli/Uteis/paleta_cores.dart';
 class MetodosAuxiliares {
   static String acertou = "";
   static String nomeGestoPlaneta = "";
+  static int pontuacaoAtual = 0;
 
   static Future<String> confirmarAcerto(String acerto) async {
     acertou = acerto;
@@ -19,6 +20,15 @@ class MetodosAuxiliares {
 
   static Future<String> recuperarAcerto() async {
     return acertou;
+  }
+
+  static Future<int> passarPontuacaoAtual(int pontuacao) async {
+    pontuacaoAtual = pontuacao;
+    return pontuacaoAtual;
+  }
+
+  static Future<int> recuperarPontuacaoAtual() async {
+    return pontuacaoAtual;
   }
 
   static Future<String> passarGestoSorteado(String nomeGesto) async {
@@ -61,11 +71,7 @@ class MetodosAuxiliares {
           size: 40,
           color: PaletaCores.corVerde,
         ),
-        border: Border(
-            top: BorderSide(color: PaletaCores.corVerde, width: 1),
-            bottom: BorderSide(color: PaletaCores.corVerde, width: 1),
-            left: BorderSide(color: PaletaCores.corVerde, width: 1),
-            right: BorderSide(color: PaletaCores.corVerde, width: 1)),
+        border: Border.all(color: PaletaCores.corVerde, width: 1),
         animationDuration: const Duration(seconds: 1),
         toastDuration: const Duration(seconds: 2),
         displayCloseButton: false,
@@ -76,11 +82,7 @@ class MetodosAuxiliares {
       return ElegantNotification.error(
         position: Alignment.center,
         width: 150,
-        border: Border(
-            top: BorderSide(color: PaletaCores.corVermelha, width: 1),
-            bottom: BorderSide(color: PaletaCores.corVermelha, width: 1),
-            left: BorderSide(color: PaletaCores.corVermelha, width: 1),
-            right: BorderSide(color: PaletaCores.corVermelha, width: 1)),
+        border: Border.all(color: PaletaCores.corVermelha, width: 1),
         displayCloseButton: false,
         animation: AnimationType.fromTop,
         showProgressIndicator: false,

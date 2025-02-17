@@ -9,6 +9,7 @@ import 'package:geoli/telas/tela_inicial.dart';
 import 'package:geoli/telas/regioes_brasil/tela_regiao_sul.dart';
 import 'package:geoli/telas/regioes_brasil/tela_todas_regioes.dart';
 import 'package:geoli/telas/tela_sistema_solar.dart';
+import 'package:geoli/telas/tela_splash.dart';
 
 class Rotas {
   static GlobalKey<NavigatorState>? navigatorKey = GlobalKey<NavigatorState>();
@@ -17,6 +18,8 @@ class Rotas {
     // Recebe os parâmetros na chamada do Navigator.
     final args = settings.arguments;
     switch (settings.name) {
+      case Constantes.rotaTelaSplashScreen:
+        return MaterialPageRoute(builder: (_) => TelaSplashScreen());
       case Constantes.rotaTelaInicial:
         return MaterialPageRoute(builder: (_) => TelaInicial());
       case Constantes.rotaTelaInicialRegioes:

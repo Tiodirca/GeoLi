@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
+import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/sistema_solar/balao_widget.dart';
 import 'package:geoli/Widgets/sistema_solar/tela_fim_jogo.dart';
 import 'package:geoli/modelos/planeta.dart';
+
 //ignore: must_be_immutable
 class AreaAnimacaoBaloes extends StatefulWidget {
   AreaAnimacaoBaloes(
@@ -54,45 +56,76 @@ class _AreaAnimacaoBaloesState extends State<AreaAnimacaoBaloes>
       AnimationController(vsync: this);
   late final AnimationController _controller14 =
       AnimationController(vsync: this);
+  late final AnimationController _controllerFade =
+      AnimationController(vsync: this);
+  late final Animation<double> _fadeAnimation =
+      Tween<double>(begin: 1, end: 0.0).animate(_controllerFade);
 
   bool exibirTelaFimJogo = false;
+  bool desativarToqueBalao = false;
 
   Widget baloes(double tamanhoTela, Size biggest, double distacia,
-          AnimationController controle, int indexPlaneta) =>
+          AnimationController controle, int indexPlaneta, String nome) =>
       PositionedTransition(
-        rect: RelativeRectTween(
-                begin: RelativeRect.fromSize(
-                    // passando a Distancia um do outro
-                    // o tamanho da tela onde a animacao ira ocorrer
-                    Rect.fromLTWH(distacia, tamanhoTela, 80, tamanhoTela),
-                    biggest),
-                end: RelativeRect.fromSize(
-                    Rect.fromLTWH(distacia, 0, 80, tamanhoTela), biggest))
-            .animate(CurvedAnimation(
-          parent: controle,
-          curve: Curves.linear,
-        )),
-        child: BalaoWidget(
-          desativarBotao: exibirTelaFimJogo,
-          planeta: widget.planetas.elementAt(indexPlaneta),
-        ),
-      );
+          rect: RelativeRectTween(
+                  begin: RelativeRect.fromSize(
+                      // passando a Distancia um do outro
+                      // o tamanho da tela onde a animacao ira ocorrer
+                      Rect.fromLTWH(distacia, tamanhoTela, 80, tamanhoTela),
+                      biggest),
+                  end: RelativeRect.fromSize(
+                      Rect.fromLTWH(distacia, 0, 80, tamanhoTela), biggest))
+              .animate(CurvedAnimation(
+            parent: controle,
+            curve: Curves.linear,
+          )),
+          child: Column(
+            children: [
+              BalaoWidget(
+                desativarBotao: desativarToqueBalao,
+                planeta: widget.planetas.elementAt(indexPlaneta),
+              ),
+              Text(nome)
+            ],
+          ));
 
   // metodo para iniciar a animacao dos baloes
   iniciarAnimacoesBaloes() {
     iniciarBalao(_controller, 5, _controller2, 1);
     iniciarBalao(_controller3, 5, _controller4, 1);
     iniciarBalao(_controller5, 5, _controller6, 1);
-    // definindo que a animacao ira comecar apos o tempo passado no delay
+    // definindo que a animacao ira comecar apos
+    // o tempo passado no delay
     Future.delayed(Duration(seconds: 2), () {
-      iniciarBalao(_controller7, 5, _controller8, 1);
-      iniciarBalao(_controller9, 5, _controller10, 1);
-      iniciarBalao(_controller11, 5, _controller12, 1);
+      // verificando se a quantidade de vida nao e igual a
+      // zero ou se o status nao esta pausado
+      if (widget.quantidadeVidas != 0) {
+        if (widget.statusAnimacao != Constantes.statusAnimacaoPausada) {
+          iniciarBalao(_controller7, 5, _controller8, 1);
+          iniciarBalao(_controller9, 5, _controller10, 1);
+          iniciarBalao(_controller11, 5, _controller12, 1);
+        }
+      }
     });
     // definindo que a animacao ira comecar apos o tempo passado no delay
     Future.delayed(Duration(milliseconds: 4300), () {
-      iniciarBalao(_controller13, 5, _controller14, 0);
+      if (widget.quantidadeVidas != 0) {
+        if (widget.statusAnimacao != Constantes.statusAnimacaoPausada) {
+          iniciarBalao(_controller13, 5, _controller14, 0);
+        }
+      }
     });
+  }
+
+  // metodo para reiniciar as animacoes dos baloes apos a pausa
+  iniciarAnimacoesBaloesPausado() {
+    iniciarBalao(_controller, 5, _controller2, 0);
+    iniciarBalao(_controller3, 5, _controller4, 0);
+    iniciarBalao(_controller5, 5, _controller6, 0);
+    iniciarBalao(_controller7, 5, _controller8, 0);
+    iniciarBalao(_controller9, 5, _controller10, 0);
+    iniciarBalao(_controller11, 5, _controller12, 0);
+    iniciarBalao(_controller13, 5, _controller14, 0);
   }
 
   // metodo para iniciar a animacao dos baloes
@@ -103,19 +136,22 @@ class _AreaAnimacaoBaloesState extends State<AreaAnimacaoBaloes>
         count: 60, period: Duration(seconds: duracaoAnimacao));
     // definindo que havera um delay para comecar a animacao do segundo controle
     Future.delayed(Duration(seconds: delay), () {
-      segundoBalaoControle.repeat(
-          count: 60, period: Duration(seconds: duracaoAnimacao));
+      if (widget.quantidadeVidas != 0) {
+        if (widget.statusAnimacao != Constantes.statusAnimacaoPausada) {
+          segundoBalaoControle.repeat(
+              count: 60, period: Duration(seconds: duracaoAnimacao));
+        }
+      }
     });
   }
 
   chamarIniciarAnimacaoBalao() {
-    // verificando se o status de animacao e para iniciar a animacao
-    if (widget.statusAnimacao == Constantes.statusAnimacaoIniciar) {
-      // verificando se a animacao ja esta acontecendo
-      if (_controller.isAnimating || _controller14.isAnimating) {
-      } else {
-        iniciarAnimacoesBaloes();
-      }
+    // verificando se a animacao
+    if (widget.statusAnimacao == Constantes.statusAnimacaoRetomar &&
+        !(_controller.isAnimating || _controller14.isAnimating)) {
+      iniciarAnimacoesBaloesPausado();
+    } else if (!(_controller.isAnimating || _controller14.isAnimating)) {
+      iniciarAnimacoesBaloes();
     }
   }
 
@@ -125,31 +161,46 @@ class _AreaAnimacaoBaloesState extends State<AreaAnimacaoBaloes>
       setState(() {
         pararAnimacaoBaloes();
         exibirTelaFimJogo = true;
+        desativarToqueBalao = true;
       });
     } else if (widget.statusAnimacao == Constantes.statusAnimacaoPausada) {
       setState(() {
+        _controllerFade.repeat(
+            count: 1000, period: Duration(milliseconds: 500));
+        desativarToqueBalao = true;
         pararAnimacaoBaloes();
       });
     } else {
-      chamarIniciarAnimacaoBalao();
+      setState(() {
+        _controllerFade.stop();
+        desativarToqueBalao = false;
+        chamarIniciarAnimacaoBalao();
+      });
     }
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    pararAnimacaoBaloes();
+    super.dispose();
+  }
+
   pararAnimacaoBaloes() {
-    _controller.stop(canceled: false);
-    _controller2.stop(canceled: false);
-    _controller3.stop(canceled: false);
-    _controller4.stop(canceled: false);
-    _controller5.stop(canceled: false);
-    _controller6.stop(canceled: false);
-    _controller7.stop(canceled: false);
-    _controller8.stop(canceled: false);
-    _controller9.stop(canceled: false);
-    _controller10.stop(canceled: false);
-    _controller11.stop(canceled: false);
-    _controller12.stop(canceled: false);
-    _controller13.stop(canceled: false);
-    _controller14.stop(canceled: false);
+    _controller.stop();
+    _controller2.stop();
+    _controller3.stop();
+    _controller4.stop();
+    _controller5.stop();
+    _controller6.stop();
+    _controller7.stop();
+    _controller8.stop();
+    _controller9.stop();
+    _controller10.stop();
+    _controller11.stop();
+    _controller12.stop();
+    _controller13.stop();
+    _controller14.stop();
   }
 
   @override
@@ -163,84 +214,106 @@ class _AreaAnimacaoBaloesState extends State<AreaAnimacaoBaloes>
       height: alturaTela,
       child: Stack(
         children: [
-          baloes(alturaTela, widget.biggest, 0, _controller, 0),
-          baloes(alturaTela, widget.biggest,
-              Platform.isAndroid || Platform.isIOS ? 50 : 200, _controller2, 1),
+          baloes(alturaTela, widget.biggest, 0, _controller, 0, "1"),
+          baloes(
+              alturaTela,
+              widget.biggest,
+              Platform.isAndroid || Platform.isIOS ? 50 : 200,
+              _controller2,
+              1,
+              "2"),
           baloes(
               alturaTela,
               widget.biggest,
               Platform.isAndroid || Platform.isIOS ? 100 : 400,
               _controller3,
-              2),
+              2,
+              "3"),
           baloes(
               alturaTela,
               widget.biggest,
               Platform.isAndroid || Platform.isIOS ? 150 : 600,
               _controller4,
-              3),
+              3,
+              "4"),
           baloes(
               alturaTela,
               widget.biggest,
               Platform.isAndroid || Platform.isIOS ? 200 : 800,
               _controller5,
-              4),
+              4,
+              "5"),
           baloes(
               alturaTela,
               widget.biggest,
               Platform.isAndroid || Platform.isIOS ? 250 : 1000,
               _controller6,
-              5),
-          baloes(alturaTela, widget.biggest, 0, _controller7, 6),
-          baloes(alturaTela, widget.biggest,
-              Platform.isAndroid || Platform.isIOS ? 50 : 200, _controller8, 7),
+              5,
+              "6"),
+          baloes(alturaTela, widget.biggest, 0, _controller7, 6, "7"),
+          baloes(
+              alturaTela,
+              widget.biggest,
+              Platform.isAndroid || Platform.isIOS ? 50 : 200,
+              _controller8,
+              7,
+              "8"),
           baloes(
               alturaTela,
               widget.biggest,
               Platform.isAndroid || Platform.isIOS ? 100 : 400,
               _controller9,
-              0),
+              0,
+              "9"),
           baloes(
               alturaTela,
               widget.biggest,
               Platform.isAndroid || Platform.isIOS ? 150 : 600,
               _controller10,
-              1),
+              1,
+              "10"),
           baloes(
               alturaTela,
               widget.biggest,
               Platform.isAndroid || Platform.isIOS ? 200 : 800,
               _controller11,
-              2),
+              2,
+              "11"),
           baloes(
               alturaTela,
               widget.biggest,
               Platform.isAndroid || Platform.isIOS ? 250 : 1000,
               _controller12,
-              3),
+              3,
+              "12"),
           baloes(
               alturaTela,
               widget.biggest,
               Platform.isAndroid || Platform.isIOS ? 50 : 250,
               _controller13,
-              4),
+              4,
+              "13"),
           baloes(
               alturaTela,
               widget.biggest,
               Platform.isAndroid || Platform.isIOS ? 150 : 550,
               _controller14,
-              5),
-          baloes(
-              alturaTela,
-              widget.biggest,
-              Platform.isAndroid || Platform.isIOS ? 250 : 550,
-              _controller13,
-              6),
+              5,
+              "14"),
           baloes(
               alturaTela,
               widget.biggest,
               Platform.isAndroid || Platform.isIOS ? 300 : 1200,
               _controller,
-              7),
+              6,
+              "1s"),
+          baloes(
+              alturaTela,
+              widget.biggest,
+              Platform.isAndroid || Platform.isIOS ? 300 : 1200,
+              _controller7,
+              7,
+              "7s"),
           LayoutBuilder(
             builder: (context, constraints) {
               if (Platform.isAndroid || Platform.isIOS) {
@@ -248,50 +321,45 @@ class _AreaAnimacaoBaloesState extends State<AreaAnimacaoBaloes>
               } else {
                 return Stack(
                   children: [
-                    baloes(
-                      alturaTela,
-                      widget.biggest,
-                      1400,
-                      _controller4,
-                      0,
-                    ),
-                    baloes(
-                      alturaTela,
-                      widget.biggest,
-                      1300,
-                      _controller10,
-                      1,
-                    ),
-                    baloes(
-                      alturaTela,
-                      widget.biggest,
-                      1050,
-                      _controller13,
-                      2,
-                    ),
-                    baloes(
-                      alturaTela,
-                      widget.biggest,
-                      1400,
-                      _controller14,
-                      3,
-                    ),
+                    baloes(alturaTela, widget.biggest, 1400, _controller4, 0,
+                        "4s"),
+                    baloes(alturaTela, widget.biggest, 1300, _controller10, 1,
+                        "10s"),
+                    baloes(alturaTela, widget.biggest, 1050, _controller13, 2,
+                        "13s"),
+                    baloes(alturaTela, widget.biggest, 1400, _controller14, 3,
+                        "14s"),
                   ],
                 );
               }
             },
           ),
-          baloes(
-            alturaTela,
-            widget.biggest,
-            Platform.isAndroid || Platform.isIOS ? 300 : 1200,
-            _controller7,
-            4,
-          ),
           Positioned(
               child: Center(
             child: Visibility(visible: exibirTelaFimJogo, child: TelaFimJogo()),
           )),
+          Positioned(
+            child: Center(
+                child: Visibility(
+              visible: widget.statusAnimacao == Constantes.statusAnimacaoPausada
+                  ? true
+                  : false,
+              child: FadeTransition(
+                  opacity: _fadeAnimation,
+                  child: Card(
+                      elevation: 0,
+                      color: Colors.transparent,
+                      shape: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Text(
+                          Textos.telaSistemaSolarPausa,
+                          style: TextStyle(fontSize: 30),
+                        ),
+                      ))),
+            )),
+          )
         ],
       ),
     );
