@@ -9,10 +9,17 @@ class Textos {
   static String btnSistemaSolar = "Sistema Solar";
   static String btnEmblemas = "Emblemas";
 
+  //TELA REINICIAR DADOS
+  static String tituloReiniciarDados = "Reiniciar dados";
+  static String descricaoReiniciarDados =
+      "Ao clicar no botão você irá APAGAR/REINICIAR todo o progresso feito";
+  static String btnExcluir = "Excluir Informações";
+
   static String btnDificuldadeFacil = "Fácil";
   static String btnDificuldadeMedio = "Médio";
   static String btnDificuldadeDificil = "Dificil";
 
+  //TELA SISTEMA SOLAR
   static String telaSistemaSolarTitulo = "Sistema Solar";
   static String telaSistemaSolarDescricaoPlanetaSorteado = "Planeta Sorteado";
   static String telaSistemaSolarDescricaoTemporizador = "Tempo";
@@ -25,6 +32,7 @@ class Textos {
   static String descricaoTelaInicialSistemaSolar =
       "Selecione uma dificuldade para começar a jogar";
 
+  //NOME PLANETAS
   static String nomePlanetaMercurio = "Mercúrio";
   static String nomePlanetaVenus = "Vênus";
   static String nomePlanetaTerra = "Terra";
@@ -110,7 +118,7 @@ class Textos {
   static String nomeRegiaoNordesteSE = "Sergipe - SE";
 
   //REGIOES DO BRASIL
-  static String tituloTelaRegioes = "Seleção das Regiões do Brasil";
+  static String tituloTelaRegioes = "Regiões do Brasil";
   static String tituloTelaRegiaoCentro = "Região Centro-Oeste";
   static String tituloTelaRegiaoSul = "Região Sul";
   static String tituloTelaRegiaoSudeste = "Região Sudeste";

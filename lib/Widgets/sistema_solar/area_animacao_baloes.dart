@@ -300,19 +300,28 @@ class _AreaAnimacaoBaloesState extends State<AreaAnimacaoBaloes>
               _controller14,
               5,
               "14"),
+          Visibility(
+            visible: Platform.isAndroid || Platform.isIOS ? true : false,
+            child: baloes(
+                alturaTela,
+                widget.biggest,250,
+                _controller14,
+                6,
+                "14s"),
+          ),
           baloes(
               alturaTela,
               widget.biggest,
               Platform.isAndroid || Platform.isIOS ? 300 : 1200,
               _controller,
-              6,
+              7,
               "1s"),
           baloes(
               alturaTela,
               widget.biggest,
               Platform.isAndroid || Platform.isIOS ? 300 : 1200,
               _controller7,
-              7,
+              0,
               "7s"),
           LayoutBuilder(
             builder: (context, constraints) {
@@ -321,13 +330,13 @@ class _AreaAnimacaoBaloesState extends State<AreaAnimacaoBaloes>
               } else {
                 return Stack(
                   children: [
-                    baloes(alturaTela, widget.biggest, 1400, _controller4, 0,
+                    baloes(alturaTela, widget.biggest, 1400, _controller4, 1,
                         "4s"),
-                    baloes(alturaTela, widget.biggest, 1300, _controller10, 1,
+                    baloes(alturaTela, widget.biggest, 1300, _controller10, 2,
                         "10s"),
-                    baloes(alturaTela, widget.biggest, 1050, _controller13, 2,
+                    baloes(alturaTela, widget.biggest, 1050, _controller13, 3,
                         "13s"),
-                    baloes(alturaTela, widget.biggest, 1400, _controller14, 3,
+                    baloes(alturaTela, widget.biggest, 1400, _controller14, 4,
                         "14s"),
                   ],
                 );

@@ -1,11 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:geoli/Uteis/paleta_cores.dart';
+
 class Constantes {
   //ROTAS
   static const rotaTelaInicial = "telaIncial";
   static const rotaTelaSistemaSolar = "telaSistemaSolar";
-
-  static const int tempoFacil = 60;
-  static const int tempoMedio = 40;
-  static const int tempoDificl = 25;
 
   // ROTA REGIOES
   static const rotaTelaSplashScreen = "telaSplashScreen";
@@ -17,6 +16,11 @@ class Constantes {
   static const rotaTelaRegiaoNordeste = "telaRegiaoNordeste";
   static const rotaTelaRegiaoTodosEstados = "telaRegiaoTodosEstados";
 
+  //TEMPO DE JOGO DO SISTEMA SOLAR
+  static const int sistemaSolarTempoFacil = 60;
+  static const int sistemaSolarTempoMedio = 40;
+  static const int sistemaSolarTempoDificl = 25;
+
   //NOME DOCUMENTO FIBASE REGIOES
   static const fireBaseColecaoRegioes = "regioes";
   static const fireBaseDocumentoRegiaoCentroOeste = "regiaoCentroOeste";
@@ -27,19 +31,25 @@ class Constantes {
   static const fireBaseDocumentoRegiaoTodosEstados = "regiaoTodosEstados";
   static const fireBaseDocumentoLiberarEstados = "liberarEstados";
   static const fireBaseDocumentoPontosJogadaRegioes = "postosJogadaRegioes";
+  static const nomeTodosEstados = "todosEstados";
 
   static const fireBaseColecaoSistemaSolar = "sistemaSolar";
   static const fireBaseDocumentoPontosJogadaSistemaSolar =
       "pontosJogadaSistemaSolar";
-  static const pontosJogada = "pontosJogada";
 
-  static const nomeTodosEstados = "todosEstados";
-
-  //
+  //STATUS PARA ANIMAR OS BALOES
   static const statusAnimacaoIniciar = "iniciarAnimacao";
   static const statusAnimacaoPausada = "pausarAnimacao";
   static const statusAnimacaoRetomar = "RetomarAnimacao";
 
+  static const resetarAcaoExcluirTudo = "excluirTudo";
+  static const resetarAcaoExcluirRegioes = "excluirRegioes";
+  static const resetarAcaoExcluirSistemaSolar = "excluirSistemaSolar";
+
+
+  static Color corPadraoRegioes = PaletaCores.corLaranja;
+
+  static const pontosJogada = "pontosJogada";
   static const msgErroAcertoGesto = "Errou";
   static const msgAcertoGesto = "Acertou";
 }

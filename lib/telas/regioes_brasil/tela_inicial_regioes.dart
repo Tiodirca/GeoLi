@@ -6,8 +6,7 @@ import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/textos.dart';
-import 'package:geoli/Uteis/paleta_cores.dart';
-import 'package:geoli/Widgets/emblema_widget.dart';
+import 'package:geoli/Widgets/area_resetar_dados.dart';
 import 'package:geoli/Widgets/exibir_emblemas.dart';
 import 'package:geoli/Widgets/tela_carregamento.dart';
 
@@ -47,6 +46,7 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
   int pontos = 0;
   bool exibirTelaCarregamento = true;
   List<Emblemas> emblemasExibir = [];
+  bool exibirTelaResetarJogo = false;
 
   @override
   void initState() {
@@ -167,8 +167,8 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
             }
           },
           shape: RoundedRectangleBorder(
-              side: BorderSide(color: PaletaCores.corOuro, width: 2),
-              borderRadius: const BorderRadius.all(Radius.circular(40))),
+              side: BorderSide(color: Constantes.corPadraoRegioes, width: 1),
+              borderRadius: const BorderRadius.all(Radius.circular(20))),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -198,22 +198,53 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
     return LayoutBuilder(
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {
-          return TelaCarregamento();
+          return TelaCarregamento(
+            corPadrao: Constantes.corPadraoRegioes,
+          );
         } else {
           return Scaffold(
               appBar: AppBar(
-                backgroundColor: Colors.white,
-                title: Text(Textos.tituloTelaRegioes),
+                backgroundColor: Constantes.corPadraoRegioes,
+                title: Text(
+                  Textos.tituloTelaRegioes,
+                  style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
+                ),
                 leading: IconButton(
-                    color: Colors.black,
+                    color: Colors.white,
                     //setando tamanho do icone
                     iconSize: 30,
-                    enableFeedback: false,
+
                     onPressed: () {
                       Navigator.pushReplacementNamed(
                           context, Constantes.rotaTelaInicial);
                     },
                     icon: const Icon(Icons.arrow_back_ios)),
+                actions: [
+                  Container(
+                    margin: EdgeInsets.only(right: 10),
+                    width: 40,
+                    height: 40,
+                    child: FloatingActionButton(
+                      heroTag: Textos.btnExcluir,
+                      backgroundColor: Colors.white,
+                      elevation: 0,
+                      shape: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(40),
+                          borderSide:
+                              BorderSide(width: 1, color: Colors.black)),
+                      onPressed: () {
+                        setState(() {
+                          exibirTelaResetarJogo = !exibirTelaResetarJogo;
+                        });
+                      },
+                      child: Icon(
+                        exibirTelaResetarJogo ? Icons.close : Icons.settings,
+                        color: Colors.black,
+                        size: 30,
+                      ),
+                    ),
+                  )
+                ],
               ),
               body: Container(
                   color: Colors.white,
@@ -221,49 +252,63 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
                   height: alturaTela,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
-                    child: Column(
+                    child: Stack(
+                      alignment: Alignment.center,
                       children: [
-                        Container(
-                            margin: EdgeInsets.only(bottom: 10),
-                            width: larguraTela,
-                            child: Text(
-                              Textos.descricaoTelaRegioes,
-                              style: TextStyle(fontSize: 18),
-                              textAlign: TextAlign.center,
-                            )),
-                        Wrap(
+                        Column(
                           children: [
-                            cartaoRegiao(regiaoCentroOeste.caminhoImagem,
-                                regiaoCentroOeste.nome),
-                            Visibility(
-                                visible: regiaoSul.acerto,
-                                child: cartaoRegiao(
-                                    regiaoSul.caminhoImagem, regiaoSul.nome)),
-                            Visibility(
-                                visible: regiaoSudeste.acerto,
-                                child: cartaoRegiao(regiaoSudeste.caminhoImagem,
-                                    regiaoSudeste.nome)),
-                            Visibility(
-                                visible: regiaoNorte.acerto,
-                                child: cartaoRegiao(regiaoNorte.caminhoImagem,
-                                    regiaoNorte.nome)),
-                            Visibility(
-                                visible: regiaoNordeste.acerto,
-                                child: cartaoRegiao(
-                                    regiaoNordeste.caminhoImagem,
-                                    regiaoNordeste.nome)),
-                            Visibility(
-                                visible: todasRegioes.acerto,
-                                child: cartaoRegiao(todasRegioes.caminhoImagem,
-                                    todasRegioes.nome)),
+                            Container(
+                                margin: EdgeInsets.only(bottom: 10),
+                                width: larguraTela,
+                                child: Text(
+                                  Textos.descricaoTelaRegioes,
+                                  style: TextStyle(fontSize: 18),
+                                  textAlign: TextAlign.center,
+                                )),
+                            Wrap(
+                              children: [
+                                cartaoRegiao(regiaoCentroOeste.caminhoImagem,
+                                    regiaoCentroOeste.nome),
+                                Visibility(
+                                    visible: regiaoSul.acerto,
+                                    child: cartaoRegiao(regiaoSul.caminhoImagem,
+                                        regiaoSul.nome)),
+                                Visibility(
+                                    visible: regiaoSudeste.acerto,
+                                    child: cartaoRegiao(
+                                        regiaoSudeste.caminhoImagem,
+                                        regiaoSudeste.nome)),
+                                Visibility(
+                                    visible: regiaoNorte.acerto,
+                                    child: cartaoRegiao(
+                                        regiaoNorte.caminhoImagem,
+                                        regiaoNorte.nome)),
+                                Visibility(
+                                    visible: regiaoNordeste.acerto,
+                                    child: cartaoRegiao(
+                                        regiaoNordeste.caminhoImagem,
+                                        regiaoNordeste.nome)),
+                                Visibility(
+                                    visible: todasRegioes.acerto,
+                                    child: cartaoRegiao(
+                                        todasRegioes.caminhoImagem,
+                                        todasRegioes.nome)),
+                              ],
+                            ),
                           ],
                         ),
+                        Visibility(
+                            visible: exibirTelaResetarJogo,
+                            child: AreaResetarDados(
+                              corCard: Constantes.corPadraoRegioes,
+                              tipoAcao: Constantes.resetarAcaoExcluirRegioes,
+                            ))
                       ],
                     ),
                   )),
               bottomSheet: ExibirEmblemas(
                 pontuacaoAtual: pontos,
-                corBordas: PaletaCores.corAzulEscuro,
+                corBordas: Constantes.corPadraoRegioes,
                 listaEmblemas: emblemasExibir,
               ));
         }

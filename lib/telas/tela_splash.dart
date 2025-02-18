@@ -1,13 +1,11 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import '../Uteis/constantes.dart';
-import '../Uteis/metodos_auxiliares.dart';
 import '../Widgets/tela_carregamento.dart';
 
 class TelaSplashScreen extends StatefulWidget {
-  const TelaSplashScreen({Key? key}) : super(key: key);
+  const TelaSplashScreen({super.key});
 
   @override
   State<TelaSplashScreen> createState() => _TelaSplashScreenState();
@@ -33,9 +31,12 @@ class _TelaSplashScreenState extends State<TelaSplashScreen> {
           color: PaletaCores.corAzulEscuro,
           child: SingleChildScrollView(
               child: SizedBox(
-                  width: larguraTela,
-                  height: alturaTela,
-                  child: TelaCarregamento(),))),
+            width: larguraTela,
+            height: alturaTela,
+            child: TelaCarregamento(
+              corPadrao: PaletaCores.corVerde,
+            ),
+          ))),
     );
   }
 }

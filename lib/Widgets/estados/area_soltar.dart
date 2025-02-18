@@ -8,9 +8,9 @@ import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/gestos_widget.dart';
 
 class AreaSoltar extends StatefulWidget {
-   AreaSoltar({super.key, required this.estado, required this.gesto});
+   const AreaSoltar({super.key, required this.estado, required this.gesto});
 
-  Estado estado;
+  final Estado estado;
   final Gestos gesto;
 
   @override
@@ -30,16 +30,18 @@ class _AreaSoltarState extends State<AreaSoltar> {
         width: 170,
         height: 170,
         child: Card(
+          elevation: 7,
           color: Colors.white,
           shape: RoundedRectangleBorder(
               side: BorderSide(color: PaletaCores.corOuro, width: 2),
-              borderRadius: const BorderRadius.all(Radius.circular(10))),
+              borderRadius: const BorderRadius.all(Radius.circular(20))),
           child: DragTarget(
             builder: (context, candidateData, rejectedData) {
               return Stack(
                 alignment: Alignment.center,
                 children: [
                   Image(
+
                     height: 140,
                     width: 140,
                     image: AssetImage('${estado.caminhoImagem}.png'),

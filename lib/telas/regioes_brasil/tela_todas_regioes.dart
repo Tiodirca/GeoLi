@@ -257,7 +257,7 @@ class _TelaTodasRegioesState extends State<TelaTodasRegioes> {
         body: LayoutBuilder(
           builder: (context, constraints) {
             if (exibirTelaCarregamento) {
-              return TelaCarregamento();
+              return TelaCarregamento(corPadrao: Constantes.corPadraoRegioes,);
             } else {
               return WidgetAreaTela(
                   nomeColecao: nomeColecao,

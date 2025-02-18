@@ -11,6 +11,7 @@ import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
+import 'package:geoli/Widgets/area_resetar_dados.dart';
 import 'package:geoli/Widgets/exibir_emblemas.dart';
 import 'package:geoli/Widgets/sistema_solar/area_animacao_baloes.dart';
 import 'package:geoli/Widgets/gestos_widget.dart';
@@ -39,6 +40,8 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   late Timer iniciarTempo;
   late String iniciarAnimacao;
   List<Emblemas> emblemasExibir = [];
+  bool exibirTelaResetarJogo = false;
+  Color corPadrao = PaletaCores.corAzul;
 
   @override
   void initState() {
@@ -249,19 +252,19 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
           heroTag: nomeDificuldade,
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            side: BorderSide(color: PaletaCores.corAzul),
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            side: BorderSide(color: corPadrao),
           ),
           onPressed: () {
             setState(() {
               if (nomeDificuldade == Textos.btnDificuldadeFacil) {
-                tempo = Constantes.tempoFacil;
+                tempo = Constantes.sistemaSolarTempoFacil;
               } else if (nomeDificuldade == Textos.btnDificuldadeMedio) {
                 tamanhoVidas = 2;
-                tempo = Constantes.tempoMedio;
+                tempo = Constantes.sistemaSolarTempoMedio;
               } else if (nomeDificuldade == Textos.btnDificuldadeDificil) {
                 tamanhoVidas = 1;
-                tempo = Constantes.tempoDificl;
+                tempo = Constantes.sistemaSolarTempoDificl;
               }
               comecarTempo();
               exibirJogo = true;
@@ -279,7 +282,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
     return LayoutBuilder(
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {
-          return TelaCarregamento();
+          return TelaCarregamento(corPadrao: corPadrao,);
         } else {
           return Scaffold(
               appBar: AppBar(
@@ -404,6 +407,36 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                       }
                     },
                   ),
+                  actions: [
+                    Visibility(
+                        visible: !exibirJogo,
+                        child: Container(
+                          margin: EdgeInsets.only(right: 10),
+                          width: 40,
+                          height: 40,
+                          child: FloatingActionButton(
+                            heroTag: Textos.btnExcluir,
+                            backgroundColor: Colors.white,
+                            elevation: 0,
+                            shape: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(40),
+                                borderSide:
+                                    BorderSide(width: 1, color: corPadrao)),
+                            onPressed: () {
+                              setState(() {
+                                exibirTelaResetarJogo = !exibirTelaResetarJogo;
+                              });
+                            },
+                            child: Icon(
+                              exibirTelaResetarJogo
+                                  ? Icons.close
+                                  : Icons.settings,
+                              color: corPadrao,
+                              size: 30,
+                            ),
+                          ),
+                        ))
+                  ],
                   leading: IconButton(
                       color: Colors.white,
                       //setando tamanho do icone
@@ -433,28 +466,42 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                       color: Colors.white,
                       width: larguraTela,
                       height: alturaTela,
-                      child: Column(
+                      child: Stack(
+                        alignment: Alignment.center,
                         children: [
-                          Container(
-                            margin: EdgeInsets.all(10),
-                            child: Text(
-                              Textos.descricaoTelaInicialSistemaSolar,
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 18),
-                            ),
+                          Column(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.all(10),
+                                child: Text(
+                                  Textos.descricaoTelaInicialSistemaSolar,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 18),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 400,
+                                child: Wrap(
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  alignment: WrapAlignment.center,
+                                  children: [
+                                    btnDificuldade(Textos.btnDificuldadeFacil),
+                                    btnDificuldade(Textos.btnDificuldadeMedio),
+                                    btnDificuldade(
+                                        Textos.btnDificuldadeDificil),
+                                  ],
+                                ),
+                              )
+                            ],
                           ),
-                          SizedBox(
-                            height: 400,
-                            child: Wrap(
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              alignment: WrapAlignment.center,
-                              children: [
-                                btnDificuldade(Textos.btnDificuldadeFacil),
-                                btnDificuldade(Textos.btnDificuldadeMedio),
-                                btnDificuldade(Textos.btnDificuldadeDificil),
-                              ],
-                            ),
-                          )
+                          Visibility(
+                              visible: exibirTelaResetarJogo,
+                              child: AreaResetarDados(
+                                corCard: corPadrao,
+                                tipoAcao:
+                                    Constantes.resetarAcaoExcluirSistemaSolar,
+                              ))
                         ],
                       ),
                     );
@@ -503,7 +550,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                   } else {
                     return ExibirEmblemas(
                         pontuacaoAtual: pontuacaoTotal,
-                        corBordas: PaletaCores.corAzulEscuro,
+                        corBordas: corPadrao,
                         listaEmblemas: emblemasExibir);
                   }
                 },

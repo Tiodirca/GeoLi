@@ -159,12 +159,13 @@ class _WidgetAreaGestosState extends State<WidgetAreaGestos> {
     double larguraTela = MediaQuery.of(context).size.width;
     return Visibility(
       visible: !widget.exibirTelaCarregamento,
-      child: SizedBox(
+      child: Container(
+        color: Colors.white,
           height: 160,
           child: Card(
               color: Colors.white,
               shape: RoundedRectangleBorder(
-                  side: BorderSide(color: Colors.black),
+                  side: BorderSide(color: Constantes.corPadraoRegioes),
                   borderRadius: const BorderRadius.all(Radius.circular(10))),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

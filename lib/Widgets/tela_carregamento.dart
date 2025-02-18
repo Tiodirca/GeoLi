@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../Uteis/paleta_cores.dart';
 import '../Uteis/textos.dart';
 
 class TelaCarregamento extends StatelessWidget {
-  const TelaCarregamento({Key? key}) : super(key: key);
+  const TelaCarregamento({Key? key, required this.corPadrao}) : super(key: key);
+
+  final Color corPadrao;
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +22,8 @@ class TelaCarregamento extends StatelessWidget {
             height: 150,
             child: Card(
               shape: RoundedRectangleBorder(
-                  side: BorderSide(color: PaletaCores.corLaranja),
-                  borderRadius: BorderRadius.all(Radius.circular(30))),
+                  side: BorderSide(color: corPadrao),
+                  borderRadius: BorderRadius.all(Radius.circular(20))),
               color: Colors.white,
               child: Center(
                 child: Column(
@@ -37,8 +38,8 @@ class TelaCarregamento extends StatelessWidget {
                     const SizedBox(
                       height: 20,
                     ),
-                    const CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation(PaletaCores.corOuro),
+                    CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation(corPadrao),
                       strokeWidth: 3.0,
                     )
                   ],

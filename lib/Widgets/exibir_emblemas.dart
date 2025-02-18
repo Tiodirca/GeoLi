@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/emblemas.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
@@ -57,8 +59,8 @@ class _ExibirEmblemasState extends State<ExibirEmblemas> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    Container(
-                      width: larguraTela * 0.15,
+                    SizedBox(
+                      width: Platform.isAndroid || Platform.isIOS ? larguraTela * 0.6 : larguraTela * 0.2,
                       height: 60,
                       child: ListView.builder(
                         itemCount: 1,
@@ -84,6 +86,7 @@ class _ExibirEmblemasState extends State<ExibirEmblemas> {
                       width: 100,
                       height: 40,
                       child: FloatingActionButton(
+                        heroTag: Textos.btnEmblemas,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -119,7 +122,7 @@ class _ExibirEmblemasState extends State<ExibirEmblemas> {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(20),
                       border: Border(
                           top: BorderSide(width: 1, color: widget.corBordas),
                           left: BorderSide(width: 1, color: widget.corBordas),
@@ -133,6 +136,7 @@ class _ExibirEmblemasState extends State<ExibirEmblemas> {
                       itemCount: widget.listaEmblemas.length,
                       itemBuilder: (context, index) {
                         return Card(
+                          shadowColor: widget.corBordas,
                           color: Colors.white,
                           child: EmblemaWidget(
                               caminhoImagem: widget.listaEmblemas

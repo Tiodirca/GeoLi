@@ -108,6 +108,53 @@ class _TelaProximoNivelState extends State<TelaProximoNivel> {
     }
   }
 
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    print("dgdfg");
+    // validarLiberarProximoNivel("");
+    // liberarProximoNivel();
+    super.dispose();
+  }
+
+  validarLiberarProximoNivel(String nomeBtn) {
+    setState(() {
+      if (widget.nomeColecao == Constantes.fireBaseDocumentoRegiaoCentroOeste) {
+        liberarRegiaoSul = true;
+        if (nomeBtn == Textos.btnProximoNivel) {
+          Navigator.pushReplacementNamed(context, Constantes.rotaTelaRegiaoSul);
+        }
+      } else if (widget.nomeColecao == Constantes.fireBaseDocumentoRegiaoSul) {
+        liberarRegiaoSudeste = true;
+        if (nomeBtn == Textos.btnProximoNivel) {
+          Navigator.pushReplacementNamed(
+              context, Constantes.rotaTelaRegiaoSudeste);
+        }
+      } else if (widget.nomeColecao ==
+          Constantes.fireBaseDocumentoRegiaoSudeste) {
+        liberarRegiaoNorte = true;
+        if (nomeBtn == Textos.btnProximoNivel) {
+          Navigator.pushReplacementNamed(
+              context, Constantes.rotaTelaRegiaoNorte);
+        }
+      } else if (widget.nomeColecao ==
+          Constantes.fireBaseDocumentoRegiaoNorte) {
+        liberarRegiaoNordeste = true;
+        if (nomeBtn == Textos.btnProximoNivel) {
+          Navigator.pushReplacementNamed(
+              context, Constantes.rotaTelaRegiaoNordeste);
+        }
+      } else if (widget.nomeColecao ==
+          Constantes.fireBaseDocumentoRegiaoNordeste) {
+        liberarTodosEstados = true;
+        if (nomeBtn == Textos.btnProximoNivel) {
+          Navigator.pushReplacementNamed(
+              context, Constantes.rotaTelaRegiaoTodosEstados);
+        }
+      }
+    });
+  }
+
   Widget cardOpcoes(
           String nomeImagem, String nomeOpcao, BuildContext context) =>
       SizedBox(
@@ -150,34 +197,7 @@ class _TelaProximoNivelState extends State<TelaProximoNivel> {
                     context, Constantes.rotaTelaRegiaoTodosEstados);
               }
             } else {
-              setState(() {
-                if (widget.nomeColecao ==
-                    Constantes.fireBaseDocumentoRegiaoCentroOeste) {
-                  liberarRegiaoSul = true;
-                  Navigator.pushReplacementNamed(
-                      context, Constantes.rotaTelaRegiaoSul);
-                } else if (widget.nomeColecao ==
-                    Constantes.fireBaseDocumentoRegiaoSul) {
-                  liberarRegiaoSudeste = true;
-                  Navigator.pushReplacementNamed(
-                      context, Constantes.rotaTelaRegiaoSudeste);
-                } else if (widget.nomeColecao ==
-                    Constantes.fireBaseDocumentoRegiaoSudeste) {
-                  liberarRegiaoNorte = true;
-                  Navigator.pushReplacementNamed(
-                      context, Constantes.rotaTelaRegiaoNorte);
-                } else if (widget.nomeColecao ==
-                    Constantes.fireBaseDocumentoRegiaoNorte) {
-                  liberarRegiaoNordeste = true;
-                  Navigator.pushReplacementNamed(
-                      context, Constantes.rotaTelaRegiaoNordeste);
-                } else if (widget.nomeColecao ==
-                    Constantes.fireBaseDocumentoRegiaoNordeste) {
-                  liberarTodosEstados = true;
-                  Navigator.pushReplacementNamed(
-                      context, Constantes.rotaTelaRegiaoTodosEstados);
-                }
-              });
+              validarLiberarProximoNivel(Textos.btnProximoNivel);
               liberarProximoNivel();
             }
           },
@@ -205,13 +225,14 @@ class _TelaProximoNivelState extends State<TelaProximoNivel> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
+        margin: EdgeInsets.symmetric(horizontal: 10),
         width: 400,
         height: 250,
         child: Card(
           color: Colors.white,
-          shape: const RoundedRectangleBorder(
-              side: BorderSide(color: PaletaCores.corAzulMagenta),
+          shape:  RoundedRectangleBorder(
+              side: BorderSide(color: Constantes.corPadraoRegioes),
               borderRadius: BorderRadius.all(Radius.circular(30))),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
