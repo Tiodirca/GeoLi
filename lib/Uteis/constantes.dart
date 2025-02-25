@@ -46,6 +46,8 @@ class Constantes {
   static const resetarAcaoExcluirRegioes = "excluirRegioes";
   static const resetarAcaoExcluirSistemaSolar = "excluirSistemaSolar";
 
+  static const statusTutorialAtivo = "Tutorial Ativo";
+  static const  statusTutorialDesativado = "Tutorial Desativado";
 
   static Color corPadraoRegioes = PaletaCores.corLaranja;
 

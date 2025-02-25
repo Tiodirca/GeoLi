@@ -3,12 +3,11 @@ import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/constantes_estados_gestos.dart';
-import 'package:geoli/Widgets/gestos_widget.dart';
+import 'package:geoli/Widgets/estados/widget_area_gestos_arrastar.dart';
+import 'package:geoli/Widgets/estados/widget_area_tela_regioes.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:geoli/Widgets/tela_carregamento.dart';
-import 'package:geoli/Widgets/estados/widget_area_gestos.dart';
-import 'package:geoli/Widgets/estados/widget_area_tela.dart';
+import 'package:geoli/Widgets/widget_tela_carregamento.dart';
 
 import '../../Uteis/textos.dart';
 
@@ -95,44 +94,6 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
     );
   }
 
-  Widget itemSoltar(Gestos gesto) => Draggable(
-        onDragCompleted: () async {
-          // variavel vai receber o retorno do metodo para poder
-          // verificar se o usuario acertou o gesto no estado correto
-          String retorno = await MetodosAuxiliares.recuperarAcerto();
-          if (retorno == Constantes.msgAcertoGesto) {
-            // caso tenha acertado ele ira remover da
-            // lista de gestos o gesto que foi acertado
-            setState(() {
-              gestos.removeWhere(
-                (element) {
-                  return element.nomeGesto == gesto.nomeGesto;
-                },
-              );
-            });
-            if (gestos.isEmpty) {
-              setState(() {
-                exibirTelaProximoNivel = true;
-              });
-            }
-          }
-        },
-        maxSimultaneousDrags: 1,
-        data: gesto.nomeGesto,
-        feedback: GestosWidget(
-          nomeGestoImagem: gesto.nomeImagem,
-          nomeGesto: gesto.nomeGesto,
-          exibirAcerto: false,
-        ),
-        rootOverlay: true,
-        childWhenDragging: Container(),
-        child: GestosWidget(
-          nomeGestoImagem: gesto.nomeImagem,
-          nomeGesto: gesto.nomeGesto,
-          exibirAcerto: false,
-        ),
-      );
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -157,16 +118,16 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
         body: LayoutBuilder(
           builder: (context, constraints) {
             if (exibirTelaCarregamento) {
-              return TelaCarregamento(corPadrao: Constantes.corPadraoRegioes,);
+              return WidgetTelaCarregamento(corPadrao: Constantes.corPadraoRegioes,);
             } else {
-              return WidgetAreaTela(
+              return WidgetAreaTelaRegioes(
                   nomeColecao: nomeColecao,
                   estadosSorteio: estadosSorteio,
                   exibirTelaProximoNivel: exibirTelaProximoNivel);
             }
           },
         ),
-        bottomNavigationBar: WidgetAreaGestos(
+        bottomNavigationBar: WidgetAreaGestosArrastar(
           nomeColecao: nomeColecao,
           gestos: gestos,
           estadoGestoMap: estadoGestoMap,

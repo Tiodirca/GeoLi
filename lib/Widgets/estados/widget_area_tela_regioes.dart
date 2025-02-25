@@ -3,13 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
-import 'package:geoli/Widgets/estados/tela_proximo_nivel.dart';
+import 'package:geoli/Widgets/estados/widget_area_soltar_estados.dart';
+import 'package:geoli/Widgets/estados/widget_tela_proximo_nivel.dart';
 
 import '../../Uteis/textos.dart';
-import 'area_soltar.dart';
 
-class WidgetAreaTela extends StatefulWidget {
-  const WidgetAreaTela(
+class WidgetAreaTelaRegioes extends StatefulWidget {
+  const WidgetAreaTelaRegioes(
       {super.key,
       required this.estadosSorteio,
       required this.exibirTelaProximoNivel,
@@ -20,10 +20,10 @@ class WidgetAreaTela extends StatefulWidget {
   final List<MapEntry<Estado, Gestos>> estadosSorteio;
 
   @override
-  State<WidgetAreaTela> createState() => _WidgetAreaTelaState();
+  State<WidgetAreaTelaRegioes> createState() => _WidgetAreaTelaRegioesState();
 }
 
-class _WidgetAreaTelaState extends State<WidgetAreaTela> {
+class _WidgetAreaTelaRegioesState extends State<WidgetAreaTelaRegioes> {
   @override
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;
@@ -62,9 +62,8 @@ class _WidgetAreaTelaState extends State<WidgetAreaTela> {
                         element.key.acerto = true;
                       }
                     }
-
                     return Center(
-                        child: AreaSoltar(
+                        child: WidgetAreaSoltarEstados(
                       estado: widget.estadosSorteio.elementAt(index).key,
                       gesto: widget.estadosSorteio.elementAt(index).value,
                     ));
@@ -77,7 +76,7 @@ class _WidgetAreaTelaState extends State<WidgetAreaTela> {
               visible: widget.exibirTelaProximoNivel,
               child: Positioned(
                 child: Center(
-                    child: TelaProximoNivel(
+                    child: WidgetTelaProximoNivel(
                   nomeColecao: widget.nomeColecao,
                   estados: widget.estadosSorteio,
                 )),

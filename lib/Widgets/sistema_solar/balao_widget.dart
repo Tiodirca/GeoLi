@@ -63,7 +63,8 @@ class _BalaoWidgetState extends State<BalaoWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
+        Container(
+          color: Colors.green,
             width: 80,
             height: 170,
             child: Stack(

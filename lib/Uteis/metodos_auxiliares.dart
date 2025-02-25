@@ -12,6 +12,7 @@ class MetodosAuxiliares {
   static String acertou = "";
   static String nomeGestoPlaneta = "";
   static int pontuacaoAtual = 0;
+  static String status = "";
 
   static Future<String> confirmarAcerto(String acerto) async {
     acertou = acerto;
@@ -20,6 +21,15 @@ class MetodosAuxiliares {
 
   static Future<String> recuperarAcerto() async {
     return acertou;
+  }
+
+  static Future<String> passarStatusTutorial(String statusAtual) async {
+    status = statusAtual;
+    return status;
+  }
+
+  static Future<String> recuperarStatusTutorial() async {
+    return status;
   }
 
   static Future<int> passarPontuacaoAtual(int pontuacao) async {
@@ -39,6 +49,7 @@ class MetodosAuxiliares {
   static Future<String> recuperarGestoSorteado() async {
     return nomeGestoPlaneta;
   }
+
 
   // metodo para remover o gesto ja acertado da lista
   // de gestos quando voltar a jogar
@@ -73,7 +84,7 @@ class MetodosAuxiliares {
         ),
         border: Border.all(color: PaletaCores.corVerde, width: 1),
         animationDuration: const Duration(seconds: 1),
-        toastDuration: const Duration(seconds: 2),
+        toastDuration: const Duration(seconds: 1),
         displayCloseButton: false,
         animation: AnimationType.fromTop,
         description: Text(msg),
@@ -92,7 +103,7 @@ class MetodosAuxiliares {
           color: PaletaCores.corVermelha,
         ),
         animationDuration: const Duration(seconds: 1),
-        toastDuration: const Duration(seconds: 2),
+        toastDuration: const Duration(seconds: 1),
         description: Text(msg),
       ).show(context);
     }

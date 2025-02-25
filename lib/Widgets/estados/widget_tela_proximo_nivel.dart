@@ -8,18 +8,18 @@ import 'package:geoli/Uteis/constantes.dart';
 import '../../Uteis/paleta_cores.dart';
 import '../../Uteis/textos.dart';
 
-class TelaProximoNivel extends StatefulWidget {
-  const TelaProximoNivel(
+class WidgetTelaProximoNivel extends StatefulWidget {
+  const WidgetTelaProximoNivel(
       {super.key, required this.estados, required this.nomeColecao});
 
   final List<MapEntry<Estado, Gestos>> estados;
   final String nomeColecao;
 
   @override
-  State<TelaProximoNivel> createState() => _TelaProximoNivelState();
+  State<WidgetTelaProximoNivel> createState() => _WidgetTelaProximoNivelState();
 }
 
-class _TelaProximoNivelState extends State<TelaProximoNivel> {
+class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
   Map<String, dynamic> dados = {};
   bool exibirBtnProximoNivel = true;
   bool liberarRegiaoSul = false;
@@ -111,7 +111,7 @@ class _TelaProximoNivelState extends State<TelaProximoNivel> {
   @override
   void dispose() {
     // TODO: implement dispose
-    print("dgdfg");
+   // print("dgdfg");
     // validarLiberarProximoNivel("");
     // liberarProximoNivel();
     super.dispose();

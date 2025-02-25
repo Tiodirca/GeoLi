@@ -1,6 +1,7 @@
 class CaminhosImagens {
   static const btnJogarNovamenteGesto = "assets/imagens/gesto_de_novo";
   static const btnProximoNivelGesto = "assets/imagens/gesto_continuar";
+  static const iconeClick= "assets/imagens/icon_click";
 
   static const btnGestoEstadosBrasileiroImagem =
       "assets/imagens/estados/gestos_estados/gesto_estados";
@@ -48,6 +49,8 @@ class CaminhosImagens {
       "assets/imagens/sistema_solar/planetas/planeta_urano";
   static const planetaNetunoImagem =
       "assets/imagens/sistema_solar/planetas/planeta_netuno";
+  static const planetaBuracoNegro =
+      "assets/imagens/sistema_solar/planetas/buraco_negro";
 
   // EMBLEMAS ESTADOS BRASILEIROS
   static const emblemaEstadosAventureiroum =

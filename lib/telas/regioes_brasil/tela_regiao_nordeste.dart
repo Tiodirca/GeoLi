@@ -6,9 +6,9 @@ import 'package:geoli/Uteis/constantes_estados_gestos.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoli/Uteis/textos.dart';
-import 'package:geoli/Widgets/tela_carregamento.dart';
-import 'package:geoli/Widgets/estados/widget_area_gestos.dart';
-import 'package:geoli/Widgets/estados/widget_area_tela.dart';
+import 'package:geoli/Widgets/estados/widget_area_gestos_arrastar.dart';
+import 'package:geoli/Widgets/estados/widget_area_tela_regioes.dart';
+import 'package:geoli/Widgets/widget_tela_carregamento.dart';
 
 class TelaRegiaoNordeste extends StatefulWidget {
   const TelaRegiaoNordeste({super.key});
@@ -152,16 +152,16 @@ class _TelaRegiaoNordesteState extends State<TelaRegiaoNordeste> {
         body: LayoutBuilder(
           builder: (context, constraints) {
             if (exibirTelaCarregamento) {
-              return TelaCarregamento(corPadrao: Constantes.corPadraoRegioes,);
+              return WidgetTelaCarregamento(corPadrao: Constantes.corPadraoRegioes,);
             } else {
-              return WidgetAreaTela(
+              return WidgetAreaTelaRegioes(
                   nomeColecao: nomeColecao,
                   estadosSorteio: estadosSorteio,
                   exibirTelaProximoNivel: exibirTelaProximoNivel);
             }
           },
         ),
-        bottomNavigationBar: WidgetAreaGestos(
+        bottomNavigationBar: WidgetAreaGestosArrastar(
           nomeColecao: nomeColecao,
           gestos: gestos,
           estadoGestoMap: estadoGestoMap,

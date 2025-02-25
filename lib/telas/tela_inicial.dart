@@ -6,9 +6,9 @@ import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
-import 'package:geoli/Widgets/area_resetar_dados.dart';
-import 'package:geoli/Widgets/exibir_emblemas.dart';
-import 'package:geoli/Widgets/tela_carregamento.dart';
+import 'package:geoli/Widgets/widget_exibir_emblemas.dart';
+import 'package:geoli/Widgets/widget_tela_carregamento.dart';
+import 'package:geoli/Widgets/widget_tela_resetar_dados.dart';
 
 class TelaInicial extends StatefulWidget {
   const TelaInicial({super.key});
@@ -176,7 +176,7 @@ class _TelaInicialState extends State<TelaInicial>
     return LayoutBuilder(
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {
-          return TelaCarregamento(corPadrao: corPadrao,);
+          return WidgetTelaCarregamento(corPadrao: corPadrao,);
         } else {
           return Scaffold(
               appBar: AppBar(
@@ -244,14 +244,14 @@ class _TelaInicialState extends State<TelaInicial>
                     ),
                     Visibility(
                         visible: exibirTelaResetarJogo,
-                        child: AreaResetarDados(
+                        child: WidgetTelaResetarDados(
                           corCard: corPadrao,
                           tipoAcao: Constantes.resetarAcaoExcluirTudo,
                         ))
                   ],
                 ),
               ),
-              bottomSheet: ExibirEmblemas(
+              bottomSheet: WidgetExibirEmblemas(
                   pontuacaoAtual: pontuacaoGeral,
                   listaEmblemas: emblemasGeral,
                   corBordas: corPadrao));

@@ -5,16 +5,16 @@ import 'package:geoli/Uteis/constantes.dart';
 import '../../Uteis/paleta_cores.dart';
 import '../../Uteis/textos.dart';
 
-class TelaFimJogo extends StatefulWidget {
-  const TelaFimJogo({
+class WidgetTelaFimJogo extends StatefulWidget {
+  const WidgetTelaFimJogo({
     super.key,
   });
 
   @override
-  State<TelaFimJogo> createState() => _TelaFimJogoState();
+  State<WidgetTelaFimJogo> createState() => _WidgetTelaFimJogoState();
 }
 
-class _TelaFimJogoState extends State<TelaFimJogo> {
+class _WidgetTelaFimJogoState extends State<WidgetTelaFimJogo> {
   @override
   void initState() {
     // TODO: implement initState

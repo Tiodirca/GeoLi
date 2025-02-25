@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/sistema_solar/balao_widget.dart';
-import 'package:geoli/Widgets/sistema_solar/tela_fim_jogo.dart';
+import 'package:geoli/Widgets/sistema_solar/widget_tela_fim_jogo.dart';
 import 'package:geoli/modelos/planeta.dart';
 
 //ignore: must_be_immutable
-class AreaAnimacaoBaloes extends StatefulWidget {
-  AreaAnimacaoBaloes(
+class WidgetAreaAnimacaoBaloes extends StatefulWidget {
+  WidgetAreaAnimacaoBaloes(
       {super.key,
       required this.planetas,
       required this.biggest,
@@ -24,10 +24,11 @@ class AreaAnimacaoBaloes extends StatefulWidget {
   String statusAnimacao;
 
   @override
-  State<AreaAnimacaoBaloes> createState() => _AreaAnimacaoBaloesState();
+  State<WidgetAreaAnimacaoBaloes> createState() =>
+      _WidgetAreaAnimacaoBaloesState();
 }
 
-class _AreaAnimacaoBaloesState extends State<AreaAnimacaoBaloes>
+class _WidgetAreaAnimacaoBaloesState extends State<WidgetAreaAnimacaoBaloes>
     with TickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(vsync: this);
   late final AnimationController _controller2 =
@@ -303,11 +304,7 @@ class _AreaAnimacaoBaloesState extends State<AreaAnimacaoBaloes>
           Visibility(
             visible: Platform.isAndroid || Platform.isIOS ? true : false,
             child: baloes(
-                alturaTela,
-                widget.biggest,250,
-                _controller14,
-                6,
-                "14s"),
+                alturaTela, widget.biggest, 250, _controller14, 6, "14s"),
           ),
           baloes(
               alturaTela,
@@ -345,7 +342,8 @@ class _AreaAnimacaoBaloesState extends State<AreaAnimacaoBaloes>
           ),
           Positioned(
               child: Center(
-            child: Visibility(visible: exibirTelaFimJogo, child: TelaFimJogo()),
+            child: Visibility(
+                visible: exibirTelaFimJogo, child: WidgetTelaFimJogo()),
           )),
           Positioned(
             child: Center(

@@ -6,9 +6,9 @@ import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/textos.dart';
-import 'package:geoli/Widgets/area_resetar_dados.dart';
-import 'package:geoli/Widgets/exibir_emblemas.dart';
-import 'package:geoli/Widgets/tela_carregamento.dart';
+import 'package:geoli/Widgets/widget_exibir_emblemas.dart';
+import 'package:geoli/Widgets/widget_tela_carregamento.dart';
+import 'package:geoli/Widgets/widget_tela_resetar_dados.dart';
 
 class TelaInicialRegioes extends StatefulWidget {
   const TelaInicialRegioes({super.key});
@@ -130,6 +130,7 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
         querySnapshot.data()!.forEach((key, value) {
           setState(() {
             pontos = value;
+            //Passando pontuacao para a tela
             MetodosAuxiliares.passarPontuacaoAtual(pontos);
           });
         });
@@ -198,7 +199,7 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
     return LayoutBuilder(
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {
-          return TelaCarregamento(
+          return WidgetTelaCarregamento(
             corPadrao: Constantes.corPadraoRegioes,
           );
         } else {
@@ -207,13 +208,13 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
                 backgroundColor: Constantes.corPadraoRegioes,
                 title: Text(
                   Textos.tituloTelaRegioes,
-                  style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
                 ),
                 leading: IconButton(
                     color: Colors.white,
                     //setando tamanho do icone
                     iconSize: 30,
-
                     onPressed: () {
                       Navigator.pushReplacementNamed(
                           context, Constantes.rotaTelaInicial);
@@ -247,66 +248,61 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
                 ],
               ),
               body: Container(
-                  color: Colors.white,
-                  width: larguraTela,
-                  height: alturaTela,
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Stack(
-                      alignment: Alignment.center,
+                color: Colors.white,
+                width: larguraTela,
+                height: alturaTela,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Column(
                       children: [
-                        Column(
+                        Container(
+                            margin: EdgeInsets.only(bottom: 10),
+                            width: larguraTela,
+                            child: Text(
+                              Textos.descricaoTelaRegioes,
+                              style: TextStyle(fontSize: 18),
+                              textAlign: TextAlign.center,
+                            )),
+                        Wrap(
                           children: [
-                            Container(
-                                margin: EdgeInsets.only(bottom: 10),
-                                width: larguraTela,
-                                child: Text(
-                                  Textos.descricaoTelaRegioes,
-                                  style: TextStyle(fontSize: 18),
-                                  textAlign: TextAlign.center,
-                                )),
-                            Wrap(
-                              children: [
-                                cartaoRegiao(regiaoCentroOeste.caminhoImagem,
-                                    regiaoCentroOeste.nome),
-                                Visibility(
-                                    visible: regiaoSul.acerto,
-                                    child: cartaoRegiao(regiaoSul.caminhoImagem,
-                                        regiaoSul.nome)),
-                                Visibility(
-                                    visible: regiaoSudeste.acerto,
-                                    child: cartaoRegiao(
-                                        regiaoSudeste.caminhoImagem,
-                                        regiaoSudeste.nome)),
-                                Visibility(
-                                    visible: regiaoNorte.acerto,
-                                    child: cartaoRegiao(
-                                        regiaoNorte.caminhoImagem,
-                                        regiaoNorte.nome)),
-                                Visibility(
-                                    visible: regiaoNordeste.acerto,
-                                    child: cartaoRegiao(
-                                        regiaoNordeste.caminhoImagem,
-                                        regiaoNordeste.nome)),
-                                Visibility(
-                                    visible: todasRegioes.acerto,
-                                    child: cartaoRegiao(
-                                        todasRegioes.caminhoImagem,
-                                        todasRegioes.nome)),
-                              ],
-                            ),
+                            cartaoRegiao(regiaoCentroOeste.caminhoImagem,
+                                regiaoCentroOeste.nome),
+                            Visibility(
+                                visible: regiaoSul.acerto,
+                                child: cartaoRegiao(
+                                    regiaoSul.caminhoImagem, regiaoSul.nome)),
+                            Visibility(
+                                visible: regiaoSudeste.acerto,
+                                child: cartaoRegiao(regiaoSudeste.caminhoImagem,
+                                    regiaoSudeste.nome)),
+                            Visibility(
+                                visible: regiaoNorte.acerto,
+                                child: cartaoRegiao(regiaoNorte.caminhoImagem,
+                                    regiaoNorte.nome)),
+                            Visibility(
+                                visible: regiaoNordeste.acerto,
+                                child: cartaoRegiao(
+                                    regiaoNordeste.caminhoImagem,
+                                    regiaoNordeste.nome)),
+                            Visibility(
+                                visible: todasRegioes.acerto,
+                                child: cartaoRegiao(todasRegioes.caminhoImagem,
+                                    todasRegioes.nome)),
                           ],
                         ),
-                        Visibility(
-                            visible: exibirTelaResetarJogo,
-                            child: AreaResetarDados(
-                              corCard: Constantes.corPadraoRegioes,
-                              tipoAcao: Constantes.resetarAcaoExcluirRegioes,
-                            ))
                       ],
                     ),
-                  )),
-              bottomSheet: ExibirEmblemas(
+                    Visibility(
+                        visible: exibirTelaResetarJogo,
+                        child: WidgetTelaResetarDados(
+                          corCard: Constantes.corPadraoRegioes,
+                          tipoAcao: Constantes.resetarAcaoExcluirRegioes,
+                        ))
+                  ],
+                ),
+              ),
+              bottomSheet: WidgetExibirEmblemas(
                 pontuacaoAtual: pontos,
                 corBordas: Constantes.corPadraoRegioes,
                 listaEmblemas: emblemasExibir,

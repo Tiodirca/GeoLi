@@ -1,31 +1,71 @@
 import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
+import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/gestos_widget.dart';
 
-class AreaSoltar extends StatefulWidget {
-   const AreaSoltar({super.key, required this.estado, required this.gesto});
+class WidgetAreaSoltarEstados extends StatefulWidget {
+  const WidgetAreaSoltarEstados(
+      {super.key, required this.estado, required this.gesto});
 
   final Estado estado;
   final Gestos gesto;
 
   @override
-  State<AreaSoltar> createState() => _AreaSoltarState();
+  State<WidgetAreaSoltarEstados> createState() =>
+      _WidgetAreaSoltarEstadosState();
 }
 
-class _AreaSoltarState extends State<AreaSoltar> {
+class _WidgetAreaSoltarEstadosState extends State<WidgetAreaSoltarEstados>
+    with SingleTickerProviderStateMixin {
+  late Estado estado = widget.estado;
+  late String status;
+
+  late final AnimationController _controllerFade =
+      AnimationController(vsync: this);
+  late final Animation<double> _fadeAnimation =
+      Tween<double>(begin: 1, end: 0.0).animate(_controllerFade);
+
+  bool exibirIndicadorTutorial = false;
+
   @override
   void initState() {
     super.initState();
+    validarTutorial();
+  }
+
+  validarTutorial() async {
+    status = await MetodosAuxiliares.recuperarStatusTutorial();
+    if (status == Constantes.statusTutorialAtivo) {
+      setState(() {
+        exibirIndicadorTutorial = true;
+      });
+      _controllerFade.repeat(count: 1000, period: Duration(milliseconds: 800));
+    }
+  }
+
+  cancelarAcertoTutorial() async {
+    if (status == Constantes.statusTutorialAtivo) {
+      print("sfdssdf");
+      estado.acerto = false;
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _controllerFade.stop(canceled: true);
+    cancelarAcertoTutorial();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    Estado estado = widget.estado;
+    //teste();
     return SizedBox(
         width: 170,
         height: 170,
@@ -41,10 +81,30 @@ class _AreaSoltarState extends State<AreaSoltar> {
                 alignment: Alignment.center,
                 children: [
                   Image(
-
                     height: 140,
                     width: 140,
                     image: AssetImage('${estado.caminhoImagem}.png'),
+                  ),
+                  Positioned(
+                    right: 10,
+                    bottom: 0,
+                    child: Visibility(
+                      visible: estado.nome == Textos.nomeRegiaoCentroMS
+                          ? exibirIndicadorTutorial
+                          : false,
+                      child: FadeTransition(
+                          opacity: _fadeAnimation,
+                          child: Container(
+                            transform: Matrix4.rotationZ(12 // here
+                                ),
+                            child: Image(
+                              width: 50,
+                              height: 50,
+                              image: AssetImage(
+                                  '${CaminhosImagens.iconeClick}.png'),
+                            ),
+                          )),
+                    ),
                   ),
                   Visibility(
                       visible: estado.acerto,
@@ -65,14 +125,15 @@ class _AreaSoltarState extends State<AreaSoltar> {
               if (data.data == estado.nome) {
                 setState(() {
                   estado.acerto = true;
+                  exibirIndicadorTutorial = false;
                 });
                 // chamando metodo para passar confirmacao do acerto
                 MetodosAuxiliares.confirmarAcerto(Constantes.msgAcertoGesto);
                 MetodosAuxiliares.exibirMensagens(
                     Textos.msgAcertou, Constantes.msgAcertoGesto, context);
               } else {
-                MetodosAuxiliares.exibirMensagens(Textos.msgErrou,
-                    Constantes.msgErroAcertoGesto, context);
+                MetodosAuxiliares.exibirMensagens(
+                    Textos.msgErrou, Constantes.msgErroAcertoGesto, context);
                 // chamando metodo para passar confirmacao do erro
                 MetodosAuxiliares.confirmarAcerto(
                     Constantes.msgErroAcertoGesto);

@@ -2,6 +2,8 @@ class Textos {
   static String nomeApp = "Geo Li";
   static String txtTelaCarregamento = "Aguarde Carregando";
 
+  static String btnComecarJogo = "Começar Jogo";
+
   static String btnJogarNovamente = "Jogar Novamente";
   static String btnProximoNivel = "Próximo Nivel";
   static String btnTodosEstados = "Todos os estados";
@@ -9,15 +11,17 @@ class Textos {
   static String btnSistemaSolar = "Sistema Solar";
   static String btnEmblemas = "Emblemas";
 
+  static String tutorialRegioesClickArraste =
+      "Clique/Aperte em cima do gesto e"
+      " arraste-o sem soltar até a area indicada";
+
   //TELA REINICIAR DADOS
   static String tituloReiniciarDados = "Reiniciar dados";
   static String descricaoReiniciarDados =
       "Ao clicar no botão você irá APAGAR/REINICIAR todo o progresso feito";
   static String btnExcluir = "Excluir Informações";
-
-  static String btnDificuldadeFacil = "Fácil";
-  static String btnDificuldadeMedio = "Médio";
-  static String btnDificuldadeDificil = "Dificil";
+  static String descricaoAlertExcluir =
+      "Tem certeza que deseja EXCLUIR/REINICIAR as informações ?";
 
   //TELA SISTEMA SOLAR
   static String telaSistemaSolarTitulo = "Sistema Solar";
@@ -29,8 +33,13 @@ class Textos {
   static String telaSistemaSolarPausa = "Pausado";
   static String telaSistemaSolarFimJogoDescricao = "Selecione uma opção";
 
-  static String descricaoTelaInicialSistemaSolar =
+  static String descriacaoSistemaSolar = "Clique no botão para começar a jogar";
+  static String descricaoSistemaSolarDificuldade =
       "Selecione uma dificuldade para começar a jogar";
+
+  static String btnDificuldadeFacil = "Fácil";
+  static String btnDificuldadeMedio = "Médio";
+  static String btnDificuldadeDificil = "Dificil";
 
   //NOME PLANETAS
   static String nomePlanetaMercurio = "Mercúrio";
@@ -41,6 +50,7 @@ class Textos {
   static String nomePlanetaSaturno = "Saturno";
   static String nomePlanetaUrano = "Urano";
   static String nomePlanetaNetuno = "Netuno";
+  static String nomePlanetaBuracoNegro = "Buraco Negro";
 
   //EMBLEMAS TELA INICIAL ESTADOS
   static String emblemaEstadosAventureiroum = "Aventureiro Um";

@@ -11,11 +11,12 @@ import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
-import 'package:geoli/Widgets/area_resetar_dados.dart';
-import 'package:geoli/Widgets/exibir_emblemas.dart';
-import 'package:geoli/Widgets/sistema_solar/area_animacao_baloes.dart';
 import 'package:geoli/Widgets/gestos_widget.dart';
-import 'package:geoli/Widgets/tela_carregamento.dart';
+import 'package:geoli/Widgets/sistema_solar/balao_widget.dart';
+import 'package:geoli/Widgets/sistema_solar/widget_area_animacao_baloes.dart';
+import 'package:geoli/Widgets/widget_exibir_emblemas.dart';
+import 'package:geoli/Widgets/widget_tela_carregamento.dart';
+import 'package:geoli/Widgets/widget_tela_resetar_dados.dart';
 import 'package:geoli/modelos/planeta.dart';
 
 class TelaSistemaSolar extends StatefulWidget {
@@ -29,6 +30,8 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
     with TickerProviderStateMixin {
   bool exibirTelaCarregamento = true;
   bool exibirJogo = false;
+  bool exibirBtnDificuldade = false;
+  bool exibirTutorial = false;
   List<Gestos> gestoPlanetasSistemaSolar = [];
   List<Planeta> planetas = [];
   late Gestos gestoSorteado;
@@ -42,12 +45,15 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   List<Emblemas> emblemasExibir = [];
   bool exibirTelaResetarJogo = false;
   Color corPadrao = PaletaCores.corAzul;
+  late final AnimationController _controllerFade =
+      AnimationController(vsync: this);
+  late final Animation<double> _fadeAnimation =
+      Tween<double>(begin: 1, end: 0.0).animate(_controllerFade);
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
     planetas.addAll([
       Planeta(
           nomePlaneta: Textos.nomePlanetaMercurio,
@@ -146,6 +152,14 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   }
 
   void comecarTempo() {
+    Future.delayed(Duration(seconds: 4), () {
+      // setState(() {
+      //   planetas.add(Planeta(
+      //       nomePlaneta: Textos.nomePlanetaBuracoNegro,
+      //       caminhoImagem: CaminhosImagens.planetaBuracoNegro));
+      // });
+      // planetas.shuffle();
+    });
     const segundo = Duration(seconds: 1);
     iniciarTempo = Timer.periodic(
       segundo,
@@ -187,7 +201,6 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
             setState(() {
               pontuacaoTotal = value;
               exibirTelaCarregamento = false;
-              MetodosAuxiliares.passarPontuacaoAtual(pontuacaoTotal);
             });
           },
         );
@@ -243,35 +256,43 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
     MetodosAuxiliares.confirmarAcerto("");
   }
 
-  Widget btnDificuldade(String nomeDificuldade) => Container(
+  Widget btnAcao(String nomeBtn) => Container(
       margin: EdgeInsets.all(10),
       width: 100,
       height: 50,
       child: FloatingActionButton(
           elevation: 0,
-          heroTag: nomeDificuldade,
+          heroTag: nomeBtn,
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
+            borderRadius: BorderRadius.all(Radius.circular(30)),
             side: BorderSide(color: corPadrao),
           ),
           onPressed: () {
             setState(() {
-              if (nomeDificuldade == Textos.btnDificuldadeFacil) {
-                tempo = Constantes.sistemaSolarTempoFacil;
-              } else if (nomeDificuldade == Textos.btnDificuldadeMedio) {
-                tamanhoVidas = 2;
-                tempo = Constantes.sistemaSolarTempoMedio;
-              } else if (nomeDificuldade == Textos.btnDificuldadeDificil) {
-                tamanhoVidas = 1;
-                tempo = Constantes.sistemaSolarTempoDificl;
+              if (nomeBtn == Textos.btnComecarJogo) {
+                exibirBtnDificuldade = true;
+                if (pontuacaoTotal == 0) {
+                  exibirTutorial = true;
+                }
+              } else {
+                if (nomeBtn == Textos.btnDificuldadeFacil) {
+                  tempo = Constantes.sistemaSolarTempoFacil;
+                } else if (nomeBtn == Textos.btnDificuldadeMedio) {
+                  tamanhoVidas = 2;
+                  tempo = Constantes.sistemaSolarTempoMedio;
+                } else if (nomeBtn == Textos.btnDificuldadeDificil) {
+                  tamanhoVidas = 1;
+                  tempo = Constantes.sistemaSolarTempoDificl;
+                }
+                comecarTempo();
+                exibirJogo = true;
+                iniciarAnimacao = Constantes.statusAnimacaoIniciar;
+                exibirBtnDificuldade = false;
               }
-              comecarTempo();
-              exibirJogo = true;
-              iniciarAnimacao = Constantes.statusAnimacaoIniciar;
             });
           },
-          child: Text(nomeDificuldade)));
+          child: Text(nomeBtn)));
 
   @override
   Widget build(BuildContext context) {
@@ -282,7 +303,9 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
     return LayoutBuilder(
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {
-          return TelaCarregamento(corPadrao: corPadrao,);
+          return WidgetTelaCarregamento(
+            corPadrao: corPadrao,
+          );
         } else {
           return Scaffold(
               appBar: AppBar(
@@ -454,7 +477,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                     // chamando metodo para ficar
                     // verificando a todo o momento se o usuario acertou o planeta
                     recuperarAcertoPlaneta();
-                    return AreaAnimacaoBaloes(
+                    return WidgetAreaAnimacaoBaloes(
                       biggest: biggest,
                       planetas: planetas,
                       statusAnimacao: iniciarAnimacao,
@@ -462,55 +485,116 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                       tempo: tempo,
                     );
                   } else {
-                    return Container(
-                      color: Colors.white,
-                      width: larguraTela,
-                      height: alturaTela,
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Column(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.all(10),
-                                child: Text(
-                                  Textos.descricaoTelaInicialSistemaSolar,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 18),
-                                ),
+                    if (exibirTutorial) {
+                      return Container(
+                        width: larguraTela,
+                        height: alturaTela,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            FadeTransition(
+                                opacity: _fadeAnimation,
+                                child: Container(
+                                  color: Colors.green,
+                                  transform: Matrix4.rotationZ(59.7 // here
+                                      ),
+                                  child: Image(
+                                    width: 50,
+                                    height: 50,
+                                    image: AssetImage(
+                                        '${CaminhosImagens.iconeClick}.png'),
+                                  ),
+                                )),
+                            BalaoWidget(
+                                planeta: Planeta(
+                                    nomePlaneta: Textos.nomePlanetaTerra,
+                                    caminhoImagem:
+                                        CaminhosImagens.planetaTerraImagem),
+                                desativarBotao: false)
+                          ],
+                        ),
+                      );
+                    } else {
+                      return Container(
+                        color: Colors.white,
+                        width: larguraTela,
+                        height: alturaTela,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Visibility(
+                              visible: !exibirBtnDificuldade,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.all(10),
+                                    child: Text(
+                                      Textos.descriacaoSistemaSolar,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 18),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 200,
+                                    child: Wrap(
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.center,
+                                      alignment: WrapAlignment.center,
+                                      children: [
+                                        btnAcao(Textos.btnComecarJogo),
+                                      ],
+                                    ),
+                                  )
+                                ],
                               ),
-                              SizedBox(
-                                height: 400,
-                                child: Wrap(
-                                  crossAxisAlignment: WrapCrossAlignment.center,
-                                  alignment: WrapAlignment.center,
-                                  children: [
-                                    btnDificuldade(Textos.btnDificuldadeFacil),
-                                    btnDificuldade(Textos.btnDificuldadeMedio),
-                                    btnDificuldade(
-                                        Textos.btnDificuldadeDificil),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                          Visibility(
-                              visible: exibirTelaResetarJogo,
-                              child: AreaResetarDados(
-                                corCard: corPadrao,
-                                tipoAcao:
-                                    Constantes.resetarAcaoExcluirSistemaSolar,
-                              ))
-                        ],
-                      ),
-                    );
+                            ),
+                            Visibility(
+                              visible: exibirBtnDificuldade,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.all(10),
+                                    child: Text(
+                                      Textos.descricaoSistemaSolarDificuldade,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Colors.black, fontSize: 18),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 400,
+                                    child: Wrap(
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.center,
+                                      alignment: WrapAlignment.center,
+                                      children: [
+                                        btnAcao(Textos.btnDificuldadeFacil),
+                                        btnAcao(Textos.btnDificuldadeMedio),
+                                        btnAcao(Textos.btnDificuldadeDificil),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Visibility(
+                                visible: exibirTelaResetarJogo,
+                                child: WidgetTelaResetarDados(
+                                  corCard: corPadrao,
+                                  tipoAcao:
+                                      Constantes.resetarAcaoExcluirSistemaSolar,
+                                ))
+                          ],
+                        ),
+                      );
+                    }
                   }
                 },
               ),
               bottomSheet: LayoutBuilder(
                 builder: (context, constraints) {
-                  if (exibirJogo) {
+                  if (exibirJogo || exibirTutorial) {
                     return Container(
                       color: Colors.transparent,
                       width: Platform.isAndroid || Platform.isIOS
@@ -548,7 +632,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                       ),
                     );
                   } else {
-                    return ExibirEmblemas(
+                    return WidgetExibirEmblemas(
                         pontuacaoAtual: pontuacaoTotal,
                         corBordas: corPadrao,
                         listaEmblemas: emblemasExibir);

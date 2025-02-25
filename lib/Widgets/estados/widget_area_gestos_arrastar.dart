@@ -2,14 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
+import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Widgets/gestos_widget.dart';
+import 'package:geoli/Widgets/widget_msg_tutoriais.dart';
 
 import '../../Uteis/textos.dart';
 
-class WidgetAreaGestos extends StatefulWidget {
-  WidgetAreaGestos({
+class WidgetAreaGestosArrastar extends StatefulWidget {
+  WidgetAreaGestosArrastar({
     super.key,
     required this.estadoGestoMap,
     required this.gestos,
@@ -23,18 +25,44 @@ class WidgetAreaGestos extends StatefulWidget {
   Map<Estado, Gestos> estadoGestoMap;
 
   @override
-  State<WidgetAreaGestos> createState() => _WidgetAreaGestosState();
+  State<WidgetAreaGestosArrastar> createState() => _WidgetAreaGestosArrastarState();
 }
 
-class _WidgetAreaGestosState extends State<WidgetAreaGestos> {
+class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
+    with SingleTickerProviderStateMixin {
   String nomeRota = "";
   int ponto = 0;
+  bool exibirMsgTutorial = false;
+
+  late final AnimationController _controllerFade =
+      AnimationController(vsync: this);
+  late final Animation<double> _fadeAnimation =
+      Tween<double>(begin: 1, end: 0.0).animate(_controllerFade);
+  late String status;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     recuperarPontuacao();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _controllerFade.stop(canceled: true);
+    super.dispose();
+  }
+
+  verificarStatusTutorial() async {
+    status = await MetodosAuxiliares.recuperarStatusTutorial();
+    print(status);
+    if (status == Constantes.statusTutorialAtivo) {
+      _controllerFade.repeat(count: 1000, period: Duration(milliseconds: 800));
+      setState(() {
+        exibirMsgTutorial = true;
+      });
+    }
   }
 
   // metodo para recuperar a pontuacao
@@ -52,6 +80,8 @@ class _WidgetAreaGestosState extends State<WidgetAreaGestos> {
           (key, value) {
             setState(() {
               ponto = value;
+              verificarStatusTutorial();
+              validarRegiao(widget.nomeColecao);
             });
           },
         );
@@ -77,7 +107,6 @@ class _WidgetAreaGestosState extends State<WidgetAreaGestos> {
   // metodo para fazer atualizacao no banco de dado
   // toda vez que o usuario acertar o estado correto
   atualizarDadosBanco() async {
-    validarRegiao(widget.nomeColecao);
     Map<String, dynamic> dados = {};
     widget.estadoGestoMap.forEach(
       (key, value) {
@@ -125,14 +154,19 @@ class _WidgetAreaGestosState extends State<WidgetAreaGestos> {
             // caso tenha acertado ele ira remover da
             // lista de gestos o gesto que foi acertado
             setState(() {
+              if (status != Constantes.statusTutorialAtivo) {
+                atualizarDadosBanco();
+              }
+              atualizarPontuacao();
+              MetodosAuxiliares.passarStatusTutorial("");
+              MetodosAuxiliares.passarPontuacaoAtual(ponto);
               widget.gestos.removeWhere(
                 (element) {
                   return element.nomeGesto == gesto.nomeGesto;
                 },
               );
             });
-            atualizarDadosBanco();
-            atualizarPontuacao();
+
             if (widget.gestos.isEmpty) {
               Navigator.pushReplacementNamed(context, nomeRota);
             }
@@ -146,6 +180,20 @@ class _WidgetAreaGestosState extends State<WidgetAreaGestos> {
           exibirAcerto: false,
         ),
         rootOverlay: true,
+        onDragStarted: () {
+          if (status == Constantes.statusTutorialAtivo) {
+            setState(() {
+              exibirMsgTutorial = false;
+            });
+          }
+        },
+        onDraggableCanceled: (velocity, offset) {
+          if (status == Constantes.statusTutorialAtivo) {
+            setState(() {
+              exibirMsgTutorial = true;
+            });
+          }
+        },
         childWhenDragging: Container(),
         child: GestosWidget(
           nomeGestoImagem: gesto.nomeImagem,
@@ -160,34 +208,63 @@ class _WidgetAreaGestosState extends State<WidgetAreaGestos> {
     return Visibility(
       visible: !widget.exibirTelaCarregamento,
       child: Container(
-        color: Colors.white,
+          color: Colors.white,
           height: 160,
           child: Card(
               color: Colors.white,
               shape: RoundedRectangleBorder(
                   side: BorderSide(color: Constantes.corPadraoRegioes),
                   borderRadius: const BorderRadius.all(Radius.circular(10))),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
+              child: Stack(
                 children: [
-                  Text(
-                    Textos.descricaoAreaGestos,
-                    textAlign: TextAlign.center,
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        Textos.descricaoAreaGestos,
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(
+                        width: larguraTela,
+                        height: 120,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: widget.gestos.length,
+                          itemBuilder: (context, index) {
+                            return itemSoltar(
+                              widget.gestos.elementAt(index),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    width: larguraTela,
-                    height: 120,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: widget.gestos.length,
-                      itemBuilder: (context, index) {
-                        return itemSoltar(
-                          widget.gestos.elementAt(index),
-                        );
-                      },
-                    ),
-                  ),
+                  Visibility(
+                      visible: exibirMsgTutorial,
+                      child: Container(
+                          margin: EdgeInsets.only(left: 90),
+                          height: 160,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              FadeTransition(
+                                  opacity: _fadeAnimation,
+                                  child: Container(
+                                    transform: Matrix4.rotationZ(12 // here
+                                        ),
+                                    child: Image(
+                                      width: 50,
+                                      height: 50,
+                                      image: AssetImage(
+                                          '${CaminhosImagens.iconeClick}.png'),
+                                    ),
+                                  )),
+                              WidgetMsgTutoriais(
+                                  corBorda: Constantes.corPadraoRegioes,
+                                  mensagem: Textos.tutorialRegioesClickArraste)
+                            ],
+                          )))
                 ],
               ))),
     );

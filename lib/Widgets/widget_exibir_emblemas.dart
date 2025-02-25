@@ -7,8 +7,8 @@ import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/emblema_widget.dart';
 
-class ExibirEmblemas extends StatefulWidget {
-  const ExibirEmblemas(
+class WidgetExibirEmblemas extends StatefulWidget {
+  const WidgetExibirEmblemas(
       {super.key,
       required this.listaEmblemas,
       required this.corBordas,
@@ -19,10 +19,10 @@ class ExibirEmblemas extends StatefulWidget {
   final int pontuacaoAtual;
 
   @override
-  State<ExibirEmblemas> createState() => _ExibirEmblemasState();
+  State<WidgetExibirEmblemas> createState() => _WidgetExibirEmblemasState();
 }
 
-class _ExibirEmblemasState extends State<ExibirEmblemas> {
+class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
   bool exibirTelaEmblemas = false;
   bool exibirListaEmblemas = false;
   late int indexEmblemaAtual = 0;

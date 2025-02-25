@@ -6,9 +6,9 @@ import 'package:geoli/Uteis/constantes_estados_gestos.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoli/Uteis/textos.dart';
-import 'package:geoli/Widgets/tela_carregamento.dart';
-import 'package:geoli/Widgets/estados/widget_area_gestos.dart';
-import 'package:geoli/Widgets/estados/widget_area_tela.dart';
+import 'package:geoli/Widgets/estados/widget_area_gestos_arrastar.dart';
+import 'package:geoli/Widgets/estados/widget_area_tela_regioes.dart';
+import 'package:geoli/Widgets/widget_tela_carregamento.dart';
 
 class TelaRegiaoCentroOeste extends StatefulWidget {
   const TelaRegiaoCentroOeste({super.key});
@@ -32,15 +32,32 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    gestos.addAll([
-      ConstantesEstadosGestos.gestoGO,
-      ConstantesEstadosGestos.gestoMT,
-      ConstantesEstadosGestos.gestoMS
-    ]); // adicionando itens na lista
-    gestos.shuffle(); // fazendo sorteio dos gestos na lista
-    // chamando metodo para fazer busca no banco de dados
-    //MetodosAuxiliares.addItensBancoDados(nomeColecao);
-    realizarBuscaDadosFireBase(nomeColecao);
+    validarPrimeiraJogada();
+  }
+
+  validarPrimeiraJogada() async {
+    // recebendo a pontuacao que esta
+    // sendo passada na TELA INICIAL REGIOES e do WIDGET AREA GESTOS
+    int pontuacao = await MetodosAuxiliares.recuperarPontuacaoAtual();
+    //Entrar caso a consulta ao banco de dados na TELA ANTERIOR retornar 0
+    // Entrar no tutorial de jogo
+    if (pontuacao == 0) {
+      setState(() {
+        carregarEstados();
+        exibirTelaCarregamento = false;
+        gestos.addAll([ConstantesEstadosGestos.gestoMS]);
+        MetodosAuxiliares.passarStatusTutorial(Constantes.statusTutorialAtivo);
+      });
+    } else {
+      gestos.addAll([
+        ConstantesEstadosGestos.gestoGO,
+        ConstantesEstadosGestos.gestoMT,
+        ConstantesEstadosGestos.gestoMS
+      ]); // adicionando itens na lista
+      gestos.shuffle(); // fazendo sorteio dos gestos na lista
+      // chamando metodo para fazer busca no banco de dados
+      realizarBuscaDadosFireBase(nomeColecao);
+    }
   }
 
   // metodo para adicionar os estados no map auxiliar e
@@ -121,16 +138,18 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
         body: LayoutBuilder(
           builder: (context, constraints) {
             if (exibirTelaCarregamento) {
-              return TelaCarregamento(corPadrao: Constantes.corPadraoRegioes,);
+              return WidgetTelaCarregamento(
+                corPadrao: Constantes.corPadraoRegioes,
+              );
             } else {
-              return WidgetAreaTela(
+              return WidgetAreaTelaRegioes(
                   nomeColecao: nomeColecao,
                   estadosSorteio: estadosSorteio,
                   exibirTelaProximoNivel: exibirTelaProximoNivel);
             }
           },
         ),
-        bottomNavigationBar: WidgetAreaGestos(
+        bottomNavigationBar: WidgetAreaGestosArrastar(
           nomeColecao: nomeColecao,
           gestos: gestos,
           estadoGestoMap: estadoGestoMap,
