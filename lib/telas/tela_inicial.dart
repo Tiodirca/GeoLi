@@ -180,6 +180,7 @@ class _TelaInicialState extends State<TelaInicial>
         } else {
           return Scaffold(
               appBar: AppBar(
+                leading: Container(),
                 backgroundColor: Colors.white,
                 title: Text(Textos.nomeApp,style: TextStyle(fontWeight: FontWeight.bold),),
                 actions: [

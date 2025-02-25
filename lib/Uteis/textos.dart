@@ -1,9 +1,6 @@
 class Textos {
-  static String nomeApp = "Geo Li";
-  static String txtTelaCarregamento = "Aguarde Carregando";
-
+  //BOTOES
   static String btnComecarJogo = "Começar Jogo";
-
   static String btnJogarNovamente = "Jogar Novamente";
   static String btnProximoNivel = "Próximo Nivel";
   static String btnTodosEstados = "Todos os estados";
@@ -11,9 +8,28 @@ class Textos {
   static String btnSistemaSolar = "Sistema Solar";
   static String btnEmblemas = "Emblemas";
 
-  static String tutorialRegioesClickArraste =
-      "Clique/Aperte em cima do gesto e"
+  // GERAIS
+  static String nomeApp = "Geo Li";
+  static String txtTelaCarregamento = "Aguarde Carregando";
+  static String descricaoAreaEstado =
+      "Clique encima do gesto e arraste até um dos estados";
+
+  static String descricaoAreaGestos = "Selecione o gesto em libras";
+  static String descricaoTelaInicial = "Selecione qual jogo deseja jogar";
+  static String msgAcertou = "Acertou";
+  static String msgErrou = "Errado";
+
+  // TUTORIAIS
+  static String tutorialRegioesClickArraste = "Clique/Aperte em cima do gesto e"
       " arraste-o sem soltar até a area indicada";
+  static String tutorialSistemaSolarClickBalao =
+      "Clique/Aperte encima do balão jogar";
+  static String tutorialSistemaSolarPlanetaSorteado =
+      "Aqui é onde o planeta que você deve acertar será sorteado. "
+      "Sendo sorteado um novo em caso de acerto";
+  static String tutorialSistemaSolarCabecalho =
+      "Aqui você pode ver Pontuação, Vidas,Tempo restante e pausar o jogo";
+  static String tutorialConcluido = "Tutorial Concluido";
 
   //TELA REINICIAR DADOS
   static String tituloReiniciarDados = "Reiniciar dados";
@@ -137,11 +153,4 @@ class Textos {
   static String tituloTelaTodasRegioes = "Todas as regioes do Brasil";
   static String descricaoTelaRegioes =
       "Selecione um dos níveis para jogar ou para desbloquear os próximos níveis";
-  static String descricaoAreaEstado =
-      "Clique encima do gesto e arraste até um dos estados";
-  static String descricaoAreaGestos = "Selecione o gesto em libras";
-
-  static String descricaoTelaInicial = "Selecione qual jogo deseja jogar";
-  static String msgAcertou = "Acertou";
-  static String msgErrou = "Errado";
 }

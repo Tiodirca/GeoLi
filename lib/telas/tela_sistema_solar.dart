@@ -15,6 +15,7 @@ import 'package:geoli/Widgets/gestos_widget.dart';
 import 'package:geoli/Widgets/sistema_solar/balao_widget.dart';
 import 'package:geoli/Widgets/sistema_solar/widget_area_animacao_baloes.dart';
 import 'package:geoli/Widgets/widget_exibir_emblemas.dart';
+import 'package:geoli/Widgets/widget_msg_tutoriais.dart';
 import 'package:geoli/Widgets/widget_tela_carregamento.dart';
 import 'package:geoli/Widgets/widget_tela_resetar_dados.dart';
 import 'package:geoli/modelos/planeta.dart';
@@ -140,6 +141,14 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
     planetas.shuffle();
     sortearGesto();
     recuperarPontuacao();
+  }
+
+  @override
+  void dispose() {
+    if(_controllerFade.isAnimating){
+      _controllerFade.stop(canceled: true);
+    }
+    super.dispose();
   }
 
   //metodo para sortear gesto
@@ -274,6 +283,10 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                 exibirBtnDificuldade = true;
                 if (pontuacaoTotal == 0) {
                   exibirTutorial = true;
+                  MetodosAuxiliares.passarStatusTutorial(
+                      Constantes.statusTutorialAtivo);
+                  _controllerFade.repeat(
+                      count: 1000, period: Duration(milliseconds: 800));
                 }
               } else {
                 if (nomeBtn == Textos.btnDificuldadeFacil) {
@@ -294,6 +307,67 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
           },
           child: Text(nomeBtn)));
 
+  Widget areaSorteioPlaneta(double larguraTela, double alturaTela) => SizedBox(
+        width: larguraTela,
+        height: alturaTela,
+        child: Card(
+          color: Colors.white,
+          margin: EdgeInsets.all(0),
+          shape: RoundedRectangleBorder(
+              side: BorderSide(color: PaletaCores.corAzulMagenta, width: 1),
+              borderRadius: const BorderRadius.only(
+                  topRight: Radius.circular(25), topLeft: Radius.circular(25))),
+          child: Column(
+            children: [
+              Text(
+                Textos.telaSistemaSolarDescricaoPlanetaSorteado,
+                style:
+                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                  height: Platform.isAndroid || Platform.isIOS ? 100 : 120,
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      if (exibirTutorial) {
+                        return GestosWidget(
+                            nomeGestoImagem:
+                                CaminhosImagens.gestoPlanetaTerraImagem,
+                            nomeGesto: Textos.nomePlanetaTerra,
+                            exibirAcerto: false);
+                      } else {
+                        return GestosWidget(
+                            nomeGestoImagem: gestoSorteado.nomeImagem,
+                            nomeGesto: gestoSorteado.nomeGesto,
+                            exibirAcerto: false);
+                      }
+                    },
+                  ))
+            ],
+          ),
+        ),
+      );
+
+  Widget indicadorMsg(String msg, bool inverter) => Wrap(
+        alignment: WrapAlignment.center,
+        crossAxisAlignment: inverter == true
+            ? WrapCrossAlignment.end
+            : WrapCrossAlignment.start,
+        children: [
+          WidgetMsgTutoriais(corBorda: corPadrao, mensagem: msg),
+          Transform.flip(
+              flipX: inverter,
+              flipY: inverter,
+              child: FadeTransition(
+                opacity: _fadeAnimation,
+                child: Image(
+                  width: 30,
+                  height: 50,
+                  image: AssetImage('${CaminhosImagens.iconeClick}.png'),
+                ),
+              )),
+        ],
+      );
+
   @override
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;
@@ -312,7 +386,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                   backgroundColor: PaletaCores.corAzulEscuro,
                   title: LayoutBuilder(
                     builder: (context, constraints) {
-                      if (exibirJogo) {
+                      if (exibirJogo || exibirTutorial) {
                         return SizedBox(
                           width: larguraTela,
                           child: Row(
@@ -432,7 +506,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                   ),
                   actions: [
                     Visibility(
-                        visible: !exibirJogo,
+                        visible: !exibirJogo && !exibirTutorial,
                         child: Container(
                           margin: EdgeInsets.only(right: 10),
                           width: 40,
@@ -487,40 +561,45 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                   } else {
                     if (exibirTutorial) {
                       return Container(
-                        width: larguraTela,
-                        height: alturaTela,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            FadeTransition(
-                                opacity: _fadeAnimation,
-                                child: Container(
-                                  color: Colors.green,
-                                  transform: Matrix4.rotationZ(59.7 // here
-                                      ),
-                                  child: Image(
-                                    width: 50,
-                                    height: 50,
-                                    image: AssetImage(
-                                        '${CaminhosImagens.iconeClick}.png'),
-                                  ),
-                                )),
-                            BalaoWidget(
-                                planeta: Planeta(
-                                    nomePlaneta: Textos.nomePlanetaTerra,
-                                    caminhoImagem:
-                                        CaminhosImagens.planetaTerraImagem),
-                                desativarBotao: false)
-                          ],
-                        ),
-                      );
+                          color: Colors.white,
+                          width: larguraTela,
+                          height: alturaTela,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                    width: Platform.isAndroid || Platform.isIOS
+                                        ? larguraTela * 0.8
+                                        : larguraTela * 0.2,
+                                    height: 100,
+                                    child: indicadorMsg(
+                                      Textos.tutorialSistemaSolarCabecalho,
+                                      false,
+                                    )),
+                                SizedBox(
+                                  width: Platform.isAndroid || Platform.isIOS
+                                      ? larguraTela * 0.4
+                                      : larguraTela * 0.1,
+                                  child: indicadorMsg(
+                                      Textos.tutorialSistemaSolarClickBalao,
+                                      true),
+                                ),
+                                BalaoWidget(
+                                    planeta: Planeta(
+                                        nomePlaneta: Textos.nomePlanetaTerra,
+                                        caminhoImagem:
+                                            CaminhosImagens.planetaTerraImagem),
+                                    desativarBotao: false),
+                              ],
+                            ),
+                          ));
                     } else {
                       return Container(
                         color: Colors.white,
                         width: larguraTela,
                         height: alturaTela,
-                        child: Stack(
-                          alignment: Alignment.center,
+                        child: Column(
                           children: [
                             Visibility(
                               visible: !exibirBtnDificuldade,
@@ -592,50 +671,66 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                   }
                 },
               ),
+              bottomNavigationBar: LayoutBuilder(
+                builder: (context, constraints) {
+                  if (exibirTutorial) {
+                    return Container(
+                        color: Colors.white,
+                        width: larguraTela,
+                        height: 260,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Row(
+                              mainAxisAlignment:
+                                  Platform.isAndroid || Platform.isIOS
+                                      ? MainAxisAlignment.start
+                                      : MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                indicadorMsg(
+                                    Textos.tutorialSistemaSolarPlanetaSorteado,
+                                    true),
+                              ],
+                            ),
+                            areaSorteioPlaneta(
+                                Platform.isAndroid || Platform.isIOS
+                                    ? larguraTela * 0.5
+                                    : larguraTela * 0.2,
+                                Platform.isAndroid || Platform.isIOS
+                                    ? 130
+                                    : 150)
+                          ],
+                        ));
+                  } else {
+                    return SizedBox(
+                      width: 0,
+                      height: 0,
+                    );
+                  }
+                },
+              ),
               bottomSheet: LayoutBuilder(
                 builder: (context, constraints) {
-                  if (exibirJogo || exibirTutorial) {
-                    return Container(
-                      color: Colors.transparent,
-                      width: Platform.isAndroid || Platform.isIOS
-                          ? larguraTela * 0.5
-                          : larguraTela * 0.2,
-                      height: Platform.isAndroid || Platform.isIOS ? 130 : 150,
-                      child: Card(
-                        color: Colors.white,
-                        margin: EdgeInsets.all(0),
-                        shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                                color: PaletaCores.corAzulMagenta, width: 1),
-                            borderRadius: const BorderRadius.only(
-                                topRight: Radius.circular(25),
-                                topLeft: Radius.circular(25))),
-                        child: Column(
-                          children: [
-                            Text(
-                              Textos.telaSistemaSolarDescricaoPlanetaSorteado,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: Platform.isAndroid || Platform.isIOS
-                                  ? 100
-                                  : 120,
-                              child: GestosWidget(
-                                  nomeGestoImagem: gestoSorteado.nomeImagem,
-                                  nomeGesto: gestoSorteado.nomeGesto,
-                                  exibirAcerto: false),
-                            )
-                          ],
-                        ),
-                      ),
+                  //verificando se nao esta no tutorial
+                  if (exibirTutorial) {
+                    return SizedBox(
+                      width: 0,
+                      height: 0,
                     );
                   } else {
-                    return WidgetExibirEmblemas(
-                        pontuacaoAtual: pontuacaoTotal,
-                        corBordas: corPadrao,
-                        listaEmblemas: emblemasExibir);
+                    if (exibirJogo) {
+                      return areaSorteioPlaneta(
+                          Platform.isAndroid || Platform.isIOS
+                              ? larguraTela * 0.5
+                              : larguraTela * 0.2,
+                          Platform.isAndroid || Platform.isIOS ? 130 : 150);
+                    } else {
+                      return WidgetExibirEmblemas(
+                          pontuacaoAtual: pontuacaoTotal,
+                          corBordas: corPadrao,
+                          listaEmblemas: emblemasExibir);
+                    }
                   }
                 },
               ));

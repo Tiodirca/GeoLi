@@ -11,8 +11,8 @@ class WidgetMsgTutoriais extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.all(10),
-      width: 200,
-      height: 100,
+      width: 220,
+      height: 90,
       child: Card(
           color: Colors.white,
           shape: RoundedRectangleBorder(
