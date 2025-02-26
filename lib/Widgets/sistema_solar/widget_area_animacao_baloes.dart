@@ -182,13 +182,26 @@ class _WidgetAreaAnimacaoBaloesState extends State<WidgetAreaAnimacaoBaloes>
 
   @override
   void dispose() {
-    // TODO: implement dispose
-    pararAnimacaoBaloes();
+    _controller.dispose();
+    _controller2.dispose();
+    _controller3.dispose();
+    _controller4.dispose();
+    _controller5.dispose();
+    _controller6.dispose();
+    _controller7.dispose();
+    _controller8.dispose();
+    _controller9.dispose();
+    _controller10.dispose();
+    _controller11.dispose();
+    _controller12.dispose();
+    _controller13.dispose();
+    _controller14.dispose();
+    _controllerFade.dispose();
     super.dispose();
   }
 
   pararAnimacaoBaloes() {
-    _controller.stop();
+    _controller.stop(canceled: true);
     _controller2.stop();
     _controller3.stop();
     _controller4.stop();

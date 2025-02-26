@@ -6,25 +6,30 @@ import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/emblema_widget.dart';
+import 'package:geoli/Widgets/mapa_regioes_widget.dart';
 
 class WidgetExibirEmblemas extends StatefulWidget {
   const WidgetExibirEmblemas(
       {super.key,
       required this.listaEmblemas,
       required this.corBordas,
-      required this.pontuacaoAtual});
+      required this.pontuacaoAtual,
+      required this.nomeBtn});
 
   final List<Emblemas> listaEmblemas;
   final Color corBordas;
   final int pontuacaoAtual;
+  final String nomeBtn;
 
   @override
   State<WidgetExibirEmblemas> createState() => _WidgetExibirEmblemasState();
 }
 
 class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
-  bool exibirTelaEmblemas = false;
-  bool exibirListaEmblemas = false;
+  bool exibirTela = false;
+  bool exibirAreaInternaTela = false;
+  bool exibirMapaRegioes = false;
+  bool exibirSistemaSolar = false;
   late int indexEmblemaAtual = 0;
 
   exibirEmblemaAtual(int pontuacaoAtual) {
@@ -37,6 +42,55 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
     return emblemas;
   }
 
+  Widget btnAcao(bool visibilidade, String nomeBtn, bool desativarBtn) =>
+      Visibility(
+          visible: visibilidade,
+          child: SizedBox(
+            width: 80,
+            height: 40,
+            child: FloatingActionButton(
+              heroTag: nomeBtn,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                side: BorderSide(color: widget.corBordas),
+              ),
+              backgroundColor: Colors.white,
+              onPressed: () {
+                setState(() {
+                  exibirTela = true;
+                  Future.delayed(Duration(seconds: 1)).then(
+                    (value) {
+                      setState(() {
+                        exibirAreaInternaTela = true;
+                        if (nomeBtn == Textos.btnRegioesMapa) {
+                          exibirMapaRegioes = true;
+                        } else if (nomeBtn == Textos.btnSistemaSolar) {
+                          exibirSistemaSolar = true;
+                        } else {
+                          exibirSistemaSolar = false;
+                          exibirMapaRegioes = false;
+                        }
+                      });
+                    },
+                  );
+                });
+              },
+              child: Text(
+                nomeBtn,
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+          ));
+
+  validarAltura(double alturaTela) {
+    if (exibirMapaRegioes == true) {
+      return exibirTela ? alturaTela * 0.9 : 60.toDouble();
+    } else {
+      return exibirTela ? alturaTela * 0.7 : 60.toDouble();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;
@@ -44,7 +98,7 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
     return AnimatedContainer(
         color: Colors.white,
         width: larguraTela,
-        height: exibirTelaEmblemas ? alturaTela * 0.7 : 60,
+        height: exibirTela ? alturaTela * 0.7 : 60,
         duration: const Duration(seconds: 1),
         child: Column(
           children: [
@@ -60,7 +114,9 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     SizedBox(
-                      width: Platform.isAndroid || Platform.isIOS ? larguraTela * 0.6 : larguraTela * 0.2,
+                      width: Platform.isAndroid || Platform.isIOS
+                          ? larguraTela * 0.5
+                          : larguraTela * 0.2,
                       height: 60,
                       child: ListView.builder(
                         itemCount: 1,
@@ -82,86 +138,74 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
                         },
                       ),
                     ),
-                    SizedBox(
-                      width: 100,
-                      height: 40,
-                      child: FloatingActionButton(
-                        heroTag: Textos.btnEmblemas,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          side: BorderSide(color: widget.corBordas),
-                        ),
-                        enableFeedback: !exibirListaEmblemas,
-                        backgroundColor: Colors.white,
-                        onPressed: () {
-                          setState(() {
-                            exibirTelaEmblemas = true;
-                            Future.delayed(Duration(seconds: 1)).then(
-                              (value) {
-                                setState(() {
-                                  exibirListaEmblemas = true;
-                                });
-                              },
-                            );
-                          });
-                        },
-                        child: Text(
-                          Textos.btnEmblemas,
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ),
-                    )
+                    btnAcao(true, Textos.btnEmblemas, !exibirTela),
+                    btnAcao(
+                        widget.nomeBtn == Textos.btnRegioesMapa ||
+                                widget.nomeBtn == Textos.btnSistemaSolar
+                            ? true
+                            : false,
+                        widget.nomeBtn,
+                        !exibirTela)
                   ],
                 ),
               ),
             ),
             Visibility(
-              visible: exibirListaEmblemas,
+              visible: exibirAreaInternaTela,
               child: Column(
                 children: [
                   Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border(
-                          top: BorderSide(width: 1, color: widget.corBordas),
-                          left: BorderSide(width: 1, color: widget.corBordas),
-                          right: BorderSide(width: 1, color: widget.corBordas),
-                          bottom:
-                              BorderSide(width: 1, color: widget.corBordas)),
-                    ),
-                    width: larguraTela * 0.9,
-                    height: 420,
-                    child: ListView.builder(
-                      itemCount: widget.listaEmblemas.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          shadowColor: widget.corBordas,
-                          color: Colors.white,
-                          child: EmblemaWidget(
-                              caminhoImagem: widget.listaEmblemas
-                                  .elementAt(index)
-                                  .caminhoImagem,
-                              nomeEmblema: widget.listaEmblemas
-                                  .elementAt(index)
-                                  .nomeEmblema,
-                              pontos:
-                                  widget.listaEmblemas.elementAt(index).pontos),
-                        );
-                      },
-                    ),
-                  ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border(
+                            top: BorderSide(width: 1, color: widget.corBordas),
+                            left: BorderSide(width: 1, color: widget.corBordas),
+                            right:
+                                BorderSide(width: 1, color: widget.corBordas),
+                            bottom:
+                                BorderSide(width: 1, color: widget.corBordas)),
+                      ),
+                      width: larguraTela * 0.9,
+                      height: 420,
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          if (exibirMapaRegioes) {
+                            return MapaRegioesWidget();
+                          } else {
+                            return ListView.builder(
+                              itemCount: widget.listaEmblemas.length,
+                              itemBuilder: (context, index) {
+                                return Card(
+                                  shadowColor: widget.corBordas,
+                                  color: Colors.white,
+                                  child: EmblemaWidget(
+                                      caminhoImagem: widget.listaEmblemas
+                                          .elementAt(index)
+                                          .caminhoImagem,
+                                      nomeEmblema: widget.listaEmblemas
+                                          .elementAt(index)
+                                          .nomeEmblema,
+                                      pontos: widget.listaEmblemas
+                                          .elementAt(index)
+                                          .pontos),
+                                );
+                              },
+                            );
+                          }
+                        },
+                      )),
                   Container(
                     margin: EdgeInsets.only(top: 10),
                     width: 40,
                     height: 40,
                     child: FloatingActionButton(
-                      heroTag: exibirListaEmblemas.toString(),
+                      heroTag: exibirAreaInternaTela.toString(),
                       backgroundColor: Colors.white,
                       onPressed: () {
                         setState(() {
-                          exibirTelaEmblemas = false;
-                          exibirListaEmblemas = false;
+                          exibirTela = false;
+                          exibirAreaInternaTela = false;
+                          validarAltura(alturaTela);
                         });
                       },
                       child: Icon(
@@ -173,7 +217,7 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
                   )
                 ],
               ),
-            )
+            ),
           ],
         ));
   }

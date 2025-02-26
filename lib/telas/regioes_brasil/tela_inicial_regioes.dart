@@ -198,115 +198,116 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
+        print("fdsfsd");
         if (exibirTelaCarregamento) {
           return WidgetTelaCarregamento(
             corPadrao: Constantes.corPadraoRegioes,
           );
         } else {
           return Scaffold(
-              appBar: AppBar(
-                backgroundColor: Constantes.corPadraoRegioes,
-                title: Text(
-                  Textos.tituloTelaRegioes,
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-                leading: IconButton(
-                    color: Colors.white,
-                    //setando tamanho do icone
-                    iconSize: 30,
+            appBar: AppBar(
+              backgroundColor: Constantes.corPadraoRegioes,
+              title: Text(
+                Textos.tituloTelaRegioes,
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+              leading: IconButton(
+                  color: Colors.white,
+                  //setando tamanho do icone
+                  iconSize: 30,
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(
+                        context, Constantes.rotaTelaInicial);
+                  },
+                  icon: const Icon(Icons.arrow_back_ios)),
+              actions: [
+                Container(
+                  margin: EdgeInsets.only(right: 10),
+                  width: 40,
+                  height: 40,
+                  child: FloatingActionButton(
+                    heroTag: Textos.btnExcluir,
+                    backgroundColor: Colors.white,
+                    elevation: 0,
+                    shape: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(40),
+                        borderSide: BorderSide(width: 1, color: Colors.black)),
                     onPressed: () {
-                      Navigator.pushReplacementNamed(
-                          context, Constantes.rotaTelaInicial);
+                      setState(() {
+                        exibirTelaResetarJogo = !exibirTelaResetarJogo;
+                      });
                     },
-                    icon: const Icon(Icons.arrow_back_ios)),
-                actions: [
-                  Container(
-                    margin: EdgeInsets.only(right: 10),
-                    width: 40,
-                    height: 40,
-                    child: FloatingActionButton(
-                      heroTag: Textos.btnExcluir,
-                      backgroundColor: Colors.white,
-                      elevation: 0,
-                      shape: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(40),
-                          borderSide:
-                              BorderSide(width: 1, color: Colors.black)),
-                      onPressed: () {
-                        setState(() {
-                          exibirTelaResetarJogo = !exibirTelaResetarJogo;
-                        });
-                      },
-                      child: Icon(
-                        exibirTelaResetarJogo ? Icons.close : Icons.settings,
-                        color: Colors.black,
-                        size: 30,
-                      ),
+                    child: Icon(
+                      exibirTelaResetarJogo ? Icons.close : Icons.settings,
+                      color: Colors.black,
+                      size: 30,
                     ),
-                  )
+                  ),
+                )
+              ],
+            ),
+            body: Container(
+              color: Colors.white,
+              width: larguraTela,
+              height: alturaTela,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Column(
+                    children: [
+                      Container(
+                          margin: EdgeInsets.only(bottom: 10),
+                          width: larguraTela,
+                          child: Text(
+                            Textos.descricaoTelaRegioes,
+                            style: TextStyle(fontSize: 18),
+                            textAlign: TextAlign.center,
+                          )),
+                      Wrap(
+                        children: [
+                          cartaoRegiao(regiaoCentroOeste.caminhoImagem,
+                              regiaoCentroOeste.nome),
+                          Visibility(
+                              visible: regiaoSul.acerto,
+                              child: cartaoRegiao(
+                                  regiaoSul.caminhoImagem, regiaoSul.nome)),
+                          Visibility(
+                              visible: regiaoSudeste.acerto,
+                              child: cartaoRegiao(regiaoSudeste.caminhoImagem,
+                                  regiaoSudeste.nome)),
+                          Visibility(
+                              visible: regiaoNorte.acerto,
+                              child: cartaoRegiao(
+                                  regiaoNorte.caminhoImagem, regiaoNorte.nome)),
+                          Visibility(
+                              visible: regiaoNordeste.acerto,
+                              child: cartaoRegiao(regiaoNordeste.caminhoImagem,
+                                  regiaoNordeste.nome)),
+                          Visibility(
+                              visible: todasRegioes.acerto,
+                              child: cartaoRegiao(todasRegioes.caminhoImagem,
+                                  todasRegioes.nome)),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Visibility(
+                      visible: exibirTelaResetarJogo,
+                      child: WidgetTelaResetarDados(
+                        corCard: Constantes.corPadraoRegioes,
+                        tipoAcao: Constantes.resetarAcaoExcluirRegioes,
+                      ))
                 ],
               ),
-              body: Container(
-                color: Colors.white,
-                width: larguraTela,
-                height: alturaTela,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Column(
-                      children: [
-                        Container(
-                            margin: EdgeInsets.only(bottom: 10),
-                            width: larguraTela,
-                            child: Text(
-                              Textos.descricaoTelaRegioes,
-                              style: TextStyle(fontSize: 18),
-                              textAlign: TextAlign.center,
-                            )),
-                        Wrap(
-                          children: [
-                            cartaoRegiao(regiaoCentroOeste.caminhoImagem,
-                                regiaoCentroOeste.nome),
-                            Visibility(
-                                visible: regiaoSul.acerto,
-                                child: cartaoRegiao(
-                                    regiaoSul.caminhoImagem, regiaoSul.nome)),
-                            Visibility(
-                                visible: regiaoSudeste.acerto,
-                                child: cartaoRegiao(regiaoSudeste.caminhoImagem,
-                                    regiaoSudeste.nome)),
-                            Visibility(
-                                visible: regiaoNorte.acerto,
-                                child: cartaoRegiao(regiaoNorte.caminhoImagem,
-                                    regiaoNorte.nome)),
-                            Visibility(
-                                visible: regiaoNordeste.acerto,
-                                child: cartaoRegiao(
-                                    regiaoNordeste.caminhoImagem,
-                                    regiaoNordeste.nome)),
-                            Visibility(
-                                visible: todasRegioes.acerto,
-                                child: cartaoRegiao(todasRegioes.caminhoImagem,
-                                    todasRegioes.nome)),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Visibility(
-                        visible: exibirTelaResetarJogo,
-                        child: WidgetTelaResetarDados(
-                          corCard: Constantes.corPadraoRegioes,
-                          tipoAcao: Constantes.resetarAcaoExcluirRegioes,
-                        ))
-                  ],
-                ),
-              ),
-              bottomSheet: WidgetExibirEmblemas(
-                pontuacaoAtual: pontos,
-                corBordas: Constantes.corPadraoRegioes,
-                listaEmblemas: emblemasExibir,
-              ));
+            ),
+            bottomSheet: WidgetExibirEmblemas(
+              pontuacaoAtual: pontos,
+              nomeBtn: Textos.btnRegioesMapa,
+              corBordas: Constantes.corPadraoRegioes,
+              listaEmblemas: emblemasExibir,
+            ),
+          );
         }
       },
     );

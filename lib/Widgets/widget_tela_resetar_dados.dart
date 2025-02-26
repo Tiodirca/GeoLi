@@ -69,20 +69,12 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     dadosTodasRegioes.addEntries(dadosRegiaoCentroOeste.entries);
     dadosTodasRegioes.addEntries(dadosRegiaoSul.entries);
     dadosTodasRegioes.addEntries(dadosRegiaoSudeste.entries);
     dadosTodasRegioes.addEntries(dadosRegiaoNordeste.entries);
     dadosTodasRegioes.addEntries(dadosRegiaoNorte.entries);
-
-    dadosTodasRegioes.forEach(
-      (key, value) {
-        // print(key.toString());
-        // print(value.toString());
-      },
-    );
   }
 
   // metodo para cadastrar item
@@ -96,7 +88,7 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
           .doc(nomeDocumento) //passando o documento
           .set(dados);
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 
@@ -165,8 +157,10 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
                         Constantes.fireBaseDocumentoPontosJogadaSistemaSolar,
                         dadosPontuacao);
                     reiniciarDadosRegioes();
-                    Navigator.pushReplacementNamed(
-                        context, Constantes.rotaTelaInicial);
+                    Future.delayed(Duration(seconds: 1), () {
+                      Navigator.pushReplacementNamed(
+                          context, Constantes.rotaTelaInicial);
+                    });
                   } else if (widget.tipoAcao ==
                       Constantes.resetarAcaoExcluirSistemaSolar) {
                     gravarDadosResetados(
@@ -177,8 +171,10 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
                         context, Constantes.rotaTelaSistemaSolar);
                   } else {
                     reiniciarDadosRegioes();
-                    Navigator.pushReplacementNamed(
-                        context, Constantes.rotaTelaInicialRegioes);
+                    Future.delayed(Duration(seconds: 1), () {
+                      Navigator.pushReplacementNamed(
+                          context, Constantes.rotaTelaInicialRegioes);
+                    });
                   }
                 });
               },

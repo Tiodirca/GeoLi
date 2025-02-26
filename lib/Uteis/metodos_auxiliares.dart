@@ -13,6 +13,7 @@ class MetodosAuxiliares {
   static String nomeGestoPlaneta = "";
   static int pontuacaoAtual = 0;
   static String status = "";
+  static int quantRegioesLiberadas = 0;
 
   static Future<String> confirmarAcerto(String acerto) async {
     acertou = acerto;
@@ -41,6 +42,15 @@ class MetodosAuxiliares {
     return pontuacaoAtual;
   }
 
+  static Future<int> passarQuantRegioesLiberadas(int quantidade) async {
+    quantRegioesLiberadas = quantidade;
+    return quantRegioesLiberadas;
+  }
+
+  static Future<int> recuperarQuantRegioesLiberadas() async {
+    return quantRegioesLiberadas;
+  }
+
   static Future<String> passarGestoSorteado(String nomeGesto) async {
     nomeGestoPlaneta = nomeGesto;
     return nomeGestoPlaneta;
@@ -49,7 +59,6 @@ class MetodosAuxiliares {
   static Future<String> recuperarGestoSorteado() async {
     return nomeGestoPlaneta;
   }
-
 
   // metodo para remover o gesto ja acertado da lista
   // de gestos quando voltar a jogar

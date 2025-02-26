@@ -176,13 +176,18 @@ class _TelaInicialState extends State<TelaInicial>
     return LayoutBuilder(
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {
-          return WidgetTelaCarregamento(corPadrao: corPadrao,);
+          return WidgetTelaCarregamento(
+            corPadrao: corPadrao,
+          );
         } else {
           return Scaffold(
               appBar: AppBar(
                 leading: Container(),
                 backgroundColor: Colors.white,
-                title: Text(Textos.nomeApp,style: TextStyle(fontWeight: FontWeight.bold),),
+                title: Text(
+                  Textos.nomeApp,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 actions: [
                   Container(
                     margin: EdgeInsets.only(right: 10),
@@ -194,8 +199,7 @@ class _TelaInicialState extends State<TelaInicial>
                       elevation: 0,
                       shape: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(40),
-                          borderSide: BorderSide(
-                              width: 1, color: corPadrao)),
+                          borderSide: BorderSide(width: 1, color: corPadrao)),
                       onPressed: () {
                         setState(() {
                           exibirTelaResetarJogo = !exibirTelaResetarJogo;
@@ -252,9 +256,11 @@ class _TelaInicialState extends State<TelaInicial>
                   ],
                 ),
               ),
+
               bottomSheet: WidgetExibirEmblemas(
                   pontuacaoAtual: pontuacaoGeral,
                   listaEmblemas: emblemasGeral,
+                  nomeBtn: "",
                   corBordas: corPadrao));
         }
       },

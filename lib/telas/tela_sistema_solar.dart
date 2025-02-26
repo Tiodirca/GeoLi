@@ -29,6 +29,7 @@ class TelaSistemaSolar extends StatefulWidget {
 
 class _TelaSistemaSolarState extends State<TelaSistemaSolar>
     with TickerProviderStateMixin {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool exibirTelaCarregamento = true;
   bool exibirJogo = false;
   bool exibirBtnDificuldade = false;
@@ -53,7 +54,6 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     planetas.addAll([
       Planeta(
@@ -145,9 +145,10 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
 
   @override
   void dispose() {
-    if(_controllerFade.isAnimating){
+    if (_controllerFade.isAnimating) {
       _controllerFade.stop(canceled: true);
     }
+    iniciarTempo.cancel();
     super.dispose();
   }
 
@@ -161,14 +162,6 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   }
 
   void comecarTempo() {
-    Future.delayed(Duration(seconds: 4), () {
-      // setState(() {
-      //   planetas.add(Planeta(
-      //       nomePlaneta: Textos.nomePlanetaBuracoNegro,
-      //       caminhoImagem: CaminhosImagens.planetaBuracoNegro));
-      // });
-      // planetas.shuffle();
-    });
     const segundo = Duration(seconds: 1);
     iniciarTempo = Timer.periodic(
       segundo,
@@ -178,11 +171,9 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
             timer.cancel();
           });
         } else {
-          if (mounted) {
-            setState(() {
-              tempo--;
-            });
-          }
+          setState(() {
+            tempo--;
+          });
         }
       },
     );
@@ -230,7 +221,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
               .fireBaseDocumentoPontosJogadaSistemaSolar) //passando o documento
           .set({Constantes.pontosJogada: pontuacaoTotal});
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 
@@ -382,6 +373,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
           );
         } else {
           return Scaffold(
+              key: _scaffoldKey,
               appBar: AppBar(
                   backgroundColor: PaletaCores.corAzulEscuro,
                   title: LayoutBuilder(
@@ -568,7 +560,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Container(
+                                SizedBox(
                                     width: Platform.isAndroid || Platform.isIOS
                                         ? larguraTela * 0.8
                                         : larguraTela * 0.2,
@@ -729,6 +721,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                       return WidgetExibirEmblemas(
                           pontuacaoAtual: pontuacaoTotal,
                           corBordas: corPadrao,
+                          nomeBtn: Textos.btnSistemaSolar,
                           listaEmblemas: emblemasExibir);
                     }
                   }

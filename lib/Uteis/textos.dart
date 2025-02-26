@@ -7,6 +7,7 @@ class Textos {
   static String btnEstadoBrasileiros = "Estados Brasileiros";
   static String btnSistemaSolar = "Sistema Solar";
   static String btnEmblemas = "Emblemas";
+  static String btnRegioesMapa = "Mapa";
 
   // GERAIS
   static String nomeApp = "Geo Li";
@@ -18,6 +19,7 @@ class Textos {
   static String descricaoTelaInicial = "Selecione qual jogo deseja jogar";
   static String msgAcertou = "Acertou";
   static String msgErrou = "Errado";
+  static String desbloqueioAreaMapa = "";
 
   // TUTORIAIS
   static String tutorialRegioesClickArraste = "Clique/Aperte em cima do gesto e"
@@ -92,7 +94,7 @@ class Textos {
   static String emblemaPatenteCapitao = "Capitão";
   static String emblemaPatenteCoronel = "Coronel";
   static String emblemaPatenteGeneralBrigada = "General de Brigada";
-  static String emblemaPatenteGeneralDivisao = "Geeneral de Divisão";
+  static String emblemaPatenteGeneralDivisao = "General de Divisão";
   static String emblemaPatenteGeneralExercito = "General do Exercito";
   static String emblemaPatenteMajor = "Major";
   static String emblemaPatenteMarechal = "Marechal";

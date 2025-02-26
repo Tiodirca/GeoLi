@@ -65,6 +65,7 @@ class _WidgetAreaSoltarEstadosState extends State<WidgetAreaSoltarEstados>
 
   @override
   Widget build(BuildContext context) {
+    print("AREA SOLTAR ESTADOS");
     //teste();
     return SizedBox(
         width: 170,

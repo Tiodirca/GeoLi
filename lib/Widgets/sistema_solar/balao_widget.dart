@@ -49,7 +49,6 @@ class _BalaoWidgetState extends State<BalaoWidget>
 
   recuperarStatusTutorial() async {
     status = await MetodosAuxiliares.recuperarStatusTutorial();
-    print("ST$status");
   }
 
   sortearNumero(int tamanhoLista) {
@@ -60,8 +59,8 @@ class _BalaoWidgetState extends State<BalaoWidget>
   validarAcerto() async {
     String gesto = "";
     gesto = await MetodosAuxiliares.recuperarGestoSorteado();
+    // verificando se o status passado esta ativo
     if (status == Constantes.statusTutorialAtivo) {
-      print("fdsfsd");
       MetodosAuxiliares.exibirMensagens(
           Textos.tutorialConcluido, Constantes.msgAcertoGesto, context);
       MetodosAuxiliares.passarStatusTutorial("");
@@ -90,7 +89,7 @@ class _BalaoWidgetState extends State<BalaoWidget>
               .fireBaseDocumentoPontosJogadaSistemaSolar) //passando o documento
           .set({Constantes.pontosJogada: 1});
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 

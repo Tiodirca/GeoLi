@@ -11,7 +11,7 @@ import 'package:geoli/Widgets/widget_msg_tutoriais.dart';
 import '../../Uteis/textos.dart';
 
 class WidgetAreaGestosArrastar extends StatefulWidget {
-  WidgetAreaGestosArrastar({
+  const WidgetAreaGestosArrastar({
     super.key,
     required this.estadoGestoMap,
     required this.gestos,
@@ -19,13 +19,14 @@ class WidgetAreaGestosArrastar extends StatefulWidget {
     required this.exibirTelaCarregamento,
   });
 
-  bool exibirTelaCarregamento;
-  List<Gestos> gestos;
-  String nomeColecao;
-  Map<Estado, Gestos> estadoGestoMap;
+  final bool exibirTelaCarregamento;
+  final List<Gestos> gestos;
+  final String nomeColecao;
+  final Map<Estado, Gestos> estadoGestoMap;
 
   @override
-  State<WidgetAreaGestosArrastar> createState() => _WidgetAreaGestosArrastarState();
+  State<WidgetAreaGestosArrastar> createState() =>
+      _WidgetAreaGestosArrastarState();
 }
 
 class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
@@ -42,21 +43,18 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     recuperarPontuacao();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _controllerFade.stop(canceled: true);
     super.dispose();
   }
 
   verificarStatusTutorial() async {
     status = await MetodosAuxiliares.recuperarStatusTutorial();
-    print(status);
     if (status == Constantes.statusTutorialAtivo) {
       _controllerFade.repeat(count: 1000, period: Duration(milliseconds: 800));
       setState(() {
@@ -100,7 +98,7 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
               .fireBaseDocumentoPontosJogadaRegioes) //passando o documento
           .set({Constantes.pontosJogada: ponto});
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 
@@ -122,7 +120,7 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
           .doc(widget.nomeColecao) //passando o documento
           .set(dados);
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 

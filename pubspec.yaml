@@ -49,6 +49,7 @@ flutter:
     #EMBLEMAS
     - assets/imagens/estados/
     #REGIOES
+    - assets/imagens/estados/mapa/
     - assets/imagens/estados/regioes/centro_oeste/
     - assets/imagens/estados/regioes/sul/
     - assets/imagens/estados/regioes/sudeste/

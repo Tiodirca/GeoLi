@@ -28,6 +28,7 @@ class _WidgetAreaTelaRegioesState extends State<WidgetAreaTelaRegioes> {
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;
     double larguraTela = MediaQuery.of(context).size.width;
+    print("AREA TELA REGIOES");
     return Container(
       color: Colors.white,
       width: larguraTela,

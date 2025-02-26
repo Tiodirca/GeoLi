@@ -30,13 +30,14 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     carregarDados();
     if (widget.estados.length >= 10) {
       exibirBtnProximoNivel = false;
     }
+
     recuperarRegioesLiberadas();
+
   }
 
   // metodo para carregar os dados
@@ -56,7 +57,7 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
           .doc(widget.nomeColecao) //passando o documento
           .set(dados);
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
   }
 
@@ -82,6 +83,8 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
           } else if (Constantes.nomeTodosEstados == key) {
             liberarTodosEstados = value;
           }
+          validarLiberarProximoNivel("");
+          liberarProximoNivel();
         });
       },
     );
@@ -104,17 +107,8 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
         Constantes.nomeTodosEstados: liberarTodosEstados,
       });
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-   // print("dgdfg");
-    // validarLiberarProximoNivel("");
-    // liberarProximoNivel();
-    super.dispose();
   }
 
   validarLiberarProximoNivel(String nomeBtn) {
@@ -231,7 +225,7 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
         height: 250,
         child: Card(
           color: Colors.white,
-          shape:  RoundedRectangleBorder(
+          shape: RoundedRectangleBorder(
               side: BorderSide(color: Constantes.corPadraoRegioes),
               borderRadius: BorderRadius.all(Radius.circular(30))),
           child: Column(

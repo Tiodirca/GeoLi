@@ -1,7 +1,7 @@
 class CaminhosImagens {
   static const btnJogarNovamenteGesto = "assets/imagens/gesto_de_novo";
   static const btnProximoNivelGesto = "assets/imagens/gesto_continuar";
-  static const iconeClick= "assets/imagens/icon_click";
+  static const iconeClick = "assets/imagens/icon_click";
 
   static const btnGestoEstadosBrasileiroImagem =
       "assets/imagens/estados/gestos_estados/gesto_estados";
@@ -51,6 +51,18 @@ class CaminhosImagens {
       "assets/imagens/sistema_solar/planetas/planeta_netuno";
   static const planetaBuracoNegro =
       "assets/imagens/sistema_solar/planetas/buraco_negro";
+
+  static const mapaCompletoBranco =
+      "assets/imagens/estados/mapa/mapa_completo_branco";
+  static const mapaCompletoCentroOeste =
+      "assets/imagens/estados/mapa/mapa_completo_regiao_centro_oeste_desbloqueada";
+  static const mapaCompletoSul =
+      "assets/imagens/estados/mapa/mapa_completo_regiao_sul_desbloqueada";
+  static const mapaCompletoSudeste =
+      "assets/imagens/estados/mapa/mapa_completo_regiao_sudeste_desbloqueada";
+  static const mapaCompletoNorte =
+      "assets/imagens/estados/mapa/mapa_completo_regiao_norte_desbloqueada";
+  static const mapaCompleto = "assets/imagens/estados/mapa/mapa_completo";
 
   // EMBLEMAS ESTADOS BRASILEIROS
   static const emblemaEstadosAventureiroum =
