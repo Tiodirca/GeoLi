@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
+import 'package:geoli/Widgets/widget_tela_carregamento.dart';
 
 class MapaRegioesWidget extends StatefulWidget {
   const MapaRegioesWidget({
@@ -20,6 +23,7 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
   bool liberarRegiaoNorte = false;
   bool liberarRegiaoNordeste = false;
   bool liberarTodosEstados = false;
+  bool exibirTelaCarregamento = true;
   String caminhoImagemRegiao = CaminhosImagens.mapaCompletoBranco;
 
   validarRegioesDesbloqueadas() {
@@ -31,14 +35,17 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
       caminhoImagemRegiao = CaminhosImagens.mapaCompletoSudeste;
     } else if (liberarRegiaoNordeste && liberarTodosEstados == false) {
       caminhoImagemRegiao = CaminhosImagens.mapaCompletoNorte;
-    }if (liberarTodosEstados) {
+    }
+    if (liberarTodosEstados) {
       caminhoImagemRegiao = CaminhosImagens.mapaCompleto;
     }
+    setState(() {
+      exibirTelaCarregamento = false;
+    });
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     recuperarRegioesLiberadas();
   }
@@ -62,7 +69,7 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
             liberarRegiaoNorte = value;
           } else if (Textos.nomeRegiaoNordeste == key) {
             liberarRegiaoNordeste = value;
-          }else if (Constantes.nomeTodosEstados == key) {
+          } else if (Constantes.nomeTodosEstados == key) {
             liberarTodosEstados = value;
           }
           validarRegioesDesbloqueadas();
@@ -74,7 +81,7 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
   Widget exibirEstrela(bool exibirEstrela, String nomeRegiao) => Visibility(
       visible: exibirEstrela,
       child: SizedBox(
-          width: 200,
+          width: 170,
           height: 20,
           child: Row(
             children: [
@@ -91,48 +98,60 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
 
   @override
   Widget build(BuildContext context) {
-    double alturaTela = MediaQuery.of(context).size.height;
     double larguraTela = MediaQuery.of(context).size.width;
     return Container(
         width: larguraTela,
-        height: alturaTela,
+        height: 420,
         color: Colors.transparent,
-        child: Stack(
-          children: [
-            SizedBox(
-              width: larguraTela,
-              height: alturaTela,
-              child: InteractiveViewer(
-                panEnabled: false,
-                minScale: 0.5,
-                maxScale: 4,
-                child: Image(
-                  image: AssetImage("$caminhoImagemRegiao.png"),
-                ),
-              ),
-            ),
-            Positioned(
-                bottom: 0,
-                left: 0,
-                child: Container(
-                  color: Colors.transparent,
-                  width: larguraTela,
-                  height: 150,
-                  child: Wrap(
-                    children: [
-                      exibirEstrela(
-                          liberarRegiaoSul, Textos.nomeRegiaoCentroOeste),
-                      exibirEstrela(liberarRegiaoSudeste, Textos.nomeRegiaoSul),
-                      exibirEstrela(
-                          liberarRegiaoNorte, Textos.nomeRegiaoSudeste),
-                      exibirEstrela(
-                          liberarRegiaoNordeste, Textos.nomeRegiaoNorte),
-                      exibirEstrela(
-                          liberarTodosEstados, Textos.nomeRegiaoNordeste),
-                    ],
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            if (exibirTelaCarregamento) {
+              return WidgetTelaCarregamento(
+                  corPadrao: Constantes.corPadraoRegioes);
+            } else {
+              return Column(
+                children: [
+                  Text(
+                    Textos.telaTituloRegioesDesbloqueados,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
-                )),
-          ],
+                  Text(Textos.telaDescricaoRegioesDesbloqueados),
+                  SizedBox(
+                    width: larguraTela,
+                    height: 300,
+                    child: InteractiveViewer(
+                      panEnabled: false,
+                      minScale: 0.5,
+                      maxScale: 4,
+                      child: Image(
+                        image: AssetImage("$caminhoImagemRegiao.png"),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: Platform.isIOS || Platform.isAndroid
+                        ? larguraTela * 0.9
+                        : larguraTela * 0.4,
+                    height: 60,
+                    child: Wrap(
+                      children: [
+                        exibirEstrela(
+                            liberarRegiaoSul, Textos.nomeRegiaoCentroOeste),
+                        exibirEstrela(
+                            liberarRegiaoSudeste, Textos.nomeRegiaoSul),
+                        exibirEstrela(
+                            liberarRegiaoNorte, Textos.nomeRegiaoSudeste),
+                        exibirEstrela(
+                            liberarRegiaoNordeste, Textos.nomeRegiaoNorte),
+                        exibirEstrela(
+                            liberarTodosEstados, Textos.nomeRegiaoNordeste),
+                      ],
+                    ),
+                  )
+                ],
+              );
+            }
+          },
         ));
   }
 }

@@ -85,8 +85,7 @@ class _WidgetAreaAnimacaoBaloesState extends State<WidgetAreaAnimacaoBaloes>
               BalaoWidget(
                 desativarBotao: desativarToqueBalao,
                 planeta: widget.planetas.elementAt(indexPlaneta),
-              ),
-              Text(nome)
+              )
             ],
           ));
 

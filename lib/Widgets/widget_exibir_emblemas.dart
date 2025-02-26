@@ -7,6 +7,7 @@ import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/emblema_widget.dart';
 import 'package:geoli/Widgets/mapa_regioes_widget.dart';
+import 'package:geoli/Widgets/sistema_solar_widget.dart';
 
 class WidgetExibirEmblemas extends StatefulWidget {
   const WidgetExibirEmblemas(
@@ -78,6 +79,7 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
               },
               child: Text(
                 nomeBtn,
+                textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.black),
               ),
             ),
@@ -171,6 +173,10 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
                         builder: (context, constraints) {
                           if (exibirMapaRegioes) {
                             return MapaRegioesWidget();
+                          }
+                          if (exibirSistemaSolar) {
+                            return SistemaSolarWidget(
+                                corPadrao: widget.corBordas);
                           } else {
                             return ListView.builder(
                               itemCount: widget.listaEmblemas.length,

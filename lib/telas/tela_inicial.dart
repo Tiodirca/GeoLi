@@ -31,7 +31,6 @@ class _TelaInicialState extends State<TelaInicial>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     recuperarPontuacao(Constantes.fireBaseColecaoRegioes,
         Constantes.fireBaseDocumentoPontosJogadaRegioes);
@@ -136,6 +135,7 @@ class _TelaInicialState extends State<TelaInicial>
           backgroundColor: Colors.white,
           onPressed: () {
             if (nome == Textos.btnSistemaSolar) {
+              MetodosAuxiliares.passarPontuacaoAtual(0);
               Navigator.pushReplacementNamed(
                   context, Constantes.rotaTelaSistemaSolar);
             } else if (nome == Textos.btnEstadoBrasileiros) {
@@ -256,7 +256,6 @@ class _TelaInicialState extends State<TelaInicial>
                   ],
                 ),
               ),
-
               bottomSheet: WidgetExibirEmblemas(
                   pontuacaoAtual: pontuacaoGeral,
                   listaEmblemas: emblemasGeral,

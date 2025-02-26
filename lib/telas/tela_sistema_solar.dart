@@ -8,6 +8,7 @@ import 'package:geoli/Modelos/emblemas.dart';
 import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
+import 'package:geoli/Uteis/constantes_sistema_solar.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
@@ -36,6 +37,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   bool exibirTutorial = false;
   List<Gestos> gestoPlanetasSistemaSolar = [];
   List<Planeta> planetas = [];
+  List<Emblemas> emblemasExibir = [];
   late Gestos gestoSorteado;
   int tempo = 0;
   bool playPauseJogo = false;
@@ -44,7 +46,6 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   int tamanhoVidas = 3;
   late Timer iniciarTempo;
   late String iniciarAnimacao;
-  List<Emblemas> emblemasExibir = [];
   bool exibirTelaResetarJogo = false;
   Color corPadrao = PaletaCores.corAzul;
   late final AnimationController _controllerFade =
@@ -55,59 +56,9 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   @override
   void initState() {
     super.initState();
-    planetas.addAll([
-      Planeta(
-          nomePlaneta: Textos.nomePlanetaMercurio,
-          caminhoImagem: CaminhosImagens.planetaMercurioImagem),
-      Planeta(
-          nomePlaneta: Textos.nomePlanetaVenus,
-          caminhoImagem: CaminhosImagens.planetaVenusImagem),
-      Planeta(
-          nomePlaneta: Textos.nomePlanetaTerra,
-          caminhoImagem: CaminhosImagens.planetaTerraImagem),
-      Planeta(
-          nomePlaneta: Textos.nomePlanetaMarte,
-          caminhoImagem: CaminhosImagens.planetaMarteImagem),
-      Planeta(
-          nomePlaneta: Textos.nomePlanetaJupiter,
-          caminhoImagem: CaminhosImagens.planetaJupiterImagem),
-      Planeta(
-          nomePlaneta: Textos.nomePlanetaSaturno,
-          caminhoImagem: CaminhosImagens.planetaSaturnoImagem),
-      Planeta(
-          nomePlaneta: Textos.nomePlanetaUrano,
-          caminhoImagem: CaminhosImagens.planetaUranoImagem),
-      Planeta(
-          nomePlaneta: Textos.nomePlanetaNetuno,
-          caminhoImagem: CaminhosImagens.planetaNetunoImagem),
-    ]);
-    gestoPlanetasSistemaSolar.addAll([
-      Gestos(
-          nomeGesto: Textos.nomePlanetaMercurio,
-          nomeImagem: CaminhosImagens.gestoPlanetaMercurioImagem),
-      Gestos(
-          nomeGesto: Textos.nomePlanetaVenus,
-          nomeImagem: CaminhosImagens.gestoPlanetaVenusImagem),
-      Gestos(
-          nomeGesto: Textos.nomePlanetaTerra,
-          nomeImagem: CaminhosImagens.gestoPlanetaTerraImagem),
-      Gestos(
-          nomeGesto: Textos.nomePlanetaMarte,
-          nomeImagem: CaminhosImagens.gestoPlanetaMarteImagem),
-      Gestos(
-          nomeGesto: Textos.nomePlanetaJupiter,
-          nomeImagem: CaminhosImagens.gestoPlanetaJupiterImagem),
-      Gestos(
-          nomeGesto: Textos.nomePlanetaSaturno,
-          nomeImagem: CaminhosImagens.gestoPlanetaSaturnoImagem),
-      Gestos(
-          nomeGesto: Textos.nomePlanetaUrano,
-          nomeImagem: CaminhosImagens.gestoPlanetaUranoImagem),
-      Gestos(
-          nomeGesto: Textos.nomePlanetaNetuno,
-          nomeImagem: CaminhosImagens.gestoPlanetaNetunoImagem),
-    ]);
-
+    planetas = ConstantesSistemaSolar.adicinarPlanetas();
+    gestoPlanetasSistemaSolar =
+        ConstantesSistemaSolar.adicionarGestosPlanetas();
     emblemasExibir.addAll({
       Emblemas(
           caminhoImagem: CaminhosImagens.emblemaSistemaSolarNovato,
@@ -200,6 +151,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
           (key, value) {
             setState(() {
               pontuacaoTotal = value;
+              MetodosAuxiliares.passarPontuacaoAtual(pontuacaoTotal);
               exibirTelaCarregamento = false;
             });
           },
@@ -532,6 +484,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                       iconSize: 30,
                       enableFeedback: false,
                       onPressed: () {
+                        MetodosAuxiliares.passarPontuacaoAtual(0);
                         Navigator.pushReplacementNamed(
                             context, Constantes.rotaTelaInicial);
                       },

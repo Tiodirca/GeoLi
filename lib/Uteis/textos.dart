@@ -8,18 +8,17 @@ class Textos {
   static String btnSistemaSolar = "Sistema Solar";
   static String btnEmblemas = "Emblemas";
   static String btnRegioesMapa = "Mapa";
+  static String btnDificuldadeFacil = "Fácil";
+  static String btnDificuldadeMedio = "Médio";
+  static String btnDificuldadeDificil = "Dificil";
 
   // GERAIS
   static String nomeApp = "Geo Li";
   static String txtTelaCarregamento = "Aguarde Carregando";
-  static String descricaoAreaEstado =
-      "Clique encima do gesto e arraste até um dos estados";
 
-  static String descricaoAreaGestos = "Selecione o gesto em libras";
   static String descricaoTelaInicial = "Selecione qual jogo deseja jogar";
   static String msgAcertou = "Acertou";
   static String msgErrou = "Errado";
-  static String desbloqueioAreaMapa = "";
 
   // TUTORIAIS
   static String tutorialRegioesClickArraste = "Clique/Aperte em cima do gesto e"
@@ -50,14 +49,12 @@ class Textos {
   static String telaSistemaSolarFimJogoTitulo = "Fim de jogo";
   static String telaSistemaSolarPausa = "Pausado";
   static String telaSistemaSolarFimJogoDescricao = "Selecione uma opção";
-
+  static String telaTituloPlanetasDesbloqueados = "Planetas Desbloqueados";
+  static String telaDescricaoPlanetasDesbloqueados =
+      "Aqui estão os planetas que você já desbloqueou";
   static String descriacaoSistemaSolar = "Clique no botão para começar a jogar";
   static String descricaoSistemaSolarDificuldade =
       "Selecione uma dificuldade para começar a jogar";
-
-  static String btnDificuldadeFacil = "Fácil";
-  static String btnDificuldadeMedio = "Médio";
-  static String btnDificuldadeDificil = "Dificil";
 
   //NOME PLANETAS
   static String nomePlanetaMercurio = "Mercúrio";
@@ -69,15 +66,6 @@ class Textos {
   static String nomePlanetaUrano = "Urano";
   static String nomePlanetaNetuno = "Netuno";
   static String nomePlanetaBuracoNegro = "Buraco Negro";
-
-  //EMBLEMAS TELA INICIAL ESTADOS
-  static String emblemaEstadosAventureiroum = "Aventureiro Um";
-  static String emblemaEstadosAventureirodois = "Aventureiro Dois";
-  static String emblemaEstadosEntusiastaum = "Entusiasta Um";
-  static String emblemaEstadosEntusiastadois = "Entusiasta Dois";
-  static String emblemaEstadosColecionador = "Colecionador";
-  static String emblemaEstadosIndiana = "Indiana";
-  static String emblemasPontos = "Pontos : ";
 
   //EMBLEMAS TELA INICIAL SISTEMA SOLAR
   static String emblemaSistemaSolarNovato = "Novato";
@@ -103,6 +91,32 @@ class Textos {
   static String emblemaPatenteSubTenente = "Sub Tenente";
   static String emblemaPatenteTenente = "Tenente";
   static String emblemaPatenteTenenteCoronel = "Tenente Coronel";
+
+  //REGIOES DO BRASIL
+  static String tituloTelaRegioes = "Regiões do Brasil";
+  static String tituloTelaRegiaoCentro = "Região Centro-Oeste";
+  static String tituloTelaRegiaoSul = "Região Sul";
+  static String tituloTelaRegiaoSudeste = "Região Sudeste";
+  static String tituloTelaRegiaoNorte = "Região Norte";
+  static String tituloTelaRegiaoNordeste = "Região Nordeste";
+  static String tituloTelaTodasRegioes = "Todas as regioes do Brasil";
+  static String descricaoTelaRegioes =
+      "Selecione um dos níveis para jogar ou para desbloquear os próximos níveis";
+  static String telaTituloRegioesDesbloqueados = "Regiões Desbloqueadas";
+  static String telaDescricaoRegioesDesbloqueados =
+      "Aqui estão as regiões que você já desbloqueou";
+  static String descricaoAreaEstado =
+      "Clique encima do gesto e arraste até um dos estados";
+  static String descricaoAreaGestos = "Selecione o gesto em libras";
+
+  //EMBLEMAS TELA INICIAL ESTADOS
+  static String emblemaEstadosAventureiroum = "Aventureiro Um";
+  static String emblemaEstadosAventureirodois = "Aventureiro Dois";
+  static String emblemaEstadosEntusiastaum = "Entusiasta Um";
+  static String emblemaEstadosEntusiastadois = "Entusiasta Dois";
+  static String emblemaEstadosColecionador = "Colecionador";
+  static String emblemaEstadosIndiana = "Indiana";
+  static String emblemasPontos = "Pontos : ";
 
   //CENTRO OESTE
   static String nomeRegiaoCentroOeste = "Região Centro-Oeste";
@@ -144,15 +158,4 @@ class Textos {
   static String nomeRegiaoNordestePI = "Piauí - PI";
   static String nomeRegiaoNordesteRN = "Rio Grande do Norte - RN";
   static String nomeRegiaoNordesteSE = "Sergipe - SE";
-
-  //REGIOES DO BRASIL
-  static String tituloTelaRegioes = "Regiões do Brasil";
-  static String tituloTelaRegiaoCentro = "Região Centro-Oeste";
-  static String tituloTelaRegiaoSul = "Região Sul";
-  static String tituloTelaRegiaoSudeste = "Região Sudeste";
-  static String tituloTelaRegiaoNorte = "Região Norte";
-  static String tituloTelaRegiaoNordeste = "Região Nordeste";
-  static String tituloTelaTodasRegioes = "Todas as regioes do Brasil";
-  static String descricaoTelaRegioes =
-      "Selecione um dos níveis para jogar ou para desbloquear os próximos níveis";
 }

@@ -78,6 +78,8 @@ class _BalaoWidgetState extends State<BalaoWidget>
     }
   }
 
+
+
   atualizarPontuacaoTutorial() async {
     try {
       // instanciando Firebase
