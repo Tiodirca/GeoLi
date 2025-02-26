@@ -50,7 +50,6 @@ class _WidgetAreaSoltarEstadosState extends State<WidgetAreaSoltarEstados>
 
   cancelarAcertoTutorial() async {
     if (status == Constantes.statusTutorialAtivo) {
-      print("sfdssdf");
       estado.acerto = false;
     }
   }
@@ -65,7 +64,6 @@ class _WidgetAreaSoltarEstadosState extends State<WidgetAreaSoltarEstados>
 
   @override
   Widget build(BuildContext context) {
-    print("AREA SOLTAR ESTADOS");
     //teste();
     return SizedBox(
         width: 170,

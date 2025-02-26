@@ -49,9 +49,12 @@ class Textos {
   static String telaSistemaSolarFimJogoTitulo = "Fim de jogo";
   static String telaSistemaSolarPausa = "Pausado";
   static String telaSistemaSolarFimJogoDescricao = "Selecione uma opção";
-  static String telaTituloPlanetasDesbloqueados = "Planetas Desbloqueados";
-  static String telaDescricaoPlanetasDesbloqueados =
+  static String telaPlanetasDesbloqueadosTitulo = "Planetas Desbloqueados";
+  static String telaPlanetasDesbloqueadosDescricao =
       "Aqui estão os planetas que você já desbloqueou";
+  static String telaPlanetasPlanetasDesbloqueadosQuanti =
+      "Planetas desbloqueados : ";
+  static String telaPlanetasPlanetasDesbloqueadosFalta = "Falta desbloquear : ";
   static String descriacaoSistemaSolar = "Clique no botão para começar a jogar";
   static String descricaoSistemaSolarDificuldade =
       "Selecione uma dificuldade para começar a jogar";

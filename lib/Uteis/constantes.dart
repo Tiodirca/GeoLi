@@ -36,6 +36,7 @@ class Constantes {
   static const fireBaseColecaoSistemaSolar = "sistemaSolar";
   static const fireBaseDocumentoPontosJogadaSistemaSolar =
       "pontosJogadaSistemaSolar";
+  static const fireBaseDocumentoPlanetasDesbloqueados = "planetasDesbloqueados";
 
   //STATUS PARA ANIMAR OS BALOES
   static const statusAnimacaoIniciar = "iniciarAnimacao";
@@ -47,7 +48,7 @@ class Constantes {
   static const resetarAcaoExcluirSistemaSolar = "excluirSistemaSolar";
 
   static const statusTutorialAtivo = "Tutorial Ativo";
-  static const  statusTutorialDesativado = "Tutorial Desativado";
+  static const statusTutorialDesativado = "Tutorial Desativado";
 
   static Color corPadraoRegioes = PaletaCores.corLaranja;
 

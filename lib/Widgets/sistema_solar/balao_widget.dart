@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
+import 'package:geoli/Uteis/constantes_sistema_solar.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/modelos/planeta.dart';
@@ -25,6 +26,7 @@ class _BalaoWidgetState extends State<BalaoWidget>
   Random random = Random();
   late Color corbalao;
   late String status;
+  List<Planeta> planetas = ConstantesSistemaSolar.adicinarPlanetas();
 
   @override
   void initState() {
@@ -72,13 +74,70 @@ class _BalaoWidgetState extends State<BalaoWidget>
     } else {
       if (gesto.contains(widget.planeta.nomePlaneta)) {
         MetodosAuxiliares.confirmarAcerto(Constantes.msgAcertoGesto);
+        recuperarPlanetasDesbloqueados();
       } else {
         MetodosAuxiliares.confirmarAcerto(Constantes.msgErroAcertoGesto);
       }
     }
   }
 
+  // metodo para gravar no banco de dados que o planeta foi desbloqueado
+  desbloquearPlaneta(String nomePlaneta) {
+    Map<String, bool> dados = {};
+    // percorrendo a lista para poder jogar os dados dentro de um map
+    for (var element in planetas) {
+      //definindo que o map vai receber o nome do planeta e o valor boleano
+      dados[element.nomePlaneta] = element.desbloqueado;
+      if (nomePlaneta == element.nomePlaneta) {
+        // definindo que o map vai contendo o nome do planeta vai receber o valor boleano
+        dados[element.nomePlaneta] = true;
+      }
+    }
 
+    try {
+      // instanciando Firebase
+      var db = FirebaseFirestore.instance;
+      db
+          .collection(
+              Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
+          .doc(Constantes
+              .fireBaseDocumentoPlanetasDesbloqueados) //passando o documento
+          .set(dados);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  // metodo para consultar o banco de dados
+  recuperarPlanetasDesbloqueados() async {
+    var db = FirebaseFirestore.instance;
+    db
+        .collection(
+            Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
+        .doc(Constantes
+            .fireBaseDocumentoPlanetasDesbloqueados) // passando documento
+        .get()
+        .then(
+      (querySnapshot) async {
+        querySnapshot.data()!.forEach(
+          (key, value) {
+            setState(() {
+              // percorendo a lista
+              for (var element in planetas) {
+                //verificando se o nome do elemento e igual ao nome do item na lista
+                if (element.nomePlaneta == key) {
+                  // caso for o campo do elemento vai receber o valor que esta no banco
+                  element.desbloqueado = value;
+                }
+              }
+              // chamando metodo
+              desbloquearPlaneta(widget.planeta.nomePlaneta);
+            });
+          },
+        );
+      },
+    );
+  }
 
   atualizarPontuacaoTutorial() async {
     try {

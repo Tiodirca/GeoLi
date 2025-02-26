@@ -4,8 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/constantes_estados_gestos.dart';
+import 'package:geoli/Uteis/constantes_sistema_solar.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
+import 'package:geoli/modelos/planeta.dart';
 
 class WidgetTelaResetarDados extends StatefulWidget {
   const WidgetTelaResetarDados(
@@ -92,6 +94,29 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
     }
   }
 
+  // metodo para gravar no banco de dados que o planeta foi bloqueado
+  bloquearPlanetas() {
+    List<Planeta> planetas = ConstantesSistemaSolar.adicinarPlanetas();
+    Map<String, bool> dados = {};
+    // percorrendo a lista para poder jogar os dados dentro de um map
+    for (var element in planetas) {
+      //definindo que o map vai receber o nome do planeta e o valor boleano
+      dados[element.nomePlaneta] = false;
+    }
+    try {
+      // instanciando Firebase
+      var db = FirebaseFirestore.instance;
+      db
+          .collection(
+              Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
+          .doc(Constantes
+              .fireBaseDocumentoPlanetasDesbloqueados) //passando o documento
+          .set(dados);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   reiniciarDadosRegioes() {
     gravarDadosResetados(Constantes.fireBaseColecaoRegioes,
         Constantes.fireBaseDocumentoPontosJogadaRegioes, dadosPontuacao);
@@ -157,12 +182,14 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
                         Constantes.fireBaseDocumentoPontosJogadaSistemaSolar,
                         dadosPontuacao);
                     reiniciarDadosRegioes();
+                    bloquearPlanetas();
                     Future.delayed(Duration(seconds: 1), () {
                       Navigator.pushReplacementNamed(
                           context, Constantes.rotaTelaInicial);
                     });
                   } else if (widget.tipoAcao ==
                       Constantes.resetarAcaoExcluirSistemaSolar) {
+                    bloquearPlanetas();
                     gravarDadosResetados(
                         Constantes.fireBaseColecaoSistemaSolar,
                         Constantes.fireBaseDocumentoPontosJogadaSistemaSolar,
