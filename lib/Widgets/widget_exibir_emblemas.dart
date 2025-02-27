@@ -6,8 +6,8 @@ import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/emblema_widget.dart';
-import 'package:geoli/Widgets/mapa_regioes_widget.dart';
-import 'package:geoli/Widgets/sistema_solar_widget.dart';
+import 'package:geoli/Widgets/estados/mapa_regioes_widget.dart';
+import 'package:geoli/Widgets/sistema_solar/sistema_solar_widget.dart';
 
 class WidgetExibirEmblemas extends StatefulWidget {
   const WidgetExibirEmblemas(

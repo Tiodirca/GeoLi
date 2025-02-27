@@ -182,7 +182,8 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
                 },
                 shape: OutlineInputBorder(
                     borderSide: BorderSide(
-                        width: 1, color: ConstantesEstadosGestos.corPadraoRegioes),
+                        width: 1,
+                        color: ConstantesEstadosGestos.corPadraoRegioes),
                     borderRadius: BorderRadius.circular(10)),
                 child: Row(
                   children: [
@@ -196,7 +197,8 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
                       child: Text(
                         estado.nome,
                         maxLines: 2,
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.black),
                       ),
                     )
                   ],
@@ -213,7 +215,7 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
           ),
           Text(
             nome,
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
             textAlign: TextAlign.center,
           )
         ],
@@ -264,7 +266,8 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
                                   shape: OutlineInputBorder(
                                       borderSide: BorderSide(
                                           width: 1,
-                                          color: ConstantesEstadosGestos.corPadraoRegioes),
+                                          color: ConstantesEstadosGestos
+                                              .corPadraoRegioes),
                                       borderRadius: BorderRadius.circular(10)),
                                   child: Column(
                                     mainAxisAlignment:

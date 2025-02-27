@@ -51,7 +51,7 @@ class Textos {
   static String telaSistemaSolarFimJogoDescricao = "Selecione uma opção";
   static String telaPlanetasDesbloqueadosTitulo = "Planetas Desbloqueados";
   static String telaPlanetasDesbloqueadosDescricao =
-      "Aqui estão os planetas que você já desbloqueou";
+      "Aqui estão os planetas que você já desbloqueou,clique/aperte sobre para ver mais";
   static String telaPlanetasPlanetasDesbloqueadosQuanti =
       "Planetas desbloqueados : ";
   static String telaPlanetasPlanetasDesbloqueadosFalta = "Falta desbloquear : ";
