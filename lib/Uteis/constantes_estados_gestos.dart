@@ -1,9 +1,69 @@
+import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
+import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
 
 class ConstantesEstadosGestos {
+  static Color corPadraoRegioes = PaletaCores.corLaranja;
+
+  static adicionarEstadosGestos() {
+    Map<Estado, Gestos> estadoGestoMap = {};
+    estadoGestoMap[ConstantesEstadosGestos.estadoMS] =
+        ConstantesEstadosGestos.gestoMS;
+    estadoGestoMap[ConstantesEstadosGestos.estadoGO] =
+        ConstantesEstadosGestos.gestoGO;
+    estadoGestoMap[ConstantesEstadosGestos.estadoMT] =
+        ConstantesEstadosGestos.gestoMT;
+    estadoGestoMap[ConstantesEstadosGestos.estadoRS] =
+        ConstantesEstadosGestos.gestoRS;
+    estadoGestoMap[ConstantesEstadosGestos.estadoSC] =
+        ConstantesEstadosGestos.gestoSC;
+    estadoGestoMap[ConstantesEstadosGestos.estadoPR] =
+        ConstantesEstadosGestos.gestoPR;
+    estadoGestoMap[ConstantesEstadosGestos.estadoMG] =
+        ConstantesEstadosGestos.gestoMG;
+    estadoGestoMap[ConstantesEstadosGestos.estadoES] =
+        ConstantesEstadosGestos.gestoES;
+    estadoGestoMap[ConstantesEstadosGestos.estadoSP] =
+        ConstantesEstadosGestos.gestoSP;
+    estadoGestoMap[ConstantesEstadosGestos.estadoRJ] =
+        ConstantesEstadosGestos.gestoRJ;
+    estadoGestoMap[ConstantesEstadosGestos.estadoAC] =
+        ConstantesEstadosGestos.gestoAC;
+    estadoGestoMap[ConstantesEstadosGestos.estadoAP] =
+        ConstantesEstadosGestos.gestoAP;
+    estadoGestoMap[ConstantesEstadosGestos.estadoAM] =
+        ConstantesEstadosGestos.gestoAM;
+    estadoGestoMap[ConstantesEstadosGestos.estadoPA] =
+        ConstantesEstadosGestos.gestoPA;
+    estadoGestoMap[ConstantesEstadosGestos.estadoRO] =
+        ConstantesEstadosGestos.gestoRO;
+    estadoGestoMap[ConstantesEstadosGestos.estadoRR] =
+        ConstantesEstadosGestos.gestoRR;
+    estadoGestoMap[ConstantesEstadosGestos.estadoTO] =
+        ConstantesEstadosGestos.gestoTO;
+    estadoGestoMap[ConstantesEstadosGestos.estadoAL] =
+        ConstantesEstadosGestos.gestoAL;
+    estadoGestoMap[ConstantesEstadosGestos.estadoBA] =
+        ConstantesEstadosGestos.gestoBA;
+    estadoGestoMap[ConstantesEstadosGestos.estadoCE] =
+        ConstantesEstadosGestos.gestoCE;
+    estadoGestoMap[ConstantesEstadosGestos.estadoMA] =
+        ConstantesEstadosGestos.gestoMA;
+    estadoGestoMap[ConstantesEstadosGestos.estadoPB] =
+        ConstantesEstadosGestos.gestoPB;
+    estadoGestoMap[ConstantesEstadosGestos.estadoPE] =
+        ConstantesEstadosGestos.gestoPE;
+    estadoGestoMap[ConstantesEstadosGestos.estadoPI] =
+        ConstantesEstadosGestos.gestoPI;
+    estadoGestoMap[ConstantesEstadosGestos.estadoRN] =
+        ConstantesEstadosGestos.gestoRN;
+    estadoGestoMap[ConstantesEstadosGestos.estadoSE] =
+        ConstantesEstadosGestos.gestoSE;
+    return estadoGestoMap;
+  }
 
   // REGIAO CENTRO OESTE
   static Estado estadoGO = Estado(

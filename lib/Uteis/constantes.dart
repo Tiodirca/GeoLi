@@ -16,11 +16,6 @@ class Constantes {
   static const rotaTelaRegiaoNordeste = "telaRegiaoNordeste";
   static const rotaTelaRegiaoTodosEstados = "telaRegiaoTodosEstados";
 
-  //TEMPO DE JOGO DO SISTEMA SOLAR
-  static const int sistemaSolarTempoFacil = 60;
-  static const int sistemaSolarTempoMedio = 40;
-  static const int sistemaSolarTempoDificl = 25;
-
   //NOME DOCUMENTO FIBASE REGIOES
   static const fireBaseColecaoRegioes = "regioes";
   static const fireBaseDocumentoRegiaoCentroOeste = "regiaoCentroOeste";
@@ -38,19 +33,12 @@ class Constantes {
       "pontosJogadaSistemaSolar";
   static const fireBaseDocumentoPlanetasDesbloqueados = "planetasDesbloqueados";
 
-  //STATUS PARA ANIMAR OS BALOES
-  static const statusAnimacaoIniciar = "iniciarAnimacao";
-  static const statusAnimacaoPausada = "pausarAnimacao";
-  static const statusAnimacaoRetomar = "RetomarAnimacao";
-
   static const resetarAcaoExcluirTudo = "excluirTudo";
   static const resetarAcaoExcluirRegioes = "excluirRegioes";
   static const resetarAcaoExcluirSistemaSolar = "excluirSistemaSolar";
 
   static const statusTutorialAtivo = "Tutorial Ativo";
   static const statusTutorialDesativado = "Tutorial Desativado";
-
-  static Color corPadraoRegioes = PaletaCores.corLaranja;
 
   static const pontosJogada = "pontosJogada";
   static const msgErroAcertoGesto = "Errou";

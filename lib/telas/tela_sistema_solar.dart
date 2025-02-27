@@ -233,17 +233,17 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                 }
               } else {
                 if (nomeBtn == Textos.btnDificuldadeFacil) {
-                  tempo = Constantes.sistemaSolarTempoFacil;
+                  tempo = ConstantesSistemaSolar.sistemaSolarTempoFacil;
                 } else if (nomeBtn == Textos.btnDificuldadeMedio) {
                   tamanhoVidas = 2;
-                  tempo = Constantes.sistemaSolarTempoMedio;
+                  tempo = ConstantesSistemaSolar.sistemaSolarTempoMedio;
                 } else if (nomeBtn == Textos.btnDificuldadeDificil) {
                   tamanhoVidas = 1;
-                  tempo = Constantes.sistemaSolarTempoDificl;
+                  tempo = ConstantesSistemaSolar.sistemaSolarTempoDificl;
                 }
                 comecarTempo();
                 exibirJogo = true;
-                iniciarAnimacao = Constantes.statusAnimacaoIniciar;
+                iniciarAnimacao = ConstantesSistemaSolar.statusAnimacaoIniciar;
                 exibirBtnDificuldade = false;
               }
             });
@@ -418,12 +418,14 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                                           if (tamanhoVidas != 0 && tempo != 0) {
                                             playPauseJogo = !playPauseJogo;
                                             if (playPauseJogo) {
-                                              iniciarAnimacao = Constantes
-                                                  .statusAnimacaoPausada;
+                                              iniciarAnimacao =
+                                                  ConstantesSistemaSolar
+                                                      .statusAnimacaoPausada;
                                               pararTempo();
                                             } else {
-                                              iniciarAnimacao = Constantes
-                                                  .statusAnimacaoRetomar;
+                                              iniciarAnimacao =
+                                                  ConstantesSistemaSolar
+                                                      .statusAnimacaoRetomar;
                                               comecarTempo();
                                             }
                                           }
@@ -494,7 +496,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                   if (exibirJogo) {
                     final Size biggest = constraints.biggest;
                     // chamando metodo para ficar
-                    // verificando a todo o momento se o usuario acertou o planeta
+                    // verificando a cada momento se o usuario acertou o planeta
                     recuperarAcertoPlaneta();
                     return WidgetAreaAnimacaoBaloes(
                       biggest: biggest,

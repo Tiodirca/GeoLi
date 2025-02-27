@@ -68,58 +68,7 @@ class _TelaTodasRegioesState extends State<TelaTodasRegioes> {
   }
 
   carregarEstados() {
-    estadoGestoMap[ConstantesEstadosGestos.estadoMS] =
-        ConstantesEstadosGestos.gestoMS;
-    estadoGestoMap[ConstantesEstadosGestos.estadoGO] =
-        ConstantesEstadosGestos.gestoGO;
-    estadoGestoMap[ConstantesEstadosGestos.estadoMT] =
-        ConstantesEstadosGestos.gestoMT;
-    estadoGestoMap[ConstantesEstadosGestos.estadoRS] =
-        ConstantesEstadosGestos.gestoRS;
-    estadoGestoMap[ConstantesEstadosGestos.estadoSC] =
-        ConstantesEstadosGestos.gestoSC;
-    estadoGestoMap[ConstantesEstadosGestos.estadoPR] =
-        ConstantesEstadosGestos.gestoPR;
-    estadoGestoMap[ConstantesEstadosGestos.estadoMG] =
-        ConstantesEstadosGestos.gestoMG;
-    estadoGestoMap[ConstantesEstadosGestos.estadoES] =
-        ConstantesEstadosGestos.gestoES;
-    estadoGestoMap[ConstantesEstadosGestos.estadoSP] =
-        ConstantesEstadosGestos.gestoSP;
-    estadoGestoMap[ConstantesEstadosGestos.estadoRJ] =
-        ConstantesEstadosGestos.gestoRJ;
-    estadoGestoMap[ConstantesEstadosGestos.estadoAC] =
-        ConstantesEstadosGestos.gestoAC;
-    estadoGestoMap[ConstantesEstadosGestos.estadoAP] =
-        ConstantesEstadosGestos.gestoAP;
-    estadoGestoMap[ConstantesEstadosGestos.estadoAM] =
-        ConstantesEstadosGestos.gestoAM;
-    estadoGestoMap[ConstantesEstadosGestos.estadoPA] =
-        ConstantesEstadosGestos.gestoPA;
-    estadoGestoMap[ConstantesEstadosGestos.estadoRO] =
-        ConstantesEstadosGestos.gestoRO;
-    estadoGestoMap[ConstantesEstadosGestos.estadoRR] =
-        ConstantesEstadosGestos.gestoRR;
-    estadoGestoMap[ConstantesEstadosGestos.estadoTO] =
-        ConstantesEstadosGestos.gestoTO;
-    estadoGestoMap[ConstantesEstadosGestos.estadoAL] =
-        ConstantesEstadosGestos.gestoAL;
-    estadoGestoMap[ConstantesEstadosGestos.estadoBA] =
-        ConstantesEstadosGestos.gestoBA;
-    estadoGestoMap[ConstantesEstadosGestos.estadoCE] =
-        ConstantesEstadosGestos.gestoCE;
-    estadoGestoMap[ConstantesEstadosGestos.estadoMA] =
-        ConstantesEstadosGestos.gestoMA;
-    estadoGestoMap[ConstantesEstadosGestos.estadoPB] =
-        ConstantesEstadosGestos.gestoPB;
-    estadoGestoMap[ConstantesEstadosGestos.estadoPE] =
-        ConstantesEstadosGestos.gestoPE;
-    estadoGestoMap[ConstantesEstadosGestos.estadoPI] =
-        ConstantesEstadosGestos.gestoPI;
-    estadoGestoMap[ConstantesEstadosGestos.estadoRN] =
-        ConstantesEstadosGestos.gestoRN;
-    estadoGestoMap[ConstantesEstadosGestos.estadoSE] =
-        ConstantesEstadosGestos.gestoSE;
+    estadoGestoMap = ConstantesEstadosGestos.adicionarEstadosGestos();
     estadosSorteio = estadoGestoMap.entries.toList();
     estadosSorteio.shuffle();
   }
@@ -257,7 +206,9 @@ class _TelaTodasRegioesState extends State<TelaTodasRegioes> {
         body: LayoutBuilder(
           builder: (context, constraints) {
             if (exibirTelaCarregamento) {
-              return WidgetTelaCarregamento(corPadrao: Constantes.corPadraoRegioes,);
+              return WidgetTelaCarregamento(
+                corPadrao: ConstantesEstadosGestos.corPadraoRegioes,
+              );
             } else {
               return WidgetAreaTelaRegioes(
                   nomeColecao: nomeColecao,

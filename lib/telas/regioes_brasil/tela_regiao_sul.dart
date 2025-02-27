@@ -118,7 +118,7 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
         body: LayoutBuilder(
           builder: (context, constraints) {
             if (exibirTelaCarregamento) {
-              return WidgetTelaCarregamento(corPadrao: Constantes.corPadraoRegioes,);
+              return WidgetTelaCarregamento(corPadrao: ConstantesEstadosGestos.corPadraoRegioes,);
             } else {
               return WidgetAreaTelaRegioes(
                   nomeColecao: nomeColecao,

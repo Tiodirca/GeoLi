@@ -4,6 +4,7 @@ import 'package:geoli/Modelos/emblemas.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
+import 'package:geoli/Uteis/constantes_estados_gestos.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/widget_exibir_emblemas.dart';
@@ -168,7 +169,7 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
             }
           },
           shape: RoundedRectangleBorder(
-              side: BorderSide(color: Constantes.corPadraoRegioes, width: 1),
+              side: BorderSide(color: ConstantesEstadosGestos.corPadraoRegioes, width: 1),
               borderRadius: const BorderRadius.all(Radius.circular(20))),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -198,15 +199,14 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        print("fdsfsd");
         if (exibirTelaCarregamento) {
           return WidgetTelaCarregamento(
-            corPadrao: Constantes.corPadraoRegioes,
+            corPadrao: ConstantesEstadosGestos.corPadraoRegioes,
           );
         } else {
           return Scaffold(
             appBar: AppBar(
-              backgroundColor: Constantes.corPadraoRegioes,
+              backgroundColor: ConstantesEstadosGestos.corPadraoRegioes,
               title: Text(
                 Textos.tituloTelaRegioes,
                 style:
@@ -295,7 +295,7 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
                   Visibility(
                       visible: exibirTelaResetarJogo,
                       child: WidgetTelaResetarDados(
-                        corCard: Constantes.corPadraoRegioes,
+                        corCard: ConstantesEstadosGestos.corPadraoRegioes,
                         tipoAcao: Constantes.resetarAcaoExcluirRegioes,
                       ))
                 ],
@@ -304,7 +304,7 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
             bottomSheet: WidgetExibirEmblemas(
               pontuacaoAtual: pontos,
               nomeBtn: Textos.btnRegioesMapa,
-              corBordas: Constantes.corPadraoRegioes,
+              corBordas: ConstantesEstadosGestos.corPadraoRegioes,
               listaEmblemas: emblemasExibir,
             ),
           );

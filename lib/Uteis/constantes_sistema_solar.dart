@@ -4,6 +4,18 @@ import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/modelos/planeta.dart';
 
 class ConstantesSistemaSolar {
+
+  //STATUS PARA ANIMAR OS BALOES
+  static const statusAnimacaoIniciar = "iniciarAnimacao";
+  static const statusAnimacaoPausada = "pausarAnimacao";
+  static const statusAnimacaoRetomar = "RetomarAnimacao";
+
+  //TEMPO DE JOGO DO SISTEMA SOLAR
+  static const int sistemaSolarTempoFacil = 60;
+  static const int sistemaSolarTempoMedio = 40;
+  static const int sistemaSolarTempoDificl = 25;
+
+
   static adicinarPlanetas() {
     List<Planeta> planetas = [];
     planetas.addAll([

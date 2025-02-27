@@ -4,6 +4,7 @@ import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
+import 'package:geoli/Uteis/constantes_estados_gestos.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Widgets/gestos_widget.dart';
 import 'package:geoli/Widgets/widget_msg_tutoriais.dart';
@@ -211,7 +212,7 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
           child: Card(
               color: Colors.white,
               shape: RoundedRectangleBorder(
-                  side: BorderSide(color: Constantes.corPadraoRegioes),
+                  side: BorderSide(color: ConstantesEstadosGestos.corPadraoRegioes),
                   borderRadius: const BorderRadius.all(Radius.circular(10))),
               child: Stack(
                 children: [
@@ -259,7 +260,7 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
                                     ),
                                   )),
                               WidgetMsgTutoriais(
-                                  corBorda: Constantes.corPadraoRegioes,
+                                  corBorda: ConstantesEstadosGestos.corPadraoRegioes,
                                   mensagem: Textos.tutorialRegioesClickArraste)
                             ],
                           )))

@@ -4,6 +4,7 @@ import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
+import 'package:geoli/Uteis/constantes_estados_gestos.dart';
 
 import '../../Uteis/paleta_cores.dart';
 import '../../Uteis/textos.dart';
@@ -226,7 +227,7 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
         child: Card(
           color: Colors.white,
           shape: RoundedRectangleBorder(
-              side: BorderSide(color: Constantes.corPadraoRegioes),
+              side: BorderSide(color: ConstantesEstadosGestos.corPadraoRegioes),
               borderRadius: BorderRadius.all(Radius.circular(30))),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

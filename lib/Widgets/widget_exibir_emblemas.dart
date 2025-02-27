@@ -85,14 +85,6 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
             ),
           ));
 
-  validarAltura(double alturaTela) {
-    if (exibirMapaRegioes == true) {
-      return exibirTela ? alturaTela * 0.9 : 60.toDouble();
-    } else {
-      return exibirTela ? alturaTela * 0.7 : 60.toDouble();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;
@@ -100,7 +92,7 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
     return AnimatedContainer(
         color: Colors.white,
         width: larguraTela,
-        height: exibirTela ? alturaTela * 0.7 : 60,
+        height: exibirTela ? alturaTela * 0.8 : 60,
         duration: const Duration(seconds: 1),
         child: Column(
           children: [
@@ -168,7 +160,7 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
                                 BorderSide(width: 1, color: widget.corBordas)),
                       ),
                       width: larguraTela * 0.9,
-                      height: 420,
+                      height: 500,
                       child: LayoutBuilder(
                         builder: (context, constraints) {
                           if (exibirMapaRegioes) {
@@ -211,7 +203,6 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
                         setState(() {
                           exibirTela = false;
                           exibirAreaInternaTela = false;
-                          validarAltura(alturaTela);
                         });
                       },
                       child: Icon(

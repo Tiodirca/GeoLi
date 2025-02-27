@@ -2,11 +2,14 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
+import 'package:geoli/Uteis/constantes_estados_gestos.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/widget_tela_carregamento.dart';
+import 'package:geoli/Modelos/gestos.dart';
 
 class MapaRegioesWidget extends StatefulWidget {
   const MapaRegioesWidget({
@@ -24,7 +27,38 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
   bool liberarRegiaoNordeste = false;
   bool liberarTodosEstados = false;
   bool exibirTelaCarregamento = true;
+  bool exibirRegiaoGestosDetalhada = false;
+  int contador = 0;
+  List<Estado> regioesSelecionadas = [];
+  List<Gestos> gestosSelecionados = [];
   String caminhoImagemRegiao = CaminhosImagens.mapaCompletoBranco;
+  Map<Estado, Gestos> estadoGestoMap = {};
+
+  Estado regiaoCentroOeste = Estado(
+      nome: Textos.nomeRegiaoCentroOeste,
+      caminhoImagem: CaminhosImagens.gestoCentroOesteImagem,
+      acerto: true);
+  Estado regiaoSul = Estado(
+      nome: Textos.nomeRegiaoSul,
+      caminhoImagem: CaminhosImagens.gestoSulImagem,
+      acerto: false);
+  Estado regiaoSudeste = Estado(
+      nome: Textos.nomeRegiaoSudeste,
+      caminhoImagem: CaminhosImagens.gestoSudesteImagem,
+      acerto: false);
+  Estado regiaoNorte = Estado(
+      nome: Textos.nomeRegiaoNorte,
+      caminhoImagem: CaminhosImagens.gestoNorteImagem,
+      acerto: false);
+  Estado regiaoNordeste = Estado(
+      nome: Textos.nomeRegiaoNordeste,
+      caminhoImagem: CaminhosImagens.gestoNordesteImagem,
+      acerto: false);
+
+  Estado todasRegioes = Estado(
+      nome: Textos.btnTodosEstados,
+      caminhoImagem: CaminhosImagens.gestoRegioesImagem,
+      acerto: false);
 
   validarRegioesDesbloqueadas() {
     if (liberarRegiaoSul && liberarRegiaoSudeste == false) {
@@ -47,7 +81,50 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
   @override
   void initState() {
     super.initState();
+    estadoGestoMap = ConstantesEstadosGestos.adicionarEstadosGestos();
     recuperarRegioesLiberadas();
+  }
+
+  recuperarRegioes(Estado regiao) {
+    estadoGestoMap.forEach(
+      (key, value) {
+        contador = contador + 1;
+        if (contador < 4 && regiao.nome == regiaoCentroOeste.nome) {
+          setState(() {
+            regioesSelecionadas.add(key);
+            gestosSelecionados.add(value);
+          });
+        } else if (contador > 3 &&
+            contador < 7 &&
+            regiao.nome == regiaoSul.nome) {
+          setState(() {
+            regioesSelecionadas.add(key);
+            gestosSelecionados.add(value);
+          });
+        } else if (contador > 6 &&
+            contador < 11 &&
+            regiao.nome == regiaoSudeste.nome) {
+          setState(() {
+            regioesSelecionadas.add(key);
+            gestosSelecionados.add(value);
+          });
+        } else if (contador > 10 &&
+            contador < 18 &&
+            regiao.nome == regiaoNorte.nome) {
+          setState(() {
+            regioesSelecionadas.add(key);
+            gestosSelecionados.add(value);
+          });
+        } else if (contador > 17 &&
+            contador < 27 &&
+            regiao.nome == regiaoNordeste.nome) {
+          setState(() {
+            regioesSelecionadas.add(key);
+            gestosSelecionados.add(value);
+          });
+        }
+      },
+    );
   }
 
   recuperarRegioesLiberadas() async {
@@ -78,76 +155,216 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
     );
   }
 
-  Widget exibirEstrela(bool exibirEstrela, String nomeRegiao) => Visibility(
-      visible: exibirEstrela,
-      child: SizedBox(
-          width: 170,
-          height: 20,
-          child: Row(
-            children: [
-              Icon(
-                Icons.star,
-                color: PaletaCores.corOuro,
-              ),
-              Text(
-                nomeRegiao,
-                style: TextStyle(fontWeight: FontWeight.bold),
-              )
-            ],
-          )));
+  Widget exibirDetalhesRegiaoDesbloqueada(bool exibir, Estado estado) =>
+      Visibility(
+          visible: exibir,
+          child: Container(
+              margin: EdgeInsets.only(right: 10, bottom: 10),
+              width: 140,
+              height: 50,
+              child: FloatingActionButton(
+                backgroundColor: Colors.white,
+                onPressed: () {
+                  if (estado.nome == Textos.nomeRegiaoCentroOeste) {
+                    recuperarRegioes(regiaoCentroOeste);
+                  } else if (estado.nome == Textos.nomeRegiaoSul) {
+                    recuperarRegioes(regiaoSul);
+                  } else if (estado.nome == Textos.nomeRegiaoSudeste) {
+                    recuperarRegioes(regiaoSudeste);
+                  } else if (estado.nome == Textos.nomeRegiaoNorte) {
+                    recuperarRegioes(regiaoNorte);
+                  } else if (estado.nome == Textos.nomeRegiaoNordeste) {
+                    recuperarRegioes(regiaoNordeste);
+                  }
+                  setState(() {
+                    exibirRegiaoGestosDetalhada = true;
+                  });
+                },
+                shape: OutlineInputBorder(
+                    borderSide: BorderSide(
+                        width: 1, color: ConstantesEstadosGestos.corPadraoRegioes),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Row(
+                  children: [
+                    Image(
+                      height: 50,
+                      width: 50,
+                      image: AssetImage('${estado.caminhoImagem}.png'),
+                    ),
+                    SizedBox(
+                      width: 90,
+                      child: Text(
+                        estado.nome,
+                        maxLines: 2,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    )
+                  ],
+                ),
+              )));
+
+  Widget imagemRegiaoGesto(String nome, String caminhoImagem) => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Image(
+            height: 80,
+            width: 80,
+            image: AssetImage('$caminhoImagem.png'),
+          ),
+          Text(
+            nome,
+            style: TextStyle(fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          )
+        ],
+      );
 
   @override
   Widget build(BuildContext context) {
     double larguraTela = MediaQuery.of(context).size.width;
     return Container(
-        width: larguraTela,
-        height: 420,
         color: Colors.transparent,
         child: LayoutBuilder(
           builder: (context, constraints) {
             if (exibirTelaCarregamento) {
               return WidgetTelaCarregamento(
-                  corPadrao: Constantes.corPadraoRegioes);
+                  corPadrao: ConstantesEstadosGestos.corPadraoRegioes);
             } else {
-              return Column(
+              return Stack(
+                alignment: Alignment.center,
                 children: [
-                  Text(
-                    Textos.telaTituloRegioesDesbloqueados,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  ),
-                  Text(Textos.telaDescricaoRegioesDesbloqueados),
-                  SizedBox(
-                    width: larguraTela,
-                    height: 300,
-                    child: InteractiveViewer(
-                      panEnabled: false,
-                      minScale: 0.5,
-                      maxScale: 4,
-                      child: Image(
-                        image: AssetImage("$caminhoImagemRegiao.png"),
+                  Column(
+                    children: [
+                      Text(
+                        textAlign: TextAlign.center,
+                        Textos.telaTituloRegioesDesbloqueados,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
                       ),
-                    ),
+                      Text(
+                        Textos.telaDescricaoRegioesDesbloqueados,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
                   ),
-                  SizedBox(
-                    width: Platform.isIOS || Platform.isAndroid
-                        ? larguraTela * 0.9
-                        : larguraTela * 0.4,
-                    height: 60,
-                    child: Wrap(
-                      children: [
-                        exibirEstrela(
-                            liberarRegiaoSul, Textos.nomeRegiaoCentroOeste),
-                        exibirEstrela(
-                            liberarRegiaoSudeste, Textos.nomeRegiaoSul),
-                        exibirEstrela(
-                            liberarRegiaoNorte, Textos.nomeRegiaoSudeste),
-                        exibirEstrela(
-                            liberarRegiaoNordeste, Textos.nomeRegiaoNorte),
-                        exibirEstrela(
-                            liberarTodosEstados, Textos.nomeRegiaoNordeste),
-                      ],
-                    ),
-                  )
+                  Positioned(
+                      right: 0,
+                      left: 0,
+                      bottom: 0,
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          if (exibirRegiaoGestosDetalhada) {
+                            return SizedBox(
+                                width: Platform.isIOS || Platform.isAndroid
+                                    ? larguraTela * 0.9
+                                    : larguraTela * 0.4,
+                                height: 450,
+                                child: Card(
+                                  color: Colors.white,
+                                  shape: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          width: 1,
+                                          color: ConstantesEstadosGestos.corPadraoRegioes),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      SizedBox(
+                                        width: larguraTela,
+                                        height: 350,
+                                        child: ListView.builder(
+                                          itemCount: regioesSelecionadas.length,
+                                          itemBuilder: (context, index) {
+                                            return Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                imagemRegiaoGesto(
+                                                    regioesSelecionadas
+                                                        .elementAt(index)
+                                                        .nome,
+                                                    regioesSelecionadas
+                                                        .elementAt(index)
+                                                        .caminhoImagem),
+                                                imagemRegiaoGesto(
+                                                    gestosSelecionados
+                                                        .elementAt(index)
+                                                        .nomeGesto,
+                                                    gestosSelecionados
+                                                        .elementAt(index)
+                                                        .nomeImagem),
+                                              ],
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 40,
+                                        height: 40,
+                                        child: FloatingActionButton(
+                                          backgroundColor: Colors.white,
+                                          onPressed: () {
+                                            setState(() {
+                                              exibirRegiaoGestosDetalhada =
+                                                  false;
+                                              regioesSelecionadas.clear();
+                                              gestosSelecionados.clear();
+                                              contador = 0;
+                                            });
+                                          },
+                                          child: Icon(
+                                            Icons.close,
+                                            color: PaletaCores.corVermelha,
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ));
+                          } else {
+                            return Column(
+                              children: [
+                                SizedBox(
+                                  width: larguraTela,
+                                  height: 250,
+                                  child: InteractiveViewer(
+                                    panEnabled: false,
+                                    minScale: 0.5,
+                                    maxScale: 4,
+                                    child: Image(
+                                      image: AssetImage(
+                                          "$caminhoImagemRegiao.png"),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(top: 10),
+                                  width: Platform.isIOS || Platform.isAndroid
+                                      ? larguraTela * 0.9
+                                      : larguraTela * 0.4,
+                                  height: 180,
+                                  child: Wrap(
+                                    alignment: WrapAlignment.center,
+                                    children: [
+                                      exibirDetalhesRegiaoDesbloqueada(
+                                          liberarRegiaoSul, regiaoCentroOeste),
+                                      exibirDetalhesRegiaoDesbloqueada(
+                                          liberarRegiaoSudeste, regiaoSul),
+                                      exibirDetalhesRegiaoDesbloqueada(
+                                          liberarRegiaoNorte, regiaoSudeste),
+                                      exibirDetalhesRegiaoDesbloqueada(
+                                          liberarRegiaoNordeste, regiaoNorte),
+                                      exibirDetalhesRegiaoDesbloqueada(
+                                          liberarTodosEstados, regiaoNordeste),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            );
+                          }
+                        },
+                      ))
                 ],
               );
             }

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:geoli/Uteis/constantes.dart';
+import 'package:geoli/Uteis/constantes_sistema_solar.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/sistema_solar/balao_widget.dart';
 import 'package:geoli/Widgets/sistema_solar/widget_tela_fim_jogo.dart';
@@ -100,7 +100,7 @@ class _WidgetAreaAnimacaoBaloesState extends State<WidgetAreaAnimacaoBaloes>
       // verificando se a quantidade de vida nao e igual a
       // zero ou se o status nao esta pausado
       if (widget.quantidadeVidas != 0) {
-        if (widget.statusAnimacao != Constantes.statusAnimacaoPausada) {
+        if (widget.statusAnimacao != ConstantesSistemaSolar.statusAnimacaoPausada) {
           iniciarBalao(_controller7, 5, _controller8, 1);
           iniciarBalao(_controller9, 5, _controller10, 1);
           iniciarBalao(_controller11, 5, _controller12, 1);
@@ -110,7 +110,7 @@ class _WidgetAreaAnimacaoBaloesState extends State<WidgetAreaAnimacaoBaloes>
     // definindo que a animacao ira comecar apos o tempo passado no delay
     Future.delayed(Duration(milliseconds: 4300), () {
       if (widget.quantidadeVidas != 0) {
-        if (widget.statusAnimacao != Constantes.statusAnimacaoPausada) {
+        if (widget.statusAnimacao != ConstantesSistemaSolar.statusAnimacaoPausada) {
           iniciarBalao(_controller13, 5, _controller14, 0);
         }
       }
@@ -137,7 +137,7 @@ class _WidgetAreaAnimacaoBaloesState extends State<WidgetAreaAnimacaoBaloes>
     // definindo que havera um delay para comecar a animacao do segundo controle
     Future.delayed(Duration(seconds: delay), () {
       if (widget.quantidadeVidas != 0) {
-        if (widget.statusAnimacao != Constantes.statusAnimacaoPausada) {
+        if (widget.statusAnimacao != ConstantesSistemaSolar.statusAnimacaoPausada) {
           segundoBalaoControle.repeat(
               count: 60, period: Duration(seconds: duracaoAnimacao));
         }
@@ -147,7 +147,7 @@ class _WidgetAreaAnimacaoBaloesState extends State<WidgetAreaAnimacaoBaloes>
 
   chamarIniciarAnimacaoBalao() {
     // verificando se a animacao
-    if (widget.statusAnimacao == Constantes.statusAnimacaoRetomar &&
+    if (widget.statusAnimacao == ConstantesSistemaSolar.statusAnimacaoRetomar &&
         !(_controller.isAnimating || _controller14.isAnimating)) {
       iniciarAnimacoesBaloesPausado();
     } else if (!(_controller.isAnimating || _controller14.isAnimating)) {
@@ -163,7 +163,7 @@ class _WidgetAreaAnimacaoBaloesState extends State<WidgetAreaAnimacaoBaloes>
         exibirTelaFimJogo = true;
         desativarToqueBalao = true;
       });
-    } else if (widget.statusAnimacao == Constantes.statusAnimacaoPausada) {
+    } else if (widget.statusAnimacao == ConstantesSistemaSolar.statusAnimacaoPausada) {
       setState(() {
         _controllerFade.repeat(
             count: 1000, period: Duration(milliseconds: 500));
@@ -360,7 +360,7 @@ class _WidgetAreaAnimacaoBaloesState extends State<WidgetAreaAnimacaoBaloes>
           Positioned(
             child: Center(
                 child: Visibility(
-              visible: widget.statusAnimacao == Constantes.statusAnimacaoPausada
+              visible: widget.statusAnimacao == ConstantesSistemaSolar.statusAnimacaoPausada
                   ? true
                   : false,
               child: FadeTransition(

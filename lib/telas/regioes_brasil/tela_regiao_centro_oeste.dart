@@ -139,7 +139,7 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
           builder: (context, constraints) {
             if (exibirTelaCarregamento) {
               return WidgetTelaCarregamento(
-                corPadrao: Constantes.corPadraoRegioes,
+                corPadrao: ConstantesEstadosGestos.corPadraoRegioes,
               );
             } else {
               return WidgetAreaTelaRegioes(

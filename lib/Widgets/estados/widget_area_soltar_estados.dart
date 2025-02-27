@@ -56,7 +56,6 @@ class _WidgetAreaSoltarEstadosState extends State<WidgetAreaSoltarEstados>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _controllerFade.stop(canceled: true);
     cancelarAcertoTutorial();
     super.dispose();
