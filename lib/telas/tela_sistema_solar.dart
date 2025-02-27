@@ -35,6 +35,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   bool exibirJogo = false;
   bool exibirBtnDificuldade = false;
   bool exibirTutorial = false;
+  bool ativarBtn = true;
   List<Gestos> gestoPlanetasSistemaSolar = [];
   List<Planeta> planetas = [];
   List<Emblemas> emblemasExibir = [];
@@ -94,15 +95,6 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
     recuperarPontuacao();
   }
 
-  @override
-  void dispose() {
-    if (_controllerFade.isAnimating) {
-      _controllerFade.stop(canceled: true);
-    }
-    iniciarTempo.cancel();
-    super.dispose();
-  }
-
   //metodo para sortear gesto
   sortearGesto() {
     Random random = Random();
@@ -122,9 +114,11 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
             timer.cancel();
           });
         } else {
-          setState(() {
-            tempo--;
-          });
+          if (mounted) {
+            setState(() {
+              tempo--;
+            });
+          }
         }
       },
     );
@@ -241,7 +235,9 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                   tamanhoVidas = 1;
                   tempo = ConstantesSistemaSolar.sistemaSolarTempoDificl;
                 }
+                ativarBtn = false;
                 comecarTempo();
+                liberarBotoes();
                 exibirJogo = true;
                 iniciarAnimacao = ConstantesSistemaSolar.statusAnimacaoIniciar;
                 exibirBtnDificuldade = false;
@@ -310,6 +306,14 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
               )),
         ],
       );
+
+  liberarBotoes() {
+    Future.delayed(Duration(milliseconds: 4300), () {
+      setState(() {
+        ativarBtn = true;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -414,22 +418,25 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                                 children: [
                                   IconButton(
                                       onPressed: () {
-                                        setState(() {
-                                          if (tamanhoVidas != 0 && tempo != 0) {
-                                            playPauseJogo = !playPauseJogo;
-                                            if (playPauseJogo) {
-                                              iniciarAnimacao =
-                                                  ConstantesSistemaSolar
-                                                      .statusAnimacaoPausada;
-                                              pararTempo();
-                                            } else {
-                                              iniciarAnimacao =
-                                                  ConstantesSistemaSolar
-                                                      .statusAnimacaoRetomar;
-                                              comecarTempo();
+                                        if (ativarBtn) {
+                                          setState(() {
+                                            if (tamanhoVidas != 0 &&
+                                                tempo != 0) {
+                                              playPauseJogo = !playPauseJogo;
+                                              if (playPauseJogo) {
+                                                iniciarAnimacao =
+                                                    ConstantesSistemaSolar
+                                                        .statusAnimacaoPausada;
+                                                pararTempo();
+                                              } else {
+                                                iniciarAnimacao =
+                                                    ConstantesSistemaSolar
+                                                        .statusAnimacaoRetomar;
+                                                comecarTempo();
+                                              }
                                             }
-                                          }
-                                        });
+                                          });
+                                        }
                                       },
                                       icon: Icon(
                                           color: Colors.white,
@@ -486,9 +493,11 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                       iconSize: 30,
                       enableFeedback: false,
                       onPressed: () {
-                        MetodosAuxiliares.passarPontuacaoAtual(0);
-                        Navigator.pushReplacementNamed(
-                            context, Constantes.rotaTelaInicial);
+                        if (ativarBtn) {
+                          MetodosAuxiliares.passarPontuacaoAtual(0);
+                          Navigator.pushReplacementNamed(
+                              context, Constantes.rotaTelaInicial);
+                        }
                       },
                       icon: const Icon(Icons.arrow_back_ios))),
               body: LayoutBuilder(

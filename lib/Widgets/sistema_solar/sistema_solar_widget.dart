@@ -236,6 +236,7 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
                                   width: 40,
                                   height: 40,
                                   child: FloatingActionButton(
+                                    heroTag: "fecharSistemaSolar",
                                     backgroundColor: Colors.white,
                                     onPressed: () {
                                       setState(() {
