@@ -1,39 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
+import 'package:geoli/Uteis/paleta_cores.dart';
+import 'package:geoli/Uteis/textos.dart';
 
-import '../../Uteis/paleta_cores.dart';
-import '../../Uteis/textos.dart';
+class WidgetTelaFimJogo extends StatelessWidget {
+  const WidgetTelaFimJogo({super.key});
 
-class WidgetTelaFimJogo extends StatefulWidget {
-  const WidgetTelaFimJogo({
-    super.key,
-  });
-
-  @override
-  State<WidgetTelaFimJogo> createState() => _WidgetTelaFimJogoState();
-}
-
-class _WidgetTelaFimJogoState extends State<WidgetTelaFimJogo> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  Widget cardOpcoes(
-          String nomeImagem, String nomeOpcao, BuildContext context) =>
-      SizedBox(
+  Widget cardOpcoes(BuildContext context) => SizedBox(
         width: 130,
         height: 170,
         child: FloatingActionButton(
-          heroTag: nomeOpcao,
+          heroTag: Textos.btnJogarNovamente,
           backgroundColor: Colors.white,
           onPressed: () {
-            if (nomeOpcao == Textos.btnJogarNovamente) {
-              Navigator.pushReplacementNamed(
-                  context, Constantes.rotaTelaSistemaSolar);
-            }
+            Navigator.pushReplacementNamed(
+                context, Constantes.rotaTelaSistemaSolar);
           },
           elevation: 0,
           shape: RoundedRectangleBorder(
@@ -45,10 +27,11 @@ class _WidgetTelaFimJogoState extends State<WidgetTelaFimJogo> {
               Image(
                 height: 110,
                 width: 110,
-                image: AssetImage("$nomeImagem.png"),
+                image:
+                    AssetImage("${CaminhosImagens.btnJogarNovamenteGesto}.png"),
               ),
               Text(
-                nomeOpcao,
+                Textos.btnJogarNovamente,
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 14, color: Colors.black),
               )
@@ -79,8 +62,7 @@ class _WidgetTelaFimJogoState extends State<WidgetTelaFimJogo> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  cardOpcoes(CaminhosImagens.btnJogarNovamenteGesto,
-                      Textos.btnJogarNovamente, context),
+                  cardOpcoes(context),
                 ],
               )
             ],

@@ -7,8 +7,8 @@ import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/constantes_estados_gestos.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/textos.dart';
+import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import 'package:geoli/Widgets/widget_exibir_emblemas.dart';
-import 'package:geoli/Widgets/widget_tela_carregamento.dart';
 import 'package:geoli/Widgets/widget_tela_resetar_dados.dart';
 
 class TelaInicialRegioes extends StatefulWidget {
@@ -131,7 +131,11 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
         querySnapshot.data()!.forEach((key, value) {
           setState(() {
             pontos = value;
-            //Passando pontuacao para a tela
+            //Passando pontuacao para
+            // a tela de emblemas sem esse metodo o
+            // emblema nao e exibido corretamente
+            // e para a TELA REGIAO CENTRO OESTE para
+            // validar se entrara no tutorial ou nao
             MetodosAuxiliares.passarPontuacaoAtual(pontos);
           });
         });
@@ -169,7 +173,8 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
             }
           },
           shape: RoundedRectangleBorder(
-              side: BorderSide(color: ConstantesEstadosGestos.corPadraoRegioes, width: 1),
+              side: BorderSide(
+                  color: ConstantesEstadosGestos.corPadraoRegioes, width: 1),
               borderRadius: const BorderRadius.all(Radius.circular(20))),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -200,7 +205,7 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
     return LayoutBuilder(
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {
-          return WidgetTelaCarregamento(
+          return TelaCarregamentoWidget(
             corPadrao: ConstantesEstadosGestos.corPadraoRegioes,
           );
         } else {

@@ -15,14 +15,16 @@ class MetodosAuxiliares {
   static String status = "";
   static int quantRegioesLiberadas = 0;
 
+  //Metodo para passar se o usuario acertou ou nao
   static Future<String> confirmarAcerto(String acerto) async {
     acertou = acerto;
     return acerto;
   }
-
+  //Metodo para recuperar acerto
   static Future<String> recuperarAcerto() async {
     return acertou;
   }
+
 
   static Future<String> passarStatusTutorial(String statusAtual) async {
     status = statusAtual;
@@ -40,15 +42,6 @@ class MetodosAuxiliares {
 
   static Future<int> recuperarPontuacaoAtual() async {
     return pontuacaoAtual;
-  }
-
-  static Future<int> passarQuantRegioesLiberadas(int quantidade) async {
-    quantRegioesLiberadas = quantidade;
-    return quantRegioesLiberadas;
-  }
-
-  static Future<int> recuperarQuantRegioesLiberadas() async {
-    return quantRegioesLiberadas;
   }
 
   static Future<String> passarGestoSorteado(String nomeGesto) async {

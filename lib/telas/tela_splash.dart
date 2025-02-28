@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
-import 'package:geoli/Widgets/widget_tela_carregamento.dart';
+import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import '../Uteis/constantes.dart';
 
 class TelaSplashScreen extends StatefulWidget {
@@ -33,7 +33,7 @@ class _TelaSplashScreenState extends State<TelaSplashScreen> {
               child: SizedBox(
             width: larguraTela,
             height: alturaTela,
-            child: WidgetTelaCarregamento(
+            child: TelaCarregamentoWidget(
               corPadrao: PaletaCores.corVerde,
             ),
           ))),

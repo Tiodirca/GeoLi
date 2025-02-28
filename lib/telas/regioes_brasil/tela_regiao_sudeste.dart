@@ -8,7 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/estados/widget_area_gestos_arrastar.dart';
 import 'package:geoli/Widgets/estados/widget_area_tela_regioes.dart';
-import 'package:geoli/Widgets/widget_tela_carregamento.dart';
+import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 
 
 class TelaRegiaoSudeste extends StatefulWidget {
@@ -19,8 +19,6 @@ class TelaRegiaoSudeste extends StatefulWidget {
 }
 
 class _TelaRegiaoSudesteState extends State<TelaRegiaoSudeste> {
-  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
-
   Map<Estado, Gestos> estadoGestoMap = {};
   List<MapEntry<Estado, Gestos>> estadosSorteio = [];
   List<Gestos> gestos = [];
@@ -44,7 +42,8 @@ class _TelaRegiaoSudesteState extends State<TelaRegiaoSudeste> {
     realizarBuscaDadosFireBase(nomeColecao);
   }
 
-  // metodo para adicionar os estados no map auxiliar e depois adicionar numa lista e fazer o sorteio dos itens
+  // metodo para adicionar os estados no map auxiliar
+  // e depois adicionar numa lista e fazer o sorteio dos itens
   carregarEstados() {
     estadoGestoMap[ConstantesEstadosGestos.estadoMG] =
         ConstantesEstadosGestos.gestoMG;
@@ -125,7 +124,7 @@ class _TelaRegiaoSudesteState extends State<TelaRegiaoSudeste> {
         body: LayoutBuilder(
           builder: (context, constraints) {
             if (exibirTelaCarregamento) {
-              return WidgetTelaCarregamento(corPadrao: ConstantesEstadosGestos.corPadraoRegioes,);
+              return TelaCarregamentoWidget(corPadrao: ConstantesEstadosGestos.corPadraoRegioes,);
             } else {
               return WidgetAreaTelaRegioes(
                   nomeColecao: nomeColecao,

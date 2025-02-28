@@ -7,7 +7,7 @@ import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoli/Widgets/estados/widget_area_gestos_arrastar.dart';
 import 'package:geoli/Widgets/estados/widget_area_tela_regioes.dart';
-import 'package:geoli/Widgets/widget_tela_carregamento.dart';
+import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 
 import '../../Uteis/textos.dart';
 
@@ -19,8 +19,6 @@ class TelaTodasRegioes extends StatefulWidget {
 }
 
 class _TelaTodasRegioesState extends State<TelaTodasRegioes> {
-  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
-
   Map<Estado, Gestos> estadoGestoMap = {};
   List<MapEntry<Estado, Gestos>> estadosSorteio = [];
   List<Gestos> gestos = [];
@@ -30,7 +28,6 @@ class _TelaTodasRegioesState extends State<TelaTodasRegioes> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     carregarEstados();
     gestos.addAll([
@@ -206,7 +203,7 @@ class _TelaTodasRegioesState extends State<TelaTodasRegioes> {
         body: LayoutBuilder(
           builder: (context, constraints) {
             if (exibirTelaCarregamento) {
-              return WidgetTelaCarregamento(
+              return TelaCarregamentoWidget(
                 corPadrao: ConstantesEstadosGestos.corPadraoRegioes,
               );
             } else {

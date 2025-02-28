@@ -31,11 +31,16 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
   bool exibirAreaInternaTela = false;
   bool exibirMapaRegioes = false;
   bool exibirSistemaSolar = false;
-  late int indexEmblemaAtual = 0;
+  late int pontuacaoAtualTela = 0;
 
+  // metodo para verficar e retornar o emblema correspondente
+  // pontuacao
   exibirEmblemaAtual(int pontuacaoAtual) {
     late Emblemas emblemas;
+    // percorrendo a lista de emblemas passado para a tela
     for (int i = 0; i < widget.listaEmblemas.length; i++) {
+      // caso o elemento PONTOS for MENOR ou IGUAL a pontuacaoAtual
+      // a variavel vai receber o emblema que satisfaz a condicao
       if (widget.listaEmblemas.elementAt(i).pontos <= pontuacaoAtual) {
         emblemas = widget.listaEmblemas.elementAt(i);
       }
@@ -60,6 +65,7 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
               onPressed: () {
                 setState(() {
                   exibirTela = true;
+                  //definindo Delay para evitar dar erro de tamanho
                   Future.delayed(Duration(seconds: 1)).then(
                     (value) {
                       setState(() {
@@ -109,25 +115,31 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
                   children: [
                     SizedBox(
                       width: Platform.isAndroid || Platform.isIOS
-                          ? larguraTela * 0.5
+                          ? larguraTela * 0.55
                           : larguraTela * 0.2,
                       height: 60,
                       child: ListView.builder(
                         itemCount: 1,
                         itemBuilder: (context, index) {
+                          // recuperando a pontuacao atual da tela que esta sendo exibida
+                          // para poder exibir o emblema correspondente a atual pontuacao
                           MetodosAuxiliares.recuperarPontuacaoAtual().then(
                             (value) {
                               setState(() {
-                                indexEmblemaAtual = value;
+                                // definindo que a variavel
+                                // vai receber o seguinte valor
+                                pontuacaoAtualTela = value;
                               });
                             },
                           );
+                          // retornando o widget passando a variavel para o metodo
                           return EmblemaWidget(
                               caminhoImagem:
-                                  exibirEmblemaAtual(indexEmblemaAtual)
+                                  exibirEmblemaAtual(pontuacaoAtualTela)
                                       .caminhoImagem,
-                              nomeEmblema: exibirEmblemaAtual(indexEmblemaAtual)
-                                  .nomeEmblema,
+                              nomeEmblema:
+                                  exibirEmblemaAtual(pontuacaoAtualTela)
+                                      .nomeEmblema,
                               pontos: widget.pontuacaoAtual);
                         },
                       ),

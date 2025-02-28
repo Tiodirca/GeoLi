@@ -1,19 +1,19 @@
 class CaminhosImagens {
+  // BOTOES DE ACAO
   static const btnJogarNovamenteGesto = "assets/imagens/gesto_de_novo";
   static const btnProximoNivelGesto = "assets/imagens/gesto_continuar";
-  static const iconeClick = "assets/imagens/icon_click";
-
   static const btnGestoEstadosBrasileiroImagem =
       "assets/imagens/estados/gestos_estados/gesto_estados";
   static const btnGestoSistemaSolarImagem =
       "assets/imagens/sistema_solar/gestos_planetas/gesto_sistema_solar";
 
-  // SISTEMA SOLAR
+  static const iconeClick = "assets/imagens/icon_click";
 
+  // SISTEMA SOLAR BALAO
   static const balaoCabelaImagem = "assets/imagens/sistema_solar/balao_cabeca";
   static const balaoCaldaImagem = "assets/imagens/sistema_solar/balao_calda";
 
-  // GESTOS
+  // GESTOS PLANETAS
   static const gestoPlanetaMercurioImagem =
       "assets/imagens/sistema_solar/gestos_planetas/gesto_planeta_mercurio";
   static const gestoPlanetaVenusImagem =
@@ -32,7 +32,6 @@ class CaminhosImagens {
       "assets/imagens/sistema_solar/gestos_planetas/gesto_planeta_netuno";
 
   // PLANETAS
-
   static const planetaMercurioImagem =
       "assets/imagens/sistema_solar/planetas/planeta_mercurio";
   static const planetaVenusImagem =
@@ -52,6 +51,7 @@ class CaminhosImagens {
   static const planetaBuracoNegro =
       "assets/imagens/sistema_solar/planetas/buraco_negro";
 
+  // MAPA DAS REGIOES
   static const mapaCompletoBranco =
       "assets/imagens/estados/mapa/mapa_completo_branco";
   static const mapaCompletoCentroOeste =
@@ -94,6 +94,7 @@ class CaminhosImagens {
   static const emblemaSistemaSolarKakarot =
       "assets/imagens/sistema_solar/emblema_sistema_solar_kakarot";
 
+  // EMBLEMAS GERAL
   static const emblemaPatenteCabo = "assets/imagens/patentes/patente_cabo";
   static const emblemaPatenteAspirante =
       "assets/imagens/patentes/patente_aspirante";

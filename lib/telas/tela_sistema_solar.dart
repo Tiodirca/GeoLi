@@ -13,11 +13,11 @@ import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Widgets/gestos_widget.dart';
+import 'package:geoli/Widgets/msg_tutoriais_widget.dart';
 import 'package:geoli/Widgets/sistema_solar/balao_widget.dart';
 import 'package:geoli/Widgets/sistema_solar/widget_area_animacao_baloes.dart';
+import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import 'package:geoli/Widgets/widget_exibir_emblemas.dart';
-import 'package:geoli/Widgets/widget_msg_tutoriais.dart';
-import 'package:geoli/Widgets/widget_tela_carregamento.dart';
 import 'package:geoli/Widgets/widget_tela_resetar_dados.dart';
 import 'package:geoli/modelos/planeta.dart';
 
@@ -36,18 +36,18 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   bool exibirBtnDificuldade = false;
   bool exibirTutorial = false;
   bool ativarBtn = true;
+  bool playPauseJogo = false;
+  bool exibirTelaResetarJogo = false;
   List<Gestos> gestoPlanetasSistemaSolar = [];
   List<Planeta> planetas = [];
   List<Emblemas> emblemasExibir = [];
-  late Gestos gestoSorteado;
   int tempo = 0;
-  bool playPauseJogo = false;
   int pontuacaoDuranteJogo = 0;
   int pontuacaoTotal = 0;
   int tamanhoVidas = 3;
+  late Gestos gestoSorteado;
   late Timer iniciarTempo;
   late String iniciarAnimacao;
-  bool exibirTelaResetarJogo = false;
   Color corPadrao = PaletaCores.corAzul;
   late final AnimationController _controllerFade =
       AnimationController(vsync: this);
@@ -145,6 +145,8 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
           (key, value) {
             setState(() {
               pontuacaoTotal = value;
+              //Passando pontuacao para
+              // a tela de emblemas sem esse metodo o emblema nao e exibido corretamente
               MetodosAuxiliares.passarPontuacaoAtual(pontuacaoTotal);
               exibirTelaCarregamento = false;
             });
@@ -172,7 +174,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   }
 
   // metodo para verificar se o usuario acertou o planeta que foi sorteado no gesto
-  recuperarAcertoPlaneta() async {
+  recuperarJogadaPeriodicamente() async {
     //recuperando o valor passado pelo metodo
     String retorno = await MetodosAuxiliares.recuperarAcerto();
     if (retorno == Constantes.msgAcertoGesto) {
@@ -309,7 +311,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
             ? WrapCrossAlignment.end
             : WrapCrossAlignment.start,
         children: [
-          WidgetMsgTutoriais(corBorda: corPadrao, mensagem: msg),
+          MsgTutoriaisWidget(corBorda: corPadrao, mensagem: msg),
           Transform.flip(
               flipX: inverter,
               flipY: inverter,
@@ -333,7 +335,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
     return LayoutBuilder(
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {
-          return WidgetTelaCarregamento(
+          return TelaCarregamentoWidget(
             corPadrao: corPadrao,
           );
         } else {
@@ -514,8 +516,9 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                   if (exibirJogo) {
                     final Size biggest = constraints.biggest;
                     // chamando metodo para ficar
-                    // verificando a cada momento se o usuario acertou o planeta
-                    recuperarAcertoPlaneta();
+                    // verificando a cada
+                    // momento se o usuario acertou o planeta
+                    recuperarJogadaPeriodicamente();
                     return WidgetAreaAnimacaoBaloes(
                       biggest: biggest,
                       planetas: planetas,

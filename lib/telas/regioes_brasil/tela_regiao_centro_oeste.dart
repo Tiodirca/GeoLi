@@ -8,7 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/estados/widget_area_gestos_arrastar.dart';
 import 'package:geoli/Widgets/estados/widget_area_tela_regioes.dart';
-import 'package:geoli/Widgets/widget_tela_carregamento.dart';
+import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 
 class TelaRegiaoCentroOeste extends StatefulWidget {
   const TelaRegiaoCentroOeste({super.key});
@@ -36,16 +36,17 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
   }
 
   validarPrimeiraJogada() async {
-    // recebendo a pontuacao que esta
-    // sendo passada na TELA INICIAL REGIOES e do WIDGET AREA GESTOS
+    // recebendo a pontuacao que esta sendo passada na
+    // TELA INICIAL REGIOES e do WIDGET AREA GESTOS
     int pontuacao = await MetodosAuxiliares.recuperarPontuacaoAtual();
-    //Entrar caso a consulta ao banco de dados na TELA ANTERIOR retornar 0
-    // Entrar no tutorial de jogo
+    // Entrar no tutorial de jogo caso a pontuacao seja 0
     if (pontuacao == 0) {
       setState(() {
         carregarEstados();
         exibirTelaCarregamento = false;
         gestos.addAll([ConstantesEstadosGestos.gestoMS]);
+        //passando status de tutorial ativo para os WIGETS
+        // validar acoes baseado no status passado
         MetodosAuxiliares.passarStatusTutorial(Constantes.statusTutorialAtivo);
       });
     } else {
@@ -138,7 +139,7 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
         body: LayoutBuilder(
           builder: (context, constraints) {
             if (exibirTelaCarregamento) {
-              return WidgetTelaCarregamento(
+              return TelaCarregamentoWidget(
                 corPadrao: ConstantesEstadosGestos.corPadraoRegioes,
               );
             } else {

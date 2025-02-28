@@ -6,7 +6,7 @@ import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/constantes_sistema_solar.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
-import 'package:geoli/Widgets/widget_tela_carregamento.dart';
+import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/modelos/planeta.dart';
 
@@ -31,9 +31,11 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
   @override
   void initState() {
     super.initState();
+    //definindo que as variaveis vao receber os valores
     planetas = ConstantesSistemaSolar.adicinarPlanetas();
     gestoPlanetasSistemaSolar =
         ConstantesSistemaSolar.adicionarGestosPlanetas();
+    //chamando metodo
     recuperarPlanetasDesbloqueados();
   }
 
@@ -53,9 +55,11 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
             setState(() {
               // percorendo a lista
               for (var element in planetas) {
-                //verificando se o nome do elemento e igual ao nome do item na lista
+                //verificando se o nome do elemento e
+                // igual ao nome do item na lista
                 if (element.nomePlaneta == key) {
-                  // caso for o campo do elemento vai receber o valor que esta no banco
+                  // caso for o campo do elemento vai
+                  // receber o valor que esta no banco
                   element.desbloqueado = value;
                   if (element.desbloqueado) {
                     quantPlanetaDesbloqueados = quantPlanetaDesbloqueados + 1;
@@ -65,8 +69,8 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
                   }
                 }
               }
-              exibirTelaCarregamento = false;
             });
+             exibirTelaCarregamento = false;
           },
         );
       },
@@ -129,10 +133,13 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
   @override
   Widget build(BuildContext context) {
     double larguraTela = MediaQuery.of(context).size.width;
-    return SizedBox(child: LayoutBuilder(
+    return LayoutBuilder(
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {
-          return WidgetTelaCarregamento(corPadrao: widget.corPadrao);
+          return Container(
+            margin: EdgeInsets.all(10),
+            child: TelaCarregamentoWidget(corPadrao: widget.corPadrao),
+          );
         } else {
           return Stack(
             children: [
@@ -142,11 +149,17 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
                   Column(
                     children: [
                       Text(
-                        Textos.telaPlanetasDesbloqueadosTitulo,textAlign: TextAlign.center,
+                        Textos.telaPlanetasDesbloqueadosTitulo,
+                        textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18,),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
                       ),
-                      Text(Textos.telaPlanetasDesbloqueadosDescricao,textAlign: TextAlign.center,),
+                      Text(
+                        Textos.telaPlanetasDesbloqueadosDescricao,
+                        textAlign: TextAlign.center,
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -155,8 +168,10 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
                     child: ListView.builder(
                       itemCount: 8,
                       itemBuilder: (context, index) {
-                        return planetaLiberados(planetas.elementAt(index),
-                            gestoPlanetasSistemaSolar.elementAt(index), index);
+                        return planetaLiberados(
+                            planetas.elementAt(index),
+                            gestoPlanetasSistemaSolar.elementAt(index),
+                            index);
                       },
                     ),
                   ),
@@ -169,7 +184,8 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                Textos.telaPlanetasPlanetasDesbloqueadosQuanti,
+                                Textos
+                                    .telaPlanetasPlanetasDesbloqueadosQuanti,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black),
@@ -181,7 +197,8 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                Textos.telaPlanetasPlanetasDesbloqueadosFalta,
+                                Textos
+                                    .telaPlanetasPlanetasDesbloqueadosFalta,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black),
@@ -209,7 +226,8 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
                                     width: 1, color: widget.corPadrao),
                                 borderRadius: BorderRadius.circular(10)),
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceAround,
                               children: [
                                 Row(
                                   mainAxisAlignment:
@@ -257,6 +275,6 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
           );
         }
       },
-    ));
+    );
   }
 }

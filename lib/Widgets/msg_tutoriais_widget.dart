@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class WidgetMsgTutoriais extends StatelessWidget {
-  const WidgetMsgTutoriais(
+class MsgTutoriaisWidget extends StatelessWidget {
+  const MsgTutoriaisWidget(
       {super.key, required this.corBorda, required this.mensagem});
 
   final Color corBorda;

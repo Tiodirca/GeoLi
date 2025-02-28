@@ -8,7 +8,7 @@ import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/constantes_estados_gestos.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
-import 'package:geoli/Widgets/widget_tela_carregamento.dart';
+import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import 'package:geoli/Modelos/gestos.dart';
 
 class MapaRegioesWidget extends StatefulWidget {
@@ -155,8 +155,8 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
           } else if (Constantes.nomeTodosEstados == key) {
             liberarTodosEstados = value;
           }
-          validarRegioesDesbloqueadas();
         });
+        validarRegioesDesbloqueadas();
       },
     );
   }
@@ -235,8 +235,11 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
         child: LayoutBuilder(
           builder: (context, constraints) {
             if (exibirTelaCarregamento) {
-              return WidgetTelaCarregamento(
-                  corPadrao: ConstantesEstadosGestos.corPadraoRegioes);
+              return Container(
+                margin: EdgeInsets.all(10),
+                child: TelaCarregamentoWidget(
+                    corPadrao: ConstantesEstadosGestos.corPadraoRegioes),
+              );
             } else {
               return Stack(
                 alignment: Alignment.center,

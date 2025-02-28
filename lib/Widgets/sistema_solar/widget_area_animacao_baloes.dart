@@ -156,7 +156,7 @@ class _WidgetAreaAnimacaoBaloesState extends State<WidgetAreaAnimacaoBaloes>
   }
 
 
-  verificarInformacoes() {
+  verificarPeriodicamenteInformacoes() {
     //caso os parametros sejam igual a zero parar a animacao
     if (widget.quantidadeVidas == 0 || widget.tempo == 0) {
       setState(() {
@@ -221,7 +221,8 @@ class _WidgetAreaAnimacaoBaloesState extends State<WidgetAreaAnimacaoBaloes>
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;
     double larguraTela = MediaQuery.of(context).size.width;
-    verificarInformacoes();
+    //metodo sera chamado de forma periodica
+    verificarPeriodicamenteInformacoes();
     return Container(
       color: Colors.white,
       width: larguraTela,

@@ -8,7 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/estados/widget_area_gestos_arrastar.dart';
 import 'package:geoli/Widgets/estados/widget_area_tela_regioes.dart';
-import 'package:geoli/Widgets/widget_tela_carregamento.dart';
+import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 
 
 class TelaRegiaoNorte extends StatefulWidget {
@@ -19,8 +19,6 @@ class TelaRegiaoNorte extends StatefulWidget {
 }
 
 class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
-  GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
-
   Map<Estado, Gestos> estadoGestoMap = {};
   List<MapEntry<Estado, Gestos>> estadosSorteio = [];
   List<Gestos> gestos = [];
@@ -141,7 +139,7 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
         body: LayoutBuilder(
           builder: (context, constraints) {
             if (exibirTelaCarregamento) {
-              return WidgetTelaCarregamento(corPadrao: ConstantesEstadosGestos.corPadraoRegioes,);
+              return TelaCarregamentoWidget(corPadrao: ConstantesEstadosGestos.corPadraoRegioes,);
             } else {
               return WidgetAreaTelaRegioes(
                   nomeColecao: nomeColecao,

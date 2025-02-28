@@ -33,6 +33,7 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
   void initState() {
     super.initState();
     carregarDados();
+    //caso o tamnho seja maior que o passado nao exibir o btn
     if (widget.estados.length >= 10) {
       exibirBtnProximoNivel = false;
     }
@@ -87,7 +88,6 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
         liberarProximoNivel();
       },
     );
-
   }
 
   // metodo para cadastrar item
@@ -111,7 +111,7 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
     }
   }
 
-  validarLiberarProximoNivel(String nomeBtn) async{
+  validarLiberarProximoNivel(String nomeBtn) async {
     setState(() {
       if (widget.nomeColecao == Constantes.fireBaseDocumentoRegiaoCentroOeste) {
         liberarRegiaoSul = true;

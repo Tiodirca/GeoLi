@@ -7,7 +7,7 @@ import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/constantes_estados_gestos.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Widgets/gestos_widget.dart';
-import 'package:geoli/Widgets/widget_msg_tutoriais.dart';
+import 'package:geoli/Widgets/msg_tutoriais_widget.dart';
 
 import '../../Uteis/textos.dart';
 
@@ -157,8 +157,13 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
                 atualizarDadosBanco();
               }
               atualizarPontuacao();
-              MetodosAuxiliares.passarStatusTutorial("");
-              MetodosAuxiliares.passarPontuacaoAtual(ponto);
+              // caso esteja no tutorial fazer acoes
+              if (status == Constantes.statusTutorialAtivo) {
+                MetodosAuxiliares.passarStatusTutorial("");
+                //chamando metodo passando pontuacao para quando recarregar atela
+                MetodosAuxiliares.passarPontuacaoAtual(ponto);
+              }
+              //removendo o item da lista em caso de acerto
               widget.gestos.removeWhere(
                 (element) {
                   return element.nomeGesto == gesto.nomeGesto;
@@ -168,6 +173,14 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
 
             if (widget.gestos.isEmpty) {
               Navigator.pushReplacementNamed(context, nomeRota);
+            }
+          } else {
+            // caso esteja no tutorial e nao seja a regiao correta exibir
+            //novamente  a msg de tutorial
+            if (status == Constantes.statusTutorialAtivo) {
+              setState(() {
+                exibirMsgTutorial = true;
+              });
             }
           }
         },
@@ -187,6 +200,8 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
           }
         },
         onDraggableCanceled: (velocity, offset) {
+          //vefiricando se tutorial caso o arrastar seja
+          // cancelado em estar em alguma area
           if (status == Constantes.statusTutorialAtivo) {
             setState(() {
               exibirMsgTutorial = true;
@@ -212,7 +227,8 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
           child: Card(
               color: Colors.white,
               shape: RoundedRectangleBorder(
-                  side: BorderSide(color: ConstantesEstadosGestos.corPadraoRegioes),
+                  side: BorderSide(
+                      color: ConstantesEstadosGestos.corPadraoRegioes),
                   borderRadius: const BorderRadius.all(Radius.circular(10))),
               child: Stack(
                 children: [
@@ -242,7 +258,7 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
                   Visibility(
                       visible: exibirMsgTutorial,
                       child: Container(
-                          margin: EdgeInsets.only(left: 90),
+                          margin: EdgeInsets.only(left: 70),
                           height: 160,
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.end,
@@ -259,8 +275,9 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
                                           '${CaminhosImagens.iconeClick}.png'),
                                     ),
                                   )),
-                              WidgetMsgTutoriais(
-                                  corBorda: ConstantesEstadosGestos.corPadraoRegioes,
+                              MsgTutoriaisWidget(
+                                  corBorda:
+                                      ConstantesEstadosGestos.corPadraoRegioes,
                                   mensagem: Textos.tutorialRegioesClickArraste)
                             ],
                           )))

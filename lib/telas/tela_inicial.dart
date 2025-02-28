@@ -6,8 +6,8 @@ import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
+import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import 'package:geoli/Widgets/widget_exibir_emblemas.dart';
-import 'package:geoli/Widgets/widget_tela_carregamento.dart';
 import 'package:geoli/Widgets/widget_tela_resetar_dados.dart';
 
 class TelaInicial extends StatefulWidget {
@@ -115,12 +115,15 @@ class _TelaInicialState extends State<TelaInicial>
               } else {
                 pontuacaoSistemaSolar = value;
                 pontuacaoGeral = pontuacaoEstados + pontuacaoSistemaSolar;
+                //Passando pontuacao para
+                // a tela de emblemas sem esse metodo o
+                // emblema nao e exibido corretamente
                 MetodosAuxiliares.passarPontuacaoAtual(pontuacaoGeral);
-                exibirTelaCarregamento = false;
               }
             });
           },
         );
+        exibirTelaCarregamento = false;
       },
     );
   }
@@ -176,7 +179,7 @@ class _TelaInicialState extends State<TelaInicial>
     return LayoutBuilder(
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {
-          return WidgetTelaCarregamento(
+          return TelaCarregamentoWidget(
             corPadrao: corPadrao,
           );
         } else {

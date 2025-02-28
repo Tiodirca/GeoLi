@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../Uteis/textos.dart';
 
-class WidgetTelaCarregamento extends StatelessWidget {
-  const WidgetTelaCarregamento({Key? key, required this.corPadrao}) : super(key: key);
+class TelaCarregamentoWidget extends StatelessWidget {
+  const TelaCarregamentoWidget({Key? key, required this.corPadrao}) : super(key: key);
 
   final Color corPadrao;
 

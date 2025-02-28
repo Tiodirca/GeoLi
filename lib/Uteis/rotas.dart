@@ -15,8 +15,7 @@ class Rotas {
   static GlobalKey<NavigatorState>? navigatorKey = GlobalKey<NavigatorState>();
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
-    // Recebe os parâmetros na chamada do Navigator.
-    final args = settings.arguments;
+
     switch (settings.name) {
       case Constantes.rotaTelaSplashScreen:
         return MaterialPageRoute(builder: (_) => TelaSplashScreen());

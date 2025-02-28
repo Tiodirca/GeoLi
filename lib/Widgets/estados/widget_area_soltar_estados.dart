@@ -22,15 +22,13 @@ class WidgetAreaSoltarEstados extends StatefulWidget {
 
 class _WidgetAreaSoltarEstadosState extends State<WidgetAreaSoltarEstados>
     with SingleTickerProviderStateMixin {
+  bool exibirIndicadorTutorial = false;
   late Estado estado = widget.estado;
   late String status;
-
   late final AnimationController _controllerFade =
       AnimationController(vsync: this);
   late final Animation<double> _fadeAnimation =
       Tween<double>(begin: 1, end: 0.0).animate(_controllerFade);
-
-  bool exibirIndicadorTutorial = false;
 
   @override
   void initState() {
@@ -38,6 +36,7 @@ class _WidgetAreaSoltarEstadosState extends State<WidgetAreaSoltarEstados>
     validarTutorial();
   }
 
+  //metodo para verificar se o tutorial esta ativo
   validarTutorial() async {
     status = await MetodosAuxiliares.recuperarStatusTutorial();
     if (status == Constantes.statusTutorialAtivo) {

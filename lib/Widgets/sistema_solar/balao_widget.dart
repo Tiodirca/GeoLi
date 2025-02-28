@@ -81,7 +81,8 @@ class _BalaoWidgetState extends State<BalaoWidget>
     }
   }
 
-  // metodo para gravar no banco de dados que o planeta foi desbloqueado
+  // metodo para gravar no banco de dados
+  // que o planeta foi desbloqueado
   desbloquearPlaneta(String nomePlaneta) {
     Map<String, bool> dados = {};
     // percorrendo a lista para poder jogar os dados dentro de um map
@@ -130,11 +131,11 @@ class _BalaoWidgetState extends State<BalaoWidget>
                   element.desbloqueado = value;
                 }
               }
-              // chamando metodo
-              desbloquearPlaneta(widget.planeta.nomePlaneta);
             });
           },
         );
+        // chamando metodo
+        desbloquearPlaneta(widget.planeta.nomePlaneta);
       },
     );
   }

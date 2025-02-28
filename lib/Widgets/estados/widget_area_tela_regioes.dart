@@ -8,7 +8,7 @@ import 'package:geoli/Widgets/estados/widget_tela_proximo_nivel.dart';
 
 import '../../Uteis/textos.dart';
 
-class WidgetAreaTelaRegioes extends StatefulWidget {
+class WidgetAreaTelaRegioes extends StatelessWidget {
   const WidgetAreaTelaRegioes(
       {super.key,
       required this.estadosSorteio,
@@ -20,10 +20,6 @@ class WidgetAreaTelaRegioes extends StatefulWidget {
   final List<MapEntry<Estado, Gestos>> estadosSorteio;
 
   @override
-  State<WidgetAreaTelaRegioes> createState() => _WidgetAreaTelaRegioesState();
-}
-
-class _WidgetAreaTelaRegioesState extends State<WidgetAreaTelaRegioes> {
   @override
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;
@@ -52,20 +48,20 @@ class _WidgetAreaTelaRegioesState extends State<WidgetAreaTelaRegioes> {
                     : larguraTela * 0.6,
                 height: alturaTela * 0.6,
                 child: GridView.builder(
-                  itemCount: widget.estadosSorteio.length,
+                  itemCount: estadosSorteio.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount:
                           Platform.isAndroid || Platform.isIOS ? 2 : 5),
                   itemBuilder: (context, index) {
-                    if (widget.exibirTelaProximoNivel) {
-                      for (var element in widget.estadosSorteio) {
+                    if (exibirTelaProximoNivel) {
+                      for (var element in estadosSorteio) {
                         element.key.acerto = true;
                       }
                     }
                     return Center(
                         child: WidgetAreaSoltarEstados(
-                      estado: widget.estadosSorteio.elementAt(index).key,
-                      gesto: widget.estadosSorteio.elementAt(index).value,
+                      estado: estadosSorteio.elementAt(index).key,
+                      gesto: estadosSorteio.elementAt(index).value,
                     ));
                   },
                 ),
@@ -73,12 +69,12 @@ class _WidgetAreaTelaRegioesState extends State<WidgetAreaTelaRegioes> {
             ],
           ),
           Visibility(
-              visible: widget.exibirTelaProximoNivel,
+              visible: exibirTelaProximoNivel,
               child: Positioned(
                 child: Center(
                     child: WidgetTelaProximoNivel(
-                  nomeColecao: widget.nomeColecao,
-                  estados: widget.estadosSorteio,
+                  nomeColecao: nomeColecao,
+                  estados: estadosSorteio,
                 )),
               ))
         ],

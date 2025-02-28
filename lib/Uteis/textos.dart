@@ -15,22 +15,15 @@ class Textos {
   // GERAIS
   static String nomeApp = "Geo Li";
   static String txtTelaCarregamento = "Aguarde Carregando";
-
-  static String descricaoTelaInicial = "Selecione qual jogo deseja jogar";
   static String msgAcertou = "Acertou";
   static String msgErrou = "Errado";
 
-  // TUTORIAIS
+  // TELA INICIAL
+  static String descricaoTelaInicial = "Selecione qual jogo deseja jogar";
+
+  // TUTORIAIS REGIOES
   static String tutorialRegioesClickArraste = "Clique/Aperte em cima do gesto e"
       " arraste-o sem soltar até a area indicada";
-  static String tutorialSistemaSolarClickBalao =
-      "Clique/Aperte encima do balão jogar";
-  static String tutorialSistemaSolarPlanetaSorteado =
-      "Aqui é onde o planeta que você deve acertar será sorteado. "
-      "Sendo sorteado um novo em caso de acerto";
-  static String tutorialSistemaSolarCabecalho =
-      "Aqui você pode ver Pontuação, Vidas,Tempo restante e pausar o jogo";
-  static String tutorialConcluido = "Tutorial Concluido";
 
   //TELA REINICIAR DADOS
   static String tituloReiniciarDados = "Reiniciar dados";
@@ -40,6 +33,16 @@ class Textos {
   static String descricaoAlertExcluir =
       "Tem certeza que deseja EXCLUIR/REINICIAR as informações ?";
 
+  //TUTORIAIS SISTEMA SOLAR
+  static String tutorialSistemaSolarClickBalao =
+      "Clique/Aperte encima do balão jogar";
+  static String tutorialSistemaSolarPlanetaSorteado =
+      "Aqui é onde o planeta que você deve acertar será sorteado. "
+      "Sendo sorteado um novo em caso de acerto";
+  static String tutorialSistemaSolarCabecalho =
+      "Aqui você pode ver Pontuação, Vidas,Tempo restante e pausar o jogo";
+  static String tutorialConcluido = "Tutorial Concluido";
+
   //TELA SISTEMA SOLAR
   static String telaSistemaSolarTitulo = "Sistema Solar";
   static String telaSistemaSolarDescricaoPlanetaSorteado = "Planeta Sorteado";
@@ -48,16 +51,17 @@ class Textos {
   static String telaSistemaSolarPontuacao = "Pontuação";
   static String telaSistemaSolarFimJogoTitulo = "Fim de jogo";
   static String telaSistemaSolarPausa = "Pausado";
-  static String telaSistemaSolarFimJogoDescricao = "Selecione uma opção";
+  static String descriacaoSistemaSolar = "Clique no botão para começar a jogar";
+  static String descricaoSistemaSolarDificuldade =
+      "Selecione uma dificuldade para começar a jogar";
+
+  //TELA PLANETAS DESBLOQUEADOS
   static String telaPlanetasDesbloqueadosTitulo = "Planetas Desbloqueados";
   static String telaPlanetasDesbloqueadosDescricao =
       "Aqui estão os planetas que você já desbloqueou,clique/aperte sobre para ver mais";
   static String telaPlanetasPlanetasDesbloqueadosQuanti =
       "Planetas desbloqueados : ";
   static String telaPlanetasPlanetasDesbloqueadosFalta = "Falta desbloquear : ";
-  static String descriacaoSistemaSolar = "Clique no botão para começar a jogar";
-  static String descricaoSistemaSolarDificuldade =
-      "Selecione uma dificuldade para começar a jogar";
 
   //NOME PLANETAS
   static String nomePlanetaMercurio = "Mercúrio";
@@ -69,6 +73,15 @@ class Textos {
   static String nomePlanetaUrano = "Urano";
   static String nomePlanetaNetuno = "Netuno";
   static String nomePlanetaBuracoNegro = "Buraco Negro";
+
+  //EMBLEMAS TELA INICIAL ESTADOS
+  static String emblemaEstadosAventureiroum = "Aventureiro Um";
+  static String emblemaEstadosAventureirodois = "Aventureiro Dois";
+  static String emblemaEstadosEntusiastaum = "Entusiasta Um";
+  static String emblemaEstadosEntusiastadois = "Entusiasta Dois";
+  static String emblemaEstadosColecionador = "Colecionador";
+  static String emblemaEstadosIndiana = "Indiana";
+  static String emblemasPontos = "Pontos : ";
 
   //EMBLEMAS TELA INICIAL SISTEMA SOLAR
   static String emblemaSistemaSolarNovato = "Novato";
@@ -103,23 +116,16 @@ class Textos {
   static String tituloTelaRegiaoNorte = "Região Norte";
   static String tituloTelaRegiaoNordeste = "Região Nordeste";
   static String tituloTelaTodasRegioes = "Todas as regioes do Brasil";
-  static String descricaoTelaRegioes =
-      "Selecione um dos níveis para jogar ou para desbloquear os próximos níveis";
-  static String telaTituloRegioesDesbloqueados = "Regiões Desbloqueadas";
-  static String telaDescricaoRegioesDesbloqueados =
-      "Aqui estão as regiões que você já desbloqueou";
   static String descricaoAreaEstado =
       "Clique encima do gesto e arraste até um dos estados";
   static String descricaoAreaGestos = "Selecione o gesto em libras";
+  static String descricaoTelaRegioes =
+      "Selecione um dos níveis para jogar ou para desbloquear os próximos níveis";
 
-  //EMBLEMAS TELA INICIAL ESTADOS
-  static String emblemaEstadosAventureiroum = "Aventureiro Um";
-  static String emblemaEstadosAventureirodois = "Aventureiro Dois";
-  static String emblemaEstadosEntusiastaum = "Entusiasta Um";
-  static String emblemaEstadosEntusiastadois = "Entusiasta Dois";
-  static String emblemaEstadosColecionador = "Colecionador";
-  static String emblemaEstadosIndiana = "Indiana";
-  static String emblemasPontos = "Pontos : ";
+  //TELA REGIOES DESBLOQUEDAS E MAPA
+  static String telaTituloRegioesDesbloqueados = "Regiões Desbloqueadas";
+  static String telaDescricaoRegioesDesbloqueados =
+      "Aqui estão as regiões que você já desbloqueou";
 
   //CENTRO OESTE
   static String nomeRegiaoCentroOeste = "Região Centro-Oeste";
