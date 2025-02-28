@@ -33,6 +33,7 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
   List<Gestos> gestosSelecionados = [];
   String caminhoImagemRegiao = CaminhosImagens.mapaCompletoBranco;
   Map<Estado, Gestos> estadoGestoMap = {};
+  String nomeRegiao = "";
 
   Estado regiaoCentroOeste = Estado(
       nome: Textos.nomeRegiaoCentroOeste,
@@ -93,6 +94,7 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
           setState(() {
             regioesSelecionadas.add(key);
             gestosSelecionados.add(value);
+            nomeRegiao = regiao.nome;
           });
         } else if (contador > 3 &&
             contador < 7 &&
@@ -100,6 +102,7 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
           setState(() {
             regioesSelecionadas.add(key);
             gestosSelecionados.add(value);
+            nomeRegiao = regiao.nome;
           });
         } else if (contador > 6 &&
             contador < 11 &&
@@ -107,6 +110,7 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
           setState(() {
             regioesSelecionadas.add(key);
             gestosSelecionados.add(value);
+            nomeRegiao = regiao.nome;
           });
         } else if (contador > 10 &&
             contador < 18 &&
@@ -114,6 +118,7 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
           setState(() {
             regioesSelecionadas.add(key);
             gestosSelecionados.add(value);
+            nomeRegiao = regiao.nome;
           });
         } else if (contador > 17 &&
             contador < 27 &&
@@ -121,6 +126,7 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
           setState(() {
             regioesSelecionadas.add(key);
             gestosSelecionados.add(value);
+            nomeRegiao = regiao.nome;
           });
         }
       },
@@ -273,6 +279,11 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceAround,
                                     children: [
+                                      Text(
+                                        nomeRegiao,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                       SizedBox(
                                         width: larguraTela,
                                         height: 350,

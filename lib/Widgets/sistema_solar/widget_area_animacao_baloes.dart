@@ -155,6 +155,7 @@ class _WidgetAreaAnimacaoBaloesState extends State<WidgetAreaAnimacaoBaloes>
     }
   }
 
+
   verificarInformacoes() {
     //caso os parametros sejam igual a zero parar a animacao
     if (widget.quantidadeVidas == 0 || widget.tempo == 0) {

@@ -1,13 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:geoli/Uteis/paleta_cores.dart';
-
 class Constantes {
   //ROTAS
+  static const rotaTelaSplashScreen = "telaSplashScreen";
   static const rotaTelaInicial = "telaIncial";
   static const rotaTelaSistemaSolar = "telaSistemaSolar";
 
   // ROTA REGIOES
-  static const rotaTelaSplashScreen = "telaSplashScreen";
   static const rotaTelaInicialRegioes = "telaIncialRegioes";
   static const rotaTelaRegiaoCentroOeste = "telaRegiaoCentroOeste";
   static const rotaTelaRegiaoSul = "telaRegiaoSul";

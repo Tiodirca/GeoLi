@@ -36,9 +36,7 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
     if (widget.estados.length >= 10) {
       exibirBtnProximoNivel = false;
     }
-
     recuperarRegioesLiberadas();
-
   }
 
   // metodo para carregar os dados
@@ -84,11 +82,12 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
           } else if (Constantes.nomeTodosEstados == key) {
             liberarTodosEstados = value;
           }
-          validarLiberarProximoNivel("");
-          liberarProximoNivel();
         });
+        validarLiberarProximoNivel("");
+        liberarProximoNivel();
       },
     );
+
   }
 
   // metodo para cadastrar item
@@ -112,7 +111,7 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
     }
   }
 
-  validarLiberarProximoNivel(String nomeBtn) {
+  validarLiberarProximoNivel(String nomeBtn) async{
     setState(() {
       if (widget.nomeColecao == Constantes.fireBaseDocumentoRegiaoCentroOeste) {
         liberarRegiaoSul = true;

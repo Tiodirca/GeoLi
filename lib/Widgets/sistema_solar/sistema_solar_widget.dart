@@ -137,20 +137,21 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
           return Stack(
             children: [
               Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Column(
                     children: [
                       Text(
-                        Textos.telaPlanetasDesbloqueadosTitulo,
+                        Textos.telaPlanetasDesbloqueadosTitulo,textAlign: TextAlign.center,
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
+                            fontWeight: FontWeight.bold, fontSize: 18,),
                       ),
-                      Text(Textos.telaPlanetasDesbloqueadosDescricao),
+                      Text(Textos.telaPlanetasDesbloqueadosDescricao,textAlign: TextAlign.center,),
                     ],
                   ),
                   SizedBox(
                     width: larguraTela,
-                    height: 400,
+                    height: 350,
                     child: ListView.builder(
                       itemCount: 8,
                       itemBuilder: (context, index) {
@@ -208,7 +209,7 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
                                     width: 1, color: widget.corPadrao),
                                 borderRadius: BorderRadius.circular(10)),
                             child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Row(
                                   mainAxisAlignment:

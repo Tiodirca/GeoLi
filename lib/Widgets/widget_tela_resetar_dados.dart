@@ -215,66 +215,65 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
   @override
   Widget build(BuildContext context) {
     double larguraTela = MediaQuery.of(context).size.width;
-    return Positioned(
-        child: Container(
-            margin: EdgeInsets.all(10),
-            color: Colors.transparent,
-            width: Platform.isAndroid || Platform.isIOS
-                ? larguraTela
-                : larguraTela * 0.4,
-            height: 200,
-            child: Card(
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                    side: BorderSide(width: 1, color: widget.corCard),
-                    borderRadius: BorderRadius.circular(20)),
-                child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    children: [
-                      Text(
-                        Textos.tituloReiniciarDados,
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        Textos.descricaoReiniciarDados,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 17),
-                      ),
-                      Container(
-                          margin: EdgeInsets.all(10),
-                          width: 200,
-                          height: 60,
-                          child: FloatingActionButton(
-                            elevation: 0,
-                            backgroundColor: Colors.white,
-                            shape: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
-                                    width: 1, color: widget.corCard)),
-                            onPressed: () {
-                              alertaExclusao(context);
-                            },
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.reset_tv_outlined,
-                                  color: PaletaCores.corVermelha,
-                                ),
-                                Text(
-                                  Textos.btnExcluir,
-                                  style: TextStyle(
-                                    color: PaletaCores.corVermelha,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ))
-                    ],
+    return Container(
+        margin: EdgeInsets.all(10),
+        color: Colors.transparent,
+        width: Platform.isAndroid || Platform.isIOS
+            ? larguraTela
+            : larguraTela * 0.4,
+        height: 200,
+        child: Card(
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
+                side: BorderSide(width: 1, color: widget.corCard),
+                borderRadius: BorderRadius.circular(20)),
+            child: Padding(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  Text(
+                    Textos.tituloReiniciarDados,
+                    style: TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
                   ),
-                ))));
+                  Text(
+                    Textos.descricaoReiniciarDados,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  Container(
+                      margin: EdgeInsets.all(10),
+                      width: 200,
+                      height: 60,
+                      child: FloatingActionButton(
+                        elevation: 0,
+                        backgroundColor: Colors.white,
+                        shape: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                width: 1, color: widget.corCard)),
+                        onPressed: () {
+                          alertaExclusao(context);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.reset_tv_outlined,
+                              color: PaletaCores.corVermelha,
+                            ),
+                            Text(
+                              Textos.btnExcluir,
+                              style: TextStyle(
+                                color: PaletaCores.corVermelha,
+                              ),
+                            )
+                          ],
+                        ),
+                      ))
+                ],
+              ),
+            )));
   }
 }

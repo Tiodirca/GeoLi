@@ -42,7 +42,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   late Gestos gestoSorteado;
   int tempo = 0;
   bool playPauseJogo = false;
-  int pontuacao = 0;
+  int pontuacaoDuranteJogo = 0;
   int pontuacaoTotal = 0;
   int tamanhoVidas = 3;
   late Timer iniciarTempo;
@@ -156,7 +156,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
 
   //atualizar pontuacao no banco de dados
   atualizarPontuacao() async {
-    pontuacaoTotal = pontuacaoTotal + pontuacao;
+    pontuacaoTotal = pontuacaoTotal + pontuacaoDuranteJogo;
     try {
       // instanciando Firebase
       var db = FirebaseFirestore.instance;
@@ -180,7 +180,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
       setState(() {
         planetas.shuffle();
         sortearGesto(); //chamando metodo para sortear um novo gesto
-        pontuacao++;
+        pontuacaoDuranteJogo++;
         // chamando metodo para exibir mensagem
         MetodosAuxiliares.exibirMensagens(
             Textos.msgAcertou, Constantes.msgAcertoGesto, context);
@@ -200,6 +200,23 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
     }
     //sobreescrevendo metodo
     MetodosAuxiliares.confirmarAcerto("");
+  }
+
+  liberarBotoes() {
+    Future.delayed(Duration(milliseconds: 4300), () {
+      setState(() {
+        ativarBtn = true;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    if (pontuacaoTotal == 0) {
+      _controllerFade.dispose();
+    }
+    super.dispose();
   }
 
   Widget btnAcao(String nomeBtn) => Container(
@@ -307,14 +324,6 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
         ],
       );
 
-  liberarBotoes() {
-    Future.delayed(Duration(milliseconds: 4300), () {
-      setState(() {
-        ativarBtn = true;
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;
@@ -357,7 +366,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                                             fontSize: 16),
                                       ),
                                       Text(
-                                        pontuacao.toString(),
+                                        pontuacaoDuranteJogo.toString(),
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 18,

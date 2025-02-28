@@ -38,17 +38,7 @@ class Rotas {
         return MaterialPageRoute(builder: (_) => TelaTodasRegioes());
       case Constantes.rotaTelaSistemaSolar:
         return MaterialPageRoute(builder: (_) => TelaSistemaSolar());
-      // case Constantes.rotaTelaDividirLetraTexto:
-      //   return MaterialPageRoute(builder: (_) => const TelaDividirLetraTexto());
-      // case Constantes.rotaTelaPesquisa:
-      //   if (args is String) {
-      //     return MaterialPageRoute(
-      //         builder: (_) => TelaPesquisa(
-      //               tipoPesquisa: args,
-      //             ));
-      //   } else {
-      //     return erroRota(settings);
-      //   }
+
     }
     // Se o argumento não é do tipo correto, retorna erro
     return erroRota(settings);
