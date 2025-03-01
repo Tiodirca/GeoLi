@@ -214,7 +214,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    atualizarPontuacao();
     if (pontuacaoTotal == 0) {
       _controllerFade.dispose();
     }
@@ -506,8 +506,13 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                       onPressed: () {
                         if (ativarBtn) {
                           MetodosAuxiliares.passarPontuacaoAtual(0);
-                          Navigator.pushReplacementNamed(
-                              context, Constantes.rotaTelaInicial);
+                          if(exibirJogo){
+                            Navigator.pushReplacementNamed(
+                                context, Constantes.rotaTelaSistemaSolar);
+                          }else{
+                            Navigator.pushReplacementNamed(
+                                context, Constantes.rotaTelaInicial);
+                          }
                         }
                       },
                       icon: const Icon(Icons.arrow_back_ios))),

@@ -81,6 +81,8 @@ class _BalaoWidgetState extends State<BalaoWidget>
     }
   }
 
+
+
   // metodo para gravar no banco de dados
   // que o planeta foi desbloqueado
   desbloquearPlaneta(String nomePlaneta) {

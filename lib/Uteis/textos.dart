@@ -59,9 +59,10 @@ class Textos {
   static String telaPlanetasDesbloqueadosTitulo = "Planetas Desbloqueados";
   static String telaPlanetasDesbloqueadosDescricao =
       "Aqui estão os planetas que você já desbloqueou,clique/aperte sobre para ver mais";
-  static String telaPlanetasPlanetasDesbloqueadosQuanti =
-      "Planetas desbloqueados : ";
-  static String telaPlanetasPlanetasDesbloqueadosFalta = "Falta desbloquear : ";
+  static String telaPlanetasDesbloqueadosQuanti = "Planetas desbloqueados : ";
+  static String telaPlanetasDesbloqueadosFalta = "Falta desbloquear : ";
+  static String telaPlanetasSemDesbloquear =
+      "Jogue para desbloquear os planetas do sistema solar";
 
   //NOME PLANETAS
   static String nomePlanetaMercurio = "Mercúrio";

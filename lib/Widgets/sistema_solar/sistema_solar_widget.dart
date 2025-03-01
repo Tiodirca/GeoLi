@@ -24,7 +24,7 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
   bool exibirPlanetaGestoDetalhado = false;
   List<Gestos> gestoPlanetasSistemaSolar = [];
   List<Planeta> planetas = [];
-  int quantPlanetaDesbloqueados = 0;
+  int quantPlanetaDesbloquear = 0;
   int quantPlanetaFaltaDesbloquear = 0;
   int indexPlaneta = 0;
 
@@ -62,7 +62,7 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
                   // receber o valor que esta no banco
                   element.desbloqueado = value;
                   if (element.desbloqueado) {
-                    quantPlanetaDesbloqueados = quantPlanetaDesbloqueados + 1;
+                    quantPlanetaDesbloquear = quantPlanetaDesbloquear + 1;
                   } else {
                     quantPlanetaFaltaDesbloquear =
                         quantPlanetaFaltaDesbloquear + 1;
@@ -70,7 +70,7 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
                 }
               }
             });
-             exibirTelaCarregamento = false;
+            exibirTelaCarregamento = false;
           },
         );
       },
@@ -163,18 +163,29 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
                     ],
                   ),
                   SizedBox(
-                    width: larguraTela,
-                    height: 350,
-                    child: ListView.builder(
-                      itemCount: 8,
-                      itemBuilder: (context, index) {
-                        return planetaLiberados(
-                            planetas.elementAt(index),
-                            gestoPlanetasSistemaSolar.elementAt(index),
-                            index);
-                      },
-                    ),
-                  ),
+                      width: larguraTela,
+                      height: 350,
+                      child: LayoutBuilder(
+                        builder: (context, constraints) {
+                          if (quantPlanetaDesbloquear == 0) {
+                            return Text(
+                              Textos.telaPlanetasSemDesbloquear,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),
+                            );
+                          } else {
+                            return ListView.builder(
+                              itemCount: 8,
+                              itemBuilder: (context, index) {
+                                return planetaLiberados(
+                                    planetas.elementAt(index),
+                                    gestoPlanetasSistemaSolar.elementAt(index),
+                                    index);
+                              },
+                            );
+                          }
+                        },
+                      )),
                   SizedBox(
                       width: larguraTela,
                       height: 50,
@@ -184,21 +195,19 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                Textos
-                                    .telaPlanetasPlanetasDesbloqueadosQuanti,
+                                Textos.telaPlanetasDesbloqueadosQuanti,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black),
                               ),
-                              Text(quantPlanetaDesbloqueados.toString())
+                              Text(quantPlanetaDesbloquear.toString())
                             ],
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                Textos
-                                    .telaPlanetasPlanetasDesbloqueadosFalta,
+                                Textos.telaPlanetasDesbloqueadosFalta,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black),
@@ -226,8 +235,7 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
                                     width: 1, color: widget.corPadrao),
                                 borderRadius: BorderRadius.circular(10)),
                             child: Column(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Row(
                                   mainAxisAlignment:
