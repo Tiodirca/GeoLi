@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/constantes_sistema_solar.dart';
+import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
@@ -27,6 +28,7 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
   int quantPlanetaDesbloquear = 0;
   int quantPlanetaFaltaDesbloquear = 0;
   int indexPlaneta = 0;
+  late String uidUsuario;
 
   @override
   void initState() {
@@ -36,6 +38,11 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
     gestoPlanetasSistemaSolar =
         ConstantesSistemaSolar.adicionarGestosPlanetas();
     //chamando metodo
+    recuperarUIDUsuario();
+  }
+
+  recuperarUIDUsuario() async {
+    uidUsuario = await MetodosAuxiliares.recuperarUid();
     recuperarPlanetasDesbloqueados();
   }
 
@@ -43,6 +50,8 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
   recuperarPlanetasDesbloqueados() async {
     var db = FirebaseFirestore.instance;
     db
+        .collection(uidUsuario) // passando a colecao
+        .doc(Constantes.fireBaseColecaoSistemaSolar)
         .collection(
             Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
         .doc(Constantes
@@ -171,7 +180,8 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
                             return Text(
                               Textos.telaPlanetasSemDesbloquear,
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 18),
                             );
                           } else {
                             return ListView.builder(

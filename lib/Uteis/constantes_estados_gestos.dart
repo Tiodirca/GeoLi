@@ -183,7 +183,7 @@ class ConstantesEstadosGestos {
       nomeImagem: CaminhosImagens.gestoNorteACImagem);
   static Gestos gestoAP = Gestos(
       nomeGesto: Textos.nomeRegiaoNorteAP,
-      nomeImagem: CaminhosImagens.gestoNorteACImagem);
+      nomeImagem: CaminhosImagens.gestoNorteAPImagem);
   static Gestos gestoAM = Gestos(
       nomeGesto: Textos.nomeRegiaoNorteAM,
       nomeImagem: CaminhosImagens.gestoNorteAMImagem);

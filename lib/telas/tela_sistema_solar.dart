@@ -48,6 +48,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   late Gestos gestoSorteado;
   late Timer iniciarTempo;
   late String iniciarAnimacao;
+  late String uidUsuario;
   Color corPadrao = PaletaCores.corAzul;
   late final AnimationController _controllerFade =
       AnimationController(vsync: this);
@@ -92,6 +93,11 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
     });
     planetas.shuffle();
     sortearGesto();
+    recuperarUIDUsuario();
+  }
+
+  recuperarUIDUsuario() async {
+    uidUsuario = await MetodosAuxiliares.recuperarUid();
     recuperarPontuacao();
   }
 
@@ -134,6 +140,8 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
     var db = FirebaseFirestore.instance;
     //instanciano variavel
     db
+        .collection(uidUsuario) // passando a colecao
+        .doc(Constantes.fireBaseColecaoSistemaSolar)
         .collection(
             Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
         .doc(Constantes
@@ -146,7 +154,8 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
             setState(() {
               pontuacaoTotal = value;
               //Passando pontuacao para
-              // a tela de emblemas sem esse metodo o emblema nao e exibido corretamente
+              // a tela de emblemas sem esse metodo
+              // o emblema nao e exibido corretamente
               MetodosAuxiliares.passarPontuacaoAtual(pontuacaoTotal);
               exibirTelaCarregamento = false;
             });
@@ -163,6 +172,8 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
       // instanciando Firebase
       var db = FirebaseFirestore.instance;
       db
+          .collection(uidUsuario) // passando a colecao
+          .doc(Constantes.fireBaseColecaoSistemaSolar)
           .collection(
               Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
           .doc(Constantes
@@ -177,7 +188,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   recuperarJogadaPeriodicamente() async {
     //recuperando o valor passado pelo metodo
     String retorno = await MetodosAuxiliares.recuperarAcerto();
-    if (retorno == Constantes.msgAcertoGesto) {
+    if (retorno == Constantes.msgAcerto) {
       // mudando estado da lista para mudar a ordem dos planetas na lista
       setState(() {
         planetas.shuffle();
@@ -185,14 +196,14 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
         pontuacaoDuranteJogo++;
         // chamando metodo para exibir mensagem
         MetodosAuxiliares.exibirMensagens(
-            Textos.msgAcertou, Constantes.msgAcertoGesto, context);
+            Textos.msgAcertou, Constantes.msgAcerto, context);
       });
-    } else if (retorno == Constantes.msgErroAcertoGesto) {
+    } else if (retorno == Constantes.msgErro) {
       setState(() {
         tamanhoVidas--;
         // chamando metodo para exibir mensagem
         MetodosAuxiliares.exibirMensagens(
-            Textos.msgErrou, Constantes.msgErroAcertoGesto, context);
+            Textos.msgErrou, Constantes.msgErro, context);
         // caso a quantide de vidas tenha chegado a 0
         if (tamanhoVidas == 0) {
           pararTempo();
@@ -214,7 +225,6 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
 
   @override
   void dispose() {
-    atualizarPontuacao();
     if (pontuacaoTotal == 0) {
       _controllerFade.dispose();
     }
@@ -506,10 +516,11 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                       onPressed: () {
                         if (ativarBtn) {
                           MetodosAuxiliares.passarPontuacaoAtual(0);
-                          if(exibirJogo){
+                          if (exibirJogo) {
+                            atualizarPontuacao();
                             Navigator.pushReplacementNamed(
                                 context, Constantes.rotaTelaSistemaSolar);
-                          }else{
+                          } else {
                             Navigator.pushReplacementNamed(
                                 context, Constantes.rotaTelaInicial);
                           }
@@ -615,7 +626,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                                     ),
                                   ),
                                   SizedBox(
-                                    height: 400,
+                                    height: 200,
                                     child: Wrap(
                                       crossAxisAlignment:
                                           WrapCrossAlignment.center,

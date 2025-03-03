@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
+import 'package:geoli/telas/login_cadastro.dart';
 import 'package:geoli/telas/regioes_brasil/tela_inicial_regioes.dart';
 import 'package:geoli/telas/regioes_brasil/tela_regiao_centro_oeste.dart';
 import 'package:geoli/telas/regioes_brasil/tela_regiao_nordeste.dart';
@@ -15,7 +16,6 @@ class Rotas {
   static GlobalKey<NavigatorState>? navigatorKey = GlobalKey<NavigatorState>();
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
-
     switch (settings.name) {
       case Constantes.rotaTelaSplashScreen:
         return MaterialPageRoute(builder: (_) => TelaSplashScreen());
@@ -37,7 +37,8 @@ class Rotas {
         return MaterialPageRoute(builder: (_) => TelaTodasRegioes());
       case Constantes.rotaTelaSistemaSolar:
         return MaterialPageRoute(builder: (_) => TelaSistemaSolar());
-
+      case Constantes.rotaTelaLoginCadastro:
+        return MaterialPageRoute(builder: (_) => TelaLoginCadastro());
     }
     // Se o argumento não é do tipo correto, retorna erro
     return erroRota(settings);

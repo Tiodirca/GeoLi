@@ -14,17 +14,18 @@ class MetodosAuxiliares {
   static int pontuacaoAtual = 0;
   static String status = "";
   static int quantRegioesLiberadas = 0;
+  static String uIDUsuario = "";
 
   //Metodo para passar se o usuario acertou ou nao
   static Future<String> confirmarAcerto(String acerto) async {
     acertou = acerto;
     return acerto;
   }
+
   //Metodo para recuperar acerto
   static Future<String> recuperarAcerto() async {
     return acertou;
   }
-
 
   static Future<String> passarStatusTutorial(String statusAtual) async {
     status = statusAtual;
@@ -53,6 +54,15 @@ class MetodosAuxiliares {
     return nomeGestoPlaneta;
   }
 
+  static Future<String> recuperarUid() async {
+    return uIDUsuario;
+  }
+
+  static Future<String> passarUidUsuario(String uid) async {
+    uIDUsuario = uid;
+    return uIDUsuario;
+  }
+
   // metodo para remover o gesto ja acertado da lista
   // de gestos quando voltar a jogar
   static removerGestoLista(
@@ -73,11 +83,10 @@ class MetodosAuxiliares {
 
   // metodo para exibir mensagem de retorno ao usuario
   static exibirMensagens(String msg, String tipoAlerta, BuildContext context) {
-    if (tipoAlerta == Constantes.msgAcertoGesto) {
+    if (tipoAlerta == Constantes.msgAcerto) {
       ElegantNotification.success(
         position: Alignment.center,
         width: 200,
-        title: Text(tipoAlerta),
         showProgressIndicator: false,
         icon: Icon(
           Icons.check_circle_outline,

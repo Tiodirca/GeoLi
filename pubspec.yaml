@@ -16,6 +16,7 @@ dependencies:
   #necessario para conexao com firebase
   firebase_core: ^3.10.1
   cloud_firestore: ^5.6.2
+  firebase_auth: ^5.5.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -26,6 +26,7 @@ class _BalaoWidgetState extends State<BalaoWidget>
   Random random = Random();
   late Color corbalao;
   late String status;
+  late String uidUsuario;
   List<Planeta> planetas = ConstantesSistemaSolar.adicinarPlanetas();
 
   @override
@@ -47,6 +48,11 @@ class _BalaoWidgetState extends State<BalaoWidget>
     ]);
     corbalao = listaCorBalao.elementAt(sortearNumero(listaCorBalao.length));
     recuperarStatusTutorial();
+    recuperarUIDUsuario();
+  }
+
+  recuperarUIDUsuario() async {
+    uidUsuario = await MetodosAuxiliares.recuperarUid();
   }
 
   recuperarStatusTutorial() async {
@@ -59,12 +65,13 @@ class _BalaoWidgetState extends State<BalaoWidget>
   }
 
   validarAcerto() async {
+    print(uidUsuario);
     String gesto = "";
     gesto = await MetodosAuxiliares.recuperarGestoSorteado();
     // verificando se o status passado esta ativo
     if (status == Constantes.statusTutorialAtivo) {
       MetodosAuxiliares.exibirMensagens(
-          Textos.tutorialConcluido, Constantes.msgAcertoGesto, context);
+          Textos.tutorialConcluido, Constantes.msgAcerto, context);
       MetodosAuxiliares.passarStatusTutorial("");
       atualizarPontuacaoTutorial();
       Timer(const Duration(seconds: 1), () {
@@ -73,15 +80,13 @@ class _BalaoWidgetState extends State<BalaoWidget>
       });
     } else {
       if (gesto.contains(widget.planeta.nomePlaneta)) {
-        MetodosAuxiliares.confirmarAcerto(Constantes.msgAcertoGesto);
+        MetodosAuxiliares.confirmarAcerto(Constantes.msgAcerto);
         recuperarPlanetasDesbloqueados();
       } else {
-        MetodosAuxiliares.confirmarAcerto(Constantes.msgErroAcertoGesto);
+        MetodosAuxiliares.confirmarAcerto(Constantes.msgErro);
       }
     }
   }
-
-
 
   // metodo para gravar no banco de dados
   // que o planeta foi desbloqueado
@@ -101,6 +106,8 @@ class _BalaoWidgetState extends State<BalaoWidget>
       // instanciando Firebase
       var db = FirebaseFirestore.instance;
       db
+          .collection(uidUsuario) // passando a colecao
+          .doc(Constantes.fireBaseColecaoSistemaSolar)
           .collection(
               Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
           .doc(Constantes
@@ -115,6 +122,8 @@ class _BalaoWidgetState extends State<BalaoWidget>
   recuperarPlanetasDesbloqueados() async {
     var db = FirebaseFirestore.instance;
     db
+        .collection(uidUsuario) // passando a colecao
+        .doc(Constantes.fireBaseColecaoSistemaSolar)
         .collection(
             Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
         .doc(Constantes
@@ -147,6 +156,8 @@ class _BalaoWidgetState extends State<BalaoWidget>
       // instanciando Firebase
       var db = FirebaseFirestore.instance;
       db
+          .collection(uidUsuario) // passando a colecao
+          .doc(Constantes.fireBaseColecaoSistemaSolar)
           .collection(
               Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
           .doc(Constantes

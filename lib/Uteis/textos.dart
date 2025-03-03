@@ -11,12 +11,30 @@ class Textos {
   static String btnDificuldadeFacil = "Fácil";
   static String btnDificuldadeMedio = "Médio";
   static String btnDificuldadeDificil = "Dificil";
+  static String btnCadastrar = "Cadastrar";
+  static String btnLogin = "Login";
+  static String btnDesconetar = "Desconetar";
 
   // GERAIS
   static String nomeApp = "Geo Li";
   static String txtTelaCarregamento = "Aguarde Carregando";
   static String msgAcertou = "Acertou";
   static String msgErrou = "Errado";
+
+  // LOGIN E CADASTRO
+
+  static String telaLoginTitulo = "Login";
+  static String telaCadastroTitulo = "Cadastro";
+
+  static String email = "E-mail";
+  static String senha = "Senha";
+
+  static String sucessoLogin = "Sucesso ao entrar na conta";
+  static String sucessoCadastro = "Sucesso ao fazer Cadastro";
+
+  static String erroLogin = "Verifique os dados e tente novamente";
+  static String erroCadastro = "Erro ao fazer Cadastro";
+  static String erroCampoVazio = "Preencha antes de prosseguir";
 
   // TELA INICIAL
   static String descricaoTelaInicial = "Selecione qual jogo deseja jogar";

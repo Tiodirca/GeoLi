@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/constantes_estados_gestos.dart';
 import 'package:geoli/Uteis/constantes_sistema_solar.dart';
+import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/modelos/planeta.dart';
@@ -65,9 +66,9 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
     ConstantesEstadosGestos.estadoRN.nome: false,
     ConstantesEstadosGestos.estadoSE.nome: false
   };
-
   Map<String, bool> dadosTodasRegioes = {};
   Map<String, int> dadosPontuacao = {Constantes.pontosJogada: 0};
+  late String uidUsuario;
 
   @override
   void initState() {
@@ -77,6 +78,11 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
     dadosTodasRegioes.addEntries(dadosRegiaoSudeste.entries);
     dadosTodasRegioes.addEntries(dadosRegiaoNordeste.entries);
     dadosTodasRegioes.addEntries(dadosRegiaoNorte.entries);
+    recuperarUIDUsuario();
+  }
+
+  recuperarUIDUsuario() async {
+    uidUsuario = await MetodosAuxiliares.recuperarUid();
   }
 
   // metodo para cadastrar item
@@ -86,6 +92,8 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
       // instanciando Firebase
       var db = FirebaseFirestore.instance;
       db
+          .collection(uidUsuario) // passando a colecao
+          .doc(nomeColecao)
           .collection(nomeColecao) // passando a colecao
           .doc(nomeDocumento) //passando o documento
           .set(dados);
@@ -107,6 +115,8 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
       // instanciando Firebase
       var db = FirebaseFirestore.instance;
       db
+          .collection(uidUsuario) // passando a colecao
+          .doc(Constantes.fireBaseColecaoSistemaSolar)
           .collection(
               Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
           .doc(Constantes
@@ -233,8 +243,7 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
                 children: [
                   Text(
                     Textos.tituloReiniciarDados,
-                    style: TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   Text(
                     Textos.descricaoReiniciarDados,
@@ -250,8 +259,8 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
                         backgroundColor: Colors.white,
                         shape: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                                width: 1, color: widget.corCard)),
+                            borderSide:
+                                BorderSide(width: 1, color: widget.corCard)),
                         onPressed: () {
                           alertaExclusao(context);
                         },

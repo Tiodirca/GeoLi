@@ -149,7 +149,7 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
           // variavel vai receber o retorno do metodo para poder
           // verificar se o usuario acertou o gesto no estado correto
           String retorno = await MetodosAuxiliares.recuperarAcerto();
-          if (retorno == Constantes.msgAcertoGesto) {
+          if (retorno == Constantes.msgAcerto) {
             // caso tenha acertado ele ira remover da
             // lista de gestos o gesto que foi acertado
             setState(() {

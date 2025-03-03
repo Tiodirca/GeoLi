@@ -2,6 +2,7 @@ class Constantes {
   //ROTAS
   static const rotaTelaSplashScreen = "telaSplashScreen";
   static const rotaTelaInicial = "telaIncial";
+  static const rotaTelaLoginCadastro = "telaLoginCadastro";
   static const rotaTelaSistemaSolar = "telaSistemaSolar";
 
   // ROTA REGIOES
@@ -40,6 +41,6 @@ class Constantes {
   static const statusTutorialAtivo = "Tutorial Ativo";
 
   static const pontosJogada = "pontosJogada";
-  static const msgErroAcertoGesto = "Errou";
-  static const msgAcertoGesto = "Acertou";
+  static const msgErro = "Errou";
+  static const msgAcerto = "Acertou";
 }

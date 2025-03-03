@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/emblemas.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
@@ -29,11 +30,22 @@ class _TelaInicialState extends State<TelaInicial>
   String caminhoImagemSistemaSolar = CaminhosImagens.btnGestoSistemaSolarImagem;
   Color corPadrao = PaletaCores.corVerde;
 
+  recuperarUsuario() async {
+    print("dasda");
+    await FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      if (user != null) {
+        print("fdsfs${user.uid}");
+        MetodosAuxiliares.passarUidUsuario(user.uid);
+        recuperarPontuacao(Constantes.fireBaseColecaoSistemaSolar,
+            Constantes.fireBaseDocumentoPontosJogadaSistemaSolar, user.uid);
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    recuperarPontuacao(Constantes.fireBaseColecaoRegioes,
-        Constantes.fireBaseDocumentoPontosJogadaRegioes);
+    recuperarUsuario();
 
     emblemasGeral.addAll([
       Emblemas(
@@ -96,10 +108,13 @@ class _TelaInicialState extends State<TelaInicial>
   }
 
   // metodo para recuperar a pontuacao
-  recuperarPontuacao(String nomeColecao, String nomeDocumento) async {
+  recuperarPontuacao(
+      String nomeColecao, String nomeDocumento, String uidUsuario) async {
     var db = FirebaseFirestore.instance;
     //instanciano variavel
     db
+        .collection(uidUsuario) // passando a colecao
+        .doc(Constantes.fireBaseColecaoSistemaSolar)
         .collection(nomeColecao) // passando a colecao
         .doc(nomeDocumento) // passando documento
         .get()
@@ -109,9 +124,9 @@ class _TelaInicialState extends State<TelaInicial>
           (key, value) {
             setState(() {
               if (nomeColecao == Constantes.fireBaseColecaoRegioes) {
-                pontuacaoEstados = value;
-                recuperarPontuacao(Constantes.fireBaseColecaoSistemaSolar,
-                    Constantes.fireBaseDocumentoPontosJogadaSistemaSolar);
+                // pontuacaoEstados = value;
+                // recuperarPontuacao(Constantes.fireBaseColecaoSistemaSolar,
+                //     Constantes.fireBaseDocumentoPontosJogadaSistemaSolar);
               } else {
                 pontuacaoSistemaSolar = value;
                 pontuacaoGeral = pontuacaoEstados + pontuacaoSistemaSolar;
@@ -210,6 +225,28 @@ class _TelaInicialState extends State<TelaInicial>
                       },
                       child: Icon(
                         exibirTelaResetarJogo ? Icons.close : Icons.settings,
+                        color: corPadrao,
+                        size: 30,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(right: 10),
+                    width: 40,
+                    height: 40,
+                    child: FloatingActionButton(
+                      heroTag: Textos.btnLogin,
+                      backgroundColor: Colors.white,
+                      elevation: 0,
+                      shape: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(40),
+                          borderSide: BorderSide(width: 1, color: corPadrao)),
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(
+                            context, Constantes.rotaTelaLoginCadastro);
+                      },
+                      child: Icon(
+                        Icons.person,
                         color: corPadrao,
                         size: 30,
                       ),

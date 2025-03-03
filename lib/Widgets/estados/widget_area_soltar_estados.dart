@@ -125,15 +125,15 @@ class _WidgetAreaSoltarEstadosState extends State<WidgetAreaSoltarEstados>
                   exibirIndicadorTutorial = false;
                 });
                 // chamando metodo para passar confirmacao do acerto
-                MetodosAuxiliares.confirmarAcerto(Constantes.msgAcertoGesto);
+                MetodosAuxiliares.confirmarAcerto(Constantes.msgAcerto);
                 MetodosAuxiliares.exibirMensagens(
-                    Textos.msgAcertou, Constantes.msgAcertoGesto, context);
+                    Textos.msgAcertou, Constantes.msgAcerto, context);
               } else {
                 MetodosAuxiliares.exibirMensagens(
-                    Textos.msgErrou, Constantes.msgErroAcertoGesto, context);
+                    Textos.msgErrou, Constantes.msgErro, context);
                 // chamando metodo para passar confirmacao do erro
                 MetodosAuxiliares.confirmarAcerto(
-                    Constantes.msgErroAcertoGesto);
+                    Constantes.msgErro);
               }
             },
           ),
