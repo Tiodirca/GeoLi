@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
-import 'package:geoli/telas/login_cadastro.dart';
 import 'package:geoli/telas/regioes_brasil/tela_inicial_regioes.dart';
 import 'package:geoli/telas/regioes_brasil/tela_regiao_centro_oeste.dart';
 import 'package:geoli/telas/regioes_brasil/tela_regiao_nordeste.dart';
@@ -9,6 +8,7 @@ import 'package:geoli/telas/regioes_brasil/tela_regiao_sudeste.dart';
 import 'package:geoli/telas/tela_inicial.dart';
 import 'package:geoli/telas/regioes_brasil/tela_regiao_sul.dart';
 import 'package:geoli/telas/regioes_brasil/tela_todas_regioes.dart';
+import 'package:geoli/telas/tela_login_cadastro.dart';
 import 'package:geoli/telas/tela_sistema_solar.dart';
 import 'package:geoli/telas/tela_splash.dart';
 

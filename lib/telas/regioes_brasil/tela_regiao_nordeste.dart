@@ -23,6 +23,7 @@ class _TelaRegiaoNordesteState extends State<TelaRegiaoNordeste> {
   List<Gestos> gestos = [];
   bool exibirTelaCarregamento = true;
   bool exibirTelaProximoNivel = false;
+  late String uidUsuario;
   String nomeColecao = Constantes.fireBaseDocumentoRegiaoNordeste;
 
   @override
@@ -42,6 +43,11 @@ class _TelaRegiaoNordesteState extends State<TelaRegiaoNordeste> {
     ]);
     gestos.shuffle();
     // chamando metodo para fazer busca no banco de dados
+    recuperarUIDUsuario();
+  }
+
+  recuperarUIDUsuario() async {
+    uidUsuario = await MetodosAuxiliares.recuperarUid();
     realizarBuscaDadosFireBase(nomeColecao);
   }
 
@@ -72,6 +78,8 @@ class _TelaRegiaoNordesteState extends State<TelaRegiaoNordeste> {
     var db = FirebaseFirestore.instance;
     //instanciano variavel
     db
+        .collection(uidUsuario) // passando a colecao
+        .doc(Constantes.fireBaseColecaoRegioes)
         .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
         .doc(nomeDocumentoRegiao) // passando documento
         .get()
@@ -149,7 +157,9 @@ class _TelaRegiaoNordesteState extends State<TelaRegiaoNordeste> {
         body: LayoutBuilder(
           builder: (context, constraints) {
             if (exibirTelaCarregamento) {
-              return TelaCarregamentoWidget(corPadrao: ConstantesEstadosGestos.corPadraoRegioes,);
+              return TelaCarregamentoWidget(
+                corPadrao: ConstantesEstadosGestos.corPadraoRegioes,
+              );
             } else {
               return WidgetAreaTelaRegioes(
                   nomeColecao: nomeColecao,

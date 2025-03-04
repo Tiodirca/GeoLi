@@ -8,6 +8,9 @@ import 'package:geoli/Uteis/textos.dart';
 class ConstantesEstadosGestos {
   static Color corPadraoRegioes = PaletaCores.corLaranja;
 
+  static const tipoAcaoCadastroRegioes = "pontuacao";
+  static const tipoAcaoCadastroRegioesLiberarNiveis = "liberarNiveis";
+
   static adicionarEstadosGestos() {
     Map<Estado, Gestos> estadoGestoMap = {};
     estadoGestoMap[ConstantesEstadosGestos.estadoMS] =

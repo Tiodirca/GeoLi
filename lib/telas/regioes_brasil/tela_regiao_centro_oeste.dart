@@ -26,12 +26,18 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
   bool exibirTelaProximoNivel = false;
   Map<Estado, Gestos> estadoGestoMap = {};
   List<MapEntry<Estado, Gestos>> estadosSorteio = [];
+  late String uidUsuario;
   String nomeColecao = Constantes.fireBaseDocumentoRegiaoCentroOeste;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    recuperarUIDUsuario();
+  }
+
+  recuperarUIDUsuario() async {
+    uidUsuario = await MetodosAuxiliares.recuperarUid();
     validarPrimeiraJogada();
   }
 
@@ -78,6 +84,8 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
     var db = FirebaseFirestore.instance;
     //instanciano variavel
     db
+        .collection(uidUsuario) // passando a colecao
+        .doc(Constantes.fireBaseColecaoRegioes)
         .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
         .doc(nomeDocumentoRegiao) // passando documento
         .get()

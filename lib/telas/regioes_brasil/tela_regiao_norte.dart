@@ -10,7 +10,6 @@ import 'package:geoli/Widgets/estados/widget_area_gestos_arrastar.dart';
 import 'package:geoli/Widgets/estados/widget_area_tela_regioes.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 
-
 class TelaRegiaoNorte extends StatefulWidget {
   const TelaRegiaoNorte({super.key});
 
@@ -24,6 +23,7 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
   List<Gestos> gestos = [];
   bool exibirTelaCarregamento = true;
   bool exibirTelaProximoNivel = false;
+  late String uidUsuario;
   String nomeColecao = Constantes.fireBaseDocumentoRegiaoNorte;
 
   @override
@@ -42,6 +42,11 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
     ]);
     gestos.shuffle();
     // chamando metodo para fazer busca no banco de dados
+    recuperarUIDUsuario();
+  }
+
+  recuperarUIDUsuario() async {
+    uidUsuario = await MetodosAuxiliares.recuperarUid();
     realizarBuscaDadosFireBase(nomeColecao);
   }
 
@@ -68,6 +73,8 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
     var db = FirebaseFirestore.instance;
     //instanciano variavel
     db
+        .collection(uidUsuario) // passando a colecao
+        .doc(Constantes.fireBaseColecaoRegioes)
         .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
         .doc(nomeDocumentoRegiao) // passando documento
         .get()
@@ -139,7 +146,9 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
         body: LayoutBuilder(
           builder: (context, constraints) {
             if (exibirTelaCarregamento) {
-              return TelaCarregamentoWidget(corPadrao: ConstantesEstadosGestos.corPadraoRegioes,);
+              return TelaCarregamentoWidget(
+                corPadrao: ConstantesEstadosGestos.corPadraoRegioes,
+              );
             } else {
               return WidgetAreaTelaRegioes(
                   nomeColecao: nomeColecao,

@@ -63,6 +63,7 @@ class MetodosAuxiliares {
     return uIDUsuario;
   }
 
+
   // metodo para remover o gesto ja acertado da lista
   // de gestos quando voltar a jogar
   static removerGestoLista(

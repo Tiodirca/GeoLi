@@ -49,13 +49,12 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
   List<Emblemas> emblemasExibir = [];
   bool exibirTelaResetarJogo = false;
 
+  late String uidUsuario;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    recuperarRegioesLiberadas();
-    recuperarPontuacao();
-
+    recuperarUIDUsuario();
     emblemasExibir.addAll({
       Emblemas(
           caminhoImagem: CaminhosImagens.emblemaEstadosEntusiastaum,
@@ -84,10 +83,18 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
     });
   }
 
+  recuperarUIDUsuario() async {
+    uidUsuario = await MetodosAuxiliares.recuperarUid();
+    recuperarRegioesLiberadas();
+    recuperarPontuacao();
+  }
+
   recuperarRegioesLiberadas() async {
     var db = FirebaseFirestore.instance;
     //instanciano variavel
     db
+        .collection(uidUsuario) // passando a colecao
+        .doc(Constantes.fireBaseColecaoRegioes)
         .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
         .doc(Constantes.fireBaseDocumentoLiberarEstados) // passando documento
         .get()
@@ -121,6 +128,8 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
     var db = FirebaseFirestore.instance;
     //instanciano variavel
     db
+        .collection(uidUsuario) // passando a colecao
+        .doc(Constantes.fireBaseColecaoRegioes)
         .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
         .doc(Constantes
             .fireBaseDocumentoPontosJogadaRegioes) // passando documento

@@ -24,6 +24,7 @@ class _TelaTodasRegioesState extends State<TelaTodasRegioes> {
   List<Gestos> gestos = [];
   bool exibirTelaCarregamento = true;
   bool exibirTelaProximoNivel = false;
+  late String uidUsuario;
   String nomeColecao = Constantes.fireBaseDocumentoRegiaoTodosEstados;
 
   @override
@@ -61,6 +62,11 @@ class _TelaTodasRegioesState extends State<TelaTodasRegioes> {
     gestos.shuffle();
     //MetodosAuxiliares.addItensBancoDados(Constantes.fireBaseDocumentoRegiaoTodosEstados);
     // chamando metodo para fazer busca no banco de dados
+    recuperarUIDUsuario();
+  }
+
+  recuperarUIDUsuario() async {
+    uidUsuario = await MetodosAuxiliares.recuperarUid();
     realizarBuscaDadosFireBase(nomeColecao);
   }
 
@@ -74,6 +80,8 @@ class _TelaTodasRegioesState extends State<TelaTodasRegioes> {
     var db = FirebaseFirestore.instance;
     //instanciano variavel
     db
+        .collection(uidUsuario) // passando a colecao
+        .doc(Constantes.fireBaseColecaoRegioes)
         .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
         .doc(nomeDocumentoRegiao) // passando documento
         .get()

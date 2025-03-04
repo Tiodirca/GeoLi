@@ -35,6 +35,7 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
   String nomeRota = "";
   int ponto = 0;
   bool exibirMsgTutorial = false;
+  late String uidUsuario;
 
   late final AnimationController _controllerFade =
       AnimationController(vsync: this);
@@ -45,6 +46,11 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
   @override
   void initState() {
     super.initState();
+    recuperarUIDUsuario();
+  }
+
+  recuperarUIDUsuario() async {
+    uidUsuario = await MetodosAuxiliares.recuperarUid();
     recuperarPontuacao();
   }
 
@@ -69,6 +75,8 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
     var db = FirebaseFirestore.instance;
     //instanciano variavel
     db
+        .collection(uidUsuario) // passando a colecao
+        .doc(Constantes.fireBaseColecaoRegioes)
         .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
         .doc(Constantes
             .fireBaseDocumentoPontosJogadaRegioes) // passando documento
@@ -94,6 +102,8 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
       // instanciando Firebase
       var db = FirebaseFirestore.instance;
       db
+          .collection(uidUsuario) // passando a colecao
+          .doc(Constantes.fireBaseColecaoRegioes)
           .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
           .doc(Constantes
               .fireBaseDocumentoPontosJogadaRegioes) //passando o documento
@@ -117,6 +127,8 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
       // instanciando Firebase
       var db = FirebaseFirestore.instance;
       db
+          .collection(uidUsuario) // passando a colecao
+          .doc(Constantes.fireBaseColecaoRegioes)
           .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
           .doc(widget.nomeColecao) //passando o documento
           .set(dados);

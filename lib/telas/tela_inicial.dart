@@ -26,27 +26,15 @@ class _TelaInicialState extends State<TelaInicial>
   List<Emblemas> emblemasGeral = [];
   bool exibirTelaCarregamento = true;
   bool exibirTelaResetarJogo = false;
+  int contador = 0;
   String caminhoImagemEstado = CaminhosImagens.btnGestoEstadosBrasileiroImagem;
   String caminhoImagemSistemaSolar = CaminhosImagens.btnGestoSistemaSolarImagem;
   Color corPadrao = PaletaCores.corVerde;
-
-  recuperarUsuario() async {
-    print("dasda");
-    await FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user != null) {
-        print("fdsfs${user.uid}");
-        MetodosAuxiliares.passarUidUsuario(user.uid);
-        recuperarPontuacao(Constantes.fireBaseColecaoSistemaSolar,
-            Constantes.fireBaseDocumentoPontosJogadaSistemaSolar, user.uid);
-      }
-    });
-  }
 
   @override
   void initState() {
     super.initState();
     recuperarUsuario();
-
     emblemasGeral.addAll([
       Emblemas(
           caminhoImagem: CaminhosImagens.emblemaPatenteSoldado,
@@ -107,6 +95,29 @@ class _TelaInicialState extends State<TelaInicial>
     ]);
   }
 
+  recuperarUsuario() async {
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      contador = contador + 1;
+      if (user != null) {
+        print("UIDS: ${user.uid}");
+        MetodosAuxiliares.passarUidUsuario(user.uid);
+        if (mounted) {
+          recuperarPontuacao(Constantes.fireBaseColecaoRegioes,
+              Constantes.fireBaseDocumentoPontosJogadaRegioes, user.uid);
+        }
+      } else {
+        if (contador > 1 && contador < 3) {
+          if (mounted) {
+            MetodosAuxiliares.passarUidUsuario("");
+            Navigator.pushReplacementNamed(
+                context, Constantes.rotaTelaLoginCadastro);
+            print("$contador");
+          }
+        }
+      }
+    });
+  }
+
   // metodo para recuperar a pontuacao
   recuperarPontuacao(
       String nomeColecao, String nomeDocumento, String uidUsuario) async {
@@ -114,7 +125,7 @@ class _TelaInicialState extends State<TelaInicial>
     //instanciano variavel
     db
         .collection(uidUsuario) // passando a colecao
-        .doc(Constantes.fireBaseColecaoSistemaSolar)
+        .doc(nomeColecao)
         .collection(nomeColecao) // passando a colecao
         .doc(nomeDocumento) // passando documento
         .get()
@@ -124,9 +135,11 @@ class _TelaInicialState extends State<TelaInicial>
           (key, value) {
             setState(() {
               if (nomeColecao == Constantes.fireBaseColecaoRegioes) {
-                // pontuacaoEstados = value;
-                // recuperarPontuacao(Constantes.fireBaseColecaoSistemaSolar,
-                //     Constantes.fireBaseDocumentoPontosJogadaSistemaSolar);
+                pontuacaoEstados = value;
+                recuperarPontuacao(
+                    Constantes.fireBaseColecaoSistemaSolar,
+                    Constantes.fireBaseDocumentoPontosJogadaSistemaSolar,
+                    uidUsuario);
               } else {
                 pontuacaoSistemaSolar = value;
                 pontuacaoGeral = pontuacaoEstados + pontuacaoSistemaSolar;

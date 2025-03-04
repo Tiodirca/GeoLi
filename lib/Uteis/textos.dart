@@ -23,16 +23,17 @@ class Textos {
 
   // LOGIN E CADASTRO
 
-  static String telaLoginTitulo = "Login";
-  static String telaCadastroTitulo = "Cadastro";
-
+  static String telaLoginTitulo = "Login/Cadastro";
+  static String telaLoginDescricao = "Faça login usando email e senha "
+      "ou faça o cadastro para poder jogar";
   static String email = "E-mail";
   static String senha = "Senha";
-
   static String sucessoLogin = "Sucesso ao entrar na conta";
   static String sucessoCadastro = "Sucesso ao fazer Cadastro";
+  static String sucessoDesconectar = "Sucesso ao desconectar conta";
 
-  static String erroLogin = "Verifique os dados e tente novamente";
+  static String erroLogin = "Verifique as Informações";
+  static String erroLoginFeito = "Login já feito";
   static String erroCadastro = "Erro ao fazer Cadastro";
   static String erroCampoVazio = "Preencha antes de prosseguir";
 

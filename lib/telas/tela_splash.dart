@@ -20,6 +20,7 @@ class _TelaSplashScreenState extends State<TelaSplashScreen> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;

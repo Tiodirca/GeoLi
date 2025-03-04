@@ -5,6 +5,7 @@ import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/constantes_estados_gestos.dart';
+import 'package:geoli/Uteis/metodos_auxiliares.dart';
 
 import '../../Uteis/paleta_cores.dart';
 import '../../Uteis/textos.dart';
@@ -28,15 +29,21 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
   bool liberarRegiaoNorte = false;
   bool liberarRegiaoNordeste = false;
   bool liberarTodosEstados = false;
+  late String uidUsuario;
 
   @override
   void initState() {
     super.initState();
+    recuperarUIDUsuario();
     carregarDados();
     //caso o tamnho seja maior que o passado nao exibir o btn
     if (widget.estados.length >= 10) {
       exibirBtnProximoNivel = false;
     }
+  }
+
+  recuperarUIDUsuario() async {
+    uidUsuario = await MetodosAuxiliares.recuperarUid();
     recuperarRegioesLiberadas();
   }
 
@@ -53,6 +60,8 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
       // instanciando Firebase
       var db = FirebaseFirestore.instance;
       db
+          .collection(uidUsuario) // passando a colecao
+          .doc(Constantes.fireBaseColecaoRegioes)
           .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
           .doc(widget.nomeColecao) //passando o documento
           .set(dados);
@@ -65,6 +74,8 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
     var db = FirebaseFirestore.instance;
     //instanciano variavel
     db
+        .collection(uidUsuario) // passando a colecao
+        .doc(Constantes.fireBaseColecaoRegioes)
         .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
         .doc(Constantes.fireBaseDocumentoLiberarEstados) // passando documento
         .get()
@@ -96,6 +107,8 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
       // instanciando Firebase
       var db = FirebaseFirestore.instance;
       db
+          .collection(uidUsuario) // passando a colecao
+          .doc(Constantes.fireBaseColecaoRegioes)
           .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
           .doc(
               Constantes.fireBaseDocumentoLiberarEstados) //passando o documento

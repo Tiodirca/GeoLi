@@ -6,6 +6,7 @@ import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/constantes_estados_gestos.dart';
+import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
@@ -29,6 +30,7 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
   bool exibirTelaCarregamento = true;
   bool exibirRegiaoGestosDetalhada = false;
   int contador = 0;
+  late String uidUsuario;
   List<Estado> regioesSelecionadas = [];
   List<Gestos> gestosSelecionados = [];
   String caminhoImagemRegiao = CaminhosImagens.mapaCompletoBranco;
@@ -83,6 +85,11 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
   void initState() {
     super.initState();
     estadoGestoMap = ConstantesEstadosGestos.adicionarEstadosGestos();
+    recuperarUIDUsuario();
+  }
+
+  recuperarUIDUsuario() async {
+    uidUsuario = await MetodosAuxiliares.recuperarUid();
     recuperarRegioesLiberadas();
   }
 
@@ -136,7 +143,8 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
   recuperarRegioesLiberadas() async {
     var db = FirebaseFirestore.instance;
     //instanciano variavel
-    db
+    db  .collection(uidUsuario) // passando a colecao
+        .doc(Constantes.fireBaseColecaoRegioes)
         .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
         .doc(Constantes.fireBaseDocumentoLiberarEstados) // passando documento
         .get()

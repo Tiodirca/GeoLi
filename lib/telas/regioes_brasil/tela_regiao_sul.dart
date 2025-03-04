@@ -24,6 +24,7 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
   List<MapEntry<Estado, Gestos>> estadosSorteio = [];
   bool exibirTelaCarregamento = true;
   bool exibirTelaProximoNivel = false;
+  late String uidUsuario;
   String nomeColecao = Constantes.fireBaseDocumentoRegiaoSul;
 
   @override
@@ -37,6 +38,11 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
     ]); // adicionando gestos na lista
     gestos.shuffle(); //fazendo sorteio os itens na lista
     // chamando metodo para fazer busca no banco de dados
+    recuperarUIDUsuario();
+  }
+
+  recuperarUIDUsuario() async {
+    uidUsuario = await MetodosAuxiliares.recuperarUid();
     realizarBuscaDadosFireBase(nomeColecao);
   }
 
@@ -57,6 +63,8 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
     var db = FirebaseFirestore.instance;
     //instanciano variavel
     db
+        .collection(uidUsuario) // passando a colecao
+        .doc(Constantes.fireBaseColecaoRegioes)
         .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
         .doc(nomeDocumentoRegiao) // passando documento
         .get()
@@ -117,7 +125,9 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
         body: LayoutBuilder(
           builder: (context, constraints) {
             if (exibirTelaCarregamento) {
-              return TelaCarregamentoWidget(corPadrao: ConstantesEstadosGestos.corPadraoRegioes,);
+              return TelaCarregamentoWidget(
+                corPadrao: ConstantesEstadosGestos.corPadraoRegioes,
+              );
             } else {
               return WidgetAreaTelaRegioes(
                   nomeColecao: nomeColecao,

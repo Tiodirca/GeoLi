@@ -1,13 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
-import 'package:geoli/Uteis/constantes_sistema_solar.dart';
+import 'package:geoli/Uteis/criar_dados_banco_firebase.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
-import 'package:geoli/modelos/planeta.dart';
 
 class TelaLoginCadastro extends StatefulWidget {
   const TelaLoginCadastro({super.key});
@@ -18,97 +16,90 @@ class TelaLoginCadastro extends StatefulWidget {
 
 class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
   bool exibirTelaCarregamento = false;
-  List<Planeta> planetas = ConstantesSistemaSolar.adicinarPlanetas();
+  bool ativarBtn = true;
   final _formKeyFormulario = GlobalKey<FormState>();
   TextEditingController email = TextEditingController(text: "");
   TextEditingController senha = TextEditingController(text: "");
+  late String uidUsuario;
 
   cadastrarUsuario() {
-    try {
-      FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: email.text, password: senha.text);
-      MetodosAuxiliares.exibirMensagens(
-          Textos.sucessoCadastro, Constantes.msgAcerto, context);
-      recuperarUsuario();
-    } catch (e) {
-      MetodosAuxiliares.exibirMensagens(
-          Textos.erroCadastro, Constantes.msgErro, context);
-      debugPrint(e.toString());
-    }
-  }
-
-  recuperarUsuario() {
-    print("Entrou");
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user != null) {
-        print("fdsfs${user.uid}");
-        criarPontuacaoSistemaSolar(user.uid);
-        criarDesbloquearPlaneta(user.uid);
+    if (uidUsuario.isEmpty) {
+      try {
+        FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: email.text, password: senha.text);
+        print("vxcvxc");
+        CriarDadosBanco.criarDadosUsuario(context);
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          print('The password provided is too weak.');
+        } else if (e.code == 'email-already-in-use') {
+          print('The account already exists for that email.');
+        }
+        MetodosAuxiliares.exibirMensagens(
+            Textos.erroCadastro, Constantes.msgErro, context);
+      }catch (e) {
+        debugPrint(e.toString());
       }
-    });
+    } else {
+      MetodosAuxiliares.exibirMensagens(
+          Textos.erroLoginFeito, Constantes.msgErro, context);
+    }
   }
 
   desconetar() async {
     await FirebaseAuth.instance.signOut();
+    MetodosAuxiliares.exibirMensagens(
+        Textos.sucessoDesconectar, Constantes.msgAcerto, context);
+    MetodosAuxiliares.passarUidUsuario("");
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaLoginCadastro);
   }
 
-  criarPontuacaoSistemaSolar(String colecaoUIDUsuario) {
-    try {
-      // instanciando Firebase
-      var db = FirebaseFirestore.instance;
-      db
-          .collection(colecaoUIDUsuario) // passando a colecao
-          .doc(Constantes.fireBaseColecaoSistemaSolar)
-          .collection(
-              Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
-          .doc(Constantes
-              .fireBaseDocumentoPontosJogadaSistemaSolar) //passando o documento
-          .set({Constantes.pontosJogada: "pontuacaoTotal"});
-    } catch (e) {
-      debugPrint(e.toString());
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    recuperarUIDUsuario();
+  }
+
+  recuperarUIDUsuario() async {
+    uidUsuario = await MetodosAuxiliares.recuperarUid();
+    if (uidUsuario.isEmpty) {
+      setState(() {
+        ativarBtn = false;
+      });
+    } else {
+      recuperarUsuario();
     }
   }
 
-  criarDesbloquearPlaneta(String uidUsuario) {
-    Map<String, bool> dados = {};
-    // percorrendo a lista para poder jogar os dados dentro de um map
-    for (var element in planetas) {
-      //definindo que o map vai receber o nome do planeta e o valor boleano
-      dados[element.nomePlaneta] = false;
-    }
-    try {
-      // instanciando Firebase
-      var db = FirebaseFirestore.instance;
-      db
-          .collection(uidUsuario) // passando a colecao
-          .doc(Constantes.fireBaseColecaoSistemaSolar)
-          .collection(
-              Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
-          .doc(Constantes
-              .fireBaseDocumentoPlanetasDesbloqueados) //passando o documento
-          .set(dados);
-    } catch (e) {
-      debugPrint(e.toString());
+  recuperarUsuario() async {
+    if (FirebaseAuth.instance.currentUser != null) {
+      String? emailRecuperado = FirebaseAuth.instance.currentUser?.email;
+      email.text = emailRecuperado!;
     }
   }
 
   fazerLogin() async {
-    try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email.text, password: senha.text);
+    if (uidUsuario.isEmpty) {
+      try {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: email.text, password: senha.text);
+
+        MetodosAuxiliares.exibirMensagens(
+            Textos.sucessoLogin, Constantes.msgAcerto, context);
+        Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
+      } on FirebaseAuthException {
+        setState(() {
+          exibirTelaCarregamento = false;
+        });
+        MetodosAuxiliares.exibirMensagens(
+            Textos.erroLogin, Constantes.msgErro, context);
+      }
+    } else {
       MetodosAuxiliares.exibirMensagens(
-          Textos.sucessoLogin, Constantes.msgAcerto, context);
-      Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
-    } on FirebaseAuthException {
-      MetodosAuxiliares.exibirMensagens(
-          Textos.erroLogin, Constantes.msgErro, context);
+          Textos.erroLoginFeito, Constantes.msgErro, context);
     }
   }
-
-//   // Disable persistence on web platforms. Must be called on initialization:
-//   final auth = FirebaseAuth.instanceFor(app: Firebase.app(), persistence: Persistence.NONE);
-// // To change it after initialization, use `setPersistence()`:
-//   await auth.setPersistence(Persistence.LOCAL);
 
   Widget campos(TextEditingController controle, String nomeCampo) => Container(
         margin: EdgeInsets.all(10),
@@ -151,7 +142,7 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
           heroTag: nomeBtn,
           backgroundColor: Colors.white,
           shape: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(15),
               borderSide: BorderSide(
                 color: PaletaCores.corAzulMagenta,
                 width: 1,
@@ -189,15 +180,17 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
         } else {
           return Scaffold(
               appBar: AppBar(
-                leading: IconButton(
-                    color: Colors.black,
-                    //setando tamanho do icone
-                    iconSize: 30,
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(
-                          context, Constantes.rotaTelaInicial);
-                    },
-                    icon: const Icon(Icons.arrow_back_ios)),
+                leading: ativarBtn == true
+                    ? IconButton(
+                        color: Colors.black,
+                        //setando tamanho do icone
+                        iconSize: 30,
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(
+                              context, Constantes.rotaTelaInicial);
+                        },
+                        icon: const Icon(Icons.arrow_back_ios))
+                    : Container(),
                 backgroundColor: Colors.white,
                 title: Text(
                   Textos.telaLoginTitulo,
@@ -211,7 +204,7 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
                 child: Column(
                   children: [
                     Text(
-                      Textos.descricaoTelaInicial,
+                      Textos.telaLoginDescricao,
                       style: TextStyle(fontSize: 18),
                       textAlign: TextAlign.center,
                     ),
