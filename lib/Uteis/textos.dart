@@ -11,9 +11,11 @@ class Textos {
   static String btnDificuldadeFacil = "Fácil";
   static String btnDificuldadeMedio = "Médio";
   static String btnDificuldadeDificil = "Dificil";
-  static String btnCadastrar = "Cadastrar";
-  static String btnLogin = "Login";
-  static String btnDesconetar = "Desconetar";
+  static String btnCadastrar = "Cadastrar Conta";
+  static String btnLogin = "Acessar Conta";
+  static String btnEntrar = "Entrar";
+  static String btnDesconectar = "Desconectar Conta";
+  static String btnMudarSenha = "Mudar Senha";
 
   // GERAIS
   static String nomeApp = "Geo Li";
@@ -21,21 +23,30 @@ class Textos {
   static String msgAcertou = "Acertou";
   static String msgErrou = "Errado";
 
-  // LOGIN E CADASTRO
-
-  static String telaLoginTitulo = "Login/Cadastro";
-  static String telaLoginDescricao = "Faça login usando email e senha "
-      "ou faça o cadastro para poder jogar";
-  static String email = "E-mail";
-  static String senha = "Senha";
+  //ERROS E ACERTOS MENSAGENS
   static String sucessoLogin = "Sucesso ao entrar na conta";
   static String sucessoCadastro = "Sucesso ao fazer Cadastro";
   static String sucessoDesconectar = "Sucesso ao desconectar conta";
-
-  static String erroLogin = "Verifique as Informações";
-  static String erroLoginFeito = "Login já feito";
+  static String erroEmailInvalido = "Email não esta correto";
+  static String erroEmailNaoCadastradoSenhaIncorreta =
+      "E-mail não cadastrado ou Senha Incorreta";
+  static String erroEmailUso = "E-mail já em uso,utilize outro";
   static String erroCadastro = "Erro ao fazer Cadastro";
   static String erroCampoVazio = "Preencha antes de prosseguir";
+
+  //USUARIO DETALHADO
+  static String telaUsuarioTitulo = "Dados Usuario";
+  static String telaUsuarioDescricao =
+      "Aqui você pode ver as informações de usuario, "
+      "bem como editar e atualiza-las nos banco de dados";
+
+  // LOGIN E CADASTRO
+  static String telaLoginCadastroTitulo = "Login/Cadastro";
+  static String telaLoginCadastroDescricao =
+      "Faça login ou faça o cadastro de um e-mail para poder jogar";
+  static String campoEmail = "E-mail";
+  static String campoSenha = "Senha";
+  static String campoUsuario = "Usuario/Apelido";
 
   // TELA INICIAL
   static String descricaoTelaInicial = "Selecione qual jogo deseja jogar";

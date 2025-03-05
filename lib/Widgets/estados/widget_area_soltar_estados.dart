@@ -127,13 +127,20 @@ class _WidgetAreaSoltarEstadosState extends State<WidgetAreaSoltarEstados>
                 // chamando metodo para passar confirmacao do acerto
                 MetodosAuxiliares.confirmarAcerto(Constantes.msgAcerto);
                 MetodosAuxiliares.exibirMensagens(
-                    Textos.msgAcertou, Constantes.msgAcerto, context);
+                    Textos.msgAcertou,
+                    Constantes.msgAcerto,
+                    Constantes.duracaoExibicaoToastJogos,
+                    Constantes.larguraToastNotificacaoJogos,
+                    context);
               } else {
                 MetodosAuxiliares.exibirMensagens(
-                    Textos.msgErrou, Constantes.msgErro, context);
+                    Textos.msgErrou,
+                    Constantes.msgErro,
+                    Constantes.duracaoExibicaoToastJogos,
+                    Constantes.larguraToastNotificacaoJogos,
+                    context);
                 // chamando metodo para passar confirmacao do erro
-                MetodosAuxiliares.confirmarAcerto(
-                    Constantes.msgErro);
+                MetodosAuxiliares.confirmarAcerto(Constantes.msgErro);
               }
             },
           ),

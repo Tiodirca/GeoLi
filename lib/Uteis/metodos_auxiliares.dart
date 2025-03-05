@@ -63,7 +63,6 @@ class MetodosAuxiliares {
     return uIDUsuario;
   }
 
-
   // metodo para remover o gesto ja acertado da lista
   // de gestos quando voltar a jogar
   static removerGestoLista(
@@ -83,11 +82,12 @@ class MetodosAuxiliares {
   }
 
   // metodo para exibir mensagem de retorno ao usuario
-  static exibirMensagens(String msg, String tipoAlerta, BuildContext context) {
+  static exibirMensagens(String msg, String tipoAlerta, int duracao,
+      double largura, BuildContext context) {
     if (tipoAlerta == Constantes.msgAcerto) {
       ElegantNotification.success(
         position: Alignment.center,
-        width: 200,
+        width: largura,
         showProgressIndicator: false,
         icon: Icon(
           Icons.check_circle_outline,
@@ -96,7 +96,7 @@ class MetodosAuxiliares {
         ),
         border: Border.all(color: PaletaCores.corVerde, width: 1),
         animationDuration: const Duration(seconds: 1),
-        toastDuration: const Duration(seconds: 1),
+        toastDuration: Duration(seconds: duracao),
         displayCloseButton: false,
         animation: AnimationType.fromTop,
         description: Text(msg),
@@ -104,7 +104,7 @@ class MetodosAuxiliares {
     } else {
       return ElegantNotification.error(
         position: Alignment.center,
-        width: 150,
+        width: largura,
         border: Border.all(color: PaletaCores.corVermelha, width: 1),
         displayCloseButton: false,
         animation: AnimationType.fromTop,
@@ -115,7 +115,7 @@ class MetodosAuxiliares {
           color: PaletaCores.corVermelha,
         ),
         animationDuration: const Duration(seconds: 1),
-        toastDuration: const Duration(seconds: 1),
+        toastDuration: Duration(seconds: duracao),
         description: Text(msg),
       ).show(context);
     }

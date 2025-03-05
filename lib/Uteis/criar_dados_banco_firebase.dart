@@ -28,14 +28,19 @@ class CriarDadosBanco {
 
   // metodo para criar dados do usuario no banco de dados
   // e os dados necessarios para ele poder jogar
-  static criarDadosUsuario(BuildContext context) {
+  static criarDadosUsuario(BuildContext context, String nomeUsuario) async {
     Map<String, dynamic> dadosPontuacao = {Constantes.pontosJogada: 0};
+    Map<String, dynamic> dadosNomeUsuario = {
+      Constantes.fireBaseDocumentoUsuario: nomeUsuario
+    };
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user != null) {
         criarDesbloquearPlaneta(user.uid);
         //gravando pontuacao de Regioes e Sistema Solar
         gravarDadosFirebase(user.uid, Constantes.fireBaseColecaoRegioes,
             Constantes.fireBaseDocumentoPontosJogadaRegioes, dadosPontuacao);
+        gravarDadosFirebase(user.uid, Constantes.fireBaseColecaoUsuario,
+            Constantes.fireBaseColecaoUsuario, dadosNomeUsuario);
         gravarDadosFirebase(
             user.uid,
             Constantes.fireBaseColecaoSistemaSolar,
@@ -45,13 +50,15 @@ class CriarDadosBanco {
         for (var element in nomeRegioes) {
           criarDadosRegioesPorLevel(element, user.uid);
         }
-      } else {
-        print("fdsfd");
       }
     });
     MetodosAuxiliares.exibirMensagens(
-        Textos.sucessoCadastro, Constantes.msgAcerto, context);
-    Timer(const Duration(seconds: 2), () {
+        Textos.sucessoCadastro,
+        Constantes.msgAcerto,
+        Constantes.duracaoExibicaoToastJogos,
+        Constantes.larguraToastLoginCadastro,
+        context);
+    Timer(const Duration(seconds: 1), () {
       Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
     });
   }

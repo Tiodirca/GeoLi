@@ -4,6 +4,7 @@ class Constantes {
   static const rotaTelaInicial = "telaIncial";
   static const rotaTelaLoginCadastro = "telaLoginCadastro";
   static const rotaTelaSistemaSolar = "telaSistemaSolar";
+  static const rotaTelaUsuarioDetalhado = "telaUsuarioDetalhado";
 
   // ROTA REGIOES
   static const rotaTelaInicialRegioes = "telaIncialRegioes";
@@ -26,11 +27,20 @@ class Constantes {
   static const fireBaseDocumentoPontosJogadaRegioes = "postosJogadaRegioes";
   static const nomeTodosEstados = "todosEstados";
 
+  static const fireBaseColecaoUsuario = "dadosUsuario";
+  static const fireBaseDocumentoUsuario = "nomeUsuario";
+
   // NOME DADOS SISTEMA SOLAR
   static const fireBaseColecaoSistemaSolar = "sistemaSolar";
   static const fireBaseDocumentoPontosJogadaSistemaSolar =
       "pontosJogadaSistemaSolar";
   static const fireBaseDocumentoPlanetasDesbloqueados = "planetasDesbloqueados";
+
+  static double larguraToastNotificacaoJogos = 200;
+  static int duracaoExibicaoToastJogos = 1;
+
+  static double larguraToastLoginCadastro = 300;
+  static int duracaoExibicaoToastLoginCadastro = 2;
 
   // STATUS DE RESETAR PONTUACOES
   static const resetarAcaoExcluirTudo = "excluirTudo";

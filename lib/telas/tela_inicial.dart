@@ -99,7 +99,7 @@ class _TelaInicialState extends State<TelaInicial>
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       contador = contador + 1;
       if (user != null) {
-        print("UIDS: ${user.uid}");
+        print("UID: ${user.uid}");
         MetodosAuxiliares.passarUidUsuario(user.uid);
         if (mounted) {
           recuperarPontuacao(Constantes.fireBaseColecaoRegioes,
@@ -111,7 +111,6 @@ class _TelaInicialState extends State<TelaInicial>
             MetodosAuxiliares.passarUidUsuario("");
             Navigator.pushReplacementNamed(
                 context, Constantes.rotaTelaLoginCadastro);
-            print("$contador");
           }
         }
       }
@@ -248,7 +247,7 @@ class _TelaInicialState extends State<TelaInicial>
                     width: 40,
                     height: 40,
                     child: FloatingActionButton(
-                      heroTag: Textos.btnLogin,
+                      heroTag: Textos.campoUsuario,
                       backgroundColor: Colors.white,
                       elevation: 0,
                       shape: OutlineInputBorder(
@@ -256,7 +255,7 @@ class _TelaInicialState extends State<TelaInicial>
                           borderSide: BorderSide(width: 1, color: corPadrao)),
                       onPressed: () {
                         Navigator.pushReplacementNamed(
-                            context, Constantes.rotaTelaLoginCadastro);
+                            context, Constantes.rotaTelaUsuarioDetalhado);
                       },
                       child: Icon(
                         Icons.person,

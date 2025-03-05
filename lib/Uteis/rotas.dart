@@ -11,6 +11,7 @@ import 'package:geoli/telas/regioes_brasil/tela_todas_regioes.dart';
 import 'package:geoli/telas/tela_login_cadastro.dart';
 import 'package:geoli/telas/tela_sistema_solar.dart';
 import 'package:geoli/telas/tela_splash.dart';
+import 'package:geoli/telas/tela_usuario_detalhado.dart';
 
 class Rotas {
   static GlobalKey<NavigatorState>? navigatorKey = GlobalKey<NavigatorState>();
@@ -39,6 +40,8 @@ class Rotas {
         return MaterialPageRoute(builder: (_) => TelaSistemaSolar());
       case Constantes.rotaTelaLoginCadastro:
         return MaterialPageRoute(builder: (_) => TelaLoginCadastro());
+      case Constantes.rotaTelaUsuarioDetalhado:
+        return MaterialPageRoute(builder: (_) => TelaUsuarioDetalhado());
     }
     // Se o argumento não é do tipo correto, retorna erro
     return erroRota(settings);

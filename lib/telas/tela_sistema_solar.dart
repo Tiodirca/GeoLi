@@ -196,14 +196,16 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
         pontuacaoDuranteJogo++;
         // chamando metodo para exibir mensagem
         MetodosAuxiliares.exibirMensagens(
-            Textos.msgAcertou, Constantes.msgAcerto, context);
+            Textos.msgAcertou, Constantes.msgAcerto,Constantes.duracaoExibicaoToastJogos,
+            Constantes.larguraToastNotificacaoJogos, context);
       });
     } else if (retorno == Constantes.msgErro) {
       setState(() {
         tamanhoVidas--;
         // chamando metodo para exibir mensagem
         MetodosAuxiliares.exibirMensagens(
-            Textos.msgErrou, Constantes.msgErro, context);
+            Textos.msgErrou, Constantes.msgErro,Constantes.duracaoExibicaoToastJogos,
+            Constantes.larguraToastNotificacaoJogos, context);
         // caso a quantide de vidas tenha chegado a 0
         if (tamanhoVidas == 0) {
           pararTempo();

@@ -71,7 +71,11 @@ class _BalaoWidgetState extends State<BalaoWidget>
     // verificando se o status passado esta ativo
     if (status == Constantes.statusTutorialAtivo) {
       MetodosAuxiliares.exibirMensagens(
-          Textos.tutorialConcluido, Constantes.msgAcerto, context);
+          Textos.tutorialConcluido,
+          Constantes.msgAcerto,
+          Constantes.duracaoExibicaoToastJogos,
+          Constantes.larguraToastNotificacaoJogos,
+          context);
       MetodosAuxiliares.passarStatusTutorial("");
       atualizarPontuacaoTutorial();
       Timer(const Duration(seconds: 1), () {

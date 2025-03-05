@@ -16,95 +16,85 @@ class TelaLoginCadastro extends StatefulWidget {
 
 class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
   bool exibirTelaCarregamento = false;
-  bool ativarBtn = true;
+  bool exibirDadosCadastro = false;
+  bool exibirCampos = false;
   final _formKeyFormulario = GlobalKey<FormState>();
-  TextEditingController email = TextEditingController(text: "");
-  TextEditingController senha = TextEditingController(text: "");
-  late String uidUsuario;
+  TextEditingController campoEmail = TextEditingController(text: "");
+  TextEditingController campoSenha = TextEditingController(text: "");
+  TextEditingController campoUsuario = TextEditingController(text: "");
 
-  cadastrarUsuario() {
-    if (uidUsuario.isEmpty) {
-      try {
-        FirebaseAuth.instance.createUserWithEmailAndPassword(
-            email: email.text, password: senha.text);
-        print("vxcvxc");
-        CriarDadosBanco.criarDadosUsuario(context);
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'weak-password') {
-          print('The password provided is too weak.');
-        } else if (e.code == 'email-already-in-use') {
-          print('The account already exists for that email.');
-        }
+  cadastrarUsuario() async {
+    try {
+      final credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: campoEmail.text,
+        password: campoSenha.text,
+      );
+      if (credential == 'email-already-in-use') {
         MetodosAuxiliares.exibirMensagens(
-            Textos.erroCadastro, Constantes.msgErro, context);
-      }catch (e) {
-        debugPrint(e.toString());
+            Textos.erroEmailUso,
+            Constantes.msgErro,
+            Constantes.duracaoExibicaoToastLoginCadastro,
+            Constantes.larguraToastLoginCadastro,
+            context);
+        setState(() {
+          exibirTelaCarregamento = false;
+        });
+      } else {
+        CriarDadosBanco.criarDadosUsuario(context, campoUsuario.text);
       }
-    } else {
-      MetodosAuxiliares.exibirMensagens(
-          Textos.erroLoginFeito, Constantes.msgErro, context);
+    } on FirebaseAuthException catch (e) {
+      validarErros(e);
+    } catch (e) {
+      debugPrint(e.toString());
     }
-  }
-
-  desconetar() async {
-    await FirebaseAuth.instance.signOut();
-    MetodosAuxiliares.exibirMensagens(
-        Textos.sucessoDesconectar, Constantes.msgAcerto, context);
-    MetodosAuxiliares.passarUidUsuario("");
-    Navigator.pushReplacementNamed(context, Constantes.rotaTelaLoginCadastro);
   }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    recuperarUIDUsuario();
   }
-
-  recuperarUIDUsuario() async {
-    uidUsuario = await MetodosAuxiliares.recuperarUid();
-    if (uidUsuario.isEmpty) {
-      setState(() {
-        ativarBtn = false;
-      });
-    } else {
-      recuperarUsuario();
-    }
-  }
-
-  recuperarUsuario() async {
-    if (FirebaseAuth.instance.currentUser != null) {
-      String? emailRecuperado = FirebaseAuth.instance.currentUser?.email;
-      email.text = emailRecuperado!;
-    }
-  }
-
   fazerLogin() async {
-    if (uidUsuario.isEmpty) {
-      try {
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
-            email: email.text, password: senha.text);
-
-        MetodosAuxiliares.exibirMensagens(
-            Textos.sucessoLogin, Constantes.msgAcerto, context);
-        Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
-      } on FirebaseAuthException {
-        setState(() {
-          exibirTelaCarregamento = false;
-        });
-        MetodosAuxiliares.exibirMensagens(
-            Textos.erroLogin, Constantes.msgErro, context);
-      }
-    } else {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: campoEmail.text, password: campoSenha.text);
       MetodosAuxiliares.exibirMensagens(
-          Textos.erroLoginFeito, Constantes.msgErro, context);
+          Textos.sucessoLogin,
+          Constantes.msgAcerto,
+          Constantes.duracaoExibicaoToastJogos,
+          Constantes.larguraToastLoginCadastro,
+          context);
+      Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
+    } on FirebaseAuthException catch (e) {
+      validarErros(e);
+    }
+  }
+
+  validarErros(erro) {
+    setState(() {
+      exibirTelaCarregamento = false;
+    });
+    if (erro.code.contains('invalid-email')) {
+      MetodosAuxiliares.exibirMensagens(
+          Textos.erroEmailInvalido,
+          Constantes.msgErro,
+          Constantes.duracaoExibicaoToastLoginCadastro,
+          Constantes.larguraToastLoginCadastro,
+          context);
+    } else if (erro.code.contains('unknown-error')) {
+      MetodosAuxiliares.exibirMensagens(
+          Textos.erroEmailNaoCadastradoSenhaIncorreta,
+          Constantes.msgErro,
+          Constantes.duracaoExibicaoToastLoginCadastro,
+          Constantes.larguraToastLoginCadastro,
+          context);
     }
   }
 
   Widget campos(TextEditingController controle, String nomeCampo) => Container(
         margin: EdgeInsets.all(10),
         width: 300,
-        height: 70,
         child: TextFormField(
           controller: controle,
           validator: (value) {
@@ -140,24 +130,39 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
         height: 40,
         child: FloatingActionButton(
           heroTag: nomeBtn,
+          elevation: 0,
           backgroundColor: Colors.white,
           shape: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
               borderSide: BorderSide(
-                color: PaletaCores.corAzulMagenta,
+                color: PaletaCores.corVerde,
                 width: 1,
               )),
           onPressed: () {
             if (nomeBtn == Textos.btnLogin) {
-              if (_formKeyFormulario.currentState!.validate()) {
-                fazerLogin();
-              }
+              setState(() {
+                exibirCampos = true;
+                exibirDadosCadastro = false;
+              });
             } else if (nomeBtn == Textos.btnCadastrar) {
+              setState(() {
+                exibirCampos = true;
+                exibirDadosCadastro = true;
+              });
+            } else if (nomeBtn == Textos.btnEntrar) {
               if (_formKeyFormulario.currentState!.validate()) {
-                cadastrarUsuario();
+                if (exibirDadosCadastro) {
+                  cadastrarUsuario();
+                  setState(() {
+                    exibirTelaCarregamento = true;
+                  });
+                } else {
+                  setState(() {
+                    exibirTelaCarregamento = true;
+                  });
+                  fazerLogin();
+                }
               }
-            } else {
-              desconetar();
             }
           },
           child: Text(
@@ -180,55 +185,54 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
         } else {
           return Scaffold(
               appBar: AppBar(
-                leading: ativarBtn == true
-                    ? IconButton(
-                        color: Colors.black,
-                        //setando tamanho do icone
-                        iconSize: 30,
-                        onPressed: () {
-                          Navigator.pushReplacementNamed(
-                              context, Constantes.rotaTelaInicial);
-                        },
-                        icon: const Icon(Icons.arrow_back_ios))
-                    : Container(),
+                leading: Container(),
                 backgroundColor: Colors.white,
                 title: Text(
-                  Textos.telaLoginTitulo,
+                  Textos.telaLoginCadastroTitulo,
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
               ),
               body: Container(
-                color: Colors.white,
-                width: larguraTela,
-                height: alturaTela,
-                child: Column(
-                  children: [
-                    Text(
-                      Textos.telaLoginDescricao,
-                      style: TextStyle(fontSize: 18),
-                      textAlign: TextAlign.center,
-                    ),
-                    Form(
-                        key: _formKeyFormulario,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            campos(email, Textos.email),
-                            campos(senha, Textos.senha),
-                          ],
-                        )),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        btnAcao(Textos.btnLogin),
-                        btnAcao(Textos.btnCadastrar),
-                        btnAcao(Textos.btnDesconetar)
-                      ],
-                    ),
-                  ],
-                ),
-              ));
+                  color: Colors.white,
+                  width: larguraTela,
+                  height: alturaTela,
+                  child: Column(
+                    children: [
+                      Text(
+                        Textos.telaLoginCadastroDescricao,
+                        style: TextStyle(fontSize: 18),
+                        textAlign: TextAlign.center,
+                      ),
+                      Visibility(
+                          visible: exibirCampos,
+                          child: Column(
+                            children: [
+                              Form(
+                                  key: _formKeyFormulario,
+                                  child: Wrap(
+                                    crossAxisAlignment:
+                                        WrapCrossAlignment.center,
+                                    children: [
+                                      Visibility(
+                                          visible: exibirDadosCadastro,
+                                          child: campos(campoUsuario,
+                                              Textos.campoUsuario)),
+                                      campos(campoEmail, Textos.campoEmail),
+                                      campos(campoSenha, Textos.campoSenha),
+                                    ],
+                                  )),
+                              btnAcao(Textos.btnEntrar),
+                            ],
+                          )),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          btnAcao(Textos.btnLogin),
+                          btnAcao(Textos.btnCadastrar),
+                        ],
+                      ),
+                    ],
+                  )));
         }
       },
     );
