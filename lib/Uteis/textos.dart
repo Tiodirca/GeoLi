@@ -8,6 +8,7 @@ class Textos {
   static String btnSistemaSolar = "Sistema Solar";
   static String btnEmblemas = "Emblemas";
   static String btnRegioesMapa = "Mapa";
+  static String btnExcluir = "Excluir Informações";
   static String btnDificuldadeFacil = "Fácil";
   static String btnDificuldadeMedio = "Médio";
   static String btnDificuldadeDificil = "Dificil";
@@ -16,6 +17,10 @@ class Textos {
   static String btnEntrar = "Entrar";
   static String btnDesconectar = "Desconectar Conta";
   static String btnMudarSenha = "Mudar Senha";
+  static String btnCancelarEdicao = "Cancelar Edição";
+  static String btnAtualizar = "Atualizar Informações";
+  static String btnExcluirUsuario = "Excluir Usuario";
+  static String btnSalvarAlteracoes = "Salvar Alterações";
 
   // GERAIS
   static String nomeApp = "Geo Li";
@@ -23,15 +28,19 @@ class Textos {
   static String msgAcertou = "Acertou";
   static String msgErrou = "Errado";
 
-  //ERROS E ACERTOS MENSAGENS
+  //ERROS E SUCESSO MENSAGENS
   static String sucessoLogin = "Sucesso ao entrar na conta";
   static String sucessoCadastro = "Sucesso ao fazer Cadastro";
   static String sucessoDesconectar = "Sucesso ao desconectar conta";
+  static String sucessoExcluirDados = "Sucesso ao excluir os dados";
+  static String sucessoFazerAlteracoes = "";
+
+  //ERROS
   static String erroEmailInvalido = "Email não esta correto";
   static String erroEmailNaoCadastradoSenhaIncorreta =
       "E-mail não cadastrado ou Senha Incorreta";
   static String erroEmailUso = "E-mail já em uso,utilize outro";
-  static String erroCadastro = "Erro ao fazer Cadastro";
+  static String erroExcluirDados = "Erro ao excluir os dados";
   static String erroCampoVazio = "Preencha antes de prosseguir";
 
   //USUARIO DETALHADO
@@ -39,6 +48,21 @@ class Textos {
   static String telaUsuarioDescricao =
       "Aqui você pode ver as informações de usuario, "
       "bem como editar e atualiza-las nos banco de dados";
+  static String telaUsuarioDescricaoAutenticacaoEmail =
+      "Digite a senha para fazer as alterações no email,"
+      " será enviado um link no novo email para confirmar a alteração";
+  static String telaUsuarioDescricaoAutenticacaoSenha =
+      "Digite a senha antiga para fazer a alteração";
+  static String telaUsuarioDescricaoDigiteSenha =
+      "Digite a senha para confirmar Exclusão";
+
+  //ALERT
+
+  static String alertTituloExclusao = "Excluir Informações";
+  static String alertDescricaoExclusaoUsuario =
+      "Deseja Realmente excluir este Usuario e todas as informações salvas nele ? ";
+  static String alertDescricaoExclusaoInformacoes =
+      "Deseja realmente Excluir/Reiniciar todas as informações ? ";
 
   // LOGIN E CADASTRO
   static String telaLoginCadastroTitulo = "Login/Cadastro";
@@ -50,6 +74,7 @@ class Textos {
 
   // TELA INICIAL
   static String descricaoTelaInicial = "Selecione qual jogo deseja jogar";
+  static String descricaoTelaInicialNomeUsuario = "Seja Bem-Vindo : ";
 
   // TUTORIAIS REGIOES
   static String tutorialRegioesClickArraste = "Clique/Aperte em cima do gesto e"
@@ -59,7 +84,6 @@ class Textos {
   static String tituloReiniciarDados = "Reiniciar dados";
   static String descricaoReiniciarDados =
       "Ao clicar no botão você irá APAGAR/REINICIAR todo o progresso feito";
-  static String btnExcluir = "Excluir Informações";
   static String descricaoAlertExcluir =
       "Tem certeza que deseja EXCLUIR/REINICIAR as informações ?";
 

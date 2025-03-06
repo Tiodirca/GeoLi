@@ -27,6 +27,7 @@ class _TelaInicialState extends State<TelaInicial>
   bool exibirTelaCarregamento = true;
   bool exibirTelaResetarJogo = false;
   int contador = 0;
+  String nomeUsuario = "";
   String caminhoImagemEstado = CaminhosImagens.btnGestoEstadosBrasileiroImagem;
   String caminhoImagemSistemaSolar = CaminhosImagens.btnGestoSistemaSolarImagem;
   Color corPadrao = PaletaCores.corVerde;
@@ -95,6 +96,27 @@ class _TelaInicialState extends State<TelaInicial>
     ]);
   }
 
+  recuperarNomeUsuario(String uidUsuario) async {
+    var db = FirebaseFirestore.instance;
+    //instanciano variavel
+    db
+        .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+        .doc(
+          uidUsuario,
+        )
+        .get()
+        .then(
+      (querySnapshot) async {
+        // verificando cada item que esta gravado no banco de dados
+        querySnapshot.data()!.forEach((key, value) {
+          setState(() {
+            nomeUsuario = value;
+          });
+        });
+      },
+    );
+  }
+
   recuperarUsuario() async {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       contador = contador + 1;
@@ -104,6 +126,7 @@ class _TelaInicialState extends State<TelaInicial>
         if (mounted) {
           recuperarPontuacao(Constantes.fireBaseColecaoRegioes,
               Constantes.fireBaseDocumentoPontosJogadaRegioes, user.uid);
+          recuperarNomeUsuario(user.uid);
         }
       } else {
         if (contador > 1 && contador < 3) {
@@ -123,8 +146,8 @@ class _TelaInicialState extends State<TelaInicial>
     var db = FirebaseFirestore.instance;
     //instanciano variavel
     db
-        .collection(uidUsuario) // passando a colecao
-        .doc(nomeColecao)
+        .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+        .doc(uidUsuario)
         .collection(nomeColecao) // passando a colecao
         .doc(nomeDocumento) // passando documento
         .get()
@@ -213,23 +236,41 @@ class _TelaInicialState extends State<TelaInicial>
           return Scaffold(
               appBar: AppBar(
                 leading: Container(),
-                backgroundColor: Colors.white,
+                backgroundColor: PaletaCores.corVerde,
                 title: Text(
                   Textos.nomeApp,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.white),
                 ),
                 actions: [
+                  Container(
+                    margin: EdgeInsets.only(right: 10),
+                    child: Row(
+                      children: [
+                        Text(
+                          Textos.descricaoTelaInicialNomeUsuario,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        Text(
+                          nomeUsuario,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, color: Colors.white),
+                        )
+                      ],
+                    ),
+                  ),
                   Container(
                     margin: EdgeInsets.only(right: 10),
                     width: 40,
                     height: 40,
                     child: FloatingActionButton(
                       heroTag: Textos.btnExcluir,
-                      backgroundColor: Colors.white,
                       elevation: 0,
+                      backgroundColor: Colors.white,
                       shape: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(40),
-                          borderSide: BorderSide(width: 1, color: corPadrao)),
+                          borderSide:
+                              BorderSide(width: 1, color: Colors.white)),
                       onPressed: () {
                         setState(() {
                           exibirTelaResetarJogo = !exibirTelaResetarJogo;
@@ -252,7 +293,8 @@ class _TelaInicialState extends State<TelaInicial>
                       elevation: 0,
                       shape: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(40),
-                          borderSide: BorderSide(width: 1, color: corPadrao)),
+                          borderSide:
+                              BorderSide(width: 1, color: Colors.white)),
                       onPressed: () {
                         Navigator.pushReplacementNamed(
                             context, Constantes.rotaTelaUsuarioDetalhado);
@@ -275,7 +317,8 @@ class _TelaInicialState extends State<TelaInicial>
                   children: [
                     Column(
                       children: [
-                        SizedBox(
+                        Container(
+                            margin: EdgeInsets.only(top: 20),
                             width: larguraTela,
                             child: Text(
                               Textos.descricaoTelaInicial,

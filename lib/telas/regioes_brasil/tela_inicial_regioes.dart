@@ -93,8 +93,8 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
     var db = FirebaseFirestore.instance;
     //instanciano variavel
     db
-        .collection(uidUsuario) // passando a colecao
-        .doc(Constantes.fireBaseColecaoRegioes)
+        .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+        .doc(uidUsuario)
         .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
         .doc(Constantes.fireBaseDocumentoLiberarEstados) // passando documento
         .get()
@@ -128,8 +128,8 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
     var db = FirebaseFirestore.instance;
     //instanciano variavel
     db
-        .collection(uidUsuario) // passando a colecao
-        .doc(Constantes.fireBaseColecaoRegioes)
+        .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+        .doc(uidUsuario)
         .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
         .doc(Constantes
             .fireBaseDocumentoPontosJogadaRegioes) // passando documento

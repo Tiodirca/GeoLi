@@ -8,8 +8,8 @@ import 'package:geoli/Widgets/estados/widget_tela_proximo_nivel.dart';
 
 import '../../Uteis/textos.dart';
 
-class WidgetAreaTelaRegioes extends StatelessWidget {
-  const WidgetAreaTelaRegioes(
+class AreaTelaRegioesWidget extends StatelessWidget {
+  const AreaTelaRegioesWidget(
       {super.key,
       required this.estadosSorteio,
       required this.exibirTelaProximoNivel,

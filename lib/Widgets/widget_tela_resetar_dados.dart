@@ -92,8 +92,8 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
       // instanciando Firebase
       var db = FirebaseFirestore.instance;
       db
-          .collection(uidUsuario) // passando a colecao
-          .doc(nomeColecao)
+          .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+          .doc(uidUsuario)
           .collection(nomeColecao) // passando a colecao
           .doc(nomeDocumento) //passando o documento
           .set(dados);
@@ -115,8 +115,8 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
       // instanciando Firebase
       var db = FirebaseFirestore.instance;
       db
-          .collection(uidUsuario) // passando a colecao
-          .doc(Constantes.fireBaseColecaoSistemaSolar)
+          .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+          .doc(uidUsuario)
           .collection(
               Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
           .doc(Constantes

@@ -50,8 +50,8 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
   recuperarPlanetasDesbloqueados() async {
     var db = FirebaseFirestore.instance;
     db
-        .collection(uidUsuario) // passando a colecao
-        .doc(Constantes.fireBaseColecaoSistemaSolar)
+        .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+        .doc(uidUsuario)
         .collection(
             Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
         .doc(Constantes

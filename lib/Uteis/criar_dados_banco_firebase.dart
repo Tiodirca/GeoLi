@@ -26,12 +26,47 @@ class CriarDadosBanco {
     Constantes.fireBaseDocumentoRegiaoTodosEstados
   ];
 
+  //metodo para gravar no banco de dados
+  static gravarDadosFirebaseUsuario(
+      String colecaoUIDUsuario, Map<String, dynamic> dados) {
+    try {
+      // instanciando Firebase
+      var db = FirebaseFirestore.instance;
+      db
+          .collection(Constantes.fireBaseColecaoUsuarios)
+          .doc(colecaoUIDUsuario)
+          .set(dados);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  //metodo para gravar no banco de dados
+  static gravarDadosFirebase(
+      String colecaoUIDUsuario,
+      String nomeColecaoDocumento,
+      String nomeDocumentoFinal,
+      Map<String, dynamic> dados) {
+    try {
+      // instanciando Firebase
+      var db = FirebaseFirestore.instance;
+      db
+          .collection(Constantes.fireBaseColecaoUsuarios)
+          .doc(colecaoUIDUsuario)
+          .collection(nomeColecaoDocumento)
+          .doc(nomeDocumentoFinal)
+          .set(dados);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   // metodo para criar dados do usuario no banco de dados
   // e os dados necessarios para ele poder jogar
   static criarDadosUsuario(BuildContext context, String nomeUsuario) async {
     Map<String, dynamic> dadosPontuacao = {Constantes.pontosJogada: 0};
     Map<String, dynamic> dadosNomeUsuario = {
-      Constantes.fireBaseDocumentoUsuario: nomeUsuario
+      Constantes.fireBaseDocumentoNomeUsuario: nomeUsuario
     };
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user != null) {
@@ -39,8 +74,9 @@ class CriarDadosBanco {
         //gravando pontuacao de Regioes e Sistema Solar
         gravarDadosFirebase(user.uid, Constantes.fireBaseColecaoRegioes,
             Constantes.fireBaseDocumentoPontosJogadaRegioes, dadosPontuacao);
-        gravarDadosFirebase(user.uid, Constantes.fireBaseColecaoUsuario,
-            Constantes.fireBaseColecaoUsuario, dadosNomeUsuario);
+        // gravarDadosFirebase(user.uid, Constantes.fireBaseDocumentoDadosUsuario,
+        //     Constantes.fireBaseDocumentoDadosUsuario, dadosNomeUsuario);
+        gravarDadosFirebaseUsuario(user.uid, dadosNomeUsuario);
         gravarDadosFirebase(
             user.uid,
             Constantes.fireBaseColecaoSistemaSolar,
@@ -101,26 +137,6 @@ class CriarDadosBanco {
     gravarDadosFirebase(
         uidUsuario, Constantes.fireBaseColecaoRegioes, regiao, dados);
     dados.clear();
-  }
-
-  //metodo para gravar no banco de dados
-  static gravarDadosFirebase(
-      String colecaoUIDUsuario,
-      String nomeColecaoDocumento,
-      String nomeDocumentoFinal,
-      Map<String, dynamic> dados) {
-    try {
-      // instanciando Firebase
-      var db = FirebaseFirestore.instance;
-      db
-          .collection(colecaoUIDUsuario)
-          .doc(nomeColecaoDocumento)
-          .collection(nomeColecaoDocumento)
-          .doc(nomeDocumentoFinal)
-          .set(dados);
-    } catch (e) {
-      debugPrint(e.toString());
-    }
   }
 
   static criarDesbloquearPlaneta(String uidUsuario) {

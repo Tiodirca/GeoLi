@@ -4,8 +4,8 @@ import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
 
-class WidgetTelaFimJogo extends StatelessWidget {
-  const WidgetTelaFimJogo({super.key});
+class TelaFimJogoWidget extends StatelessWidget {
+  const TelaFimJogoWidget({super.key});
 
   Widget cardOpcoes(BuildContext context) => SizedBox(
         width: 130,

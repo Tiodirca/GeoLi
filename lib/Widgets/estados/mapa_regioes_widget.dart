@@ -143,8 +143,8 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
   recuperarRegioesLiberadas() async {
     var db = FirebaseFirestore.instance;
     //instanciano variavel
-    db  .collection(uidUsuario) // passando a colecao
-        .doc(Constantes.fireBaseColecaoRegioes)
+    db  .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+        .doc(uidUsuario)
         .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
         .doc(Constantes.fireBaseDocumentoLiberarEstados) // passando documento
         .get()

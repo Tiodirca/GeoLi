@@ -65,7 +65,6 @@ class _BalaoWidgetState extends State<BalaoWidget>
   }
 
   validarAcerto() async {
-    print(uidUsuario);
     String gesto = "";
     gesto = await MetodosAuxiliares.recuperarGestoSorteado();
     // verificando se o status passado esta ativo
@@ -110,8 +109,8 @@ class _BalaoWidgetState extends State<BalaoWidget>
       // instanciando Firebase
       var db = FirebaseFirestore.instance;
       db
-          .collection(uidUsuario) // passando a colecao
-          .doc(Constantes.fireBaseColecaoSistemaSolar)
+          .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+          .doc(uidUsuario)
           .collection(
               Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
           .doc(Constantes
@@ -126,8 +125,8 @@ class _BalaoWidgetState extends State<BalaoWidget>
   recuperarPlanetasDesbloqueados() async {
     var db = FirebaseFirestore.instance;
     db
-        .collection(uidUsuario) // passando a colecao
-        .doc(Constantes.fireBaseColecaoSistemaSolar)
+        .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+        .doc(uidUsuario)
         .collection(
             Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
         .doc(Constantes
@@ -160,8 +159,8 @@ class _BalaoWidgetState extends State<BalaoWidget>
       // instanciando Firebase
       var db = FirebaseFirestore.instance;
       db
-          .collection(uidUsuario) // passando a colecao
-          .doc(Constantes.fireBaseColecaoSistemaSolar)
+          .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+          .doc(uidUsuario)
           .collection(
               Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
           .doc(Constantes

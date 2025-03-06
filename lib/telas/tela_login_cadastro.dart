@@ -55,6 +55,7 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
     // TODO: implement initState
     super.initState();
   }
+
   fazerLogin() async {
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -186,22 +187,27 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
           return Scaffold(
               appBar: AppBar(
                 leading: Container(),
-                backgroundColor: Colors.white,
+                backgroundColor: PaletaCores.corVerde,
                 title: Text(
                   Textos.telaLoginCadastroTitulo,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.white),
                 ),
               ),
               body: Container(
+                  padding: EdgeInsets.only(top: 20),
                   color: Colors.white,
                   width: larguraTela,
                   height: alturaTela,
                   child: Column(
                     children: [
-                      Text(
-                        Textos.telaLoginCadastroDescricao,
-                        style: TextStyle(fontSize: 18),
-                        textAlign: TextAlign.center,
+                      Container(
+                        margin: EdgeInsets.only(bottom: 20),
+                        child: Text(
+                          Textos.telaLoginCadastroDescricao,
+                          style: TextStyle(fontSize: 18),
+                          textAlign: TextAlign.center,
+                        ),
                       ),
                       Visibility(
                           visible: exibirCampos,
@@ -221,7 +227,10 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
                                       campos(campoSenha, Textos.campoSenha),
                                     ],
                                   )),
-                              btnAcao(Textos.btnEntrar),
+                              Container(
+                                margin: EdgeInsets.only(top: 20),
+                                child: btnAcao(Textos.btnEntrar),
+                              )
                             ],
                           )),
                       Row(

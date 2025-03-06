@@ -6,8 +6,8 @@ import 'package:geoli/Uteis/constantes_estados_gestos.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoli/Uteis/textos.dart';
+import 'package:geoli/Widgets/estados/area_tela_regioes_widget.dart';
 import 'package:geoli/Widgets/estados/widget_area_gestos_arrastar.dart';
-import 'package:geoli/Widgets/estados/widget_area_tela_regioes.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 
 class TelaRegiaoSudeste extends StatefulWidget {
@@ -66,8 +66,8 @@ class _TelaRegiaoSudesteState extends State<TelaRegiaoSudeste> {
     var db = FirebaseFirestore.instance;
     //instanciano variavel
     db
-        .collection(uidUsuario) // passando a colecao
-        .doc(Constantes.fireBaseColecaoRegioes)
+        .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+        .doc(uidUsuario)
         .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
         .doc(nomeDocumentoRegiao) // passando documento
         .get()
@@ -135,7 +135,7 @@ class _TelaRegiaoSudesteState extends State<TelaRegiaoSudeste> {
                 corPadrao: ConstantesEstadosGestos.corPadraoRegioes,
               );
             } else {
-              return WidgetAreaTelaRegioes(
+              return AreaTelaRegioesWidget(
                   nomeColecao: nomeColecao,
                   estadosSorteio: estadosSorteio,
                   exibirTelaProximoNivel: exibirTelaProximoNivel);

@@ -60,8 +60,8 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
       // instanciando Firebase
       var db = FirebaseFirestore.instance;
       db
-          .collection(uidUsuario) // passando a colecao
-          .doc(Constantes.fireBaseColecaoRegioes)
+          .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+          .doc(uidUsuario)
           .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
           .doc(widget.nomeColecao) //passando o documento
           .set(dados);
@@ -74,8 +74,8 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
     var db = FirebaseFirestore.instance;
     //instanciano variavel
     db
-        .collection(uidUsuario) // passando a colecao
-        .doc(Constantes.fireBaseColecaoRegioes)
+        .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+        .doc(uidUsuario)
         .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
         .doc(Constantes.fireBaseDocumentoLiberarEstados) // passando documento
         .get()
@@ -107,8 +107,8 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
       // instanciando Firebase
       var db = FirebaseFirestore.instance;
       db
-          .collection(uidUsuario) // passando a colecao
-          .doc(Constantes.fireBaseColecaoRegioes)
+          .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+          .doc(uidUsuario)
           .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
           .doc(
               Constantes.fireBaseDocumentoLiberarEstados) //passando o documento

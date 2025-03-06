@@ -140,8 +140,8 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
     var db = FirebaseFirestore.instance;
     //instanciano variavel
     db
-        .collection(uidUsuario) // passando a colecao
-        .doc(Constantes.fireBaseColecaoSistemaSolar)
+        .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+        .doc(uidUsuario)
         .collection(
             Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
         .doc(Constantes
@@ -172,8 +172,8 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
       // instanciando Firebase
       var db = FirebaseFirestore.instance;
       db
-          .collection(uidUsuario) // passando a colecao
-          .doc(Constantes.fireBaseColecaoSistemaSolar)
+          .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+          .doc(uidUsuario)
           .collection(
               Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
           .doc(Constantes
@@ -196,16 +196,22 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
         pontuacaoDuranteJogo++;
         // chamando metodo para exibir mensagem
         MetodosAuxiliares.exibirMensagens(
-            Textos.msgAcertou, Constantes.msgAcerto,Constantes.duracaoExibicaoToastJogos,
-            Constantes.larguraToastNotificacaoJogos, context);
+            Textos.msgAcertou,
+            Constantes.msgAcerto,
+            Constantes.duracaoExibicaoToastJogos,
+            Constantes.larguraToastNotificacaoJogos,
+            context);
       });
     } else if (retorno == Constantes.msgErro) {
       setState(() {
         tamanhoVidas--;
         // chamando metodo para exibir mensagem
         MetodosAuxiliares.exibirMensagens(
-            Textos.msgErrou, Constantes.msgErro,Constantes.duracaoExibicaoToastJogos,
-            Constantes.larguraToastNotificacaoJogos, context);
+            Textos.msgErrou,
+            Constantes.msgErro,
+            Constantes.duracaoExibicaoToastJogos,
+            Constantes.larguraToastNotificacaoJogos,
+            context);
         // caso a quantide de vidas tenha chegado a 0
         if (tamanhoVidas == 0) {
           pararTempo();
