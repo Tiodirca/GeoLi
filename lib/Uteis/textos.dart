@@ -27,13 +27,20 @@ class Textos {
   static String txtTelaCarregamento = "Aguarde Carregando";
   static String msgAcertou = "Acertou";
   static String msgErrou = "Errado";
+  static String campoEmail = "E-mail";
+  static String campoSenha = "Senha";
+  static String campoUsuario = "Usuario/Apelido";
+  static String campoSenhaNova = "Senha Nova";
+  static String campoSenhaAntiga = "Senha Antiga";
 
   //ERROS E SUCESSO MENSAGENS
   static String sucessoLogin = "Sucesso ao entrar na conta";
   static String sucessoCadastro = "Sucesso ao fazer Cadastro";
   static String sucessoDesconectar = "Sucesso ao desconectar conta";
   static String sucessoExcluirDados = "Sucesso ao excluir os dados";
-  static String sucessoFazerAlteracoes = "";
+  static String sucessoEnvioLink = "Verifique seu Email para"
+      " concluir a alteração do email";
+  static String sucessoAtualizarSenha = "Senha alterada com sucesso";
 
   //ERROS
   static String erroEmailInvalido = "Email não esta correto";
@@ -68,9 +75,6 @@ class Textos {
   static String telaLoginCadastroTitulo = "Login/Cadastro";
   static String telaLoginCadastroDescricao =
       "Faça login ou faça o cadastro de um e-mail para poder jogar";
-  static String campoEmail = "E-mail";
-  static String campoSenha = "Senha";
-  static String campoUsuario = "Usuario/Apelido";
 
   // TELA INICIAL
   static String descricaoTelaInicial = "Selecione qual jogo deseja jogar";

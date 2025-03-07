@@ -31,12 +31,7 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
         password: campoSenha.text,
       );
       if (credential == 'email-already-in-use') {
-        MetodosAuxiliares.exibirMensagens(
-            Textos.erroEmailUso,
-            Constantes.msgErro,
-            Constantes.duracaoExibicaoToastLoginCadastro,
-            Constantes.larguraToastLoginCadastro,
-            context);
+        chamarExibirMensagem(Textos.erroEmailUso, Constantes.msgErro);
         setState(() {
           exibirTelaCarregamento = false;
         });
@@ -58,18 +53,31 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
 
   fazerLogin() async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: campoEmail.text, password: campoSenha.text);
-      MetodosAuxiliares.exibirMensagens(
-          Textos.sucessoLogin,
-          Constantes.msgAcerto,
-          Constantes.duracaoExibicaoToastJogos,
-          Constantes.larguraToastLoginCadastro,
-          context);
-      Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(
+              email: campoEmail.text, password: campoSenha.text)
+          .then((value) {
+        chamarExibirMensagem(Textos.sucessoLogin, Constantes.msgAcerto);
+        redirecionarTelaInicial();
+      }, onError: (e) {
+        validarErros(e);
+      });
     } on FirebaseAuthException catch (e) {
       validarErros(e);
     }
+  }
+
+  redirecionarTelaInicial() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
+  }
+
+  chamarExibirMensagem(String mensagem, String tipoMensagem) {
+    MetodosAuxiliares.exibirMensagens(
+        mensagem,
+        Constantes.msgAcerto,
+        Constantes.duracaoExibicaoToastJogos,
+        Constantes.larguraToastLoginCadastro,
+        context);
   }
 
   validarErros(erro) {
@@ -93,8 +101,7 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
     }
   }
 
-  Widget campos(TextEditingController controle, String nomeCampo) => Container(
-        margin: EdgeInsets.all(10),
+  Widget campos(TextEditingController controle, String nomeCampo) => SizedBox(
         width: 300,
         child: TextFormField(
           controller: controle,
@@ -221,10 +228,26 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
                                     children: [
                                       Visibility(
                                           visible: exibirDadosCadastro,
-                                          child: campos(campoUsuario,
-                                              Textos.campoUsuario)),
-                                      campos(campoEmail, Textos.campoEmail),
-                                      campos(campoSenha, Textos.campoSenha),
+                                          child: Container(
+                                              margin: EdgeInsets.all(10),
+                                              width: 400,
+                                              height: 70,
+                                              child: campos(campoUsuario,
+                                                  Textos.campoUsuario))),
+                                      Container(
+                                        margin: EdgeInsets.all(10),
+                                        width: 400,
+                                        height: 70,
+                                        child: campos(
+                                            campoEmail, Textos.campoEmail),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.all(10),
+                                        width: 400,
+                                        height: 70,
+                                        child: campos(
+                                            campoSenha, Textos.campoSenha),
+                                      )
                                     ],
                                   )),
                               Container(

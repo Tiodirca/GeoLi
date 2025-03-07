@@ -208,7 +208,7 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
                         context, Constantes.rotaTelaSistemaSolar);
                   } else {
                     reiniciarDadosRegioes();
-                    Future.delayed(Duration(seconds: 1), () {
+                    Future.delayed(Duration(seconds:0), () {
                       Navigator.pushReplacementNamed(
                           context, Constantes.rotaTelaInicialRegioes);
                     });

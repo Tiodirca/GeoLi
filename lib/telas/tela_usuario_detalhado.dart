@@ -19,8 +19,10 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
   bool ativarCampoUsuario = false;
   bool ativarCampoEmail = false;
   bool ativarCampoSenha = false;
+  bool exibirBtnMudarSenha = true;
   bool exibirTelaCarregamento = true;
   bool exibirAutenticacao = false;
+  bool exibirBtnAtualizar = false;
   final _formKeyFormulario = GlobalKey<FormState>();
   final _formKeyExcluirDados = GlobalKey<FormState>();
   String emailAuxiliarValidar = "";
@@ -28,7 +30,6 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
   TextEditingController campoSenha = TextEditingController(text: "");
   TextEditingController campoSenhaNova = TextEditingController(text: "");
   TextEditingController campoUsuario = TextEditingController(text: "");
-  String tipoAutenticacaoTrocaEmail = "TrocaEmail";
 
   @override
   void initState() {
@@ -50,36 +51,60 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
     }
   }
 
-  autenticarUsuario(String tipoAutenticacao) async {
+  autenticarUsuario(String nomeCampoAcao) async {
     AuthCredential credential = EmailAuthProvider.credential(
         email: emailAuxiliarValidar, password: campoSenha.text);
     try {
-      FirebaseAuth.instance.signInWithCredential(credential);
-      if (tipoAutenticacao == tipoAutenticacaoTrocaEmail) {
-        atualizarEmail();
-      } else {
-        excluirUsuarioInformacoes();
-      }
+      FirebaseAuth.instance.signInWithCredential(credential).then((value) {
+        if (nomeCampoAcao == Textos.campoEmail && ativarCampoEmail) {
+          atualizarEmail();
+        } else if (!ativarCampoEmail && nomeCampoAcao == Textos.campoEmail) {
+          atualizarSenha();
+        } else {
+          chamarDeletarDadosBancoDados();
+        }
+        setState(() {
+          campoSenha.text = "";
+        });
+      }, onError: (e) {
+        setState(() {
+          exibirTelaCarregamento = false;
+        });
+        validarErros(e);
+      });
     } on FirebaseAuthException catch (e) {
+      setState(() {
+        exibirTelaCarregamento = false;
+      });
       validarErros(e);
+    }
+  }
+
+  atualizarEmail() async {
+    if (FirebaseAuth.instance.currentUser != null) {
+      FirebaseAuth.instance.currentUser
+          ?.verifyBeforeUpdateEmail(campoEmail.text);
+      chamarExibirMensagens(Textos.sucessoEnvioLink, Constantes.msgAcerto);
+      Navigator.pushReplacementNamed(
+          context, Constantes.rotaTelaUsuarioDetalhado);
+    }
+  }
+
+  atualizarSenha() async {
+    if (FirebaseAuth.instance.currentUser != null) {
+      FirebaseAuth.instance.currentUser?.updatePassword(campoSenhaNova.text);
+      chamarExibirMensagens(Textos.sucessoAtualizarSenha, Constantes.msgAcerto);
+      Navigator.pushReplacementNamed(
+          context, Constantes.rotaTelaUsuarioDetalhado);
     }
   }
 
   validarErros(erro) {
     if (erro.code.contains('invalid-email')) {
-      MetodosAuxiliares.exibirMensagens(
-          Textos.erroEmailInvalido,
-          Constantes.msgErro,
-          Constantes.duracaoExibicaoToastLoginCadastro,
-          Constantes.larguraToastLoginCadastro,
-          context);
+      chamarExibirMensagens(Textos.erroEmailInvalido, Constantes.msgErro);
     } else if (erro.code.contains('unknown-error')) {
-      MetodosAuxiliares.exibirMensagens(
-          Textos.erroEmailNaoCadastradoSenhaIncorreta,
-          Constantes.msgErro,
-          Constantes.duracaoExibicaoToastLoginCadastro,
-          Constantes.larguraToastLoginCadastro,
-          context);
+      chamarExibirMensagens(
+          Textos.erroEmailNaoCadastradoSenhaIncorreta, Constantes.msgErro);
     }
   }
 
@@ -109,84 +134,79 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
 
   desconetarUsuario() async {
     await FirebaseAuth.instance.signOut();
-    MetodosAuxiliares.exibirMensagens(
-        Textos.sucessoDesconectar,
-        Constantes.msgAcerto,
-        Constantes.duracaoExibicaoToastJogos,
-        Constantes.larguraToastLoginCadastro,
-        context);
+    chamarExibirMensagens(Textos.sucessoDesconectar, Constantes.msgAcerto);
     MetodosAuxiliares.passarUidUsuario("");
-    Navigator.pushReplacementNamed(context, Constantes.rotaTelaLoginCadastro);
+    redirecionarTela();
   }
 
-  excluirUsuarioInformacoes() async {
-    setState(() {
-      exibirTelaCarregamento = true;
-    });
-    chamarDeletarDadosBancoDados();
+  redirecionarTela() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaLoginCadastro);
   }
 
   // Metodo para chamar deletar tabela
   chamarDeletarDadosBancoDados() async {
-    var db = FirebaseFirestore.instance;
-    db
-        .collection(Constantes.fireBaseColecaoUsuarios)
-        .doc(uidUsuario)
-        .delete()
-        .then((doc) {
-      setState(() {});
-      MetodosAuxiliares.exibirMensagens(
-          Textos.sucessoExcluirDados,
-          Textos.msgAcertou,
-          Constantes.duracaoExibicaoToastLoginCadastro,
-          Constantes.larguraToastLoginCadastro,
-          context);
-      if (FirebaseAuth.instance.currentUser != null) {
-        FirebaseAuth.instance.currentUser?.delete();
+    bool retornoRegioes =
+        await excluirDocumentoDentroColecao(Constantes.fireBaseColecaoRegioes);
+    if (retornoRegioes) {
+      bool retornoSistemaSolar = await excluirDocumentoDentroColecao(
+          Constantes.fireBaseColecaoSistemaSolar);
+      if (retornoSistemaSolar) {
+        var db = FirebaseFirestore.instance;
+        db
+            .collection(Constantes.fireBaseColecaoUsuarios)
+            .doc(uidUsuario)
+            .delete()
+            .then((doc) {
+          if (FirebaseAuth.instance.currentUser != null) {
+            FirebaseAuth.instance.currentUser?.delete();
+          }
+          desconetarUsuario();
+          chamarExibirMensagens(Textos.sucessoExcluirDados, Textos.msgAcertou);
+        }, onError: (e) {
+          chamarExibirMensagens(Textos.erroExcluirDados, Textos.msgErrou);
+          setState(() {
+            exibirTelaCarregamento = false;
+          });
+        });
       }
-      desconetarUsuario();
-    }, onError: (e) {
-      MetodosAuxiliares.exibirMensagens(
-          Textos.erroExcluirDados,
-          Textos.msgErrou,
-          Constantes.duracaoExibicaoToastLoginCadastro,
-          Constantes.larguraToastLoginCadastro,
-          context);
-      setState(() {
-        exibirTelaCarregamento = false;
-      });
-    });
+    }
   }
 
-  // excluirDadosColecaoDocumento(String idDocumentoFirebase) async {
-  //   var db = FirebaseFirestore.instance;
-  //   //consultando id do documento no firebase para posteriormente excluir
-  //   await db
-  //       .collection(Constantes.fireBaseColecaoUsuarios)
-  //       .doc(uidUsuario)
-  //       .collection(Constantes.fireBaseDadosCadastrados)
-  //       .get()
-  //       .then(
-  //         (querySnapshot) {
-  //       // para cada iteracao do FOR excluir o
-  //       // item corresponde ao ID da iteracao
-  //       for (var docSnapshot in querySnapshot.docs) {
-  //         db
-  //             .collection(Constantes.fireBaseColecaoEscala)
-  //             .doc(idDocumentoFirebase)
-  //             .collection(Constantes.fireBaseDadosCadastrados)
-  //             .doc(docSnapshot.id)
-  //             .delete();
-  //       }
-  //     },
-  //   );
-  // }
+  chamarExibirMensagens(String tipoMensagem, String tipoExibicao) {
+    MetodosAuxiliares.exibirMensagens(
+        Textos.sucessoExcluirDados,
+        Textos.msgAcertou,
+        Constantes.duracaoExibicaoToastLoginCadastro,
+        Constantes.larguraToastLoginCadastro,
+        context);
+  }
 
-  atualizarEmail() async {
-    if (FirebaseAuth.instance.currentUser != null) {
-      FirebaseAuth.instance.currentUser
-          ?.verifyBeforeUpdateEmail(campoEmail.text);
-    }
+  //metodo para excluir cada elemento dentro dos documento que compoem
+  // aquela colecao de registros no UID do usuario
+  Future<bool> excluirDocumentoDentroColecao(String idDocumentoFirebase) async {
+    bool retorno = false;
+    var db = FirebaseFirestore.instance;
+    await db
+        .collection(Constantes.fireBaseColecaoUsuarios)
+        .doc(uidUsuario)
+        .collection(idDocumentoFirebase)
+        .get()
+        .then((querySnapshot) {
+      //para cada iteracao do FOR excluir o
+      //item corresponde ao ID da iteracao
+      for (var docSnapshot in querySnapshot.docs) {
+        db
+            .collection(Constantes.fireBaseColecaoUsuarios)
+            .doc(uidUsuario)
+            .collection(idDocumentoFirebase)
+            .doc(docSnapshot.id)
+            .delete();
+      }
+      retorno = true;
+    }, onError: (e) {
+      retorno = false;
+    });
+    return retorno;
   }
 
   atualizarNomeUsuario() {
@@ -215,7 +235,7 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
   Widget campos(
           TextEditingController controle, String nomeCampo, bool ativarCampo) =>
       Container(
-        margin: EdgeInsets.all(10),
+        margin: EdgeInsets.only(right: 10),
         width: 300,
         child: TextFormField(
           enabled: ativarCampo,
@@ -234,8 +254,7 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
                       BorderSide(width: 1, color: PaletaCores.corVerde)),
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
-                  borderSide:
-                      BorderSide(width: 2, color: PaletaCores.corAzul)),
+                  borderSide: BorderSide(width: 2, color: PaletaCores.corAzul)),
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
                   borderSide:
@@ -265,36 +284,43 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
                 color: corBtn,
                 width: 1,
               )),
-          onPressed: () {
+          onPressed: () async {
             if (nomeBtn == Textos.btnCancelarEdicao) {
               setState(() {
                 ativarCampoUsuario = false;
                 ativarCampoEmail = false;
                 ativarCampoSenha = false;
+                exibirBtnMudarSenha = true;
+                exibirBtnAtualizar = false;
               });
             } else if (nomeBtn == Textos.btnMudarSenha) {
               setState(() {
                 ativarCampoSenha = true;
                 ativarCampoUsuario = false;
                 ativarCampoEmail = false;
+                exibirBtnMudarSenha = false;
+                exibirBtnAtualizar = true;
               });
             } else if (nomeBtn == Textos.btnAtualizar) {
+              //Verificando se o usuario esta
+              // alterando SOMENTE o nome de usuario
               if (ativarCampoUsuario &&
                   emailAuxiliarValidar == campoEmail.text) {
                 if (_formKeyFormulario.currentState!.validate()) {
                   atualizarNomeUsuario();
                 }
               } else {
-                setState(() {
-                  exibirAutenticacao = true;
-                });
+                if (_formKeyFormulario.currentState!.validate()) {
+                  setState(() {
+                    exibirAutenticacao = true;
+                  });
+                }
               }
             } else if (nomeBtn == Textos.btnDesconectar) {
               desconetarUsuario();
             } else if (nomeBtn == Textos.btnSalvarAlteracoes) {
               if (_formKeyFormulario.currentState!.validate()) {
-                atualizarNomeUsuario();
-                autenticarUsuario(tipoAutenticacaoTrocaEmail);
+                autenticarUsuario(Textos.campoEmail);
               }
             } else if (nomeBtn == Textos.btnExcluirUsuario) {
               alertaExclusao(context);
@@ -312,6 +338,7 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
         width: 45,
         height: 45,
         child: FloatingActionButton(
+          heroTag: icone.toString(),
           backgroundColor: Colors.white,
           shape: OutlineInputBorder(
               borderSide: BorderSide(color: cor, width: 1),
@@ -321,18 +348,26 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
               setState(() {
                 exibirAutenticacao = false;
                 ativarCampoSenha = false;
+                ativarCampoEmail = false;
+                ativarCampoUsuario = false;
+                exibirBtnAtualizar = false;
+                exibirBtnMudarSenha = true;
               });
             } else if (nomeBtn == Textos.campoUsuario) {
               setState(() {
                 ativarCampoUsuario = true;
                 ativarCampoEmail = false;
                 ativarCampoSenha = false;
+                exibirBtnMudarSenha = false;
+                exibirBtnAtualizar = true;
               });
             } else if (nomeBtn == Textos.campoEmail) {
               setState(() {
                 ativarCampoUsuario = false;
                 ativarCampoEmail = true;
                 ativarCampoSenha = false;
+                exibirBtnMudarSenha = false;
+                exibirBtnAtualizar = true;
               });
             }
           },
@@ -400,6 +435,9 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
               onPressed: () {
                 if (_formKeyExcluirDados.currentState!.validate()) {
                   Navigator.of(context).pop();
+                  setState(() {
+                    exibirTelaCarregamento = true;
+                  });
                   autenticarUsuario("");
                 }
               },
@@ -435,7 +473,8 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
               backgroundColor: PaletaCores.corVerde,
               title: Text(
                 Textos.telaUsuarioTitulo,
-                style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
               ),
             ),
             body: Container(
@@ -474,8 +513,12 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
                                     children: [
                                       Form(
                                         key: _formKeyFormulario,
-                                        child: campos(campoSenha,
-                                            Textos.campoSenha, true),
+                                        child: campos(
+                                            campoSenha,
+                                            ativarCampoEmail == true
+                                                ? Textos.campoSenha
+                                                : Textos.campoSenhaAntiga,
+                                            true),
                                       )
                                     ],
                                   ),
@@ -493,50 +536,65 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
                             } else {
                               return Column(
                                 children: [
-                                  Container(
+                                  SizedBox(
                                     width: 400,
                                     height: alturaTela * 0.3,
                                     child: Form(
                                       key: _formKeyFormulario,
                                       child: Column(
                                         children: [
-                                          Row(
-                                            children: [
-                                              campos(
-                                                  campoUsuario,
+                                          SizedBox(
+                                            width: 400,
+                                            height: 70,
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                campos(
+                                                    campoUsuario,
+                                                    Textos.campoUsuario,
+                                                    ativarCampoUsuario),
+                                                btnIcone(
+                                                  Icons.edit,
+                                                  PaletaCores.corOuro,
                                                   Textos.campoUsuario,
-                                                  ativarCampoUsuario),
-                                              btnIcone(
-                                                Icons.edit,
-                                                PaletaCores.corOuro,
-                                                Textos.campoUsuario,
-                                              )
-                                            ],
+                                                )
+                                              ],
+                                            ),
                                           ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              campos(
-                                                  campoEmail,
+                                          SizedBox(
+                                            width: 400,
+                                            height: 70,
+                                            child: Row(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              children: [
+                                                campos(
+                                                    campoEmail,
+                                                    Textos.campoEmail,
+                                                    ativarCampoEmail),
+                                                btnIcone(
+                                                  Icons.edit,
+                                                  PaletaCores.corOuro,
                                                   Textos.campoEmail,
-                                                  ativarCampoEmail),
-                                              btnIcone(
-                                                Icons.edit,
-                                                PaletaCores.corOuro,
-                                                Textos.campoEmail,
-                                              )
-                                            ],
+                                                )
+                                              ],
+                                            ),
                                           ),
                                           Visibility(
                                               visible: ativarCampoSenha,
-                                              child: Row(
-                                                children: [
-                                                  campos(
-                                                      campoSenhaNova,
-                                                      Textos.campoSenha,
-                                                      ativarCampoSenha),
-                                                ],
+                                              child: SizedBox(
+                                                width: 400,
+                                                height: 70,
+                                                child: Row( crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                                  children: [
+                                                    campos(
+                                                        campoSenhaNova,
+                                                        Textos.campoSenhaNova,
+                                                        ativarCampoSenha),
+                                                  ],
+                                                ),
                                               )),
                                         ],
                                       ),
@@ -546,9 +604,7 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Visibility(
-                                          visible: ativarCampoUsuario ||
-                                              ativarCampoEmail ||
-                                              ativarCampoSenha,
+                                          visible: exibirBtnAtualizar,
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
@@ -560,7 +616,7 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
                                             ],
                                           )),
                                       Visibility(
-                                        visible: !ativarCampoSenha,
+                                        visible: exibirBtnMudarSenha,
                                         child: btnAcao(Textos.btnMudarSenha,
                                             PaletaCores.corAzul, 100),
                                       )

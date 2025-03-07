@@ -122,6 +122,8 @@ class _TelaInicialState extends State<TelaInicial>
       contador = contador + 1;
       if (user != null) {
         print("UID: ${user.uid}");
+        print(user.email);
+
         MetodosAuxiliares.passarUidUsuario(user.uid);
         if (mounted) {
           recuperarPontuacao(Constantes.fireBaseColecaoRegioes,
