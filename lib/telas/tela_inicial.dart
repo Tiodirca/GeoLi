@@ -121,9 +121,6 @@ class _TelaInicialState extends State<TelaInicial>
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       contador = contador + 1;
       if (user != null) {
-        print("UID: ${user.uid}");
-        print(user.email);
-
         MetodosAuxiliares.passarUidUsuario(user.uid);
         if (mounted) {
           recuperarPontuacao(Constantes.fireBaseColecaoRegioes,
@@ -131,7 +128,7 @@ class _TelaInicialState extends State<TelaInicial>
           recuperarNomeUsuario(user.uid);
         }
       } else {
-        if (contador > 1 && contador < 3) {
+        if (contador >= 1 && contador <= 3) {
           if (mounted) {
             MetodosAuxiliares.passarUidUsuario("");
             Navigator.pushReplacementNamed(
@@ -261,53 +258,6 @@ class _TelaInicialState extends State<TelaInicial>
                       ],
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(right: 10),
-                    width: 40,
-                    height: 40,
-                    child: FloatingActionButton(
-                      heroTag: Textos.btnExcluir,
-                      elevation: 0,
-                      backgroundColor: Colors.white,
-                      shape: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(40),
-                          borderSide:
-                              BorderSide(width: 1, color: Colors.white)),
-                      onPressed: () {
-                        setState(() {
-                          exibirTelaResetarJogo = !exibirTelaResetarJogo;
-                        });
-                      },
-                      child: Icon(
-                        exibirTelaResetarJogo ? Icons.close : Icons.settings,
-                        color: corPadrao,
-                        size: 30,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(right: 10),
-                    width: 40,
-                    height: 40,
-                    child: FloatingActionButton(
-                      heroTag: Textos.campoUsuario,
-                      backgroundColor: Colors.white,
-                      elevation: 0,
-                      shape: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(40),
-                          borderSide:
-                              BorderSide(width: 1, color: Colors.white)),
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(
-                            context, Constantes.rotaTelaUsuarioDetalhado);
-                      },
-                      child: Icon(
-                        Icons.person,
-                        color: corPadrao,
-                        size: 30,
-                      ),
-                    ),
-                  )
                 ],
               ),
               body: Container(
@@ -320,7 +270,69 @@ class _TelaInicialState extends State<TelaInicial>
                     Column(
                       children: [
                         Container(
-                            margin: EdgeInsets.only(top: 20),
+                          margin: EdgeInsets.only(top: 10),
+                          width: larguraTela,
+                          height: 40,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(right: 10),
+                                width: 50,
+                                height: 50,
+                                child: FloatingActionButton(
+                                  heroTag: Textos.btnExcluir,
+                                  elevation: 0,
+                                  backgroundColor: Colors.white,
+                                  shape: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide: BorderSide(
+                                          width: 1,
+                                          color: PaletaCores.corVerde)),
+                                  onPressed: () {
+                                    setState(() {
+                                      exibirTelaResetarJogo =
+                                          !exibirTelaResetarJogo;
+                                    });
+                                  },
+                                  child: Icon(
+                                    exibirTelaResetarJogo
+                                        ? Icons.close
+                                        : Icons.settings,
+                                    color: corPadrao,
+                                    size: 30,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(right: 10),
+                                width: 50,
+                                height: 50,
+                                child: FloatingActionButton(
+                                  heroTag: Textos.campoUsuario,
+                                  backgroundColor: Colors.white,
+                                  elevation: 0,
+                                  shape: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                      borderSide: BorderSide(
+                                          width: 1, color:PaletaCores.corVerde)),
+                                  onPressed: () {
+                                    Navigator.pushReplacementNamed(context,
+                                        Constantes.rotaTelaUsuarioDetalhado);
+                                  },
+                                  child: Icon(
+                                    Icons.person,
+                                    color: corPadrao,
+                                    size: 30,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        Container(
+                            margin: EdgeInsets.only(top: 10),
                             width: larguraTela,
                             child: Text(
                               Textos.descricaoTelaInicial,

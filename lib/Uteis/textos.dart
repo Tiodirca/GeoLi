@@ -46,6 +46,8 @@ class Textos {
   static String erroEmailInvalido = "Email não esta correto";
   static String erroEmailNaoCadastradoSenhaIncorreta =
       "E-mail não cadastrado ou Senha Incorreta";
+  static String erroSenhaIncorreta = "Senha Incorreta";
+  static String erroSenhaCurta = "Digite uma senha de pelo menos 6 caracteres";
   static String erroEmailUso = "E-mail já em uso,utilize outro";
   static String erroExcluirDados = "Erro ao excluir os dados";
   static String erroCampoVazio = "Preencha antes de prosseguir";

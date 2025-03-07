@@ -257,8 +257,7 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
                   borderSide: BorderSide(width: 2, color: PaletaCores.corAzul)),
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
-                  borderSide:
-                      BorderSide(width: 1, color: PaletaCores.corAzulMagenta)),
+                  borderSide: BorderSide(width: 1, color: PaletaCores.corAzul)),
               errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
                   borderSide:
@@ -273,7 +272,7 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
   Widget btnAcao(String nomeBtn, Color corBtn, double larguraBtn) => Container(
         margin: EdgeInsets.all(10),
         width: larguraBtn,
-        height: 40,
+        height: 50,
         child: FloatingActionButton(
           heroTag: nomeBtn,
           elevation: 0,
@@ -338,7 +337,7 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
         width: 45,
         height: 45,
         child: FloatingActionButton(
-          heroTag: icone.toString(),
+          heroTag: nomeBtn,
           backgroundColor: Colors.white,
           shape: OutlineInputBorder(
               borderSide: BorderSide(color: cor, width: 1),
@@ -477,162 +476,178 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
                     TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
               ),
             ),
-            body: Container(
-                padding: EdgeInsets.all(10),
-                color: Colors.white,
-                width: larguraTela,
-                height: alturaTela,
-                child: Column(
-                  children: [
-                    Text(
-                      Textos.telaUsuarioDescricao,
-                      style: TextStyle(fontSize: 18),
-                      textAlign: TextAlign.center,
-                    ),
-                    Container(
-                        margin: EdgeInsets.only(top: 20),
-                        width: larguraTela,
-                        height: alturaTela * 0.4,
-                        child: LayoutBuilder(
-                          builder: (context, constraints) {
-                            if (exibirAutenticacao) {
-                              return Column(
-                                children: [
-                                  Text(
-                                    ativarCampoEmail == true
-                                        ? Textos
-                                            .telaUsuarioDescricaoAutenticacaoEmail
-                                        : Textos
-                                            .telaUsuarioDescricaoAutenticacaoSenha,
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  Column(
+            body: GestureDetector(
+              child: Container(
+                  padding: EdgeInsets.all(10),
+                  color: Colors.white,
+                  width: larguraTela,
+                  height: alturaTela,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Text(
+                          Textos.telaUsuarioDescricao,
+                          style: TextStyle(fontSize: 18),
+                          textAlign: TextAlign.center,
+                        ),
+                        Container(
+                            margin: EdgeInsets.only(top: 20),
+                            width: larguraTela,
+                            height: alturaTela * 0.4,
+                            child: LayoutBuilder(
+                              builder: (context, constraints) {
+                                if (exibirAutenticacao) {
+                                  return Column(
                                     children: [
-                                      Form(
-                                        key: _formKeyFormulario,
-                                        child: campos(
-                                            campoSenha,
-                                            ativarCampoEmail == true
-                                                ? Textos.campoSenha
-                                                : Textos.campoSenhaAntiga,
-                                            true),
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      btnIcone(Icons.close,
-                                          PaletaCores.corVermelha, ""),
-                                      btnAcao(Textos.btnSalvarAlteracoes,
-                                          PaletaCores.corAzul, 100),
-                                    ],
-                                  )
-                                ],
-                              );
-                            } else {
-                              return Column(
-                                children: [
-                                  SizedBox(
-                                    width: 400,
-                                    height: alturaTela * 0.3,
-                                    child: Form(
-                                      key: _formKeyFormulario,
-                                      child: Column(
+                                      Text(
+                                        ativarCampoEmail == true
+                                            ? Textos
+                                                .telaUsuarioDescricaoAutenticacaoEmail
+                                            : Textos
+                                                .telaUsuarioDescricaoAutenticacaoSenha,
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      Column(
                                         children: [
-                                          SizedBox(
-                                            width: 400,
-                                            height: 70,
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                campos(
-                                                    campoUsuario,
-                                                    Textos.campoUsuario,
-                                                    ativarCampoUsuario),
-                                                btnIcone(
-                                                  Icons.edit,
-                                                  PaletaCores.corOuro,
-                                                  Textos.campoUsuario,
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: 400,
-                                            height: 70,
-                                            child: Row(
-                                              crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                              children: [
-                                                campos(
-                                                    campoEmail,
-                                                    Textos.campoEmail,
-                                                    ativarCampoEmail),
-                                                btnIcone(
-                                                  Icons.edit,
-                                                  PaletaCores.corOuro,
-                                                  Textos.campoEmail,
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          Visibility(
-                                              visible: ativarCampoSenha,
-                                              child: SizedBox(
-                                                width: 400,
-                                                height: 70,
-                                                child: Row( crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                                  children: [
-                                                    campos(
-                                                        campoSenhaNova,
-                                                        Textos.campoSenhaNova,
-                                                        ativarCampoSenha),
-                                                  ],
-                                                ),
-                                              )),
+                                          Form(
+                                            key: _formKeyFormulario,
+                                            child: campos(
+                                                campoSenha,
+                                                ativarCampoEmail == true
+                                                    ? Textos.campoSenha
+                                                    : Textos.campoSenhaAntiga,
+                                                true),
+                                          )
                                         ],
                                       ),
-                                    ),
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Visibility(
-                                          visible: exibirBtnAtualizar,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              btnAcao(Textos.btnCancelarEdicao,
-                                                  PaletaCores.corVermelha, 100),
-                                              btnAcao(Textos.btnAtualizar,
-                                                  PaletaCores.corLaranja, 200),
-                                            ],
-                                          )),
-                                      Visibility(
-                                        visible: exibirBtnMudarSenha,
-                                        child: btnAcao(Textos.btnMudarSenha,
-                                            PaletaCores.corAzul, 100),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          btnIcone(Icons.close,
+                                              PaletaCores.corVermelha, ""),
+                                          btnAcao(Textos.btnSalvarAlteracoes,
+                                              PaletaCores.corAzul, 100),
+                                        ],
                                       )
                                     ],
-                                  )
-                                ],
-                              );
-                            }
-                          },
-                        )),
-                  ],
-                )),
-            bottomSheet: Container(
+                                  );
+                                } else {
+                                  return Column(
+                                    children: [
+                                      SizedBox(
+                                        width: 400,
+                                        height: alturaTela * 0.3,
+                                        child: Form(
+                                          key: _formKeyFormulario,
+                                          child: Column(
+                                            children: [
+                                              SizedBox(
+                                                width: 400,
+                                                height: 70,
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    campos(
+                                                        campoUsuario,
+                                                        Textos.campoUsuario,
+                                                        ativarCampoUsuario),
+                                                    btnIcone(
+                                                      Icons.edit,
+                                                      PaletaCores.corOuro,
+                                                      Textos.campoUsuario,
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 400,
+                                                height: 70,
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    campos(
+                                                        campoEmail,
+                                                        Textos.campoEmail,
+                                                        ativarCampoEmail),
+                                                    btnIcone(
+                                                      Icons.edit,
+                                                      PaletaCores.corOuro,
+                                                      Textos.campoEmail,
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              Visibility(
+                                                  visible: ativarCampoSenha,
+                                                  child: SizedBox(
+                                                    width: 400,
+                                                    height: 70,
+                                                    child: Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        campos(
+                                                            campoSenhaNova,
+                                                            Textos
+                                                                .campoSenhaNova,
+                                                            ativarCampoSenha),
+                                                      ],
+                                                    ),
+                                                  )),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Visibility(
+                                              visible: exibirBtnAtualizar,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  btnAcao(
+                                                      Textos.btnCancelarEdicao,
+                                                      PaletaCores.corVermelha,
+                                                      100),
+                                                  btnAcao(
+                                                      Textos.btnAtualizar,
+                                                      PaletaCores.corLaranja,
+                                                      200),
+                                                ],
+                                              )),
+                                          Visibility(
+                                            visible: exibirBtnMudarSenha,
+                                            child: btnAcao(Textos.btnMudarSenha,
+                                                PaletaCores.corAzul, 100),
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  );
+                                }
+                              },
+                            )),
+                      ],
+                    ),
+                  )),
+              onTap: () {
+                FocusScope.of(context).requestFocus(FocusNode());
+              },
+            ),
+            bottomNavigationBar: Container(
                 color: Colors.white,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: Wrap(
+                  alignment: WrapAlignment.center,
                   children: [
                     btnAcao(
                         Textos.btnDesconectar, PaletaCores.corVermelha, 200),

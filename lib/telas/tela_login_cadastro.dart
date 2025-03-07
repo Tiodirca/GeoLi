@@ -25,21 +25,18 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
 
   cadastrarUsuario() async {
     try {
-      final credential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
         email: campoEmail.text,
         password: campoSenha.text,
-      );
-      if (credential == 'email-already-in-use') {
-        chamarExibirMensagem(Textos.erroEmailUso, Constantes.msgErro);
-        setState(() {
-          exibirTelaCarregamento = false;
-        });
-      } else {
+      )
+          .then((value) {
         CriarDadosBanco.criarDadosUsuario(context, campoUsuario.text);
-      }
+      }, onError: (e) {
+        validarErros(e.toString());
+      });
     } on FirebaseAuthException catch (e) {
-      validarErros(e);
+      validarErros(e.code);
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -60,10 +57,10 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
         chamarExibirMensagem(Textos.sucessoLogin, Constantes.msgAcerto);
         redirecionarTelaInicial();
       }, onError: (e) {
-        validarErros(e);
+        validarErros(e.toString());
       });
     } on FirebaseAuthException catch (e) {
-      validarErros(e);
+      validarErros(e.code);
     }
   }
 
@@ -75,29 +72,27 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
     MetodosAuxiliares.exibirMensagens(
         mensagem,
         Constantes.msgAcerto,
-        Constantes.duracaoExibicaoToastJogos,
+        Constantes.duracaoExibicaoToastLoginCadastro,
         Constantes.larguraToastLoginCadastro,
         context);
   }
 
-  validarErros(erro) {
+  validarErros(String erro) {
     setState(() {
       exibirTelaCarregamento = false;
     });
-    if (erro.code.contains('invalid-email')) {
-      MetodosAuxiliares.exibirMensagens(
-          Textos.erroEmailInvalido,
-          Constantes.msgErro,
-          Constantes.duracaoExibicaoToastLoginCadastro,
-          Constantes.larguraToastLoginCadastro,
-          context);
-    } else if (erro.code.contains('unknown-error')) {
-      MetodosAuxiliares.exibirMensagens(
-          Textos.erroEmailNaoCadastradoSenhaIncorreta,
-          Constantes.msgErro,
-          Constantes.duracaoExibicaoToastLoginCadastro,
-          Constantes.larguraToastLoginCadastro,
-          context);
+    if (erro.contains('invalid-email')) {
+      chamarExibirMensagem(Textos.erroEmailInvalido, Constantes.msgErro);
+    } else if (erro.contains('email-already-in-use')) {
+      chamarExibirMensagem(Textos.erroEmailUso, Constantes.msgErro);
+    } else if (erro.contains('Password should be at least 6 characters')) {
+      chamarExibirMensagem(Textos.erroSenhaCurta, Constantes.msgErro);
+    } else if (erro.contains(
+        'The supplied auth credential is incorrect, malformed or has expired')) {
+      chamarExibirMensagem(Textos.erroSenhaIncorreta, Constantes.msgErro);
+    } else if (erro.contains('unknown-error')) {
+      chamarExibirMensagem(
+          Textos.erroEmailNaoCadastradoSenhaIncorreta, Constantes.msgErro);
     }
   }
 
@@ -206,64 +201,65 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
                   color: Colors.white,
                   width: larguraTela,
                   height: alturaTela,
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: EdgeInsets.only(bottom: 20),
-                        child: Text(
-                          Textos.telaLoginCadastroDescricao,
-                          style: TextStyle(fontSize: 18),
-                          textAlign: TextAlign.center,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(bottom: 20),
+                          child: Text(
+                            Textos.telaLoginCadastroDescricao,
+                            style: TextStyle(fontSize: 18),
+                            textAlign: TextAlign.center,
+                          ),
                         ),
-                      ),
-                      Visibility(
-                          visible: exibirCampos,
-                          child: Column(
-                            children: [
-                              Form(
-                                  key: _formKeyFormulario,
-                                  child: Wrap(
-                                    crossAxisAlignment:
-                                        WrapCrossAlignment.center,
-                                    children: [
-                                      Visibility(
-                                          visible: exibirDadosCadastro,
-                                          child: Container(
-                                              margin: EdgeInsets.all(10),
-                                              width: 400,
-                                              height: 70,
-                                              child: campos(campoUsuario,
-                                                  Textos.campoUsuario))),
-                                      Container(
-                                        margin: EdgeInsets.all(10),
-                                        width: 400,
-                                        height: 70,
-                                        child: campos(
-                                            campoEmail, Textos.campoEmail),
-                                      ),
-                                      Container(
-                                        margin: EdgeInsets.all(10),
-                                        width: 400,
-                                        height: 70,
-                                        child: campos(
-                                            campoSenha, Textos.campoSenha),
-                                      )
-                                    ],
-                                  )),
-                              Container(
-                                margin: EdgeInsets.only(top: 20),
-                                child: btnAcao(Textos.btnEntrar),
-                              )
-                            ],
-                          )),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          btnAcao(Textos.btnLogin),
-                          btnAcao(Textos.btnCadastrar),
-                        ],
-                      ),
-                    ],
+                        Visibility(
+                            visible: exibirCampos,
+                            child: Column(
+                              children: [
+                                Form(
+                                    key: _formKeyFormulario,
+                                    child: Wrap(
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.center,
+                                      children: [
+                                        Visibility(
+                                            visible: exibirDadosCadastro,
+                                            child: Container(
+                                                margin: EdgeInsets.all(10),
+                                                width: 400,
+                                                height: 70,
+                                                child: campos(campoUsuario,
+                                                    Textos.campoUsuario))),
+                                        Container(
+                                          margin: EdgeInsets.all(10),
+                                          width: 400,
+                                          height: 70,
+                                          child: campos(
+                                              campoEmail, Textos.campoEmail),
+                                        ),
+                                        Container(
+                                          margin: EdgeInsets.all(10),
+                                          width: 400,
+                                          height: 70,
+                                          child: campos(
+                                              campoSenha, Textos.campoSenha),
+                                        )
+                                      ],
+                                    )),
+                                Container(
+                                  margin: EdgeInsets.only(top: 20),
+                                  child: btnAcao(Textos.btnEntrar),
+                                )
+                              ],
+                            )),
+                        Wrap(
+                          children: [
+                            btnAcao(Textos.btnLogin),
+                            btnAcao(Textos.btnCadastrar),
+                          ],
+                        ),
+                      ],
+                    ),
                   )));
         }
       },
