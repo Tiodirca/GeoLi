@@ -227,11 +227,14 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
             width: 80,
             image: AssetImage('$caminhoImagem.png'),
           ),
-          Text(
-            nome,
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-            textAlign: TextAlign.center,
-          )
+         SizedBox(
+           width: 100,
+           child:  Text(
+             nome,
+             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+             textAlign: TextAlign.center,
+           ),
+         )
         ],
       );
 

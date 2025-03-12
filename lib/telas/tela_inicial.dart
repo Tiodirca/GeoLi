@@ -121,15 +121,19 @@ class _TelaInicialState extends State<TelaInicial>
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       contador = contador + 1;
       if (user != null) {
+        print(user.uid);
         MetodosAuxiliares.passarUidUsuario(user.uid);
         if (mounted) {
+          print("fdsdfcxvxcvxc");
           recuperarPontuacao(Constantes.fireBaseColecaoRegioes,
               Constantes.fireBaseDocumentoPontosJogadaRegioes, user.uid);
           recuperarNomeUsuario(user.uid);
         }
       } else {
-        if (contador >= 1 && contador <= 3) {
+        print(contador);
+        if (contador >= 2 && contador <= 3) {
           if (mounted) {
+            print("fdfds");
             MetodosAuxiliares.passarUidUsuario("");
             Navigator.pushReplacementNamed(
                 context, Constantes.rotaTelaLoginCadastro);
@@ -316,7 +320,8 @@ class _TelaInicialState extends State<TelaInicial>
                                   shape: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(15),
                                       borderSide: BorderSide(
-                                          width: 1, color:PaletaCores.corVerde)),
+                                          width: 1,
+                                          color: PaletaCores.corVerde)),
                                   onPressed: () {
                                     Navigator.pushReplacementNamed(context,
                                         Constantes.rotaTelaUsuarioDetalhado);

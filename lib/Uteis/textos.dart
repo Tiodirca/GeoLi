@@ -13,14 +13,14 @@ class Textos {
   static String btnDificuldadeMedio = "Médio";
   static String btnDificuldadeDificil = "Dificil";
   static String btnCadastrar = "Cadastrar Conta";
-  static String btnLogin = "Acessar Conta";
-  static String btnEntrar = "Entrar";
-  static String btnDesconectar = "Desconectar Conta";
+  static String btnAcessar = "Acessar Conta";
+  static String btnEntrar = "Entrar na conta";
+  static String btnSair = "Sair da Conta";
   static String btnMudarSenha = "Mudar Senha";
   static String btnCancelarEdicao = "Cancelar Edição";
-  static String btnAtualizar = "Atualizar Informações";
+  static String btnAtualizar = "Atualizar Dados";
   static String btnExcluirUsuario = "Excluir Usuario";
-  static String btnSalvarAlteracoes = "Salvar Alterações";
+  static String btnSalvarAlteracoes = "Salvar";
 
   // GERAIS
   static String nomeApp = "Geo Li";
@@ -29,7 +29,7 @@ class Textos {
   static String msgErrou = "Errado";
   static String campoEmail = "E-mail";
   static String campoSenha = "Senha";
-  static String campoUsuario = "Usuario/Apelido";
+  static String campoUsuario = "Nome/Usuario";
   static String campoSenhaNova = "Senha Nova";
   static String campoSenhaAntiga = "Senha Antiga";
 
@@ -77,6 +77,8 @@ class Textos {
   static String telaLoginCadastroTitulo = "Login/Cadastro";
   static String telaLoginCadastroDescricao =
       "Faça login ou faça o cadastro de um e-mail para poder jogar";
+  static String telaLoginCadastroDescricaoBtn =
+      "Aperte aqui para mudar a Opção";
 
   // TELA INICIAL
   static String descricaoTelaInicial = "Selecione qual jogo deseja jogar";

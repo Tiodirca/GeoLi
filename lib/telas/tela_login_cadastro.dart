@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/criar_dados_banco_firebase.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
@@ -96,53 +99,66 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
     }
   }
 
-  Widget campos(TextEditingController controle, String nomeCampo) => SizedBox(
-        width: 300,
-        child: TextFormField(
-          controller: controle,
-          validator: (value) {
-            if (value!.isEmpty) {
-              return Textos.erroCampoVazio;
-            }
-            return null;
-          },
-          decoration: InputDecoration(
-              hintText: nomeCampo,
-              enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide:
-                      BorderSide(width: 1, color: PaletaCores.corVerde)),
-              focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide:
-                      BorderSide(width: 1, color: PaletaCores.corVerde)),
-              errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide:
-                      BorderSide(width: 1, color: PaletaCores.corVermelha)),
-              focusedErrorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide:
-                      BorderSide(width: 1, color: PaletaCores.corVermelha))),
-        ),
-      );
+  Widget campos(TextEditingController controle, String nomeCampo,
+          String nomeImagem) =>
+      Container(
+          margin: EdgeInsets.all(5),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image(
+                height: 100,
+                width: 100,
+                image: AssetImage("$nomeImagem.png"),
+              ),
+              SizedBox(
+                width: Platform.isAndroid || Platform.isIOS ? 200 : 300,
+                height: 80,
+                child: TextFormField(
+                  controller: controle,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return Textos.erroCampoVazio;
+                    }
+                    return null;
+                  },
+                  decoration: InputDecoration(
+                      labelText: nomeCampo,
+                      labelStyle: TextStyle(
+                        color: Colors.black
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                              width: 1, color: PaletaCores.corVerde)),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                              width: 1, color: PaletaCores.corVerde)),
+                      errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                              width: 1, color: PaletaCores.corVermelha)),
+                      focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                              width: 1, color: PaletaCores.corVermelha))),
+                ),
+              )
+            ],
+          ));
 
-  Widget btnAcao(String nomeBtn) => Container(
+  Widget cartaoBtn(String nomeImagem, String nomeBtn) => Container(
         margin: EdgeInsets.all(10),
-        width: 200,
-        height: 40,
+        width: 140,
+        height: 170,
         child: FloatingActionButton(
-          heroTag: nomeBtn,
           elevation: 0,
+          heroTag: nomeBtn,
           backgroundColor: Colors.white,
-          shape: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
-              borderSide: BorderSide(
-                color: PaletaCores.corVerde,
-                width: 1,
-              )),
           onPressed: () {
-            if (nomeBtn == Textos.btnLogin) {
+            if (nomeBtn == Textos.btnAcessar) {
               setState(() {
                 exibirCampos = true;
                 exibirDadosCadastro = false;
@@ -168,9 +184,26 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
               }
             }
           },
-          child: Text(
-            nomeBtn,
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+          shape: RoundedRectangleBorder(
+              side: BorderSide(color: PaletaCores.corVerde, width: 2),
+              borderRadius: const BorderRadius.all(Radius.circular(40))),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image(
+                height: 120,
+                width: 120,
+                image: AssetImage("$nomeImagem.png"),
+              ),
+              Text(
+                nomeBtn,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
+              )
+            ],
           ),
         ),
       );
@@ -196,71 +229,87 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
                       fontWeight: FontWeight.bold, color: Colors.white),
                 ),
               ),
-              body: Container(
-                  padding: EdgeInsets.only(top: 20),
-                  color: Colors.white,
-                  width: larguraTela,
-                  height: alturaTela,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(bottom: 20),
-                          child: Text(
-                            Textos.telaLoginCadastroDescricao,
-                            style: TextStyle(fontSize: 18),
-                            textAlign: TextAlign.center,
+              body: GestureDetector(
+                child: Container(
+                    color: Colors.white,
+                    width: larguraTela,
+                    height: alturaTela,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Container(
+                            margin: EdgeInsets.only(bottom: 10),
+                            child: Text(
+                              Textos.telaLoginCadastroDescricao,
+                              style: TextStyle(fontSize: 18),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
-                        ),
-                        Visibility(
-                            visible: exibirCampos,
-                            child: Column(
-                              children: [
-                                Form(
-                                    key: _formKeyFormulario,
-                                    child: Wrap(
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.center,
-                                      children: [
-                                        Visibility(
-                                            visible: exibirDadosCadastro,
-                                            child: Container(
-                                                margin: EdgeInsets.all(10),
-                                                width: 400,
-                                                height: 70,
-                                                child: campos(campoUsuario,
-                                                    Textos.campoUsuario))),
-                                        Container(
-                                          margin: EdgeInsets.all(10),
-                                          width: 400,
-                                          height: 70,
-                                          child: campos(
-                                              campoEmail, Textos.campoEmail),
+                          Visibility(
+                              visible: exibirCampos,
+                              child: Column(
+                                children: [
+                                  Form(
+                                      key: _formKeyFormulario,
+                                      child: Wrap(
+                                        crossAxisAlignment:
+                                            WrapCrossAlignment.center,
+                                        children: [
+                                          Visibility(
+                                              visible: exibirDadosCadastro,
+                                              child: campos(
+                                                  campoUsuario,
+                                                  Textos.campoUsuario,
+                                                  CaminhosImagens.gestoNome)),
+                                          campos(campoEmail, Textos.campoEmail,
+                                              CaminhosImagens.gestoEmail),
+                                          campos(campoSenha, Textos.campoSenha,
+                                              CaminhosImagens.gestoSenha),
+                                        ],
+                                      )),
+                                  Container(
+                                    margin: EdgeInsets.only(top: 10),
+                                    child: cartaoBtn(
+                                        CaminhosImagens.gestoEntrar,
+                                        Textos.btnEntrar),
+                                  ),
+                                  Container(
+                                      margin: EdgeInsets.only(top: 10),
+                                      width: 50,
+                                      height: 50,
+                                      child: FloatingActionButton(
+                                        backgroundColor: Colors.white,
+                                        onPressed: () {
+                                          setState(() {
+                                            exibirCampos = false;
+                                          });
+                                        },
+                                        child: Icon(
+                                          size: 30,
+                                          Icons.close,
+                                          color: PaletaCores.corVermelha,
                                         ),
-                                        Container(
-                                          margin: EdgeInsets.all(10),
-                                          width: 400,
-                                          height: 70,
-                                          child: campos(
-                                              campoSenha, Textos.campoSenha),
-                                        )
-                                      ],
-                                    )),
-                                Container(
-                                  margin: EdgeInsets.only(top: 20),
-                                  child: btnAcao(Textos.btnEntrar),
-                                )
-                              ],
-                            )),
-                        Wrap(
-                          children: [
-                            btnAcao(Textos.btnLogin),
-                            btnAcao(Textos.btnCadastrar),
-                          ],
-                        ),
-                      ],
-                    ),
-                  )));
+                                      ))
+                                ],
+                              )),
+                          Visibility(
+                              visible: !exibirCampos,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  cartaoBtn(CaminhosImagens.gestoEntrar,
+                                      Textos.btnAcessar),
+                                  cartaoBtn(CaminhosImagens.gestoCadastro,
+                                      Textos.btnCadastrar),
+                                ],
+                              )),
+                        ],
+                      ),
+                    )),
+                onTap: () {
+                  FocusScope.of(context).requestFocus(FocusNode());
+                },
+              ));
         }
       },
     );

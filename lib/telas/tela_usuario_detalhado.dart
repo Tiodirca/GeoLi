@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
@@ -23,6 +26,8 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
   bool exibirTelaCarregamento = true;
   bool exibirAutenticacao = false;
   bool exibirBtnAtualizar = false;
+  double tamanhoImagemPadrao = 90;
+  double tamanhoImagemReduzida = 50;
   final _formKeyFormulario = GlobalKey<FormState>();
   final _formKeyExcluirDados = GlobalKey<FormState>();
   String emailAuxiliarValidar = "";
@@ -174,8 +179,8 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
 
   chamarExibirMensagens(String tipoMensagem, String tipoExibicao) {
     MetodosAuxiliares.exibirMensagens(
-        Textos.sucessoExcluirDados,
-        Textos.msgAcertou,
+        tipoMensagem,
+        tipoExibicao,
         Constantes.duracaoExibicaoToastLoginCadastro,
         Constantes.larguraToastLoginCadastro,
         context);
@@ -232,45 +237,71 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
     }
   }
 
-  Widget campos(
-          TextEditingController controle, String nomeCampo, bool ativarCampo) =>
+  Widget campos(TextEditingController controle, String nomeCampo,
+          bool ativarCampo, String nomeImagem) =>
       Container(
-        margin: EdgeInsets.only(right: 10),
-        width: 300,
-        child: TextFormField(
-          enabled: ativarCampo,
-          controller: controle,
-          validator: (value) {
-            if (value!.isEmpty) {
-              return Textos.erroCampoVazio;
-            }
-            return null;
-          },
-          decoration: InputDecoration(
-              hintText: nomeCampo,
-              disabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide:
-                      BorderSide(width: 1, color: PaletaCores.corVerde)),
-              enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(width: 2, color: PaletaCores.corAzul)),
-              focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(width: 1, color: PaletaCores.corAzul)),
-              errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide:
-                      BorderSide(width: 1, color: PaletaCores.corVermelha)),
-              focusedErrorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide:
-                      BorderSide(width: 2, color: PaletaCores.corAzul))),
-        ),
-      );
+          width: 500,
+          margin: EdgeInsets.all(5),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Image(
+                height: 80,
+                width: 80,
+                image: AssetImage("$nomeImagem.png"),
+              ),
+              SizedBox(
+                width: Platform.isAndroid || Platform.isIOS ? 200 : 300,
+                height: 80,
+                child: TextFormField(
+                  controller: controle,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return Textos.erroCampoVazio;
+                    }
+                    return null;
+                  },
+                  enabled: ativarCampo,
+                  decoration: InputDecoration(
+                      labelText: nomeCampo,
+                      labelStyle: TextStyle(color: Colors.black),
+                      disabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                              width: 1, color: PaletaCores.corVerde)),
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                              width: 1, color: PaletaCores.corVerde)),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                              width: 1, color: PaletaCores.corVerde)),
+                      errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                              width: 1, color: PaletaCores.corVermelha)),
+                      focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          borderSide: BorderSide(
+                              width: 1, color: PaletaCores.corVermelha))),
+                ),
+              ),
+              Visibility(
+                  visible: nomeCampo == Textos.campoEmail ||
+                          nomeCampo == Textos.campoUsuario
+                      ? true
+                      : false,
+                  child: btnIcone(
+                    Icons.edit,
+                    PaletaCores.corOuro,
+                    nomeCampo,
+                  ))
+            ],
+          ));
 
-  Widget btnAcao(String nomeBtn, Color corBtn, double larguraBtn) => Container(
-        margin: EdgeInsets.all(10),
+  Widget btnAcao(String nomeBtn, Color corBtn, double larguraBtn) => SizedBox(
         width: larguraBtn,
         height: 50,
         child: FloatingActionButton(
@@ -284,15 +315,7 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
                 width: 1,
               )),
           onPressed: () async {
-            if (nomeBtn == Textos.btnCancelarEdicao) {
-              setState(() {
-                ativarCampoUsuario = false;
-                ativarCampoEmail = false;
-                ativarCampoSenha = false;
-                exibirBtnMudarSenha = true;
-                exibirBtnAtualizar = false;
-              });
-            } else if (nomeBtn == Textos.btnMudarSenha) {
+            if (nomeBtn == Textos.btnMudarSenha) {
               setState(() {
                 ativarCampoSenha = true;
                 ativarCampoUsuario = false;
@@ -315,14 +338,10 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
                   });
                 }
               }
-            } else if (nomeBtn == Textos.btnDesconectar) {
-              desconetarUsuario();
             } else if (nomeBtn == Textos.btnSalvarAlteracoes) {
               if (_formKeyFormulario.currentState!.validate()) {
                 autenticarUsuario(Textos.campoEmail);
               }
-            } else if (nomeBtn == Textos.btnExcluirUsuario) {
-              alertaExclusao(context);
             }
           },
           child: Text(
@@ -333,7 +352,8 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
         ),
       );
 
-  Widget btnIcone(IconData icone, Color cor, String nomeBtn) => SizedBox(
+  Widget btnIcone(IconData icone, Color cor, String nomeBtn) => Container(
+        margin: EdgeInsets.symmetric(horizontal: 10),
         width: 45,
         height: 45,
         child: FloatingActionButton(
@@ -378,6 +398,70 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
         ),
       );
 
+  Widget cartaoBtn(String nomeImagem, String nomeBtn, Color cor, double altura,
+          double tamanhoImagem) =>
+      Container(
+        margin: EdgeInsets.all(5),
+        width: 140,
+        height: altura,
+        child: FloatingActionButton(
+          elevation: 0,
+          heroTag: nomeBtn,
+          backgroundColor: Colors.white,
+          onPressed: () {
+            if (nomeBtn == Textos.btnSair) {
+              desconetarUsuario();
+            } else if (nomeBtn == Textos.btnExcluirUsuario) {
+              alertaExclusao(context);
+            } else if (nomeBtn == Textos.btnMudarSenha) {
+              setState(() {
+                ativarCampoSenha = true;
+                ativarCampoUsuario = false;
+                ativarCampoEmail = false;
+                exibirBtnMudarSenha = false;
+                exibirBtnAtualizar = true;
+              });
+            } else if (nomeBtn == Textos.btnAtualizar) {
+              //Verificando se o usuario esta
+              // alterando SOMENTE o nome de usuario
+              if (ativarCampoUsuario &&
+                  emailAuxiliarValidar == campoEmail.text) {
+                if (_formKeyFormulario.currentState!.validate()) {
+                  atualizarNomeUsuario();
+                }
+              } else {
+                if (_formKeyFormulario.currentState!.validate()) {
+                  setState(() {
+                    exibirAutenticacao = true;
+                  });
+                }
+              }
+            }
+          },
+          shape: RoundedRectangleBorder(
+              side: BorderSide(color: cor, width: 2),
+              borderRadius: const BorderRadius.all(Radius.circular(40))),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image(
+                height: tamanhoImagem,
+                width: tamanhoImagem,
+                image: AssetImage("$nomeImagem.png"),
+              ),
+              Text(
+                nomeBtn,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black),
+              )
+            ],
+          ),
+        ),
+      );
+
   Future<void> alertaExclusao(BuildContext context) async {
     return showDialog<void>(
       context: context,
@@ -409,7 +493,8 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
                     ),
                     Form(
                       key: _formKeyExcluirDados,
-                      child: campos(campoSenha, Textos.campoSenha, true),
+                      child: campos(campoSenha, Textos.campoSenha, true,
+                          CaminhosImagens.gestoSenha),
                     )
                   ],
                 ),
@@ -491,9 +576,9 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
                           textAlign: TextAlign.center,
                         ),
                         Container(
-                            margin: EdgeInsets.only(top: 20),
+                            margin: EdgeInsets.only(top: 10),
                             width: larguraTela,
-                            height: alturaTela * 0.4,
+                            height: alturaTela * 0.45,
                             child: LayoutBuilder(
                               builder: (context, constraints) {
                                 if (exibirAutenticacao) {
@@ -519,7 +604,8 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
                                                 ativarCampoEmail == true
                                                     ? Textos.campoSenha
                                                     : Textos.campoSenhaAntiga,
-                                                true),
+                                                true,
+                                                CaminhosImagens.gestoSenha),
                                           )
                                         ],
                                       ),
@@ -529,109 +615,50 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
                                         children: [
                                           btnIcone(Icons.close,
                                               PaletaCores.corVermelha, ""),
-                                          btnAcao(Textos.btnSalvarAlteracoes,
-                                              PaletaCores.corAzul, 100),
+                                          cartaoBtn(
+                                              CaminhosImagens.gestoSenha,
+                                              Textos.btnSalvarAlteracoes,
+                                              PaletaCores.corAzul,
+                                              100,
+                                              tamanhoImagemReduzida),
                                         ],
                                       )
                                     ],
                                   );
                                 } else {
                                   return Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      SizedBox(
-                                        width: 400,
-                                        height: alturaTela * 0.3,
-                                        child: Form(
-                                          key: _formKeyFormulario,
-                                          child: Column(
-                                            children: [
-                                              SizedBox(
-                                                width: 400,
-                                                height: 70,
-                                                child: Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    campos(
-                                                        campoUsuario,
-                                                        Textos.campoUsuario,
-                                                        ativarCampoUsuario),
-                                                    btnIcone(
-                                                      Icons.edit,
-                                                      PaletaCores.corOuro,
-                                                      Textos.campoUsuario,
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: 400,
-                                                height: 70,
-                                                child: Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    campos(
-                                                        campoEmail,
-                                                        Textos.campoEmail,
-                                                        ativarCampoEmail),
-                                                    btnIcone(
-                                                      Icons.edit,
-                                                      PaletaCores.corOuro,
-                                                      Textos.campoEmail,
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                              Visibility(
-                                                  visible: ativarCampoSenha,
-                                                  child: SizedBox(
-                                                    width: 400,
-                                                    height: 70,
-                                                    child: Row(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        campos(
-                                                            campoSenhaNova,
-                                                            Textos
-                                                                .campoSenhaNova,
-                                                            ativarCampoSenha),
-                                                      ],
-                                                    ),
-                                                  )),
-                                            ],
-                                          ),
+                                      Form(
+                                        key: _formKeyFormulario,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            campos(
+                                                campoUsuario,
+                                                Textos.campoUsuario,
+                                                ativarCampoUsuario,
+                                                CaminhosImagens.gestoNome),
+                                            campos(
+                                                campoEmail,
+                                                Textos.campoEmail,
+                                                ativarCampoEmail,
+                                                CaminhosImagens.gestoEmail),
+                                            Visibility(
+                                              visible: ativarCampoSenha,
+                                              child: campos(
+                                                  campoSenhaNova,
+                                                  Textos.campoSenhaNova,
+                                                  ativarCampoSenha,
+                                                  CaminhosImagens.gestoSenha),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Visibility(
-                                              visible: exibirBtnAtualizar,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  btnAcao(
-                                                      Textos.btnCancelarEdicao,
-                                                      PaletaCores.corVermelha,
-                                                      100),
-                                                  btnAcao(
-                                                      Textos.btnAtualizar,
-                                                      PaletaCores.corLaranja,
-                                                      200),
-                                                ],
-                                              )),
-                                          Visibility(
-                                            visible: exibirBtnMudarSenha,
-                                            child: btnAcao(Textos.btnMudarSenha,
-                                                PaletaCores.corAzul, 100),
-                                          )
-                                        ],
-                                      )
                                     ],
                                   );
                                 }
@@ -645,14 +672,58 @@ class _TelaUsuarioDetalhadoState extends State<TelaUsuarioDetalhado> {
               },
             ),
             bottomNavigationBar: Container(
+                width: larguraTela,
+                height: 260,
                 color: Colors.white,
-                child: Wrap(
-                  alignment: WrapAlignment.center,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    btnAcao(
-                        Textos.btnDesconectar, PaletaCores.corVermelha, 200),
-                    btnAcao(
-                        Textos.btnExcluirUsuario, PaletaCores.corVermelha, 150),
+                    Visibility(
+                      visible: !exibirAutenticacao,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Visibility(
+                              visible: exibirBtnAtualizar,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  btnIcone(Icons.close, PaletaCores.corVermelha,
+                                      Textos.btnCancelarEdicao),
+                                  cartaoBtn(
+                                      CaminhosImagens.gestoSenha,
+                                      Textos.btnAtualizar,
+                                      PaletaCores.corLaranja,
+                                      100,
+                                      tamanhoImagemReduzida),
+                                ],
+                              )),
+                          Visibility(
+                            visible: exibirBtnMudarSenha,
+                            child: cartaoBtn(
+                                CaminhosImagens.gestoSenha,
+                                Textos.btnMudarSenha,
+                                PaletaCores.corAzul,
+                                100,
+                                tamanhoImagemReduzida),
+                          )
+                        ],
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        cartaoBtn(CaminhosImagens.gestoSair, Textos.btnSair,
+                            PaletaCores.corVermelha, 140, tamanhoImagemPadrao),
+                        cartaoBtn(
+                            CaminhosImagens.gestoExcluir,
+                            Textos.btnExcluirUsuario,
+                            PaletaCores.corVermelha,
+                            140,
+                            tamanhoImagemPadrao)
+                      ],
+                    )
                   ],
                 )),
           );

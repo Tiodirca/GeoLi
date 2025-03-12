@@ -251,7 +251,9 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
                     const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: exibirBtnProximoNivel == true
+                    ? MainAxisAlignment.spaceEvenly
+                    : MainAxisAlignment.center,
                 children: [
                   cardOpcoes(CaminhosImagens.btnJogarNovamenteGesto,
                       Textos.btnJogarNovamente, context),

@@ -7,6 +7,15 @@ class CaminhosImagens {
   static const btnGestoSistemaSolarImagem =
       "assets/imagens/sistema_solar/gestos_planetas/gesto_sistema_solar";
 
+  static const gestoExcluir = "assets/imagens/gesto_excluir";
+  static const gestoSair = "assets/imagens/gesto_sair";
+  static const gestoEntrar = "assets/imagens/gesto_entrar";
+  static const gestoCadastro = "assets/imagens/gesto_cadastro";
+  static const gestoCancelar = "assets/imagens/gesto_cancelar";
+  static const gestoSenha = "assets/imagens/gesto_senha";
+  static const gestoNome = "assets/imagens/gesto_nome";
+  static const gestoEmail = "assets/imagens/gesto_email";
+
   static const iconeClick = "assets/imagens/icon_click";
 
   // SISTEMA SOLAR BALAO
