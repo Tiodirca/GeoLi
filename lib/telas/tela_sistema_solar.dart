@@ -483,16 +483,16 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                         visible: !exibirJogo && !exibirTutorial,
                         child: Container(
                           margin: EdgeInsets.only(right: 10),
-                          width: 40,
-                          height: 40,
+                          width: 50,
+                          height: 50,
                           child: FloatingActionButton(
                             heroTag: Textos.btnExcluir,
                             backgroundColor: Colors.white,
                             elevation: 0,
                             shape: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(40),
+                                borderRadius: BorderRadius.circular(15),
                                 borderSide:
-                                    BorderSide(width: 1, color: corPadrao)),
+                                    BorderSide(width: 1, color: Colors.black)),
                             onPressed: () {
                               setState(() {
                                 exibirTelaResetarJogo = !exibirTelaResetarJogo;
@@ -589,22 +589,17 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                               visible: !exibirBtnDificuldade,
                               child: Column(
                                 children: [
-                                  Container(
-                                    margin: EdgeInsets.all(10),
-                                    child: Text(
-                                      Textos.descriacaoSistemaSolar,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 18),
-                                    ),
-                                  ),
                                   SizedBox(
                                     height: 200,
-                                    child: Wrap(
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.center,
-                                      alignment: WrapAlignment.center,
+                                    child: Column(
                                       children: [
+                                        Text(
+                                          Textos.descriacaoSistemaSolar,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 18),
+                                        ),
                                         btnAcao(Textos.btnComecarJogo),
                                       ],
                                     ),
@@ -613,34 +608,30 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                               ),
                             ),
                             Visibility(
-                              visible: exibirBtnDificuldade,
-                              child: Column(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.all(10),
-                                    child: Text(
-                                      Textos.descricaoSistemaSolarDificuldade,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Colors.black, fontSize: 18),
-                                    ),
+                                visible: exibirBtnDificuldade,
+                                child: SizedBox(
+                                  height: 200,
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        Textos.descricaoSistemaSolarDificuldade,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            color: Colors.black, fontSize: 18),
+                                      ),
+                                      Wrap(
+                                        crossAxisAlignment:
+                                            WrapCrossAlignment.center,
+                                        alignment: WrapAlignment.center,
+                                        children: [
+                                          btnAcao(Textos.btnDificuldadeFacil),
+                                          btnAcao(Textos.btnDificuldadeMedio),
+                                          btnAcao(Textos.btnDificuldadeDificil),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                  SizedBox(
-                                    height: 200,
-                                    child: Wrap(
-                                      crossAxisAlignment:
-                                          WrapCrossAlignment.center,
-                                      alignment: WrapAlignment.center,
-                                      children: [
-                                        btnAcao(Textos.btnDificuldadeFacil),
-                                        btnAcao(Textos.btnDificuldadeMedio),
-                                        btnAcao(Textos.btnDificuldadeDificil),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
+                                )),
                             Visibility(
                                 visible: exibirTelaResetarJogo,
                                 child: WidgetTelaResetarDados(

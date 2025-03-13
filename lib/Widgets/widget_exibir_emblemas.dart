@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/emblemas.dart';
+import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
@@ -48,47 +49,69 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
     return emblemas;
   }
 
+  validarImagemBtn(String nomeBtn) {
+    String caminhoImagem = "";
+    if (nomeBtn == Textos.btnRegioesMapa) {
+      caminhoImagem = CaminhosImagens.gestoSim;
+    } else if (nomeBtn == Textos.btnSistemaSolar) {
+      caminhoImagem = CaminhosImagens.btnGestoSistemaSolarImagem;
+    } else if (nomeBtn == Textos.btnEmblemas) {
+      caminhoImagem = CaminhosImagens.gestoCancelar;
+    }
+    return caminhoImagem;
+  }
+
   Widget btnAcao(bool visibilidade, String nomeBtn, bool desativarBtn) =>
       Visibility(
           visible: visibilidade,
           child: SizedBox(
             width: 80,
-            height: 40,
+            height: 120,
             child: FloatingActionButton(
-              heroTag: nomeBtn,
-              elevation: 0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                side: BorderSide(color: widget.corBordas),
-              ),
-              backgroundColor: Colors.white,
-              onPressed: () {
-                setState(() {
-                  exibirTela = true;
-                  //definindo Delay para evitar dar erro de tamanho
-                  Future.delayed(Duration(seconds: 1)).then(
-                    (value) {
-                      setState(() {
-                        exibirAreaInternaTela = true;
-                        if (nomeBtn == Textos.btnRegioesMapa) {
-                          exibirMapaRegioes = true;
-                        } else if (nomeBtn == Textos.btnSistemaSolar) {
-                          exibirSistemaSolar = true;
-                        } else {
-                          exibirSistemaSolar = false;
-                          exibirMapaRegioes = false;
-                        }
-                      });
-                    },
-                  );
-                });
-              },
-              child: Text(
-                nomeBtn,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
+                heroTag: nomeBtn,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  side: BorderSide(color: widget.corBordas),
+                ),
+                backgroundColor: Colors.white,
+                onPressed: () {
+                  setState(() {
+                    exibirTela = true;
+                    //definindo Delay para evitar dar erro de tamanho
+                    Future.delayed(Duration(seconds: 1)).then(
+                      (value) {
+                        setState(() {
+                          exibirAreaInternaTela = true;
+                          if (nomeBtn == Textos.btnRegioesMapa) {
+                            exibirMapaRegioes = true;
+                          } else if (nomeBtn == Textos.btnSistemaSolar) {
+                            exibirSistemaSolar = true;
+                          } else {
+                            exibirSistemaSolar = false;
+                            exibirMapaRegioes = false;
+                          }
+                        });
+                      },
+                    );
+                  });
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image(
+                      height: 70,
+                      width: 70,
+                      image: AssetImage("${validarImagemBtn(nomeBtn)}.png"),
+                    ),
+                    Text(
+                      nomeBtn,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ],
+                )),
           ));
 
   @override
@@ -98,13 +121,13 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
     return AnimatedContainer(
         color: Colors.white,
         width: larguraTela,
-        height: exibirTela ? alturaTela * 0.8 : 60,
+        height: exibirTela ? alturaTela * 0.8 : 130,
         duration: const Duration(seconds: 1),
         child: Column(
           children: [
             SizedBox(
               width: larguraTela,
-              height: 60,
+              height: 130,
               child: Card(
                 elevation: 0,
                 color: Colors.white,
@@ -112,6 +135,7 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
                     borderRadius: const BorderRadius.all(Radius.circular(10))),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     SizedBox(
                       width: Platform.isAndroid || Platform.isIOS
@@ -146,12 +170,13 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
                     ),
                     btnAcao(true, Textos.btnEmblemas, !exibirTela),
                     btnAcao(
-                        widget.nomeBtn == Textos.btnRegioesMapa ||
-                                widget.nomeBtn == Textos.btnSistemaSolar
-                            ? true
-                            : false,
-                        widget.nomeBtn,
-                        !exibirTela)
+                      widget.nomeBtn == Textos.btnRegioesMapa ||
+                              widget.nomeBtn == Textos.btnSistemaSolar
+                          ? true
+                          : false,
+                      widget.nomeBtn,
+                      !exibirTela,
+                    )
                   ],
                 ),
               ),
@@ -172,7 +197,7 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
                                 BorderSide(width: 1, color: widget.corBordas)),
                       ),
                       width: larguraTela * 0.9,
-                      height: 500,
+                      height: 440,
                       child: LayoutBuilder(
                         builder: (context, constraints) {
                           if (exibirMapaRegioes) {

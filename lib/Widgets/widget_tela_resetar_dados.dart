@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/constantes_estados_gestos.dart';
 import 'package:geoli/Uteis/constantes_sistema_solar.dart';
@@ -171,18 +172,38 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text(
-                'Não',
-                style: TextStyle(color: Colors.black),
+              child: Column(
+                children: [
+                  Image(
+                    height: 90,
+                    width: 90,
+                    image: AssetImage(
+                        "${CaminhosImagens.gestoCancelar}.png"),
+                  ),
+                  Text(
+                    'Cancelar',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
               ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: const Text(
-                'Sim',
-                style: TextStyle(color: Colors.black),
+              child: Column(
+                children: [
+                  Image(
+                    height: 90,
+                    width: 90,
+                    image: AssetImage(
+                        "${CaminhosImagens.gestoSim}.png"),
+                  ),
+                  Text(
+                    'Sim',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
               ),
               onPressed: () {
                 setState(() {
@@ -208,7 +229,7 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
                         context, Constantes.rotaTelaSistemaSolar);
                   } else {
                     reiniciarDadosRegioes();
-                    Future.delayed(Duration(seconds:0), () {
+                    Future.delayed(Duration(seconds: 0), () {
                       Navigator.pushReplacementNamed(
                           context, Constantes.rotaTelaInicialRegioes);
                     });
@@ -231,7 +252,7 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
         width: Platform.isAndroid || Platform.isIOS
             ? larguraTela
             : larguraTela * 0.4,
-        height: 200,
+        height: 250,
         child: Card(
             color: Colors.white,
             shape: RoundedRectangleBorder(
@@ -251,9 +272,9 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
                     style: TextStyle(fontSize: 17),
                   ),
                   Container(
-                      margin: EdgeInsets.all(10),
-                      width: 200,
-                      height: 60,
+                      margin: EdgeInsets.only(top: 10),
+                      width: 130,
+                      height: 130,
                       child: FloatingActionButton(
                         elevation: 0,
                         backgroundColor: Colors.white,
@@ -264,13 +285,14 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
                         onPressed: () {
                           alertaExclusao(context);
                         },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(
-                              Icons.reset_tv_outlined,
-                              color: PaletaCores.corVermelha,
+                            Image(
+                              height: 90,
+                              width: 90,
+                              image: AssetImage(
+                                  "${CaminhosImagens.gestoExcluir}.png"),
                             ),
                             Text(
                               Textos.btnExcluir,

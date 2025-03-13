@@ -14,7 +14,6 @@ class MetodosAuxiliares {
   static String nomeGestoPlaneta = "";
   static int pontuacaoAtual = 0;
   static String status = "";
-  static int quantRegioesLiberadas = 0;
   static String uIDUsuario = "";
 
   //Metodo para passar se o usuario acertou ou nao
@@ -129,16 +128,16 @@ class MetodosAuxiliares {
     if (tipoAlerta == Constantes.msgAcerto) {
       return ElegantNotification.success(
         position: Alignment.center,
-        height: 120,
-        width: 120,
+        height: 130,
+        width: 130,
         showProgressIndicator: false,
         borderRadius: BorderRadius.circular(40),
         icon: null,
         iconSize: 0,
         animation: AnimationType.fromTop,
         border: Border.all(color: PaletaCores.corVerde, width: 2),
-        animationDuration: const Duration(seconds: 1),
-        toastDuration: Duration(milliseconds: 1700),
+        animationDuration: const Duration(milliseconds: 500),
+        toastDuration: Duration(milliseconds: 1500),
         displayCloseButton: false,
         description: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,7 +145,7 @@ class MetodosAuxiliares {
             Image(
               height: 80,
               width: 80,
-              image: AssetImage("${CaminhosImagens.gestoSenha}.png"),
+              image: AssetImage("${CaminhosImagens.gestoAcertar}.png"),
             ),
             Text(msg)
           ],
@@ -155,16 +154,16 @@ class MetodosAuxiliares {
     } else {
       return ElegantNotification.error(
         position: Alignment.center,
-        height: 120,
-        width: 120,
+        height: 130,
+        width: 130,
         showProgressIndicator: false,
         borderRadius: BorderRadius.circular(40),
         icon: null,
         iconSize: 0,
         animation: AnimationType.fromTop,
         border: Border.all(color: PaletaCores.corVermelha, width: 2),
-        animationDuration: const Duration(seconds: 1),
-        toastDuration: Duration(milliseconds: 1700),
+        animationDuration: const Duration(milliseconds: 500),
+        toastDuration: Duration(milliseconds: 1500),
         displayCloseButton: false,
         description: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -172,7 +171,7 @@ class MetodosAuxiliares {
             Image(
               height: 80,
               width: 80,
-              image: AssetImage("${CaminhosImagens.gestoSenha}.png"),
+              image: AssetImage("${CaminhosImagens.gestoErrado}.png"),
             ),
             Text(msg)
           ],

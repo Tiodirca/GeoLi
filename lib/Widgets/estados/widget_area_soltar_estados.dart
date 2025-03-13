@@ -124,19 +124,19 @@ class _WidgetAreaSoltarEstadosState extends State<WidgetAreaSoltarEstados>
                   estado.acerto = true;
                   exibirIndicadorTutorial = false;
                 });
-                // chamando metodo para passar confirmacao do acerto
-                MetodosAuxiliares.confirmarAcerto(Constantes.msgAcerto);
-                if(mounted){
+                if (mounted) {
                   MetodosAuxiliares.exibirMensagensDuranteJogo(
                       Textos.msgAcertou, Constantes.msgAcerto, context);
+                  // chamando metodo para passar confirmacao do acerto
+                  MetodosAuxiliares.confirmarAcerto(Constantes.msgAcerto);
                 }
               } else {
-                if(mounted){
+                if (mounted) {
                   MetodosAuxiliares.exibirMensagensDuranteJogo(
                       Textos.msgErrou, Constantes.msgErro, context);
+                  // chamando metodo para passar confirmacao do erro
+                  MetodosAuxiliares.confirmarAcerto(Constantes.msgErro);
                 }
-                // chamando metodo para passar confirmacao do erro
-                MetodosAuxiliares.confirmarAcerto(Constantes.msgErro);
               }
             },
           ),

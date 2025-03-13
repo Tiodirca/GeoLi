@@ -154,7 +154,7 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
 
   Widget cartaoRegiao(String nomeImagem, String nomeRegiao) => Container(
         margin: EdgeInsets.only(bottom: 10, left: 10.0, right: 10.0),
-        width: 150,
+        width: 130,
         height: 170,
         child: FloatingActionButton(
           elevation: 0,
@@ -238,14 +238,14 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
               actions: [
                 Container(
                   margin: EdgeInsets.only(right: 10),
-                  width: 40,
-                  height: 40,
+                  width: 50,
+                  height: 50,
                   child: FloatingActionButton(
                     heroTag: Textos.btnExcluir,
                     backgroundColor: Colors.white,
                     elevation: 0,
                     shape: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(40),
+                        borderRadius: BorderRadius.circular(15),
                         borderSide: BorderSide(width: 1, color: Colors.black)),
                     onPressed: () {
                       setState(() {

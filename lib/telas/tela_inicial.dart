@@ -10,9 +10,7 @@ import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import 'package:geoli/Widgets/widget_exibir_emblemas.dart';
 import 'package:geoli/Widgets/widget_tela_resetar_dados.dart';
-import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shared_preferences_android/shared_preferences_android.dart';
 
 class TelaInicial extends StatefulWidget {
   const TelaInicial({super.key});
@@ -34,13 +32,6 @@ class _TelaInicialState extends State<TelaInicial>
   String caminhoImagemEstado = CaminhosImagens.btnGestoEstadosBrasileiroImagem;
   String caminhoImagemSistemaSolar = CaminhosImagens.btnGestoSistemaSolarImagem;
   Color corPadrao = PaletaCores.corVerde;
-
-  static const SharedPreferencesAsyncAndroidOptions options =
-      SharedPreferencesAsyncAndroidOptions(
-          backend: SharedPreferencesAndroidBackendLibrary.SharedPreferences,
-          originalSharedPreferencesOptions:
-              AndroidSharedPreferencesStoreOptions(
-                  fileName: 'the_name_of_a_file'));
 
   @override
   void initState() {
@@ -189,22 +180,27 @@ class _TelaInicialState extends State<TelaInicial>
             });
           },
         );
-        exibirTelaCarregamento = false;
+        if (nomeColecao != Constantes.fireBaseColecaoRegioes) {
+          exibirTelaCarregamento = false;
+        }
       },
     );
   }
 
   Widget cartao(String nomeImagem, String nome) => Container(
-        margin: EdgeInsets.only(bottom: 20),
-        width: 170,
-        height: 170,
+        margin: EdgeInsets.only(bottom: 10),
+        width: 140,
+        height: 150,
         child: FloatingActionButton(
           elevation: 0,
           heroTag: nome,
           backgroundColor: Colors.white,
           onPressed: () {
             if (nome == Textos.btnSistemaSolar) {
+              //Zerando metodos para evitar passar
+              // informacao incorreta para a tela
               MetodosAuxiliares.passarPontuacaoAtual(0);
+              MetodosAuxiliares.confirmarAcerto("");
               Navigator.pushReplacementNamed(
                   context, Constantes.rotaTelaSistemaSolar);
             } else if (nome == Textos.btnEstadoBrasileiros) {
@@ -213,7 +209,7 @@ class _TelaInicialState extends State<TelaInicial>
             }
           },
           shape: RoundedRectangleBorder(
-              side: BorderSide(color: corPadrao, width: 2),
+              side: BorderSide(color: corPadrao, width: 1),
               borderRadius: const BorderRadius.all(Radius.circular(40))),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -259,21 +255,60 @@ class _TelaInicialState extends State<TelaInicial>
                       fontWeight: FontWeight.bold, color: Colors.white),
                 ),
                 actions: [
-                  Container(
-                    margin: EdgeInsets.only(right: 10),
-                    child: Row(
-                      children: [
-                        Text(
-                          Textos.descricaoTelaInicialNomeUsuario,
-                          style: TextStyle(color: Colors.white),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(right: 10),
+                        width: 50,
+                        height: 50,
+                        child: FloatingActionButton(
+                          heroTag: "Config",
+                          elevation: 0,
+                          backgroundColor: Colors.white,
+                          shape: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide:
+                                  BorderSide(width: 1, color: Colors.black)),
+                          onPressed: () {
+                            setState(() {
+                              exibirTelaResetarJogo = !exibirTelaResetarJogo;
+                            });
+                          },
+                          child: Icon(
+                            exibirTelaResetarJogo
+                                ? Icons.close
+                                : Icons.settings,
+                            color: corPadrao,
+                            size: 30,
+                          ),
                         ),
-                        Text(
-                          nomeUsuario,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.white),
-                        )
-                      ],
-                    ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(right: 10),
+                        width: 50,
+                        height: 50,
+                        child: FloatingActionButton(
+                          heroTag: Textos.campoUsuario,
+                          backgroundColor: Colors.white,
+                          elevation: 0,
+                          shape: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              borderSide:
+                                  BorderSide(width: 1, color: Colors.black)),
+                          onPressed: () {
+                            Navigator.pushReplacementNamed(
+                                context, Constantes.rotaTelaUsuarioDetalhado);
+                          },
+                          child: Icon(
+                            Icons.person,
+                            color: corPadrao,
+                            size: 30,
+                          ),
+                        ),
+                      )
+                    ],
                   ),
                 ],
               ),
@@ -287,70 +322,7 @@ class _TelaInicialState extends State<TelaInicial>
                     Column(
                       children: [
                         Container(
-                          margin: EdgeInsets.only(top: 10),
-                          width: larguraTela,
-                          height: 40,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Container(
-                                margin: EdgeInsets.only(right: 10),
-                                width: 50,
-                                height: 50,
-                                child: FloatingActionButton(
-                                  heroTag: Textos.btnExcluir,
-                                  elevation: 0,
-                                  backgroundColor: Colors.white,
-                                  shape: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(15),
-                                      borderSide: BorderSide(
-                                          width: 1,
-                                          color: PaletaCores.corVerde)),
-                                  onPressed: () {
-                                    setState(() {
-                                      exibirTelaResetarJogo =
-                                          !exibirTelaResetarJogo;
-                                    });
-                                  },
-                                  child: Icon(
-                                    exibirTelaResetarJogo
-                                        ? Icons.close
-                                        : Icons.settings,
-                                    color: corPadrao,
-                                    size: 30,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(right: 10),
-                                width: 50,
-                                height: 50,
-                                child: FloatingActionButton(
-                                  heroTag: Textos.campoUsuario,
-                                  backgroundColor: Colors.white,
-                                  elevation: 0,
-                                  shape: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(15),
-                                      borderSide: BorderSide(
-                                          width: 1,
-                                          color: PaletaCores.corVerde)),
-                                  onPressed: () {
-                                    Navigator.pushReplacementNamed(context,
-                                        Constantes.rotaTelaUsuarioDetalhado);
-                                  },
-                                  child: Icon(
-                                    Icons.person,
-                                    color: corPadrao,
-                                    size: 30,
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        Container(
-                            margin: EdgeInsets.only(top: 10),
+                            margin: EdgeInsets.only(top: 30),
                             width: larguraTela,
                             child: Text(
                               Textos.descricaoTelaInicial,
@@ -379,7 +351,28 @@ class _TelaInicialState extends State<TelaInicial>
                         child: WidgetTelaResetarDados(
                           corCard: corPadrao,
                           tipoAcao: Constantes.resetarAcaoExcluirTudo,
-                        ))
+                        )),
+                    Container(
+                      width: larguraTela,
+                      height: alturaTela,
+                      margin: EdgeInsets.all(5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            Textos.descricaoTelaInicialNomeUsuario,
+                            style: TextStyle(color: Colors.black),
+                          ),
+                          Text(
+                            nomeUsuario,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black),
+                          )
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),

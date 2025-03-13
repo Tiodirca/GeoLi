@@ -377,8 +377,8 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
         ),
       );
 
-  Widget cartaoBtn(String nomeImagem, String nomeBtn, Color cor, double altura,
-          double tamanhoImagem) =>
+  Widget cartaoBtn(
+          String nomeImagem, String nomeBtn, Color cor, double altura) =>
       Container(
         margin: EdgeInsets.all(5),
         width: 140,
@@ -439,8 +439,8 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image(
-                height: tamanhoImagem,
-                width: tamanhoImagem,
+                height: 90,
+                width: 90,
                 image: AssetImage("$nomeImagem.png"),
               ),
               Text(
@@ -581,11 +581,10 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
                                 btnIcone(Icons.close, PaletaCores.corVermelha,
                                     Textos.btnCancelarEdicao),
                                 cartaoBtn(
-                                    CaminhosImagens.gestoSenha,
+                                    CaminhosImagens.gestoSalvar,
                                     Textos.btnSalvarAlteracoes,
                                     PaletaCores.corAzul,
-                                    100,
-                                    70)
+                                    120)
                               ],
                             ))
                       ],
@@ -607,13 +606,13 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         cartaoBtn(CaminhosImagens.gestoSair, Textos.btnSair,
-                            PaletaCores.corVermelha, 140, 90),
+                            PaletaCores.corVermelha, 140),
                         cartaoBtn(
-                            CaminhosImagens.gestoExcluir,
-                            Textos.btnExcluirUsuario,
-                            PaletaCores.corVermelha,
-                            140,
-                            90)
+                          CaminhosImagens.gestoExcluir,
+                          Textos.btnExcluirUsuario,
+                          PaletaCores.corVermelha,
+                          140,
+                        )
                       ],
                     )
                   ],

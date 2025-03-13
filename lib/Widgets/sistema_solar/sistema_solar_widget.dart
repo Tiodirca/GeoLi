@@ -173,7 +173,7 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
                   ),
                   SizedBox(
                       width: larguraTela,
-                      height: 350,
+                      height: 300,
                       child: LayoutBuilder(
                         builder: (context, constraints) {
                           if (quantPlanetaDesbloquear == 0) {

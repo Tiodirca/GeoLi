@@ -241,162 +241,155 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
   @override
   Widget build(BuildContext context) {
     double larguraTela = MediaQuery.of(context).size.width;
-    return Container(
-        color: Colors.transparent,
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            if (exibirTelaCarregamento) {
-              return Container(
-                margin: EdgeInsets.all(10),
-                child: TelaCarregamentoWidget(
-                    corPadrao: ConstantesEstadosGestos.corPadraoRegioes),
-              );
-            } else {
-              return Stack(
-                alignment: Alignment.center,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (exibirTelaCarregamento) {
+          return Container(
+            margin: EdgeInsets.all(10),
+            child: TelaCarregamentoWidget(
+                corPadrao: ConstantesEstadosGestos.corPadraoRegioes),
+          );
+        } else {
+          return Column(
+            children: [
+              Column(
                 children: [
-                  Column(
-                    children: [
-                      Text(
-                        textAlign: TextAlign.center,
-                        Textos.telaTituloRegioesDesbloqueados,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
-                      ),
-                      Text(
-                        Textos.telaDescricaoRegioesDesbloqueados,
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
+                  Text(
+                    textAlign: TextAlign.center,
+                    Textos.telaTituloRegioesDesbloqueados,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 18),
                   ),
-                  Positioned(
-                      right: 0,
-                      left: 0,
-                      bottom: 0,
-                      child: LayoutBuilder(
-                        builder: (context, constraints) {
-                          if (exibirRegiaoGestosDetalhada) {
-                            return SizedBox(
-                                width: Platform.isIOS || Platform.isAndroid
-                                    ? larguraTela * 0.9
-                                    : larguraTela * 0.4,
-                                height: 450,
-                                child: Card(
-                                  color: Colors.white,
-                                  shape: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          width: 1,
-                                          color: ConstantesEstadosGestos
-                                              .corPadraoRegioes),
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Text(
-                                        nomeRegiao,
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      SizedBox(
-                                        width: larguraTela,
-                                        height: 350,
-                                        child: ListView.builder(
-                                          itemCount: regioesSelecionadas.length,
-                                          itemBuilder: (context, index) {
-                                            return Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                imagemRegiaoGesto(
-                                                    regioesSelecionadas
-                                                        .elementAt(index)
-                                                        .nome,
-                                                    regioesSelecionadas
-                                                        .elementAt(index)
-                                                        .caminhoImagem),
-                                                imagemRegiaoGesto(
-                                                    gestosSelecionados
-                                                        .elementAt(index)
-                                                        .nomeGesto,
-                                                    gestosSelecionados
-                                                        .elementAt(index)
-                                                        .nomeImagem),
-                                              ],
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: 40,
-                                        height: 40,
-                                        child: FloatingActionButton(
-                                          backgroundColor: Colors.white,
-                                          onPressed: () {
-                                            setState(() {
-                                              exibirRegiaoGestosDetalhada =
-                                                  false;
-                                              regioesSelecionadas.clear();
-                                              gestosSelecionados.clear();
-                                              contador = 0;
-                                            });
-                                          },
-                                          child: Icon(
-                                            Icons.close,
-                                            color: PaletaCores.corVermelha,
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ));
-                          } else {
-                            return Column(
-                              children: [
-                                SizedBox(
-                                  width: larguraTela,
-                                  height: 250,
-                                  child: InteractiveViewer(
-                                    panEnabled: false,
-                                    minScale: 0.5,
-                                    maxScale: 4,
-                                    child: Image(
-                                      image: AssetImage(
-                                          "$caminhoImagemRegiao.png"),
-                                    ),
+                  Text(
+                    Textos.telaDescricaoRegioesDesbloqueados,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  if (exibirRegiaoGestosDetalhada) {
+                    return SizedBox(
+                        width: Platform.isIOS || Platform.isAndroid
+                            ? larguraTela * 0.9
+                            : larguraTela * 0.4,
+                        height: 380,
+                        child: Card(
+                          color: Colors.white,
+                          shape: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  width: 1,
+                                  color: ConstantesEstadosGestos
+                                      .corPadraoRegioes),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Column(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceAround,
+                            children: [
+                              Text(
+                                nomeRegiao,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                width: larguraTela,
+                                height: 300,
+                                child: ListView.builder(
+                                  itemCount: regioesSelecionadas.length,
+                                  itemBuilder: (context, index) {
+                                    return Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        imagemRegiaoGesto(
+                                            regioesSelecionadas
+                                                .elementAt(index)
+                                                .nome,
+                                            regioesSelecionadas
+                                                .elementAt(index)
+                                                .caminhoImagem),
+                                        imagemRegiaoGesto(
+                                            gestosSelecionados
+                                                .elementAt(index)
+                                                .nomeGesto,
+                                            gestosSelecionados
+                                                .elementAt(index)
+                                                .nomeImagem),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ),
+                              SizedBox(
+                                width: 40,
+                                height: 40,
+                                child: FloatingActionButton(
+                                  backgroundColor: Colors.white,
+                                  onPressed: () {
+                                    setState(() {
+                                      exibirRegiaoGestosDetalhada =
+                                      false;
+                                      regioesSelecionadas.clear();
+                                      gestosSelecionados.clear();
+                                      contador = 0;
+                                    });
+                                  },
+                                  child: Icon(
+                                    Icons.close,
+                                    color: PaletaCores.corVermelha,
                                   ),
                                 ),
-                                Container(
-                                  margin: EdgeInsets.only(top: 10),
-                                  width: Platform.isIOS || Platform.isAndroid
-                                      ? larguraTela * 0.9
-                                      : larguraTela * 0.4,
-                                  height: 180,
-                                  child: Wrap(
-                                    alignment: WrapAlignment.center,
-                                    children: [
-                                      exibirDetalhesRegiaoDesbloqueada(
-                                          liberarRegiaoSul, regiaoCentroOeste),
-                                      exibirDetalhesRegiaoDesbloqueada(
-                                          liberarRegiaoSudeste, regiaoSul),
-                                      exibirDetalhesRegiaoDesbloqueada(
-                                          liberarRegiaoNorte, regiaoSudeste),
-                                      exibirDetalhesRegiaoDesbloqueada(
-                                          liberarRegiaoNordeste, regiaoNorte),
-                                      exibirDetalhesRegiaoDesbloqueada(
-                                          liberarTodosEstados, regiaoNordeste),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            );
-                          }
-                        },
-                      ))
-                ],
-              );
-            }
-          },
-        ));
+                              )
+                            ],
+                          ),
+                        ));
+                  } else {
+                    return Column(
+                      children: [
+                        SizedBox(
+                          width: larguraTela,
+                          height: 200,
+                          child: InteractiveViewer(
+                            panEnabled: false,
+                            minScale: 0.5,
+                            maxScale: 4,
+                            child: Image(
+                              image: AssetImage(
+                                  "$caminhoImagemRegiao.png"),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 10),
+                          width: Platform.isIOS || Platform.isAndroid
+                              ? larguraTela * 0.9
+                              : larguraTela * 0.4,
+                          height: 180,
+                          child: Wrap(
+                            alignment: WrapAlignment.center,
+                            children: [
+                              exibirDetalhesRegiaoDesbloqueada(
+                                  liberarRegiaoSul, regiaoCentroOeste),
+                              exibirDetalhesRegiaoDesbloqueada(
+                                  liberarRegiaoSudeste, regiaoSul),
+                              exibirDetalhesRegiaoDesbloqueada(
+                                  liberarRegiaoNorte, regiaoSudeste),
+                              exibirDetalhesRegiaoDesbloqueada(
+                                  liberarRegiaoNordeste, regiaoNorte),
+                              exibirDetalhesRegiaoDesbloqueada(
+                                  liberarTodosEstados, regiaoNordeste),
+                            ],
+                          ),
+                        )
+                      ],
+                    );
+                  }
+                },
+              )
+            ],
+          );
+        }
+      },
+    );
   }
 }
