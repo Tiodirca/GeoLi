@@ -126,19 +126,15 @@ class _WidgetAreaSoltarEstadosState extends State<WidgetAreaSoltarEstados>
                 });
                 // chamando metodo para passar confirmacao do acerto
                 MetodosAuxiliares.confirmarAcerto(Constantes.msgAcerto);
-                MetodosAuxiliares.exibirMensagens(
-                    Textos.msgAcertou,
-                    Constantes.msgAcerto,
-                    Constantes.duracaoExibicaoToastJogos,
-                    Constantes.larguraToastNotificacaoJogos,
-                    context);
+                if(mounted){
+                  MetodosAuxiliares.exibirMensagensDuranteJogo(
+                      Textos.msgAcertou, Constantes.msgAcerto, context);
+                }
               } else {
-                MetodosAuxiliares.exibirMensagens(
-                    Textos.msgErrou,
-                    Constantes.msgErro,
-                    Constantes.duracaoExibicaoToastJogos,
-                    Constantes.larguraToastNotificacaoJogos,
-                    context);
+                if(mounted){
+                  MetodosAuxiliares.exibirMensagensDuranteJogo(
+                      Textos.msgErrou, Constantes.msgErro, context);
+                }
                 // chamando metodo para passar confirmacao do erro
                 MetodosAuxiliares.confirmarAcerto(Constantes.msgErro);
               }

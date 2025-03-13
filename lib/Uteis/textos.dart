@@ -57,21 +57,17 @@ class Textos {
   static String telaUsuarioDescricao =
       "Aqui você pode ver as informações de usuario, "
       "bem como editar e atualiza-las nos banco de dados";
-  static String telaUsuarioDescricaoAutenticacaoEmail =
-      "Digite a senha para fazer as alterações no email,"
-      " será enviado um link no novo email para confirmar a alteração";
-  static String telaUsuarioDescricaoAutenticacaoSenha =
-      "Digite a senha antiga para fazer a alteração";
-  static String telaUsuarioDescricaoDigiteSenha =
-      "Digite a senha para confirmar Exclusão";
 
   //ALERT
-
-  static String alertTituloExclusao = "Excluir Informações";
+  static String alertTitulo = "Confirmar";
+  static String alertDescricaoAlterarEmail =
+      "Digite a senha para fazer a alteracao do Email,"
+      "será enviado um link no novo email para confirmar a alteração";
+  static String alertDescricaoAlterarSenha =
+      "Digite a senha antiga para mudar a senha";
   static String alertDescricaoExclusaoUsuario =
       "Deseja Realmente excluir este Usuario e todas as informações salvas nele ? ";
-  static String alertDescricaoExclusaoInformacoes =
-      "Deseja realmente Excluir/Reiniciar todas as informações ? ";
+
 
   // LOGIN E CADASTRO
   static String telaLoginCadastroTitulo = "Login/Cadastro";

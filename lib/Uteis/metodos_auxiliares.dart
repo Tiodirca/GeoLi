@@ -5,6 +5,7 @@ import 'package:elegant_notification/resources/arrays.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
+import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 
@@ -89,6 +90,7 @@ class MetodosAuxiliares {
         position: Alignment.center,
         width: largura,
         showProgressIndicator: false,
+        borderRadius: BorderRadius.circular(10),
         icon: Icon(
           Icons.check_circle_outline,
           size: 40,
@@ -117,6 +119,64 @@ class MetodosAuxiliares {
         animationDuration: const Duration(seconds: 1),
         toastDuration: Duration(seconds: duracao),
         description: Text(msg),
+      ).show(context);
+    }
+  }
+
+  // metodo para exibir mensagem de retorno ao usuario
+  static exibirMensagensDuranteJogo(
+      String msg, String tipoAlerta, BuildContext context) {
+    if (tipoAlerta == Constantes.msgAcerto) {
+      return ElegantNotification.success(
+        position: Alignment.center,
+        height: 120,
+        width: 120,
+        showProgressIndicator: false,
+        borderRadius: BorderRadius.circular(40),
+        icon: null,
+        iconSize: 0,
+        animation: AnimationType.fromTop,
+        border: Border.all(color: PaletaCores.corVerde, width: 2),
+        animationDuration: const Duration(seconds: 1),
+        toastDuration: Duration(milliseconds: 1700),
+        displayCloseButton: false,
+        description: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image(
+              height: 80,
+              width: 80,
+              image: AssetImage("${CaminhosImagens.gestoSenha}.png"),
+            ),
+            Text(msg)
+          ],
+        ),
+      ).show(context);
+    } else {
+      return ElegantNotification.error(
+        position: Alignment.center,
+        height: 120,
+        width: 120,
+        showProgressIndicator: false,
+        borderRadius: BorderRadius.circular(40),
+        icon: null,
+        iconSize: 0,
+        animation: AnimationType.fromTop,
+        border: Border.all(color: PaletaCores.corVermelha, width: 2),
+        animationDuration: const Duration(seconds: 1),
+        toastDuration: Duration(milliseconds: 1700),
+        displayCloseButton: false,
+        description: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image(
+              height: 80,
+              width: 80,
+              image: AssetImage("${CaminhosImagens.gestoSenha}.png"),
+            ),
+            Text(msg)
+          ],
+        ),
       ).show(context);
     }
   }

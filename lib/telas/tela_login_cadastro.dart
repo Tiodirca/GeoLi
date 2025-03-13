@@ -9,6 +9,7 @@ import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TelaLoginCadastro extends StatefulWidget {
   const TelaLoginCadastro({super.key});
@@ -21,6 +22,8 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
   bool exibirTelaCarregamento = false;
   bool exibirDadosCadastro = false;
   bool exibirCampos = false;
+  bool ocultarSenhaDigitada = true;
+  IconData iconeSenhaVisivel = Icons.visibility;
   final _formKeyFormulario = GlobalKey<FormState>();
   TextEditingController campoEmail = TextEditingController(text: "");
   TextEditingController campoSenha = TextEditingController(text: "");
@@ -34,6 +37,7 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
         password: campoSenha.text,
       )
           .then((value) {
+        gravarDadosShared();
         CriarDadosBanco.criarDadosUsuario(context, campoUsuario.text);
       }, onError: (e) {
         validarErros(e.toString());
@@ -57,6 +61,7 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
           .signInWithEmailAndPassword(
               email: campoEmail.text, password: campoSenha.text)
           .then((value) {
+        gravarDadosShared();
         chamarExibirMensagem(Textos.sucessoLogin, Constantes.msgAcerto);
         redirecionarTelaInicial();
       }, onError: (e) {
@@ -65,6 +70,12 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
     } on FirebaseAuthException catch (e) {
       validarErros(e.code);
     }
+  }
+
+  gravarDadosShared() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(Constantes.sharedPreferencesEmail, campoEmail.text);
+    prefs.setString(Constantes.sharedPreferencesSenha, campoSenha.text);
   }
 
   redirecionarTelaInicial() {
@@ -117,6 +128,10 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
                 height: 80,
                 child: TextFormField(
                   controller: controle,
+                  obscureText: nomeCampo == Textos.campoEmail ||
+                          nomeCampo == Textos.campoUsuario
+                      ? false
+                      : ocultarSenhaDigitada,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return Textos.erroCampoVazio;
@@ -125,9 +140,27 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
                   },
                   decoration: InputDecoration(
                       labelText: nomeCampo,
-                      labelStyle: TextStyle(
-                        color: Colors.black
-                      ),
+                      suffixIcon: nomeCampo == Textos.campoEmail ||
+                              nomeCampo == Textos.campoUsuario
+                          ? null
+                          : IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  if (ocultarSenhaDigitada) {
+                                    setState(() {
+                                      ocultarSenhaDigitada = false;
+                                      iconeSenhaVisivel = Icons.visibility_off;
+                                    });
+                                  } else {
+                                    setState(() {
+                                      ocultarSenhaDigitada = true;
+                                      iconeSenhaVisivel = Icons.visibility;
+                                    });
+                                  }
+                                });
+                              },
+                              icon: Icon(iconeSenhaVisivel)),
+                      labelStyle: TextStyle(color: Colors.black),
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
                           borderSide: BorderSide(
@@ -282,6 +315,10 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
                                         onPressed: () {
                                           setState(() {
                                             exibirCampos = false;
+                                            campoSenha.clear();
+                                            campoUsuario.clear();
+                                            campoEmail.clear();
+                                            ocultarSenhaDigitada = true;
                                           });
                                         },
                                         child: Icon(

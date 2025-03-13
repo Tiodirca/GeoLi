@@ -10,6 +10,9 @@ import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import 'package:geoli/Widgets/widget_exibir_emblemas.dart';
 import 'package:geoli/Widgets/widget_tela_resetar_dados.dart';
+import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences_android/shared_preferences_android.dart';
 
 class TelaInicial extends StatefulWidget {
   const TelaInicial({super.key});
@@ -31,6 +34,13 @@ class _TelaInicialState extends State<TelaInicial>
   String caminhoImagemEstado = CaminhosImagens.btnGestoEstadosBrasileiroImagem;
   String caminhoImagemSistemaSolar = CaminhosImagens.btnGestoSistemaSolarImagem;
   Color corPadrao = PaletaCores.corVerde;
+
+  static const SharedPreferencesAsyncAndroidOptions options =
+      SharedPreferencesAsyncAndroidOptions(
+          backend: SharedPreferencesAndroidBackendLibrary.SharedPreferences,
+          originalSharedPreferencesOptions:
+              AndroidSharedPreferencesStoreOptions(
+                  fileName: 'the_name_of_a_file'));
 
   @override
   void initState() {
@@ -118,29 +128,32 @@ class _TelaInicialState extends State<TelaInicial>
   }
 
   recuperarUsuario() async {
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      contador = contador + 1;
-      if (user != null) {
-        print(user.uid);
-        MetodosAuxiliares.passarUidUsuario(user.uid);
-        if (mounted) {
-          print("fdsdfcxvxcvxc");
-          recuperarPontuacao(Constantes.fireBaseColecaoRegioes,
-              Constantes.fireBaseDocumentoPontosJogadaRegioes, user.uid);
-          recuperarNomeUsuario(user.uid);
-        }
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String email = "";
+    String senha = "";
+    email = prefs.getString(Constantes.sharedPreferencesEmail) ?? '';
+    senha = prefs.getString(Constantes.sharedPreferencesSenha) ?? '';
+
+    AuthCredential credential =
+        EmailAuthProvider.credential(email: email, password: senha);
+    FirebaseAuth.instance.signInWithCredential(credential).then((value) async {
+      if (FirebaseAuth.instance.currentUser != null) {
+        String? uid = FirebaseAuth.instance.currentUser?.uid;
+        MetodosAuxiliares.passarUidUsuario(uid!);
+        recuperarPontuacao(Constantes.fireBaseColecaoRegioes,
+            Constantes.fireBaseDocumentoPontosJogadaRegioes, uid);
+        recuperarNomeUsuario(uid);
       } else {
-        print(contador);
-        if (contador >= 2 && contador <= 3) {
-          if (mounted) {
-            print("fdfds");
-            MetodosAuxiliares.passarUidUsuario("");
-            Navigator.pushReplacementNamed(
-                context, Constantes.rotaTelaLoginCadastro);
-          }
-        }
+        redirecionarTelaLogin();
       }
+    }, onError: (e) {
+      redirecionarTelaLogin();
     });
+  }
+
+  redirecionarTelaLogin() async {
+    MetodosAuxiliares.passarUidUsuario("");
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaLoginCadastro);
   }
 
   // metodo para recuperar a pontuacao
@@ -206,8 +219,8 @@ class _TelaInicialState extends State<TelaInicial>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image(
-                height: 110,
-                width: 110,
+                height: 90,
+                width: 90,
                 image: AssetImage("$nomeImagem.png"),
               ),
               Text(

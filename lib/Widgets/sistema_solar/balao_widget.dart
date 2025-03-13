@@ -8,6 +8,7 @@ import 'package:geoli/Uteis/constantes_sistema_solar.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/modelos/planeta.dart';
+import 'package:lottie/lottie.dart';
 
 class BalaoWidget extends StatefulWidget {
   const BalaoWidget(
@@ -27,6 +28,7 @@ class _BalaoWidgetState extends State<BalaoWidget>
   late Color corbalao;
   late String status;
   late String uidUsuario;
+  bool exibirAnimacaoExplosao = false;
   List<Planeta> planetas = ConstantesSistemaSolar.adicinarPlanetas();
 
   @override
@@ -69,20 +71,28 @@ class _BalaoWidgetState extends State<BalaoWidget>
     gesto = await MetodosAuxiliares.recuperarGestoSorteado();
     // verificando se o status passado esta ativo
     if (status == Constantes.statusTutorialAtivo) {
-      MetodosAuxiliares.exibirMensagens(
-          Textos.tutorialConcluido,
-          Constantes.msgAcerto,
-          Constantes.duracaoExibicaoToastJogos,
-          Constantes.larguraToastNotificacaoJogos,
-          context);
+      MetodosAuxiliares.exibirMensagensDuranteJogo(
+          Textos.tutorialConcluido, Constantes.msgAcerto, context);
       MetodosAuxiliares.passarStatusTutorial("");
       atualizarPontuacaoTutorial();
+      setState(() {
+        exibirAnimacaoExplosao = true;
+      });
       Timer(const Duration(seconds: 1), () {
         Navigator.pushReplacementNamed(
             context, Constantes.rotaTelaSistemaSolar);
       });
     } else {
       if (gesto.contains(widget.planeta.nomePlaneta)) {
+        setState(() {
+          exibirAnimacaoExplosao = true;
+        });
+        Timer(const Duration(seconds: 1), () {
+          setState(() {
+            exibirAnimacaoExplosao = false;
+          });
+        });
+
         MetodosAuxiliares.confirmarAcerto(Constantes.msgAcerto);
         recuperarPlanetasDesbloqueados();
       } else {
@@ -227,6 +237,14 @@ class _BalaoWidgetState extends State<BalaoWidget>
                             },
                           )),
                     ),
+                    Visibility(
+                      visible: exibirAnimacaoExplosao,
+                      child: Lottie.asset(
+                          reverse: true,
+                          height: 80,
+                          width: 80,
+                          'assets/animacoes_lottie/explosao.json'),
+                    )
                   ],
                 ),
                 Padding(
