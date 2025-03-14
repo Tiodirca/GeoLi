@@ -37,6 +37,7 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
         password: campoSenha.text,
       )
           .then((value) {
+        print(value.user!.uid);
         gravarDadosShared();
         CriarDadosBanco.criarDadosUsuario(context, campoUsuario.text);
       }, onError: (e) {
@@ -61,6 +62,7 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
           .signInWithEmailAndPassword(
               email: campoEmail.text, password: campoSenha.text)
           .then((value) {
+        print(value.user!.uid);
         gravarDadosShared();
         chamarExibirMensagem(Textos.sucessoLogin, Constantes.msgAcerto);
         redirecionarTelaInicial();
@@ -85,7 +87,7 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
   chamarExibirMensagem(String mensagem, String tipoMensagem) {
     MetodosAuxiliares.exibirMensagens(
         mensagem,
-        Constantes.msgAcerto,
+        tipoMensagem,
         Constantes.duracaoExibicaoToastLoginCadastro,
         Constantes.larguraToastLoginCadastro,
         context);
@@ -99,6 +101,8 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
       chamarExibirMensagem(Textos.erroEmailInvalido, Constantes.msgErro);
     } else if (erro.contains('email-already-in-use')) {
       chamarExibirMensagem(Textos.erroEmailUso, Constantes.msgErro);
+    } else if (erro.contains('An internal error has occurred.')) {
+      chamarExibirMensagem(Textos.erroSemInternet, Constantes.msgErro);
     } else if (erro.contains('Password should be at least 6 characters')) {
       chamarExibirMensagem(Textos.erroSenhaCurta, Constantes.msgErro);
     } else if (erro.contains(
@@ -249,6 +253,7 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {
           return TelaCarregamentoWidget(
+            exibirMensagemConexao: false,
             corPadrao: PaletaCores.corVerde,
           );
         } else {

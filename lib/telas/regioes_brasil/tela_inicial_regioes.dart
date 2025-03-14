@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/emblemas.dart';
@@ -10,6 +12,7 @@ import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import 'package:geoli/Widgets/widget_exibir_emblemas.dart';
 import 'package:geoli/Widgets/widget_tela_resetar_dados.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 class TelaInicialRegioes extends StatefulWidget {
   const TelaInicialRegioes({super.key});
@@ -49,6 +52,7 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
   List<Emblemas> emblemasExibir = [];
   bool exibirTelaResetarJogo = false;
 
+  bool exibirMensagem = false;
   late String uidUsuario;
 
   @override
@@ -81,12 +85,35 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
           nomeEmblema: Textos.emblemaEstadosIndiana,
           pontos: 50),
     });
+    validarConexao();
   }
 
   recuperarUIDUsuario() async {
     uidUsuario = await MetodosAuxiliares.recuperarUid();
     recuperarRegioesLiberadas();
     recuperarPontuacao();
+  }
+
+  validarConexao() async {
+    bool retornoConexao = await InternetConnection().hasInternetAccess;
+    if (retornoConexao) {
+      if (mounted) {
+        setState(() {
+          exibirTelaCarregamento = false;
+          exibirMensagem = false;
+        });
+      }
+    } else {
+      if (mounted) {
+        setState(() {
+          exibirTelaCarregamento = true;
+          exibirMensagem = true;
+        });
+      }
+    }
+    Timer( Duration(seconds: Constantes.duracaoVerificarConexao), () {
+      validarConexao();
+    });
   }
 
   recuperarRegioesLiberadas() async {
@@ -215,6 +242,7 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {
           return TelaCarregamentoWidget(
+            exibirMensagemConexao: exibirMensagem,
             corPadrao: ConstantesEstadosGestos.corPadraoRegioes,
           );
         } else {

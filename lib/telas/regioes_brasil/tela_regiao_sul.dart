@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Modelos/estado.dart';
@@ -8,6 +10,7 @@ import 'package:geoli/Widgets/estados/widget_area_gestos_arrastar.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 import '../../Uteis/textos.dart';
 
@@ -27,10 +30,13 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
   late String uidUsuario;
   String nomeColecao = Constantes.fireBaseDocumentoRegiaoSul;
 
+  bool exibirMensagem = false;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    validarConexao();
     gestos.addAll([
       ConstantesEstadosGestos.gestoPR,
       ConstantesEstadosGestos.gestoSC,
@@ -39,6 +45,29 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
     gestos.shuffle(); //fazendo sorteio os itens na lista
     // chamando metodo para fazer busca no banco de dados
     recuperarUIDUsuario();
+    validarConexao();
+  }
+
+  validarConexao() async {
+    bool retornoConexao = await InternetConnection().hasInternetAccess;
+    if (retornoConexao) {
+      if (mounted) {
+        setState(() {
+          exibirTelaCarregamento = false;
+          exibirMensagem = false;
+        });
+      }
+    } else {
+      if (mounted) {
+        setState(() {
+          exibirTelaCarregamento = true;
+          exibirMensagem = true;
+        });
+      }
+    }
+    Timer( Duration(seconds: Constantes.duracaoVerificarConexao), () {
+      validarConexao();
+    });
   }
 
   recuperarUIDUsuario() async {
@@ -126,6 +155,7 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
           builder: (context, constraints) {
             if (exibirTelaCarregamento) {
               return TelaCarregamentoWidget(
+                exibirMensagemConexao: exibirMensagem,
                 corPadrao: ConstantesEstadosGestos.corPadraoRegioes,
               );
             } else {

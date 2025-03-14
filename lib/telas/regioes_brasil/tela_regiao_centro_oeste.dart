@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Modelos/estado.dart';
@@ -9,6 +11,7 @@ import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/estados/area_tela_regioes_widget.dart';
 import 'package:geoli/Widgets/estados/widget_area_gestos_arrastar.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 class TelaRegiaoCentroOeste extends StatefulWidget {
   const TelaRegiaoCentroOeste({super.key});
@@ -27,6 +30,7 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
   Map<Estado, Gestos> estadoGestoMap = {};
   List<MapEntry<Estado, Gestos>> estadosSorteio = [];
   late String uidUsuario;
+  bool exibirMensagem = false;
   String nomeColecao = Constantes.fireBaseDocumentoRegiaoCentroOeste;
 
   @override
@@ -34,6 +38,7 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
     // TODO: implement initState
     super.initState();
     recuperarUIDUsuario();
+    validarConexao();
   }
 
   recuperarUIDUsuario() async {
@@ -89,38 +94,60 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
         .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
         .doc(nomeDocumentoRegiao) // passando documento
         .get()
-        .then(
-      (querySnapshot) async {
-        // verificando cada item que esta gravado no banco de dados
-        querySnapshot.data()!.forEach(
-          (key, value) {
-            //caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
-            setState(() {
-              if (ConstantesEstadosGestos.estadoMT.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoMT, value, gestos);
-              } else if (ConstantesEstadosGestos.estadoMS.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoMS, value, gestos);
-                ConstantesEstadosGestos.estadoMS.acerto = value;
-              } else if (ConstantesEstadosGestos.estadoGO.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoGO, value, gestos);
-              }
-            });
-          },
-        );
-        setState(
-          () {
-            carregarEstados();
-            if (gestos.isEmpty) {
-              exibirTelaProximoNivel = true;
+        .then((querySnapshot) async {
+      // verificando cada item que esta gravado no banco de dados
+      querySnapshot.data()!.forEach(
+        (key, value) {
+          //caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
+          setState(() {
+            if (ConstantesEstadosGestos.estadoMT.nome == key) {
+              MetodosAuxiliares.removerGestoLista(
+                  ConstantesEstadosGestos.estadoMT, value, gestos);
+            } else if (ConstantesEstadosGestos.estadoMS.nome == key) {
+              MetodosAuxiliares.removerGestoLista(
+                  ConstantesEstadosGestos.estadoMS, value, gestos);
+              ConstantesEstadosGestos.estadoMS.acerto = value;
+            } else if (ConstantesEstadosGestos.estadoGO.nome == key) {
+              MetodosAuxiliares.removerGestoLista(
+                  ConstantesEstadosGestos.estadoGO, value, gestos);
             }
-            exibirTelaCarregamento = false;
-          },
-        );
-      },
-    );
+          });
+        },
+      );
+      setState(
+        () {
+          carregarEstados();
+          if (gestos.isEmpty) {
+            exibirTelaProximoNivel = true;
+          }
+          exibirTelaCarregamento = false;
+        },
+      );
+    }, onError: (e) {
+      print("#${e.toString()}");
+    });
+  }
+
+  validarConexao() async {
+    bool retornoConexao = await InternetConnection().hasInternetAccess;
+    if (retornoConexao) {
+      if (mounted) {
+        setState(() {
+          exibirTelaCarregamento = false;
+          exibirMensagem = false;
+        });
+      }
+    } else {
+      if (mounted) {
+        setState(() {
+          exibirTelaCarregamento = true;
+          exibirMensagem = true;
+        });
+      }
+    }
+    Timer( Duration(seconds: Constantes.duracaoVerificarConexao), () {
+      validarConexao();
+    });
   }
 
   @override
@@ -148,6 +175,7 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
           builder: (context, constraints) {
             if (exibirTelaCarregamento) {
               return TelaCarregamentoWidget(
+                exibirMensagemConexao: exibirMensagem,
                 corPadrao: ConstantesEstadosGestos.corPadraoRegioes,
               );
             } else {

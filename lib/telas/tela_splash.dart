@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import '../Uteis/constantes.dart';
@@ -18,8 +19,17 @@ class _TelaSplashScreenState extends State<TelaSplashScreen> {
     Timer(const Duration(seconds: 1), () {
       Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
     });
+    //validarConexao();
   }
 
+
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +45,7 @@ class _TelaSplashScreenState extends State<TelaSplashScreen> {
             width: larguraTela,
             height: alturaTela,
             child: TelaCarregamentoWidget(
+              exibirMensagemConexao: false,
               corPadrao: PaletaCores.corVerde,
             ),
           ))),

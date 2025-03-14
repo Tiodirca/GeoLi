@@ -50,7 +50,11 @@ class Textos {
   static String erroSenhaCurta = "Digite uma senha de pelo menos 6 caracteres";
   static String erroEmailUso = "E-mail já em uso,utilize outro";
   static String erroExcluirDados = "Erro ao excluir os dados";
+  static String erroSemInternet = "Sem conexao com internet";
   static String erroCampoVazio = "Preencha antes de prosseguir";
+  static String erroSemInternetAvisoTelaCarregamento =
+      "Sem conexao com internet,"
+      "Conecte-se a uma rede para continuar jogando, Verificando conexao em ";
 
   //USUARIO DETALHADO
   static String telaUsuarioTitulo = "Dados Usuario";
@@ -67,7 +71,6 @@ class Textos {
       "Digite a senha antiga para mudar a senha";
   static String alertDescricaoExclusaoUsuario =
       "Deseja Realmente excluir este Usuario e todas as informações salvas nele ? ";
-
 
   // LOGIN E CADASTRO
   static String telaLoginCadastroTitulo = "Login/Cadastro";

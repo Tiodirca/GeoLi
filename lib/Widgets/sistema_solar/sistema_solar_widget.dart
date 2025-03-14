@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,6 +11,7 @@ import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/modelos/planeta.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 class SistemaSolarWidget extends StatefulWidget {
   const SistemaSolarWidget({super.key, required this.corPadrao});
@@ -147,7 +149,10 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
         if (exibirTelaCarregamento) {
           return Container(
             margin: EdgeInsets.all(10),
-            child: TelaCarregamentoWidget(corPadrao: widget.corPadrao),
+            child: TelaCarregamentoWidget(
+              corPadrao: widget.corPadrao,
+              exibirMensagemConexao: false,
+            ),
           );
         } else {
           return Stack(

@@ -9,6 +9,7 @@ import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TelaUsuarioDetalhes extends StatefulWidget {
   const TelaUsuarioDetalhes({super.key});
@@ -26,6 +27,7 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
   IconData iconeSenhaVisivel = Icons.visibility;
   String emailAuxiliarValidar = "";
   late String uidUsuario;
+  bool exibirMensagem = false;
   final _formKeyFormulario = GlobalKey<FormState>();
   final _formKeySenhaAlerta = GlobalKey<FormState>();
   TextEditingController campoEmail = TextEditingController(text: "");
@@ -82,9 +84,9 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
     await FirebaseAuth.instance.signOut();
     chamarExibirMensagens(Textos.sucessoDesconectar, Constantes.msgAcerto);
     MetodosAuxiliares.passarUidUsuario("");
-    //SharedPreferences prefs = await SharedPreferences.getInstance();
-    //prefs.setString(Constantes.sharedPreferencesEmail, "");
-    //prefs.setString(Constantes.sharedPreferencesSenha, "");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(Constantes.sharedPreferencesEmail, "");
+    prefs.setString(Constantes.sharedPreferencesSenha, "");
     redirecionarTelaLogin();
   }
 
@@ -528,6 +530,7 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {
           return TelaCarregamentoWidget(
+            exibirMensagemConexao: exibirMensagem,
             corPadrao: PaletaCores.corVerde,
           );
         } else {

@@ -8,6 +8,7 @@ import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 class MetodosAuxiliares {
   static String acertou = "";
@@ -15,6 +16,7 @@ class MetodosAuxiliares {
   static int pontuacaoAtual = 0;
   static String status = "";
   static String uIDUsuario = "";
+  static bool retornoConexao = false;
 
   //Metodo para passar se o usuario acertou ou nao
   static Future<String> confirmarAcerto(String acerto) async {
@@ -79,6 +81,28 @@ class MetodosAuxiliares {
       //exibirAcerto = estado.acerto;
     }
     return gestosCentro;
+  }
+
+  static Future<bool> recuperarConexao() async {
+    return retornoConexao;
+  }
+
+  static Future<bool> passarConexao(bool conexao) async {
+    retornoConexao = conexao;
+    return retornoConexao;
+  }
+
+  static Future<bool> validarConexao() async {
+    bool retornoConexao = await InternetConnection().hasInternetAccess;
+    if (retornoConexao) {
+      print(retornoConexao);
+    } else {
+      print(retornoConexao);
+    }
+    Timer(const Duration(seconds: 10), () {
+      validarConexao();
+    });
+    return retornoConexao;
   }
 
   // metodo para exibir mensagem de retorno ao usuario

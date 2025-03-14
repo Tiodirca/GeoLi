@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,7 @@ import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import 'package:geoli/Widgets/widget_exibir_emblemas.dart';
 import 'package:geoli/Widgets/widget_tela_resetar_dados.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TelaInicial extends StatefulWidget {
@@ -27,16 +30,16 @@ class _TelaInicialState extends State<TelaInicial>
   List<Emblemas> emblemasGeral = [];
   bool exibirTelaCarregamento = true;
   bool exibirTelaResetarJogo = false;
-  int contador = 0;
+  int contadorConexao = 0;
   String nomeUsuario = "";
   String caminhoImagemEstado = CaminhosImagens.btnGestoEstadosBrasileiroImagem;
   String caminhoImagemSistemaSolar = CaminhosImagens.btnGestoSistemaSolarImagem;
   Color corPadrao = PaletaCores.corVerde;
+  bool exibirMensagem = false;
 
   @override
   void initState() {
     super.initState();
-    recuperarUsuario();
     emblemasGeral.addAll([
       Emblemas(
           caminhoImagem: CaminhosImagens.emblemaPatenteSoldado,
@@ -95,6 +98,32 @@ class _TelaInicialState extends State<TelaInicial>
           nomeEmblema: Textos.emblemaPatenteMarechal,
           pontos: 200),
     ]);
+    validarConexao();
+  }
+
+  validarConexao() async {
+    bool retornoConexao = await InternetConnection().hasInternetAccess;
+    if (retornoConexao) {
+      if (mounted) {
+        setState(() {
+          exibirTelaCarregamento = false;
+          exibirMensagem = false;
+        });
+      }
+      if (mounted && nomeUsuario.isEmpty) {
+        recuperarUsuario();
+      }
+    } else {
+      if (mounted) {
+        setState(() {
+          exibirTelaCarregamento = true;
+          exibirMensagem = true;
+        });
+      }
+    }
+    Timer(Duration(seconds: Constantes.duracaoVerificarConexao), () {
+      validarConexao();
+    });
   }
 
   recuperarNomeUsuario(String uidUsuario) async {
@@ -119,12 +148,13 @@ class _TelaInicialState extends State<TelaInicial>
   }
 
   recuperarUsuario() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    print("dfdsfds");
     String email = "";
     String senha = "";
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     email = prefs.getString(Constantes.sharedPreferencesEmail) ?? '';
     senha = prefs.getString(Constantes.sharedPreferencesSenha) ?? '';
-
+    print(email);
     AuthCredential credential =
         EmailAuthProvider.credential(email: email, password: senha);
     FirebaseAuth.instance.signInWithCredential(credential).then((value) async {
@@ -144,7 +174,15 @@ class _TelaInicialState extends State<TelaInicial>
 
   redirecionarTelaLogin() async {
     MetodosAuxiliares.passarUidUsuario("");
+    gravarDadosSharedVazio();
     Navigator.pushReplacementNamed(context, Constantes.rotaTelaLoginCadastro);
+  }
+
+  //metodo para gravar dados vazios no share
+  gravarDadosSharedVazio() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(Constantes.sharedPreferencesEmail, "");
+    prefs.setString(Constantes.sharedPreferencesSenha, "");
   }
 
   // metodo para recuperar a pontuacao
@@ -242,6 +280,7 @@ class _TelaInicialState extends State<TelaInicial>
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {
           return TelaCarregamentoWidget(
+            exibirMensagemConexao: exibirMensagem,
             corPadrao: corPadrao,
           );
         } else {
@@ -297,9 +336,20 @@ class _TelaInicialState extends State<TelaInicial>
                               borderRadius: BorderRadius.circular(15),
                               borderSide:
                                   BorderSide(width: 1, color: Colors.black)),
-                          onPressed: () {
-                            Navigator.pushReplacementNamed(
-                                context, Constantes.rotaTelaUsuarioDetalhado);
+                          onPressed: () async {
+                            bool retornoConexao =
+                                await InternetConnection().hasInternetAccess;
+                            if (retornoConexao) {
+                              Navigator.pushReplacementNamed(
+                                  context, Constantes.rotaTelaUsuarioDetalhado);
+                            } else {
+                              MetodosAuxiliares.exibirMensagens(
+                                  Textos.erroSemInternet,
+                                  Constantes.msgErro,
+                                  Constantes.duracaoExibicaoToastJogos,
+                                  Constantes.larguraToastLoginCadastro,
+                                  context);
+                            }
                           },
                           child: Icon(
                             Icons.person,

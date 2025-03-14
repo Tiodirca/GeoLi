@@ -143,7 +143,8 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
   recuperarRegioesLiberadas() async {
     var db = FirebaseFirestore.instance;
     //instanciano variavel
-    db  .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+    db
+        .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
         .doc(uidUsuario)
         .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
         .doc(Constantes.fireBaseDocumentoLiberarEstados) // passando documento
@@ -227,14 +228,15 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
             width: 80,
             image: AssetImage('$caminhoImagem.png'),
           ),
-         SizedBox(
-           width: 100,
-           child:  Text(
-             nome,
-             style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
-             textAlign: TextAlign.center,
-           ),
-         )
+          SizedBox(
+            width: 100,
+            child: Text(
+              nome,
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.black),
+              textAlign: TextAlign.center,
+            ),
+          )
         ],
       );
 
@@ -247,6 +249,7 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
           return Container(
             margin: EdgeInsets.all(10),
             child: TelaCarregamentoWidget(
+                exibirMensagemConexao: false,
                 corPadrao: ConstantesEstadosGestos.corPadraoRegioes),
           );
         } else {
@@ -257,8 +260,7 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
                   Text(
                     textAlign: TextAlign.center,
                     Textos.telaTituloRegioesDesbloqueados,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 18),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                   Text(
                     Textos.telaDescricaoRegioesDesbloqueados,
@@ -279,17 +281,15 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
                           shape: OutlineInputBorder(
                               borderSide: BorderSide(
                                   width: 1,
-                                  color: ConstantesEstadosGestos
-                                      .corPadraoRegioes),
+                                  color:
+                                      ConstantesEstadosGestos.corPadraoRegioes),
                               borderRadius: BorderRadius.circular(10)),
                           child: Column(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceAround,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Text(
                                 nomeRegiao,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold),
+                                style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               SizedBox(
                                 width: larguraTela,
@@ -299,7 +299,7 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
                                   itemBuilder: (context, index) {
                                     return Row(
                                       mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
                                         imagemRegiaoGesto(
                                             regioesSelecionadas
@@ -327,8 +327,7 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
                                   backgroundColor: Colors.white,
                                   onPressed: () {
                                     setState(() {
-                                      exibirRegiaoGestosDetalhada =
-                                      false;
+                                      exibirRegiaoGestosDetalhada = false;
                                       regioesSelecionadas.clear();
                                       gestosSelecionados.clear();
                                       contador = 0;
@@ -354,8 +353,7 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
                             minScale: 0.5,
                             maxScale: 4,
                             child: Image(
-                              image: AssetImage(
-                                  "$caminhoImagemRegiao.png"),
+                              image: AssetImage("$caminhoImagemRegiao.png"),
                             ),
                           ),
                         ),

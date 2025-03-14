@@ -20,6 +20,7 @@ import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import 'package:geoli/Widgets/widget_exibir_emblemas.dart';
 import 'package:geoli/Widgets/widget_tela_resetar_dados.dart';
 import 'package:geoli/modelos/planeta.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 class TelaSistemaSolar extends StatefulWidget {
   const TelaSistemaSolar({super.key});
@@ -54,6 +55,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
       AnimationController(vsync: this);
   late final Animation<double> _fadeAnimation =
       Tween<double>(begin: 1, end: 0.0).animate(_controllerFade);
+  bool exibirMensagem = false;
 
   @override
   void initState() {
@@ -231,6 +233,24 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
     super.dispose();
   }
 
+  validarConexao() async {
+    bool retornoConexao = await InternetConnection().hasInternetAccess;
+    if (retornoConexao) {
+      setState(() {
+        exibirTelaCarregamento = false;
+        exibirMensagem = false;
+      });
+    } else {
+      setState(() {
+        exibirTelaCarregamento = true;
+        exibirMensagem = true;
+      });
+    }
+    Timer(const Duration(seconds: 10), () {
+      validarConexao();
+    });
+  }
+
   Widget btnAcao(String nomeBtn) => Container(
       margin: EdgeInsets.all(10),
       width: 100,
@@ -346,6 +366,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {
           return TelaCarregamentoWidget(
+            exibirMensagemConexao: exibirMensagem,
             corPadrao: corPadrao,
           );
         } else {

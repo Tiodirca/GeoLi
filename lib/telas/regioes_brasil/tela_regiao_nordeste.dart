@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Modelos/estado.dart';
@@ -9,6 +11,7 @@ import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/estados/area_tela_regioes_widget.dart';
 import 'package:geoli/Widgets/estados/widget_area_gestos_arrastar.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 class TelaRegiaoNordeste extends StatefulWidget {
   const TelaRegiaoNordeste({super.key});
@@ -24,12 +27,14 @@ class _TelaRegiaoNordesteState extends State<TelaRegiaoNordeste> {
   bool exibirTelaCarregamento = true;
   bool exibirTelaProximoNivel = false;
   late String uidUsuario;
+  bool exibirMensagem = false;
   String nomeColecao = Constantes.fireBaseDocumentoRegiaoNordeste;
 
   @override
   void initState() {
     super.initState();
     carregarEstados();
+    validarConexao();
     gestos.addAll([
       ConstantesEstadosGestos.gestoAL,
       ConstantesEstadosGestos.gestoBA,
@@ -44,6 +49,28 @@ class _TelaRegiaoNordesteState extends State<TelaRegiaoNordeste> {
     gestos.shuffle();
     // chamando metodo para fazer busca no banco de dados
     recuperarUIDUsuario();
+  }
+
+  validarConexao() async {
+    bool retornoConexao = await InternetConnection().hasInternetAccess;
+    if (retornoConexao) {
+      if (mounted) {
+        setState(() {
+          exibirTelaCarregamento = false;
+          exibirMensagem = false;
+        });
+      }
+    } else {
+      if (mounted) {
+        setState(() {
+          exibirTelaCarregamento = true;
+          exibirMensagem = true;
+        });
+      }
+    }
+    Timer( Duration(seconds: Constantes.duracaoVerificarConexao), () {
+      validarConexao();
+    });
   }
 
   recuperarUIDUsuario() async {
@@ -158,6 +185,7 @@ class _TelaRegiaoNordesteState extends State<TelaRegiaoNordeste> {
           builder: (context, constraints) {
             if (exibirTelaCarregamento) {
               return TelaCarregamentoWidget(
+                exibirMensagemConexao: exibirMensagem,
                 corPadrao: ConstantesEstadosGestos.corPadraoRegioes,
               );
             } else {
