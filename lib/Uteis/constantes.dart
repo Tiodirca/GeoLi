@@ -56,6 +56,9 @@ class Constantes {
   //STATUS TUTORIAL
   static const statusTutorialAtivo = "Tutorial Ativo";
 
+  static const erroConexaoSemIntenet = "sem internet";
+  static const erroConexaoExpirada = "conexao expirada";
+
   static const pontosJogada = "pontosJogada";
   static const msgErro = "Errou";
   static const msgAcerto = "Acertou";

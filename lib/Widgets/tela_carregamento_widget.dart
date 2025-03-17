@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:geoli/Uteis/caminho_imagens.dart';
+import 'package:geoli/Uteis/constantes.dart';
+import 'package:geoli/Uteis/metodos_auxiliares.dart';
 
 import '../Uteis/textos.dart';
 
@@ -25,33 +28,36 @@ class _TelaCarregamentoWidgetState extends State<TelaCarregamentoWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (widget.exibirMensagemConexao) {
-      comecarTempo();
-    }
   }
 
-  void comecarTempo() {
-    const segundo = Duration(seconds: 1);
-    iniciarTempo = Timer.periodic(
-      segundo,
-      (timer) {
-        if (tempo == 0) {
-          if (mounted) {
-            setState(() {
-              tempo = 10;
-              timer.cancel();
-              comecarTempo();
-            });
-          }
-        } else {
-          if (mounted) {
-            setState(() {
-              tempo--;
-            });
-          }
-        }
-      },
-    );
+  recarregarTela() async {
+    String telaAtual = await MetodosAuxiliares.recuperarTelaAtualErroConexao();
+    print(telaAtual);
+    if (telaAtual == Constantes.rotaTelaInicial) {
+      Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
+    } else if (telaAtual == Constantes.rotaTelaInicialRegioes) {
+      Navigator.pushReplacementNamed(
+          context, Constantes.rotaTelaInicialRegioes);
+    } else if (telaAtual == Constantes.rotaTelaRegiaoCentroOeste) {
+      Navigator.pushReplacementNamed(
+          context, Constantes.rotaTelaRegiaoCentroOeste);
+    } else if (telaAtual == Constantes.rotaTelaRegiaoSul) {
+      Navigator.pushReplacementNamed(context, Constantes.rotaTelaRegiaoSul);
+    } else if (telaAtual == Constantes.rotaTelaRegiaoSudeste) {
+      Navigator.pushReplacementNamed(context, Constantes.rotaTelaRegiaoSudeste);
+    } else if (telaAtual == Constantes.rotaTelaRegiaoNorte) {
+      Navigator.pushReplacementNamed(context, Constantes.rotaTelaRegiaoNorte);
+    } else if (telaAtual == Constantes.rotaTelaRegiaoNordeste) {
+      Navigator.pushReplacementNamed(
+          context, Constantes.rotaTelaRegiaoNordeste);
+    } else if (telaAtual == Constantes.rotaTelaRegiaoTodosEstados) {
+      Navigator.pushReplacementNamed(
+          context, Constantes.rotaTelaRegiaoTodosEstados);
+    } else if (telaAtual == Constantes.rotaTelaSistemaSolar) {
+      Navigator.pushReplacementNamed(context, Constantes.rotaTelaSistemaSolar);
+    }else if (telaAtual == Constantes.rotaTelaUsuarioDetalhado) {
+      Navigator.pushReplacementNamed(context, Constantes.rotaTelaUsuarioDetalhado);
+    }
   }
 
   @override
@@ -84,12 +90,43 @@ class _TelaCarregamentoWidgetState extends State<TelaCarregamentoWidget> {
                           style: const TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold),
                         ),
-                        Text(
-                          tempo.toString(),
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
+                        Container(
+                          margin: EdgeInsets.only(bottom: 10),
+                          width: 140,
+                          height: 150,
+                          child: FloatingActionButton(
+                            elevation: 0,
+                            heroTag: Textos.btnRecarregarTelaNovamente,
+                            backgroundColor: Colors.white,
+                            onPressed: () {
+                              recarregarTela();
+                            },
+                            shape: RoundedRectangleBorder(
+                                side: BorderSide(
+                                    color: widget.corPadrao, width: 1),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(40))),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image(
+                                  height: 90,
+                                  width: 90,
+                                  image: AssetImage(
+                                      "${CaminhosImagens.btnNovamenteGesto}.png"),
+                                ),
+                                Text(
+                                  Textos.btnRecarregarTelaNovamente,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                )
+                              ],
+                            ),
+                          ),
+                        )
                       ],
                     );
                   } else {

@@ -16,7 +16,7 @@ class MetodosAuxiliares {
   static int pontuacaoAtual = 0;
   static String status = "";
   static String uIDUsuario = "";
-  static bool retornoConexao = false;
+  static String telaAtualErroConexao = "";
 
   //Metodo para passar se o usuario acertou ou nao
   static Future<String> confirmarAcerto(String acerto) async {
@@ -27,6 +27,16 @@ class MetodosAuxiliares {
   //Metodo para recuperar acerto
   static Future<String> recuperarAcerto() async {
     return acertou;
+  }
+
+  static Future<String> passarTelaAtualErroConexao(String telaAtual) async {
+    telaAtualErroConexao = telaAtual;
+    return telaAtualErroConexao;
+  }
+
+  //Metodo para recuperar acerto
+  static Future<String> recuperarTelaAtualErroConexao() async {
+    return telaAtualErroConexao;
   }
 
   static Future<String> passarStatusTutorial(String statusAtual) async {
@@ -81,15 +91,6 @@ class MetodosAuxiliares {
       //exibirAcerto = estado.acerto;
     }
     return gestosCentro;
-  }
-
-  static Future<bool> recuperarConexao() async {
-    return retornoConexao;
-  }
-
-  static Future<bool> passarConexao(bool conexao) async {
-    retornoConexao = conexao;
-    return retornoConexao;
   }
 
   static Future<bool> validarConexao() async {

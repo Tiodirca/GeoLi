@@ -28,7 +28,7 @@ class TelaFimJogoWidget extends StatelessWidget {
                 height: 110,
                 width: 110,
                 image:
-                    AssetImage("${CaminhosImagens.btnJogarNovamenteGesto}.png"),
+                    AssetImage("${CaminhosImagens.btnNovamenteGesto}.png"),
               ),
               Text(
                 Textos.btnJogarNovamente,

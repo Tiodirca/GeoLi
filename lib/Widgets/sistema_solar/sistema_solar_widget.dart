@@ -1,6 +1,4 @@
-import 'dart:async';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
@@ -50,42 +48,50 @@ class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
 
   // metodo para consultar o banco de dados
   recuperarPlanetasDesbloqueados() async {
+    bool retornoConexao = await InternetConnection().hasInternetAccess;
     var db = FirebaseFirestore.instance;
-    db
-        .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
-        .doc(uidUsuario)
-        .collection(
-            Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
-        .doc(Constantes
-            .fireBaseDocumentoPlanetasDesbloqueados) // passando documento
-        .get()
-        .then(
-      (querySnapshot) async {
-        querySnapshot.data()!.forEach(
-          (key, value) {
-            setState(() {
-              // percorendo a lista
-              for (var element in planetas) {
-                //verificando se o nome do elemento e
-                // igual ao nome do item na lista
-                if (element.nomePlaneta == key) {
-                  // caso for o campo do elemento vai
-                  // receber o valor que esta no banco
-                  element.desbloqueado = value;
-                  if (element.desbloqueado) {
-                    quantPlanetaDesbloquear = quantPlanetaDesbloquear + 1;
-                  } else {
-                    quantPlanetaFaltaDesbloquear =
-                        quantPlanetaFaltaDesbloquear + 1;
+    if (retornoConexao) {
+      try {
+        db
+            .collection(
+                Constantes.fireBaseColecaoUsuarios) // passando a colecao
+            .doc(uidUsuario)
+            .collection(
+                Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
+            .doc(Constantes
+                .fireBaseDocumentoPlanetasDesbloqueados) // passando documento
+            .get()
+            .then((querySnapshot) async {
+          querySnapshot.data()!.forEach(
+            (key, value) {
+              setState(() {
+                // percorendo a lista
+                for (var element in planetas) {
+                  //verificando se o nome do elemento e
+                  // igual ao nome do item na lista
+                  if (element.nomePlaneta == key) {
+                    // caso for o campo do elemento vai
+                    // receber o valor que esta no banco
+                    element.desbloqueado = value;
+                    if (element.desbloqueado) {
+                      quantPlanetaDesbloquear = quantPlanetaDesbloquear + 1;
+                    } else {
+                      quantPlanetaFaltaDesbloquear =
+                          quantPlanetaFaltaDesbloquear + 1;
+                    }
                   }
                 }
-              }
-            });
-            exibirTelaCarregamento = false;
-          },
-        );
-      },
-    );
+              });
+              exibirTelaCarregamento = false;
+            },
+          );
+        }, onError: (e) {
+          debugPrint("STWON${e.toString()}");
+        });
+      } catch (e) {
+        debugPrint("STW${e.toString()}");
+      }
+    }
   }
 
   Widget planetaLiberados(Planeta planeta, Gestos gesto, int index) => Row(

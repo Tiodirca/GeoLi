@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +10,6 @@ import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import 'package:geoli/Widgets/widget_exibir_emblemas.dart';
 import 'package:geoli/Widgets/widget_tela_resetar_dados.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TelaInicial extends StatefulWidget {
@@ -35,7 +32,7 @@ class _TelaInicialState extends State<TelaInicial>
   String caminhoImagemEstado = CaminhosImagens.btnGestoEstadosBrasileiroImagem;
   String caminhoImagemSistemaSolar = CaminhosImagens.btnGestoSistemaSolarImagem;
   Color corPadrao = PaletaCores.corVerde;
-  bool exibirMensagem = false;
+  bool exibirMensagemSemConexao = false;
 
   @override
   void initState() {
@@ -98,32 +95,7 @@ class _TelaInicialState extends State<TelaInicial>
           nomeEmblema: Textos.emblemaPatenteMarechal,
           pontos: 200),
     ]);
-    validarConexao();
-  }
-
-  validarConexao() async {
-    bool retornoConexao = await InternetConnection().hasInternetAccess;
-    if (retornoConexao) {
-      if (mounted) {
-        setState(() {
-          exibirTelaCarregamento = false;
-          exibirMensagem = false;
-        });
-      }
-      if (mounted && nomeUsuario.isEmpty) {
-        recuperarUsuario();
-      }
-    } else {
-      if (mounted) {
-        setState(() {
-          exibirTelaCarregamento = true;
-          exibirMensagem = true;
-        });
-      }
-    }
-    Timer(Duration(seconds: Constantes.duracaoVerificarConexao), () {
-      validarConexao();
-    });
+    recuperarUsuario();
   }
 
   recuperarNomeUsuario(String uidUsuario) async {
@@ -135,26 +107,24 @@ class _TelaInicialState extends State<TelaInicial>
           uidUsuario,
         )
         .get()
-        .then(
-      (querySnapshot) async {
-        // verificando cada item que esta gravado no banco de dados
-        querySnapshot.data()!.forEach((key, value) {
-          setState(() {
-            nomeUsuario = value;
-          });
+        .then((querySnapshot) async {
+      // verificando cada item que esta gravado no banco de dados
+      querySnapshot.data()!.forEach((key, value) {
+        setState(() {
+          nomeUsuario = value;
         });
-      },
-    );
+      });
+    }, onError: (e) {
+      validarErro(e.toString());
+    });
   }
 
   recuperarUsuario() async {
-    print("dfdsfds");
     String email = "";
     String senha = "";
     SharedPreferences prefs = await SharedPreferences.getInstance();
     email = prefs.getString(Constantes.sharedPreferencesEmail) ?? '';
     senha = prefs.getString(Constantes.sharedPreferencesSenha) ?? '';
-    print(email);
     AuthCredential credential =
         EmailAuthProvider.credential(email: email, password: senha);
     FirebaseAuth.instance.signInWithCredential(credential).then((value) async {
@@ -165,11 +135,26 @@ class _TelaInicialState extends State<TelaInicial>
             Constantes.fireBaseDocumentoPontosJogadaRegioes, uid);
         recuperarNomeUsuario(uid);
       } else {
+        debugPrint("TelaU");
         redirecionarTelaLogin();
       }
     }, onError: (e) {
-      redirecionarTelaLogin();
+      debugPrint("ErroTUON${e.toString()}");
+      validarErro(e.toString());
     });
+  }
+
+  validarErro(String erro) {
+    if (erro.contains("An internal error has occurred")) {
+      setState(() {
+        exibirMensagemSemConexao = true;
+        MetodosAuxiliares.passarTelaAtualErroConexao(
+            Constantes.rotaTelaInicial);
+        exibirTelaCarregamento = true;
+      });
+    } else {
+      redirecionarTelaLogin();
+    }
   }
 
   redirecionarTelaLogin() async {
@@ -190,14 +175,14 @@ class _TelaInicialState extends State<TelaInicial>
       String nomeColecao, String nomeDocumento, String uidUsuario) async {
     var db = FirebaseFirestore.instance;
     //instanciano variavel
-    db
-        .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
-        .doc(uidUsuario)
-        .collection(nomeColecao) // passando a colecao
-        .doc(nomeDocumento) // passando documento
-        .get()
-        .then(
-      (querySnapshot) async {
+    try {
+      db
+          .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+          .doc(uidUsuario)
+          .collection(nomeColecao) // passando a colecao
+          .doc(nomeDocumento) // passando documento
+          .get()
+          .then((querySnapshot) async {
         querySnapshot.data()!.forEach(
           (key, value) {
             setState(() {
@@ -221,8 +206,14 @@ class _TelaInicialState extends State<TelaInicial>
         if (nomeColecao != Constantes.fireBaseColecaoRegioes) {
           exibirTelaCarregamento = false;
         }
-      },
-    );
+      }, onError: (e) {
+        debugPrint("ErroTONP${e.toString()}");
+        validarErro(e.toString());
+      });
+    } catch (e) {
+      debugPrint("ErroTP${e.toString()}");
+      validarErro(e.toString());
+    }
   }
 
   Widget cartao(String nomeImagem, String nome) => Container(
@@ -280,7 +271,7 @@ class _TelaInicialState extends State<TelaInicial>
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {
           return TelaCarregamentoWidget(
-            exibirMensagemConexao: exibirMensagem,
+            exibirMensagemConexao: exibirMensagemSemConexao,
             corPadrao: corPadrao,
           );
         } else {
@@ -337,19 +328,8 @@ class _TelaInicialState extends State<TelaInicial>
                               borderSide:
                                   BorderSide(width: 1, color: Colors.black)),
                           onPressed: () async {
-                            bool retornoConexao =
-                                await InternetConnection().hasInternetAccess;
-                            if (retornoConexao) {
-                              Navigator.pushReplacementNamed(
-                                  context, Constantes.rotaTelaUsuarioDetalhado);
-                            } else {
-                              MetodosAuxiliares.exibirMensagens(
-                                  Textos.erroSemInternet,
-                                  Constantes.msgErro,
-                                  Constantes.duracaoExibicaoToastJogos,
-                                  Constantes.larguraToastLoginCadastro,
-                                  context);
-                            }
+                            Navigator.pushReplacementNamed(
+                                context, Constantes.rotaTelaUsuarioDetalhado);
                           },
                           child: Icon(
                             Icons.person,

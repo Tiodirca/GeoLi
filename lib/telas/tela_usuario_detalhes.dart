@@ -9,6 +9,7 @@ import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TelaUsuarioDetalhes extends StatefulWidget {
@@ -27,7 +28,8 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
   IconData iconeSenhaVisivel = Icons.visibility;
   String emailAuxiliarValidar = "";
   late String uidUsuario;
-  bool exibirMensagem = false;
+  bool exibirMensagemSemConexao = false;
+
   final _formKeyFormulario = GlobalKey<FormState>();
   final _formKeySenhaAlerta = GlobalKey<FormState>();
   TextEditingController campoEmail = TextEditingController(text: "");
@@ -58,26 +60,56 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
 
   recuperarNomeUsuario() async {
     var db = FirebaseFirestore.instance;
+
+    bool retornoConexao = await InternetConnection().hasInternetAccess;
     //instanciano variavel
-    db
-        .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
-        .doc(
-          uidUsuario,
-        )
-        .get()
-        .then(
-      (querySnapshot) async {
-        // verificando cada item que esta gravado no banco de dados
-        querySnapshot.data()!.forEach((key, value) {
-          setState(() {
-            campoUsuario.text = value;
+    if (retornoConexao) {
+      try {
+        db
+            .collection(
+                Constantes.fireBaseColecaoUsuarios) // passando a colecao
+            .doc(
+              uidUsuario,
+            )
+            .get()
+            .then((querySnapshot) async {
+          // verificando cada item que esta gravado no banco de dados
+          querySnapshot.data()!.forEach((key, value) {
+            setState(() {
+              campoUsuario.text = value;
+            });
           });
+          setState(() {
+            exibirTelaCarregamento = false;
+          });
+        }, onError: (e) {
+          debugPrint("RPON${e.toString()}");
+          validarErro(e.toString());
         });
-        setState(() {
-          exibirTelaCarregamento = false;
-        });
-      },
-    );
+      } catch (e) {
+        debugPrint("RP${e.toString()}");
+        validarErro(e.toString());
+      }
+    } else {
+      exibirErroConexao();
+    }
+  }
+
+  exibirErroConexao() {
+    if (mounted) {
+      setState(() {
+        exibirTelaCarregamento = true;
+        exibirMensagemSemConexao = true;
+        MetodosAuxiliares.passarTelaAtualErroConexao(
+            Constantes.rotaTelaUsuarioDetalhado);
+      });
+    }
+  }
+
+  validarErro(String erro) {
+    if (erro.contains("An internal error has occurred")) {
+      exibirErroConexao();
+    }
   }
 
   desconetarUsuario() async {
@@ -530,7 +562,7 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {
           return TelaCarregamentoWidget(
-            exibirMensagemConexao: exibirMensagem,
+            exibirMensagemConexao: exibirMensagemSemConexao,
             corPadrao: PaletaCores.corVerde,
           );
         } else {

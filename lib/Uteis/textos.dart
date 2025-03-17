@@ -2,6 +2,7 @@ class Textos {
   //BOTOES
   static String btnComecarJogo = "Começar Jogo";
   static String btnJogarNovamente = "Jogar Novamente";
+  static String btnRecarregarTelaNovamente = "Tentar nova conexao";
   static String btnProximoNivel = "Próximo Nivel";
   static String btnTodosEstados = "Todos os estados";
   static String btnEstadoBrasileiros = "Estados Brasileiros";
@@ -54,7 +55,7 @@ class Textos {
   static String erroCampoVazio = "Preencha antes de prosseguir";
   static String erroSemInternetAvisoTelaCarregamento =
       "Sem conexao com internet,"
-      "Conecte-se a uma rede para continuar jogando, Verificando conexao em ";
+      "Conecte-se a uma rede de Internet para continuar jogando.";
 
   //USUARIO DETALHADO
   static String telaUsuarioTitulo = "Dados Usuario";

@@ -125,25 +125,28 @@ class _BalaoWidgetState extends State<BalaoWidget>
               Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
           .doc(Constantes
               .fireBaseDocumentoPlanetasDesbloqueados) //passando o documento
-          .set(dados);
+          .set(dados)
+          .then((value) {}, onError: (e) {
+        debugPrint("BDPON${e.toString()}");
+      });
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("BDP${e.toString()}");
     }
   }
 
   // metodo para consultar o banco de dados
   recuperarPlanetasDesbloqueados() async {
     var db = FirebaseFirestore.instance;
-    db
-        .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
-        .doc(uidUsuario)
-        .collection(
-            Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
-        .doc(Constantes
-            .fireBaseDocumentoPlanetasDesbloqueados) // passando documento
-        .get()
-        .then(
-      (querySnapshot) async {
+    try {
+      db
+          .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+          .doc(uidUsuario)
+          .collection(
+              Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
+          .doc(Constantes
+              .fireBaseDocumentoPlanetasDesbloqueados) // passando documento
+          .get()
+          .then((querySnapshot) async {
         querySnapshot.data()!.forEach(
           (key, value) {
             setState(() {
@@ -160,8 +163,12 @@ class _BalaoWidgetState extends State<BalaoWidget>
         );
         // chamando metodo
         desbloquearPlaneta(widget.planeta.nomePlaneta);
-      },
-    );
+      }, onError: (e) {
+        debugPrint("RPON${e.toString()}");
+      });
+    } catch (e) {
+      debugPrint("RP${e.toString()}");
+    }
   }
 
   atualizarPontuacaoTutorial() async {
@@ -175,9 +182,11 @@ class _BalaoWidgetState extends State<BalaoWidget>
               Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
           .doc(Constantes
               .fireBaseDocumentoPontosJogadaSistemaSolar) //passando o documento
-          .set({Constantes.pontosJogada: 1});
+          .set({Constantes.pontosJogada: 1}).then((value) {}, onError: (e) {
+        debugPrint("ATPONB${e.toString()}");
+      });
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("ATPB${e.toString()}");
     }
   }
 

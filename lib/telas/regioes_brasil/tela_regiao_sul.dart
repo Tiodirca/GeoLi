@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Modelos/estado.dart';
@@ -30,13 +28,12 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
   late String uidUsuario;
   String nomeColecao = Constantes.fireBaseDocumentoRegiaoSul;
 
-  bool exibirMensagem = false;
+  bool exibirMensagemSemConexao = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    validarConexao();
+    //validarConexao();
     gestos.addAll([
       ConstantesEstadosGestos.gestoPR,
       ConstantesEstadosGestos.gestoSC,
@@ -45,29 +42,6 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
     gestos.shuffle(); //fazendo sorteio os itens na lista
     // chamando metodo para fazer busca no banco de dados
     recuperarUIDUsuario();
-    validarConexao();
-  }
-
-  validarConexao() async {
-    bool retornoConexao = await InternetConnection().hasInternetAccess;
-    if (retornoConexao) {
-      if (mounted) {
-        setState(() {
-          exibirTelaCarregamento = false;
-          exibirMensagem = false;
-        });
-      }
-    } else {
-      if (mounted) {
-        setState(() {
-          exibirTelaCarregamento = true;
-          exibirMensagem = true;
-        });
-      }
-    }
-    Timer( Duration(seconds: Constantes.duracaoVerificarConexao), () {
-      validarConexao();
-    });
   }
 
   recuperarUIDUsuario() async {
@@ -89,45 +63,74 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
   }
 
   realizarBuscaDadosFireBase(String nomeDocumentoRegiao) async {
+    bool retornoConexao = await InternetConnection().hasInternetAccess;
     var db = FirebaseFirestore.instance;
     //instanciano variavel
-    db
-        .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
-        .doc(uidUsuario)
-        .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-        .doc(nomeDocumentoRegiao) // passando documento
-        .get()
-        .then(
-      (querySnapshot) async {
-        // verificando cada item que esta gravado no banco de dados
-        querySnapshot.data()!.forEach(
-          (key, value) {
-            // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
-            setState(() {
-              if (ConstantesEstadosGestos.estadoSC.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoSC, value, gestos);
-              } else if (ConstantesEstadosGestos.estadoRS.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoRS, value, gestos);
-              } else if (ConstantesEstadosGestos.estadoPR.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoPR, value, gestos);
+    if (retornoConexao) {
+      try {
+        db
+            .collection(
+                Constantes.fireBaseColecaoUsuarios) // passando a colecao
+            .doc(uidUsuario)
+            .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
+            .doc(nomeDocumentoRegiao) // passando documento
+            .get()
+            .then((querySnapshot) async {
+          // verificando cada item que esta gravado no banco de dados
+          querySnapshot.data()!.forEach(
+            (key, value) {
+              // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
+              setState(() {
+                if (ConstantesEstadosGestos.estadoSC.nome == key) {
+                  MetodosAuxiliares.removerGestoLista(
+                      ConstantesEstadosGestos.estadoSC, value, gestos);
+                } else if (ConstantesEstadosGestos.estadoRS.nome == key) {
+                  MetodosAuxiliares.removerGestoLista(
+                      ConstantesEstadosGestos.estadoRS, value, gestos);
+                } else if (ConstantesEstadosGestos.estadoPR.nome == key) {
+                  MetodosAuxiliares.removerGestoLista(
+                      ConstantesEstadosGestos.estadoPR, value, gestos);
+                }
+              });
+            },
+          );
+          setState(
+            () {
+              carregarEstados();
+              if (gestos.isEmpty) {
+                exibirTelaProximoNivel = true;
               }
-            });
-          },
-        );
-        setState(
-          () {
-            carregarEstados();
-            if (gestos.isEmpty) {
-              exibirTelaProximoNivel = true;
-            }
-            exibirTelaCarregamento = false;
-          },
-        );
-      },
-    );
+              exibirTelaCarregamento = false;
+            },
+          );
+        }, onError: (e) {
+          debugPrint("ErroONS${e.toString()}");
+          validarErro(e.toString());
+        });
+      } catch (e) {
+        debugPrint("ErroS${e.toString()}");
+        validarErro(e.toString());
+      }
+    } else {
+      exibirErroConexao();
+    }
+  }
+
+  validarErro(String erro) {
+    if (erro.contains("An internal error has occurred")) {
+      exibirErroConexao();
+    }
+  }
+
+  exibirErroConexao() {
+    if (mounted) {
+      setState(() {
+        exibirTelaCarregamento = true;
+        exibirMensagemSemConexao = true;
+        MetodosAuxiliares.passarTelaAtualErroConexao(
+            Constantes.rotaTelaRegiaoSul);
+      });
+    }
   }
 
   @override
@@ -155,7 +158,7 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
           builder: (context, constraints) {
             if (exibirTelaCarregamento) {
               return TelaCarregamentoWidget(
-                exibirMensagemConexao: exibirMensagem,
+                exibirMensagemConexao: exibirMensagemSemConexao,
                 corPadrao: ConstantesEstadosGestos.corPadraoRegioes,
               );
             } else {

@@ -276,7 +276,7 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
                       child: Column(
                         children: [
                           Container(
-                            margin: EdgeInsets.only(bottom: 10),
+                            margin: EdgeInsets.only(bottom: 10,right: 10,left: 10),
                             child: Text(
                               Textos.telaLoginCadastroDescricao,
                               style: TextStyle(fontSize: 18),

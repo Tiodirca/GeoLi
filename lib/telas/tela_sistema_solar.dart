@@ -52,10 +52,10 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   late String uidUsuario;
   Color corPadrao = PaletaCores.corAzul;
   late final AnimationController _controllerFade =
-      AnimationController(vsync: this);
+  AnimationController(vsync: this);
   late final Animation<double> _fadeAnimation =
-      Tween<double>(begin: 1, end: 0.0).animate(_controllerFade);
-  bool exibirMensagem = false;
+  Tween<double>(begin: 1, end: 0.0).animate(_controllerFade);
+  bool exibirMensagemSemConexao = false;
 
   @override
   void initState() {
@@ -116,7 +116,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
     const segundo = Duration(seconds: 1);
     iniciarTempo = Timer.periodic(
       segundo,
-      (timer) {
+          (timer) {
         if (tempo == 0) {
           setState(() {
             timer.cancel();
@@ -140,31 +140,59 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   // metodo para recuperar a pontuacao
   recuperarPontuacao() async {
     var db = FirebaseFirestore.instance;
-    //instanciano variavel
-    db
-        .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
-        .doc(uidUsuario)
-        .collection(
+    bool retornoConexao = await InternetConnection().hasInternetAccess;
+    if (retornoConexao) {
+      try {
+        db
+            .collection(
+            Constantes.fireBaseColecaoUsuarios) // passando a colecao
+            .doc(uidUsuario)
+            .collection(
             Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
-        .doc(Constantes
+            .doc(Constantes
             .fireBaseDocumentoPontosJogadaSistemaSolar) // passando documento
-        .get()
-        .then(
-      (querySnapshot) async {
-        querySnapshot.data()!.forEach(
-          (key, value) {
-            setState(() {
-              pontuacaoTotal = value;
-              //Passando pontuacao para
-              // a tela de emblemas sem esse metodo
-              // o emblema nao e exibido corretamente
-              MetodosAuxiliares.passarPontuacaoAtual(pontuacaoTotal);
-              exibirTelaCarregamento = false;
-            });
-          },
-        );
-      },
-    );
+            .get()
+            .then((querySnapshot) async {
+          querySnapshot.data()!.forEach(
+                (key, value) {
+              setState(() {
+                pontuacaoTotal = value;
+                //Passando pontuacao para
+                // a tela de emblemas sem esse metodo
+                // o emblema nao e exibido corretamente
+                MetodosAuxiliares.passarPontuacaoAtual(pontuacaoTotal);
+                exibirTelaCarregamento = false;
+              });
+            },
+          );
+        }, onError: (e) {
+          debugPrint("RPSON${e.toString()}");
+          validarErro(e.toString());
+        });
+      } catch (e) {
+        debugPrint("RPS${e.toString()}");
+        validarErro(e.toString());
+      }
+    } else {
+      exibirErroConexao();
+    }
+  }
+
+  exibirErroConexao() {
+    if (mounted) {
+      setState(() {
+        exibirTelaCarregamento = true;
+        exibirMensagemSemConexao = true;
+        MetodosAuxiliares.passarTelaAtualErroConexao(
+            Constantes.rotaTelaSistemaSolar);
+      });
+    }
+  }
+
+  validarErro(String erro) {
+    if (erro.contains("An internal error has occurred")) {
+      exibirErroConexao();
+    }
   }
 
   //atualizar pontuacao no banco de dados
@@ -177,12 +205,15 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
           .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
           .doc(uidUsuario)
           .collection(
-              Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
+          Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
           .doc(Constantes
-              .fireBaseDocumentoPontosJogadaSistemaSolar) //passando o documento
-          .set({Constantes.pontosJogada: pontuacaoTotal});
+          .fireBaseDocumentoPontosJogadaSistemaSolar) //passando o documento
+          .set({Constantes.pontosJogada: pontuacaoTotal}).then((value) {},
+          onError: (e) {
+            debugPrint("ATPONSS${e.toString()}");
+          });
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("ATPSS${e.toString()}");
     }
   }
 
@@ -233,69 +264,54 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
     super.dispose();
   }
 
-  validarConexao() async {
-    bool retornoConexao = await InternetConnection().hasInternetAccess;
-    if (retornoConexao) {
-      setState(() {
-        exibirTelaCarregamento = false;
-        exibirMensagem = false;
-      });
-    } else {
-      setState(() {
-        exibirTelaCarregamento = true;
-        exibirMensagem = true;
-      });
-    }
-    Timer(const Duration(seconds: 10), () {
-      validarConexao();
-    });
-  }
+  Widget btnAcao(String nomeBtn) =>
+      Container(
+          margin: EdgeInsets.all(10),
+          width: 100,
+          height: 50,
+          child: FloatingActionButton(
+              elevation: 0,
+              heroTag: nomeBtn,
+              backgroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(30)),
+                side: BorderSide(color: corPadrao),
+              ),
+              onPressed: () {
+                setState(() {
+                  if (nomeBtn == Textos.btnComecarJogo) {
+                    exibirBtnDificuldade = true;
+                    if (pontuacaoTotal == 0) {
+                      exibirTutorial = true;
+                      MetodosAuxiliares.passarStatusTutorial(
+                          Constantes.statusTutorialAtivo);
+                      _controllerFade.repeat(
+                          count: 1000, period: Duration(milliseconds: 800));
+                    }
+                  } else {
+                    if (nomeBtn == Textos.btnDificuldadeFacil) {
+                      tempo = ConstantesSistemaSolar.sistemaSolarTempoFacil;
+                    } else if (nomeBtn == Textos.btnDificuldadeMedio) {
+                      tamanhoVidas = 2;
+                      tempo = ConstantesSistemaSolar.sistemaSolarTempoMedio;
+                    } else if (nomeBtn == Textos.btnDificuldadeDificil) {
+                      tamanhoVidas = 1;
+                      tempo = ConstantesSistemaSolar.sistemaSolarTempoDificl;
+                    }
+                    ativarBtn = false;
+                    comecarTempo();
+                    liberarBotoes();
+                    exibirJogo = true;
+                    iniciarAnimacao =
+                        ConstantesSistemaSolar.statusAnimacaoIniciar;
+                    exibirBtnDificuldade = false;
+                  }
+                });
+              },
+              child: Text(nomeBtn)));
 
-  Widget btnAcao(String nomeBtn) => Container(
-      margin: EdgeInsets.all(10),
-      width: 100,
-      height: 50,
-      child: FloatingActionButton(
-          elevation: 0,
-          heroTag: nomeBtn,
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(30)),
-            side: BorderSide(color: corPadrao),
-          ),
-          onPressed: () {
-            setState(() {
-              if (nomeBtn == Textos.btnComecarJogo) {
-                exibirBtnDificuldade = true;
-                if (pontuacaoTotal == 0) {
-                  exibirTutorial = true;
-                  MetodosAuxiliares.passarStatusTutorial(
-                      Constantes.statusTutorialAtivo);
-                  _controllerFade.repeat(
-                      count: 1000, period: Duration(milliseconds: 800));
-                }
-              } else {
-                if (nomeBtn == Textos.btnDificuldadeFacil) {
-                  tempo = ConstantesSistemaSolar.sistemaSolarTempoFacil;
-                } else if (nomeBtn == Textos.btnDificuldadeMedio) {
-                  tamanhoVidas = 2;
-                  tempo = ConstantesSistemaSolar.sistemaSolarTempoMedio;
-                } else if (nomeBtn == Textos.btnDificuldadeDificil) {
-                  tamanhoVidas = 1;
-                  tempo = ConstantesSistemaSolar.sistemaSolarTempoDificl;
-                }
-                ativarBtn = false;
-                comecarTempo();
-                liberarBotoes();
-                exibirJogo = true;
-                iniciarAnimacao = ConstantesSistemaSolar.statusAnimacaoIniciar;
-                exibirBtnDificuldade = false;
-              }
-            });
-          },
-          child: Text(nomeBtn)));
-
-  Widget areaSorteioPlaneta(double larguraTela, double alturaTela) => SizedBox(
+  Widget areaSorteioPlaneta(double larguraTela, double alturaTela) =>
+      SizedBox(
         width: larguraTela,
         height: alturaTela,
         child: Card(
@@ -310,7 +326,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
               Text(
                 Textos.telaSistemaSolarDescricaoPlanetaSorteado,
                 style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               ),
               SizedBox(
                   height: Platform.isAndroid || Platform.isIOS ? 100 : 120,
@@ -319,7 +335,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                       if (exibirTutorial) {
                         return GestosWidget(
                             nomeGestoImagem:
-                                CaminhosImagens.gestoPlanetaTerraImagem,
+                            CaminhosImagens.gestoPlanetaTerraImagem,
                             nomeGesto: Textos.nomePlanetaTerra,
                             exibirAcerto: false);
                       } else {
@@ -335,7 +351,8 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
         ),
       );
 
-  Widget indicadorMsg(String msg, bool inverter) => Wrap(
+  Widget indicadorMsg(String msg, bool inverter) =>
+      Wrap(
         alignment: WrapAlignment.center,
         crossAxisAlignment: inverter == true
             ? WrapCrossAlignment.end
@@ -358,15 +375,21 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
 
   @override
   Widget build(BuildContext context) {
-    double alturaTela = MediaQuery.of(context).size.height;
-    double larguraTela = MediaQuery.of(context).size.width;
+    double alturaTela = MediaQuery
+        .of(context)
+        .size
+        .height;
+    double larguraTela = MediaQuery
+        .of(context)
+        .size
+        .width;
     //double alturaBarraStatus = MediaQuery.of(context).padding.top;
     //double alturaAppBar = AppBar().preferredSize.height;
     return LayoutBuilder(
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {
           return TelaCarregamentoWidget(
-            exibirMensagemConexao: exibirMensagem,
+            exibirMensagemConexao: exibirMensagemSemConexao,
             corPadrao: corPadrao,
           );
         } else {
@@ -384,12 +407,12 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                             children: [
                               Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
+                                MainAxisAlignment.spaceEvenly,
                                 children: [
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    CrossAxisAlignment.center,
                                     children: [
                                       Text(
                                         Textos.telaSistemaSolarPontuacao,
@@ -410,7 +433,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    CrossAxisAlignment.center,
                                     children: [
                                       Text(
                                         Textos.telaSistemaSolarVidas,
@@ -513,7 +536,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                             shape: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15),
                                 borderSide:
-                                    BorderSide(width: 1, color: Colors.black)),
+                                BorderSide(width: 1, color: Colors.black)),
                             onPressed: () {
                               setState(() {
                                 exibirTelaResetarJogo = !exibirTelaResetarJogo;
@@ -594,7 +617,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                                     planeta: Planeta(
                                         nomePlaneta: Textos.nomePlanetaTerra,
                                         caminhoImagem:
-                                            CaminhosImagens.planetaTerraImagem),
+                                        CaminhosImagens.planetaTerraImagem),
                                     desativarBotao: false),
                               ],
                             ),
@@ -642,7 +665,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                                       ),
                                       Wrap(
                                         crossAxisAlignment:
-                                            WrapCrossAlignment.center,
+                                        WrapCrossAlignment.center,
                                         alignment: WrapAlignment.center,
                                         children: [
                                           btnAcao(Textos.btnDificuldadeFacil),
@@ -658,7 +681,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                                 child: WidgetTelaResetarDados(
                                   corCard: corPadrao,
                                   tipoAcao:
-                                      Constantes.resetarAcaoExcluirSistemaSolar,
+                                  Constantes.resetarAcaoExcluirSistemaSolar,
                                 ))
                           ],
                         ),
@@ -679,9 +702,9 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                           children: [
                             Row(
                               mainAxisAlignment:
-                                  Platform.isAndroid || Platform.isIOS
-                                      ? MainAxisAlignment.start
-                                      : MainAxisAlignment.center,
+                              Platform.isAndroid || Platform.isIOS
+                                  ? MainAxisAlignment.start
+                                  : MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 indicadorMsg(

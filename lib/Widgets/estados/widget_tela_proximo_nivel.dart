@@ -30,6 +30,7 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
   bool liberarRegiaoNordeste = false;
   bool liberarTodosEstados = false;
   late String uidUsuario;
+  String nomeRota = "";
 
   @override
   void initState() {
@@ -64,23 +65,26 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
           .doc(uidUsuario)
           .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
           .doc(widget.nomeColecao) //passando o documento
-          .set(dados);
+          .set(dados)
+          .then((value) {}, onError: (e) {
+        debugPrint("RDON${e.toString()}");
+      });
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("RD${e.toString()}");
     }
   }
 
   recuperarRegioesLiberadas() async {
     var db = FirebaseFirestore.instance;
     //instanciano variavel
-    db
-        .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
-        .doc(uidUsuario)
-        .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-        .doc(Constantes.fireBaseDocumentoLiberarEstados) // passando documento
-        .get()
-        .then(
-      (querySnapshot) async {
+    try {
+      db
+          .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+          .doc(uidUsuario)
+          .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
+          .doc(Constantes.fireBaseDocumentoLiberarEstados) // passando documento
+          .get()
+          .then((querySnapshot) async {
         // verificando cada item que esta gravado no banco de dados
         querySnapshot.data()!.forEach((key, value) {
           if (Textos.nomeRegiaoSul == key) {
@@ -97,8 +101,12 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
         });
         validarLiberarProximoNivel("");
         liberarProximoNivel();
-      },
-    );
+      }, onError: (e) {
+        debugPrint("RLON${e.toString()}");
+      });
+    } catch (e) {
+      debugPrint("RL${e.toString()}");
+    }
   }
 
   // metodo para cadastrar item
@@ -118,48 +126,55 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
         Textos.nomeRegiaoNorte: liberarRegiaoNorte,
         Textos.nomeRegiaoNordeste: liberarRegiaoNordeste,
         Constantes.nomeTodosEstados: liberarTodosEstados,
+      }).then((value) {}, onError: (e) {
+        debugPrint("LPON${e.toString()}");
       });
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("LP${e.toString()}");
     }
   }
 
   validarLiberarProximoNivel(String nomeBtn) async {
-    setState(() {
-      if (widget.nomeColecao == Constantes.fireBaseDocumentoRegiaoCentroOeste) {
-        liberarRegiaoSul = true;
-        if (nomeBtn == Textos.btnProximoNivel) {
-          Navigator.pushReplacementNamed(context, Constantes.rotaTelaRegiaoSul);
+    if (mounted) {
+      setState(() {
+        if (widget.nomeColecao ==
+            Constantes.fireBaseDocumentoRegiaoCentroOeste) {
+          liberarRegiaoSul = true;
+          if (nomeBtn == Textos.btnProximoNivel) {
+            Navigator.pushReplacementNamed(
+                context, Constantes.rotaTelaRegiaoSul);
+          }
+        } else if (widget.nomeColecao ==
+            Constantes.fireBaseDocumentoRegiaoSul) {
+          liberarRegiaoSudeste = true;
+          if (nomeBtn == Textos.btnProximoNivel) {
+            Navigator.pushReplacementNamed(
+                context, Constantes.rotaTelaRegiaoSudeste);
+          }
+        } else if (widget.nomeColecao ==
+            Constantes.fireBaseDocumentoRegiaoSudeste) {
+          liberarRegiaoNorte = true;
+          if (nomeBtn == Textos.btnProximoNivel) {
+            Navigator.pushReplacementNamed(
+                context, Constantes.rotaTelaRegiaoNorte);
+          }
+        } else if (widget.nomeColecao ==
+            Constantes.fireBaseDocumentoRegiaoNorte) {
+          liberarRegiaoNordeste = true;
+          if (nomeBtn == Textos.btnProximoNivel) {
+            Navigator.pushReplacementNamed(
+                context, Constantes.rotaTelaRegiaoNordeste);
+          }
+        } else if (widget.nomeColecao ==
+            Constantes.fireBaseDocumentoRegiaoNordeste) {
+          liberarTodosEstados = true;
+          if (nomeBtn == Textos.btnProximoNivel) {
+            Navigator.pushReplacementNamed(
+                context, Constantes.rotaTelaRegiaoTodosEstados);
+          }
         }
-      } else if (widget.nomeColecao == Constantes.fireBaseDocumentoRegiaoSul) {
-        liberarRegiaoSudeste = true;
-        if (nomeBtn == Textos.btnProximoNivel) {
-          Navigator.pushReplacementNamed(
-              context, Constantes.rotaTelaRegiaoSudeste);
-        }
-      } else if (widget.nomeColecao ==
-          Constantes.fireBaseDocumentoRegiaoSudeste) {
-        liberarRegiaoNorte = true;
-        if (nomeBtn == Textos.btnProximoNivel) {
-          Navigator.pushReplacementNamed(
-              context, Constantes.rotaTelaRegiaoNorte);
-        }
-      } else if (widget.nomeColecao ==
-          Constantes.fireBaseDocumentoRegiaoNorte) {
-        liberarRegiaoNordeste = true;
-        if (nomeBtn == Textos.btnProximoNivel) {
-          Navigator.pushReplacementNamed(
-              context, Constantes.rotaTelaRegiaoNordeste);
-        }
-      } else if (widget.nomeColecao ==
-          Constantes.fireBaseDocumentoRegiaoNordeste) {
-        liberarTodosEstados = true;
-        if (nomeBtn == Textos.btnProximoNivel) {
-          Navigator.pushReplacementNamed(
-              context, Constantes.rotaTelaRegiaoTodosEstados);
-        }
-      }
-    });
+      });
+    }
   }
 
   Widget cardOpcoes(
@@ -255,7 +270,7 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
                     ? MainAxisAlignment.spaceEvenly
                     : MainAxisAlignment.center,
                 children: [
-                  cardOpcoes(CaminhosImagens.btnJogarNovamenteGesto,
+                  cardOpcoes(CaminhosImagens.btnNovamenteGesto,
                       Textos.btnJogarNovamente, context),
                   Visibility(
                       visible: exibirBtnProximoNivel,

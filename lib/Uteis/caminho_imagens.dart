@@ -1,6 +1,6 @@
 class CaminhosImagens {
   // BOTOES DE ACAO
-  static const btnJogarNovamenteGesto = "assets/imagens/gesto_de_novo";
+  static const btnNovamenteGesto = "assets/imagens/gesto_de_novo";
   static const btnProximoNivelGesto = "assets/imagens/gesto_continuar";
   static const btnGestoEstadosBrasileiroImagem =
       "assets/imagens/estados/gestos_estados/gesto_estados";

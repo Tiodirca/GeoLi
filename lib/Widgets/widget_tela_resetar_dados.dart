@@ -97,9 +97,12 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
           .doc(uidUsuario)
           .collection(nomeColecao) // passando a colecao
           .doc(nomeDocumento) //passando o documento
-          .set(dados);
+          .set(dados)
+          .then((value) {}, onError: (e) {
+        debugPrint("GRON${e.toString()}");
+      });
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("GR${e.toString()}");
     }
   }
 
@@ -122,10 +125,14 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
               Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
           .doc(Constantes
               .fireBaseDocumentoPlanetasDesbloqueados) //passando o documento
-          .set(dados);
+          .set(dados)
+          .then((value) {}, onError: (e) {
+        debugPrint("BPON${e.toString()}");
+      });
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("BP${e.toString()}");
     }
+    ;
   }
 
   reiniciarDadosRegioes() {
@@ -177,8 +184,7 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
                   Image(
                     height: 90,
                     width: 90,
-                    image: AssetImage(
-                        "${CaminhosImagens.gestoCancelar}.png"),
+                    image: AssetImage("${CaminhosImagens.gestoCancelar}.png"),
                   ),
                   Text(
                     'Cancelar',
@@ -196,8 +202,7 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
                   Image(
                     height: 90,
                     width: 90,
-                    image: AssetImage(
-                        "${CaminhosImagens.gestoSim}.png"),
+                    image: AssetImage("${CaminhosImagens.gestoSim}.png"),
                   ),
                   Text(
                     'Sim',

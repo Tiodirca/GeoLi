@@ -52,6 +52,7 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
   recuperarUIDUsuario() async {
     uidUsuario = await MetodosAuxiliares.recuperarUid();
     recuperarPontuacao();
+    validarRegiao(widget.nomeColecao);
   }
 
   @override
@@ -64,36 +65,45 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
     status = await MetodosAuxiliares.recuperarStatusTutorial();
     if (status == Constantes.statusTutorialAtivo) {
       _controllerFade.repeat(count: 1000, period: Duration(milliseconds: 800));
-      setState(() {
-        exibirMsgTutorial = true;
-      });
+      if (mounted) {
+        setState(() {
+          exibirMsgTutorial = true;
+        });
+      }
     }
   }
 
   // metodo para recuperar a pontuacao
   recuperarPontuacao() async {
-    var db = FirebaseFirestore.instance;
-    //instanciano variavel
-    db
-        .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
-        .doc(uidUsuario)
-        .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-        .doc(Constantes
-            .fireBaseDocumentoPontosJogadaRegioes) // passando documento
-        .get()
-        .then(
-      (querySnapshot) async {
-        querySnapshot.data()!.forEach(
-          (key, value) {
-            setState(() {
-              ponto = value;
-              verificarStatusTutorial();
-              validarRegiao(widget.nomeColecao);
-            });
-          },
-        );
-      },
-    );
+    try {
+      var db = FirebaseFirestore.instance;
+      //instanciano variavel
+      db
+          .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+          .doc(uidUsuario)
+          .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
+          .doc(Constantes
+              .fireBaseDocumentoPontosJogadaRegioes) // passando documento
+          .get()
+          .then((querySnapshot) async {
+        if (mounted) {
+          querySnapshot.data()!.forEach(
+            (key, value) {
+              if (mounted) {
+                setState(() {
+                  ponto = value;
+                  verificarStatusTutorial();
+                });
+              }
+            },
+          );
+        }
+      }, onError: (e) {
+        debugPrint(e.toString());
+      });
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 
   atualizarPontuacao() async {
@@ -107,9 +117,11 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
           .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
           .doc(Constantes
               .fireBaseDocumentoPontosJogadaRegioes) //passando o documento
-          .set({Constantes.pontosJogada: ponto});
+          .set({Constantes.pontosJogada: ponto}).then((value) {}, onError: (e) {
+        debugPrint("ATPON:${e.toString()}");
+      });
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("ATP:${e.toString()}");
     }
   }
 
@@ -131,9 +143,12 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
           .doc(uidUsuario)
           .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
           .doc(widget.nomeColecao) //passando o documento
-          .set(dados);
+          .set(dados)
+          .then((value) {}, onError: (e) {
+        debugPrint("ADON:${e.toString()}");
+      });
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("AD:${e.toString()}");
     }
   }
 
@@ -164,24 +179,26 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
           if (retorno == Constantes.msgAcerto) {
             // caso tenha acertado ele ira remover da
             // lista de gestos o gesto que foi acertado
-            setState(() {
-              if (status != Constantes.statusTutorialAtivo) {
-                atualizarDadosBanco();
-              }
-              atualizarPontuacao();
-              // caso esteja no tutorial fazer acoes
-              if (status == Constantes.statusTutorialAtivo) {
-                MetodosAuxiliares.passarStatusTutorial("");
-                //chamando metodo passando pontuacao para quando recarregar atela
-                MetodosAuxiliares.passarPontuacaoAtual(ponto);
-              }
-              //removendo o item da lista em caso de acerto
-              widget.gestos.removeWhere(
-                (element) {
-                  return element.nomeGesto == gesto.nomeGesto;
-                },
-              );
-            });
+            if (mounted) {
+              setState(() {
+                if (status != Constantes.statusTutorialAtivo) {
+                  atualizarDadosBanco();
+                }
+                atualizarPontuacao();
+                // caso esteja no tutorial fazer acoes
+                if (status == Constantes.statusTutorialAtivo) {
+                  MetodosAuxiliares.passarStatusTutorial("");
+                  //chamando metodo passando pontuacao para quando recarregar atela
+                  MetodosAuxiliares.passarPontuacaoAtual(ponto);
+                }
+                //removendo o item da lista em caso de acerto
+                widget.gestos.removeWhere(
+                  (element) {
+                    return element.nomeGesto == gesto.nomeGesto;
+                  },
+                );
+              });
+            }
 
             if (widget.gestos.isEmpty) {
               Navigator.pushReplacementNamed(context, nomeRota);
@@ -190,9 +207,11 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
             // caso esteja no tutorial e nao seja a regiao correta exibir
             //novamente  a msg de tutorial
             if (status == Constantes.statusTutorialAtivo) {
-              setState(() {
-                exibirMsgTutorial = true;
-              });
+              if (mounted) {
+                setState(() {
+                  exibirMsgTutorial = true;
+                });
+              }
             }
           }
         },
@@ -206,18 +225,22 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
         rootOverlay: true,
         onDragStarted: () {
           if (status == Constantes.statusTutorialAtivo) {
-            setState(() {
-              exibirMsgTutorial = false;
-            });
+            if (mounted) {
+              setState(() {
+                exibirMsgTutorial = false;
+              });
+            }
           }
         },
         onDraggableCanceled: (velocity, offset) {
           //vefiricando se tutorial caso o arrastar seja
           // cancelado em estar em alguma area
           if (status == Constantes.statusTutorialAtivo) {
-            setState(() {
-              exibirMsgTutorial = true;
-            });
+            if (mounted) {
+              setState(() {
+                exibirMsgTutorial = true;
+              });
+            }
           }
         },
         childWhenDragging: Container(),

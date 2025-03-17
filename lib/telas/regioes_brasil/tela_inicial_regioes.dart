@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/emblemas.dart';
@@ -52,7 +50,7 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
   List<Emblemas> emblemasExibir = [];
   bool exibirTelaResetarJogo = false;
 
-  bool exibirMensagem = false;
+  bool exibirMensagemSemConexao = false;
   late String uidUsuario;
 
   @override
@@ -85,7 +83,6 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
           nomeEmblema: Textos.emblemaEstadosIndiana,
           pontos: 50),
     });
-    validarConexao();
   }
 
   recuperarUIDUsuario() async {
@@ -94,89 +91,110 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
     recuperarPontuacao();
   }
 
-  validarConexao() async {
-    bool retornoConexao = await InternetConnection().hasInternetAccess;
-    if (retornoConexao) {
-      if (mounted) {
-        setState(() {
-          exibirTelaCarregamento = false;
-          exibirMensagem = false;
-        });
-      }
-    } else {
-      if (mounted) {
-        setState(() {
-          exibirTelaCarregamento = true;
-          exibirMensagem = true;
-        });
-      }
-    }
-    Timer( Duration(seconds: Constantes.duracaoVerificarConexao), () {
-      validarConexao();
-    });
-  }
-
   recuperarRegioesLiberadas() async {
     var db = FirebaseFirestore.instance;
+
+    bool retornoConexao = await InternetConnection().hasInternetAccess;
     //instanciano variavel
-    db
-        .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
-        .doc(uidUsuario)
-        .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-        .doc(Constantes.fireBaseDocumentoLiberarEstados) // passando documento
-        .get()
-        .then(
-      (querySnapshot) async {
-        // verificando cada item que esta gravado no banco de dados
-        querySnapshot.data()!.forEach((key, value) {
-          setState(() {
-            // verificando se o nome da KEY e igual ao nome passado
-            if (regiaoSul.nome == key) {
-              regiaoSul.acerto = value;
-            } else if (regiaoSudeste.nome == key) {
-              regiaoSudeste.acerto = value;
-            } else if (regiaoNorte.nome == key) {
-              regiaoNorte.acerto = value;
-            } else if (regiaoNordeste.nome == key) {
-              regiaoNordeste.acerto = value;
-            } else if (Constantes.nomeTodosEstados == key) {
-              todasRegioes.acerto = value;
-            }
+    if (retornoConexao) {
+      try {
+        db
+            .collection(
+                Constantes.fireBaseColecaoUsuarios) // passando a colecao
+            .doc(uidUsuario)
+            .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
+            .doc(Constantes
+                .fireBaseDocumentoLiberarEstados) // passando documento
+            .get()
+            .then((querySnapshot) async {
+          // verificando cada item que esta gravado no banco de dados
+          querySnapshot.data()!.forEach((key, value) {
+            setState(() {
+              // verificando se o nome da KEY e igual ao nome passado
+              if (regiaoSul.nome == key) {
+                regiaoSul.acerto = value;
+              } else if (regiaoSudeste.nome == key) {
+                regiaoSudeste.acerto = value;
+              } else if (regiaoNorte.nome == key) {
+                regiaoNorte.acerto = value;
+              } else if (regiaoNordeste.nome == key) {
+                regiaoNordeste.acerto = value;
+              } else if (Constantes.nomeTodosEstados == key) {
+                todasRegioes.acerto = value;
+              }
+            });
           });
+          setState(() {
+            exibirTelaCarregamento = false;
+          });
+        }, onError: (e) {
+          debugPrint("ErroONTIR${e.toString()}");
+          validarErro(e.toString());
         });
-        setState(() {
-          exibirTelaCarregamento = false;
-        });
-      },
-    );
+      } catch (e) {
+        debugPrint("ErroTIR${e.toString()}");
+        validarErro(e.toString());
+      }
+    } else {
+      exibirErroConexao();
+    }
+  }
+
+  exibirErroConexao() {
+    if (mounted) {
+      setState(() {
+        exibirTelaCarregamento = true;
+        exibirMensagemSemConexao = true;
+        MetodosAuxiliares.passarTelaAtualErroConexao(
+            Constantes.rotaTelaRegiaoCentroOeste);
+      });
+    }
+  }
+
+  validarErro(String erro) {
+    if (erro.contains("An internal error has occurred")) {
+      exibirErroConexao();
+    }
   }
 
   recuperarPontuacao() async {
     var db = FirebaseFirestore.instance;
     //instanciano variavel
-    db
-        .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
-        .doc(uidUsuario)
-        .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-        .doc(Constantes
-            .fireBaseDocumentoPontosJogadaRegioes) // passando documento
-        .get()
-        .then(
-      (querySnapshot) async {
-        // verificando cada item que esta gravado no banco de dados
-        querySnapshot.data()!.forEach((key, value) {
-          setState(() {
-            pontos = value;
-            //Passando pontuacao para
-            // a tela de emblemas sem esse metodo o
-            // emblema nao e exibido corretamente
-            // e para a TELA REGIAO CENTRO OESTE para
-            // validar se entrara no tutorial ou nao
-            MetodosAuxiliares.passarPontuacaoAtual(pontos);
-          });
-        });
-      },
-    );
+
+    bool retornoConexao = await InternetConnection().hasInternetAccess;
+   if(retornoConexao){
+     try {
+       db
+           .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+           .doc(uidUsuario)
+           .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
+           .doc(Constantes
+           .fireBaseDocumentoPontosJogadaRegioes) // passando documento
+           .get()
+           .then((querySnapshot) async {
+         // verificando cada item que esta gravado no banco de dados
+         querySnapshot.data()!.forEach((key, value) {
+           setState(() {
+             pontos = value;
+             //Passando pontuacao para
+             // a tela de emblemas sem esse metodo o
+             // emblema nao e exibido corretamente
+             // e para a TELA REGIAO CENTRO OESTE para
+             // validar se entrara no tutorial ou nao
+             MetodosAuxiliares.passarPontuacaoAtual(pontos);
+           });
+         });
+       }, onError: (e) {
+         debugPrint("ErroTRON${e.toString()}");
+         validarErro(e.toString());
+       });
+     } catch (e) {
+       debugPrint("ErroTR${e.toString()}");
+       validarErro(e.toString());
+     }
+   }else{
+     exibirErroConexao();
+   }
   }
 
   Widget cartaoRegiao(String nomeImagem, String nomeRegiao) => Container(
@@ -242,7 +260,7 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {
           return TelaCarregamentoWidget(
-            exibirMensagemConexao: exibirMensagem,
+            exibirMensagemConexao: exibirMensagemSemConexao,
             corPadrao: ConstantesEstadosGestos.corPadraoRegioes,
           );
         } else {

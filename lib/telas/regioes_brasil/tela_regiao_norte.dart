@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Modelos/estado.dart';
@@ -27,7 +25,7 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
   bool exibirTelaCarregamento = true;
   bool exibirTelaProximoNivel = false;
   late String uidUsuario;
-  bool exibirMensagem = false;
+  bool exibirMensagemSemConexao = false;
   String nomeColecao = Constantes.fireBaseDocumentoRegiaoNorte;
 
   @override
@@ -35,7 +33,6 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
     // TODO: implement initState
     super.initState();
     carregarEstados();
-    validarConexao();
     gestos.addAll([
       ConstantesEstadosGestos.gestoAC,
       ConstantesEstadosGestos.gestoAP,
@@ -50,32 +47,12 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
     recuperarUIDUsuario();
   }
 
-  validarConexao() async {
-    bool retornoConexao = await InternetConnection().hasInternetAccess;
-    if (retornoConexao) {
-      if (mounted) {
-        setState(() {
-          exibirTelaCarregamento = false;
-          exibirMensagem = false;
-        });
-      }
-    } else {
-      if (mounted) {
-        setState(() {
-          exibirTelaCarregamento = true;
-          exibirMensagem = true;
-        });
-      }
-    }
-    Timer(Duration(seconds: Constantes.duracaoVerificarConexao), () {
-      validarConexao();
-    });
-  }
-
   recuperarUIDUsuario() async {
     uidUsuario = await MetodosAuxiliares.recuperarUid();
     realizarBuscaDadosFireBase(nomeColecao);
   }
+
+
 
   carregarEstados() {
     estadoGestoMap[ConstantesEstadosGestos.estadoAC] =
@@ -97,56 +74,85 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
   }
 
   realizarBuscaDadosFireBase(String nomeDocumentoRegiao) async {
+    bool retornoConexao = await InternetConnection().hasInternetAccess;
     var db = FirebaseFirestore.instance;
     //instanciano variavel
-    db
-        .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
-        .doc(uidUsuario)
-        .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-        .doc(nomeDocumentoRegiao) // passando documento
-        .get()
-        .then(
-      (querySnapshot) async {
-        // verificando cada item que esta gravado no banco de dados
-        querySnapshot.data()!.forEach(
-          (key, value) {
-            // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
-            setState(() {
-              if (ConstantesEstadosGestos.estadoAC.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoAC, value, gestos);
-              } else if (ConstantesEstadosGestos.estadoAP.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoAP, value, gestos);
-              } else if (ConstantesEstadosGestos.estadoAM.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoAM, value, gestos);
-              } else if (ConstantesEstadosGestos.estadoPA.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoPA, value, gestos);
-              } else if (ConstantesEstadosGestos.estadoRO.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoRO, value, gestos);
-              } else if (ConstantesEstadosGestos.estadoRR.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoRR, value, gestos);
-              } else if (ConstantesEstadosGestos.estadoTO.nome == key) {
-                MetodosAuxiliares.removerGestoLista(
-                    ConstantesEstadosGestos.estadoTO, value, gestos);
+    if (retornoConexao) {
+      try {
+        db
+            .collection(
+                Constantes.fireBaseColecaoUsuarios) // passando a colecao
+            .doc(uidUsuario)
+            .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
+            .doc(nomeDocumentoRegiao) // passando documento
+            .get()
+            .then((querySnapshot) async {
+          // verificando cada item que esta gravado no banco de dados
+          querySnapshot.data()!.forEach(
+            (key, value) {
+              // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
+              setState(() {
+                if (ConstantesEstadosGestos.estadoAC.nome == key) {
+                  MetodosAuxiliares.removerGestoLista(
+                      ConstantesEstadosGestos.estadoAC, value, gestos);
+                } else if (ConstantesEstadosGestos.estadoAP.nome == key) {
+                  MetodosAuxiliares.removerGestoLista(
+                      ConstantesEstadosGestos.estadoAP, value, gestos);
+                } else if (ConstantesEstadosGestos.estadoAM.nome == key) {
+                  MetodosAuxiliares.removerGestoLista(
+                      ConstantesEstadosGestos.estadoAM, value, gestos);
+                } else if (ConstantesEstadosGestos.estadoPA.nome == key) {
+                  MetodosAuxiliares.removerGestoLista(
+                      ConstantesEstadosGestos.estadoPA, value, gestos);
+                } else if (ConstantesEstadosGestos.estadoRO.nome == key) {
+                  MetodosAuxiliares.removerGestoLista(
+                      ConstantesEstadosGestos.estadoRO, value, gestos);
+                } else if (ConstantesEstadosGestos.estadoRR.nome == key) {
+                  MetodosAuxiliares.removerGestoLista(
+                      ConstantesEstadosGestos.estadoRR, value, gestos);
+                } else if (ConstantesEstadosGestos.estadoTO.nome == key) {
+                  MetodosAuxiliares.removerGestoLista(
+                      ConstantesEstadosGestos.estadoTO, value, gestos);
+                }
+              });
+            },
+          );
+          setState(
+            () {
+              if (gestos.isEmpty) {
+                exibirTelaProximoNivel = true;
               }
-            });
-          },
-        );
-        setState(
-          () {
-            if (gestos.isEmpty) {
-              exibirTelaProximoNivel = true;
-            }
-            exibirTelaCarregamento = false;
-          },
-        );
-      },
-    );
+              exibirTelaCarregamento = false;
+            },
+          );
+        }, onError: (e) {
+          debugPrint("ErroONN${e.toString()}");
+          validarErro(e.toString());
+        });
+      } catch (e) {
+        debugPrint("ErroN${e.toString()}");
+        validarErro(e.toString());
+      }
+    } else {
+      exibirErroConexao();
+    }
+  }
+
+  validarErro(String erro) {
+    if (erro.contains("An internal error has occurred")) {
+      exibirErroConexao();
+    }
+  }
+
+  exibirErroConexao() {
+    if (mounted) {
+      setState(() {
+        exibirTelaCarregamento = true;
+        exibirMensagemSemConexao = true;
+        MetodosAuxiliares.passarTelaAtualErroConexao(
+            Constantes.rotaTelaRegiaoNorte);
+      });
+    }
   }
 
   @override
@@ -174,7 +180,7 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
           builder: (context, constraints) {
             if (exibirTelaCarregamento) {
               return TelaCarregamentoWidget(
-                exibirMensagemConexao: exibirMensagem,
+                exibirMensagemConexao: exibirMensagemSemConexao,
                 corPadrao: ConstantesEstadosGestos.corPadraoRegioes,
               );
             } else {

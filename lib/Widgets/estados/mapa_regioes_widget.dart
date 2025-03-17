@@ -36,6 +36,7 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
   String caminhoImagemRegiao = CaminhosImagens.mapaCompletoBranco;
   Map<Estado, Gestos> estadoGestoMap = {};
   String nomeRegiao = "";
+  bool exibirMensagemSemConexao = false;
 
   Estado regiaoCentroOeste = Estado(
       nome: Textos.nomeRegiaoCentroOeste,
@@ -76,9 +77,11 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
     if (liberarTodosEstados) {
       caminhoImagemRegiao = CaminhosImagens.mapaCompleto;
     }
-    setState(() {
-      exibirTelaCarregamento = false;
-    });
+    if (mounted) {
+      setState(() {
+        exibirTelaCarregamento = false;
+      });
+    }
   }
 
   @override
@@ -152,22 +155,40 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
         .then(
       (querySnapshot) async {
         // verificando cada item que esta gravado no banco de dados
-        querySnapshot.data()!.forEach((key, value) {
-          if (Textos.nomeRegiaoSul == key) {
-            liberarRegiaoSul = value;
-          } else if (Textos.nomeRegiaoSudeste == key) {
-            liberarRegiaoSudeste = value;
-          } else if (Textos.nomeRegiaoNorte == key) {
-            liberarRegiaoNorte = value;
-          } else if (Textos.nomeRegiaoNordeste == key) {
-            liberarRegiaoNordeste = value;
-          } else if (Constantes.nomeTodosEstados == key) {
-            liberarTodosEstados = value;
-          }
-        });
+        if (mounted) {
+          querySnapshot.data()!.forEach((key, value) {
+            if (Textos.nomeRegiaoSul == key) {
+              liberarRegiaoSul = value;
+            } else if (Textos.nomeRegiaoSudeste == key) {
+              liberarRegiaoSudeste = value;
+            } else if (Textos.nomeRegiaoNorte == key) {
+              liberarRegiaoNorte = value;
+            } else if (Textos.nomeRegiaoNordeste == key) {
+              liberarRegiaoNordeste = value;
+            } else if (Constantes.nomeTodosEstados == key) {
+              liberarTodosEstados = value;
+            }
+          });
+        }
         validarRegioesDesbloqueadas();
       },
     );
+  }
+
+  exibirErroConexao() {
+    if (mounted) {
+      setState(() {
+        exibirTelaCarregamento = true;
+        exibirMensagemSemConexao = true;
+        MetodosAuxiliares.passarTelaAtualErroConexao(Textos.btnRegioesMapa);
+      });
+    }
+  }
+
+  validarErro(String erro) {
+    if (erro.contains("An internal error has occurred")) {
+      exibirErroConexao();
+    }
   }
 
   Widget exibirDetalhesRegiaoDesbloqueada(bool exibir, Estado estado) =>
@@ -249,7 +270,7 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
           return Container(
             margin: EdgeInsets.all(10),
             child: TelaCarregamentoWidget(
-                exibirMensagemConexao: false,
+                exibirMensagemConexao: exibirMensagemSemConexao,
                 corPadrao: ConstantesEstadosGestos.corPadraoRegioes),
           );
         } else {
