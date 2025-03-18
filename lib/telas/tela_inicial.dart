@@ -120,11 +120,12 @@ class _TelaInicialState extends State<TelaInicial>
   }
 
   recuperarUsuario() async {
-    String email = "";
-    String senha = "";
+    String email = "jhoe@gmail.com";
+    String senha = "Agosto";
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    email = prefs.getString(Constantes.sharedPreferencesEmail) ?? '';
-    senha = prefs.getString(Constantes.sharedPreferencesSenha) ?? '';
+    // email = prefs.getString(Constantes.sharedPreferencesEmail) ?? '';
+    // senha = prefs.getString(Constantes.sharedPreferencesSenha) ?? '';
+
     AuthCredential credential =
         EmailAuthProvider.credential(email: email, password: senha);
     FirebaseAuth.instance.signInWithCredential(credential).then((value) async {
@@ -152,6 +153,8 @@ class _TelaInicialState extends State<TelaInicial>
             Constantes.rotaTelaInicial);
         exibirTelaCarregamento = true;
       });
+    } else if (erro.contains("An email address must be provided.")) {
+      redirecionarTelaLogin();
     } else {
       redirecionarTelaLogin();
     }

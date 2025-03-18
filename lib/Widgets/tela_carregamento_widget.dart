@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
+import 'package:geoli/Uteis/paleta_cores.dart';
 
 import '../Uteis/textos.dart';
 
@@ -55,8 +57,9 @@ class _TelaCarregamentoWidgetState extends State<TelaCarregamentoWidget> {
           context, Constantes.rotaTelaRegiaoTodosEstados);
     } else if (telaAtual == Constantes.rotaTelaSistemaSolar) {
       Navigator.pushReplacementNamed(context, Constantes.rotaTelaSistemaSolar);
-    }else if (telaAtual == Constantes.rotaTelaUsuarioDetalhado) {
-      Navigator.pushReplacementNamed(context, Constantes.rotaTelaUsuarioDetalhado);
+    } else if (telaAtual == Constantes.rotaTelaUsuarioDetalhado) {
+      Navigator.pushReplacementNamed(
+          context, Constantes.rotaTelaUsuarioDetalhado);
     }
   }
 
@@ -71,8 +74,10 @@ class _TelaCarregamentoWidgetState extends State<TelaCarregamentoWidget> {
         color: Colors.white,
         child: Center(
           child: SizedBox(
-            width: larguraTela * 0.9,
-            height: 150,
+            width: Platform.isAndroid || Platform.isIOS
+                ? larguraTela * 0.9
+                : larguraTela * 0.3,
+            height: widget.exibirMensagemConexao == true ? 400 : 150,
             child: Card(
               shape: RoundedRectangleBorder(
                   side: BorderSide(color: widget.corPadrao),
@@ -81,53 +86,66 @@ class _TelaCarregamentoWidgetState extends State<TelaCarregamentoWidget> {
               child: Center(child: LayoutBuilder(
                 builder: (context, constraints) {
                   if (widget.exibirMensagemConexao) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          Textos.erroSemInternetAvisoTelaCarregamento,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 10),
-                          width: 140,
-                          height: 150,
-                          child: FloatingActionButton(
-                            elevation: 0,
-                            heroTag: Textos.btnRecarregarTelaNovamente,
-                            backgroundColor: Colors.white,
-                            onPressed: () {
-                              recarregarTela();
-                            },
-                            shape: RoundedRectangleBorder(
-                                side: BorderSide(
-                                    color: widget.corPadrao, width: 1),
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(40))),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image(
-                                  height: 90,
-                                  width: 90,
-                                  image: AssetImage(
-                                      "${CaminhosImagens.btnNovamenteGesto}.png"),
-                                ),
-                                Text(
-                                  Textos.btnRecarregarTelaNovamente,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
-                                )
-                              ],
+                    return SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Container(
+                            margin: EdgeInsets.all(10),
+                            child: Text(
+                              Textos.erroSemInternetAvisoTelaCarregamento,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                           ),
-                        )
-                      ],
+                          SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: Icon(
+                              Icons.signal_wifi_connected_no_internet_4,
+                              color: PaletaCores.corVermelha,
+                              size: 50,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 140,
+                            height: 150,
+                            child: FloatingActionButton(
+                              elevation: 0,
+                              heroTag: Textos.btnRecarregarTelaNovamente,
+                              backgroundColor: Colors.white,
+                              onPressed: () {
+                                recarregarTela();
+                              },
+                              shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                      color: widget.corPadrao, width: 1),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(40))),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image(
+                                    height: 90,
+                                    width: 90,
+                                    image: AssetImage(
+                                        "${CaminhosImagens.btnNovamenteGesto}.png"),
+                                  ),
+                                  Text(
+                                    Textos.btnRecarregarTelaNovamente,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black),
+                                  )
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     );
                   } else {
                     return Column(

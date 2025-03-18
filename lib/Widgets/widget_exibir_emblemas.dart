@@ -8,7 +8,7 @@ import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/emblema_widget.dart';
 import 'package:geoli/Widgets/estados/mapa_regioes_widget.dart';
-import 'package:geoli/Widgets/sistema_solar/sistema_solar_widget.dart';
+import 'package:geoli/Widgets/sistema_solar/planetas_desbloqueados_widget.dart';
 
 class WidgetExibirEmblemas extends StatefulWidget {
   const WidgetExibirEmblemas(
@@ -52,11 +52,11 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
   validarImagemBtn(String nomeBtn) {
     String caminhoImagem = "";
     if (nomeBtn == Textos.btnRegioesMapa) {
-      caminhoImagem = CaminhosImagens.gestoSim;
+      caminhoImagem = CaminhosImagens.gestoMapa;
     } else if (nomeBtn == Textos.btnSistemaSolar) {
       caminhoImagem = CaminhosImagens.btnGestoSistemaSolarImagem;
     } else if (nomeBtn == Textos.btnEmblemas) {
-      caminhoImagem = CaminhosImagens.gestoCancelar;
+      caminhoImagem = CaminhosImagens.gestoEmblemas;
     }
     return caminhoImagem;
   }
@@ -204,7 +204,7 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
                             return MapaRegioesWidget();
                           }
                           if (exibirSistemaSolar) {
-                            return SistemaSolarWidget(
+                            return PlanetasDesbloqueadosWidget(
                                 corPadrao: widget.corBordas);
                           } else {
                             return ListView.builder(

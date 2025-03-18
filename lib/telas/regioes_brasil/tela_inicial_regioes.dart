@@ -146,7 +146,7 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
         exibirTelaCarregamento = true;
         exibirMensagemSemConexao = true;
         MetodosAuxiliares.passarTelaAtualErroConexao(
-            Constantes.rotaTelaRegiaoCentroOeste);
+            Constantes.rotaTelaInicialRegioes);
       });
     }
   }
@@ -154,6 +154,13 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
   validarErro(String erro) {
     if (erro.contains("An internal error has occurred")) {
       exibirErroConexao();
+    } else if (erro.contains("a document path must be a non-empty strin")) {
+      MetodosAuxiliares.exibirMensagens(
+          Textos.erroFirebaseSemReferencia,
+          Constantes.msgErro,
+          Constantes.duracaoExibicaoToastLoginCadastro,
+          Constantes.larguraToastLoginCadastro,
+          context);
     }
   }
 
@@ -162,45 +169,46 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
     //instanciano variavel
 
     bool retornoConexao = await InternetConnection().hasInternetAccess;
-   if(retornoConexao){
-     try {
-       db
-           .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
-           .doc(uidUsuario)
-           .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-           .doc(Constantes
-           .fireBaseDocumentoPontosJogadaRegioes) // passando documento
-           .get()
-           .then((querySnapshot) async {
-         // verificando cada item que esta gravado no banco de dados
-         querySnapshot.data()!.forEach((key, value) {
-           setState(() {
-             pontos = value;
-             //Passando pontuacao para
-             // a tela de emblemas sem esse metodo o
-             // emblema nao e exibido corretamente
-             // e para a TELA REGIAO CENTRO OESTE para
-             // validar se entrara no tutorial ou nao
-             MetodosAuxiliares.passarPontuacaoAtual(pontos);
-           });
-         });
-       }, onError: (e) {
-         debugPrint("ErroTRON${e.toString()}");
-         validarErro(e.toString());
-       });
-     } catch (e) {
-       debugPrint("ErroTR${e.toString()}");
-       validarErro(e.toString());
-     }
-   }else{
-     exibirErroConexao();
-   }
+    if (retornoConexao) {
+      try {
+        db
+            .collection(
+                Constantes.fireBaseColecaoUsuarios) // passando a colecao
+            .doc(uidUsuario)
+            .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
+            .doc(Constantes
+                .fireBaseDocumentoPontosJogadaRegioes) // passando documento
+            .get()
+            .then((querySnapshot) async {
+          // verificando cada item que esta gravado no banco de dados
+          querySnapshot.data()!.forEach((key, value) {
+            setState(() {
+              pontos = value;
+              //Passando pontuacao para
+              // a tela de emblemas sem esse metodo o
+              // emblema nao e exibido corretamente
+              // e para a TELA REGIAO CENTRO OESTE para
+              // validar se entrara no tutorial ou nao
+              MetodosAuxiliares.passarPontuacaoAtual(pontos);
+            });
+          });
+        }, onError: (e) {
+          debugPrint("ErroTRON${e.toString()}");
+          validarErro(e.toString());
+        });
+      } catch (e) {
+        debugPrint("ErroTR${e.toString()}");
+        validarErro(e.toString());
+      }
+    } else {
+      exibirErroConexao();
+    }
   }
 
   Widget cartaoRegiao(String nomeImagem, String nomeRegiao) => Container(
         margin: EdgeInsets.only(bottom: 10, left: 10.0, right: 10.0),
-        width: 130,
-        height: 170,
+        width: 120,
+        height: 140,
         child: FloatingActionButton(
           elevation: 0,
           heroTag: nomeRegiao,
@@ -234,8 +242,8 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image(
-                height: 110,
-                width: 110,
+                height: 90,
+                width: 90,
                 image: AssetImage("$nomeImagem.png"),
               ),
               Text(

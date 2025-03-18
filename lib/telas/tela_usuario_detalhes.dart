@@ -84,11 +84,11 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
           });
         }, onError: (e) {
           debugPrint("RPON${e.toString()}");
-          validarErro(e.toString());
+          validarErros(e.toString());
         });
       } catch (e) {
         debugPrint("RP${e.toString()}");
-        validarErro(e.toString());
+        validarErros(e.toString());
       }
     } else {
       exibirErroConexao();
@@ -103,12 +103,6 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
         MetodosAuxiliares.passarTelaAtualErroConexao(
             Constantes.rotaTelaUsuarioDetalhado);
       });
-    }
-  }
-
-  validarErro(String erro) {
-    if (erro.contains("An internal error has occurred")) {
-      exibirErroConexao();
     }
   }
 
@@ -207,9 +201,14 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
           .doc(
             uidUsuario,
           )
-          .set(nomeUsuario);
-      Navigator.pushReplacementNamed(
-          context, Constantes.rotaTelaUsuarioDetalhado);
+          .set(nomeUsuario)
+          .then((value) {
+        Navigator.pushReplacementNamed(
+            context, Constantes.rotaTelaUsuarioDetalhado);
+      }, onError: (e) {
+        debugPrint("NOME${e.toString()}");
+        validarErros(e.toString());
+      });
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -248,25 +247,38 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
     } else if (erro.code.contains('unknown-error')) {
       chamarExibirMensagens(
           Textos.erroEmailNaoCadastradoSenhaIncorreta, Constantes.msgErro);
+    } else if (erro.contains("An internal error has occurred")) {
+      exibirErroConexao();
     }
   }
 
   atualizarEmail() async {
     if (FirebaseAuth.instance.currentUser != null) {
       FirebaseAuth.instance.currentUser
-          ?.verifyBeforeUpdateEmail(campoEmail.text);
-      chamarExibirMensagens(Textos.sucessoEnvioLink, Constantes.msgAcerto);
-      Navigator.pushReplacementNamed(
-          context, Constantes.rotaTelaUsuarioDetalhado);
+          ?.verifyBeforeUpdateEmail(campoEmail.text)
+          .then((value) {
+        chamarExibirMensagens(Textos.sucessoEnvioLink, Constantes.msgAcerto);
+        Navigator.pushReplacementNamed(
+           context, Constantes.rotaTelaUsuarioDetalhado);
+      }, onError: (e) {
+        debugPrint("EMAIL${e.toString()}");
+        validarErros(e.toString());
+      });
     }
   }
 
   atualizarSenha() async {
     if (FirebaseAuth.instance.currentUser != null) {
-      FirebaseAuth.instance.currentUser?.updatePassword(campoSenhaNova.text);
-      chamarExibirMensagens(Textos.sucessoAtualizarSenha, Constantes.msgAcerto);
-      Navigator.pushReplacementNamed(
-          context, Constantes.rotaTelaUsuarioDetalhado);
+      FirebaseAuth.instance.currentUser
+          ?.updatePassword(campoSenhaNova.text)
+          .then((value) {
+        chamarExibirMensagens(Textos.sucessoAtualizarSenha, Constantes.msgAcerto);
+        Navigator.pushReplacementNamed(
+           context, Constantes.rotaTelaUsuarioDetalhado);
+      }, onError: (e) {
+        debugPrint("SENHA${e.toString()}");
+        validarErros(e.toString());
+      });
     }
   }
 

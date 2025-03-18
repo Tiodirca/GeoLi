@@ -37,22 +37,22 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
         password: campoSenha.text,
       )
           .then((value) {
-        print(value.user!.uid);
         gravarDadosShared();
         CriarDadosBanco.criarDadosUsuario(context, campoUsuario.text);
       }, onError: (e) {
+        debugPrint("ERRO ON CA${e.toString()}");
         validarErros(e.toString());
       });
     } on FirebaseAuthException catch (e) {
+      debugPrint("ERRO FIRE CA${e.toString()}");
       validarErros(e.code);
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("ERRO CA${e.toString()}");
     }
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -62,14 +62,15 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
           .signInWithEmailAndPassword(
               email: campoEmail.text, password: campoSenha.text)
           .then((value) {
-        print(value.user!.uid);
         gravarDadosShared();
         chamarExibirMensagem(Textos.sucessoLogin, Constantes.msgAcerto);
         redirecionarTelaInicial();
       }, onError: (e) {
+        debugPrint("ERRO ON LO${e.toString()}");
         validarErros(e.toString());
       });
     } on FirebaseAuthException catch (e) {
+      debugPrint("ERRO FIRE LO${e.toString()}");
       validarErros(e.code);
     }
   }
@@ -99,6 +100,8 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
     });
     if (erro.contains('invalid-email')) {
       chamarExibirMensagem(Textos.erroEmailInvalido, Constantes.msgErro);
+    } else if (erro.contains('network-request-failed')) {
+      chamarExibirMensagem(Textos.erroSemInternet, Constantes.msgErro);
     } else if (erro.contains('email-already-in-use')) {
       chamarExibirMensagem(Textos.erroEmailUso, Constantes.msgErro);
     } else if (erro.contains('An internal error has occurred.')) {
@@ -276,7 +279,8 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
                       child: Column(
                         children: [
                           Container(
-                            margin: EdgeInsets.only(bottom: 10,right: 10,left: 10),
+                            margin: EdgeInsets.only(
+                                bottom: 10, right: 10, left: 10),
                             child: Text(
                               Textos.telaLoginCadastroDescricao,
                               style: TextStyle(fontSize: 18),
@@ -349,7 +353,9 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
                       ),
                     )),
                 onTap: () {
-                  FocusScope.of(context).requestFocus(FocusNode());
+                  if (Platform.isIOS || Platform.isAndroid) {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                  }
                 },
               ));
         }

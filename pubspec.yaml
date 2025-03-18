@@ -39,6 +39,7 @@ flutter:
   assets:
     - assets/animacoes_lottie/
     - assets/imagens/
+    - assets/imagens/acoes_usuario/
     #emblemas GERAL
     - assets/imagens/patentes/
     #GESTOS

@@ -11,16 +11,16 @@ import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/modelos/planeta.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
-class SistemaSolarWidget extends StatefulWidget {
-  const SistemaSolarWidget({super.key, required this.corPadrao});
+class PlanetasDesbloqueadosWidget extends StatefulWidget {
+  const PlanetasDesbloqueadosWidget({super.key, required this.corPadrao});
 
   final Color corPadrao;
 
   @override
-  State<SistemaSolarWidget> createState() => _SistemaSolarWidgetState();
+  State<PlanetasDesbloqueadosWidget> createState() => _PlanetasDesbloqueadosWidgetState();
 }
 
-class _SistemaSolarWidgetState extends State<SistemaSolarWidget> {
+class _PlanetasDesbloqueadosWidgetState extends State<PlanetasDesbloqueadosWidget> {
   bool exibirTelaCarregamento = true;
   bool exibirPlanetaGestoDetalhado = false;
   List<Gestos> gestoPlanetasSistemaSolar = [];

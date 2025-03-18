@@ -1,6 +1,6 @@
 class Textos {
   //BOTOES
-  static String btnComecarJogo = "Começar Jogo";
+  static String btnComecarJogo = "Começar";
   static String btnJogarNovamente = "Jogar Novamente";
   static String btnRecarregarTelaNovamente = "Tentar nova conexao";
   static String btnProximoNivel = "Próximo Nivel";
@@ -44,6 +44,8 @@ class Textos {
   static String sucessoAtualizarSenha = "Senha alterada com sucesso";
 
   //ERROS
+  static String erroFirebaseSemReferencia =
+      "Nao foi possivel encontrar a referencia da coleçao";
   static String erroEmailInvalido = "Email não esta correto";
   static String erroEmailNaoCadastradoSenhaIncorreta =
       "E-mail não cadastrado ou Senha Incorreta";

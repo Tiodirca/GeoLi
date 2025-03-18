@@ -7,18 +7,25 @@ class CaminhosImagens {
   static const btnGestoSistemaSolarImagem =
       "assets/imagens/sistema_solar/gestos_planetas/gesto_sistema_solar";
 
-  static const gestoExcluir = "assets/imagens/gesto_excluir";
-  static const gestoSair = "assets/imagens/gesto_sair";
-  static const gestoEntrar = "assets/imagens/gesto_entrar";
-  static const gestoCadastro = "assets/imagens/gesto_cadastro";
-  static const gestoCancelar = "assets/imagens/gesto_cancelar";
-  static const gestoSenha = "assets/imagens/gesto_senha";
-  static const gestoNome = "assets/imagens/gesto_nome";
-  static const gestoEmail = "assets/imagens/gesto_email";
-  static const gestoSalvar = "assets/imagens/gesto_salvar";
+  //GESTOS ACOES USUARIO
+  static const gestoExcluir = "assets/imagens/acoes_usuario/gesto_excluir";
+  static const gestoSair = "assets/imagens/acoes_usuario/gesto_sair";
+  static const gestoEntrar = "assets/imagens/acoes_usuario/gesto_entrar";
+  static const gestoCadastro = "assets/imagens/acoes_usuario/gesto_cadastro";
+  static const gestoCancelar = "assets/imagens/acoes_usuario/gesto_cancelar";
+  static const gestoSenha = "assets/imagens/acoes_usuario/gesto_senha";
+  static const gestoNome = "assets/imagens/acoes_usuario/gesto_nome";
+  static const gestoEmail = "assets/imagens/acoes_usuario/gesto_email";
+  static const gestoSalvar = "assets/imagens/acoes_usuario/gesto_salvar";
+  static const gestoSim = "assets/imagens/acoes_usuario/gesto_sim";
+
+  // GESTOS GAMEPLAY
+  static const gestoComecar = "assets/imagens/gesto_comecar";
+  static const gestoFacil = "assets/imagens/gesto_facil";
   static const gestoAcertar = "assets/imagens/gesto_acertar";
   static const gestoErrado = "assets/imagens/gesto_errado";
-  static const gestoSim = "assets/imagens/gesto_sim";
+  static const gestoEmblemas = "assets/imagens/gesto_emblema";
+  static const gestoMapa = "assets/imagens/gesto_mapa";
   static const iconeClick = "assets/imagens/icon_click";
 
   // SISTEMA SOLAR BALAO
