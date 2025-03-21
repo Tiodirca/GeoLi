@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Modelos/estado.dart';
@@ -149,8 +151,10 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
                   iconSize: 30,
                   enableFeedback: false,
                   onPressed: () {
-                    Navigator.pushReplacementNamed(
-                        context, Constantes.rotaTelaInicialRegioes);
+                    Timer(const Duration(milliseconds: 2), () {
+                      Navigator.pushReplacementNamed(
+                          context, Constantes.rotaTelaInicialRegioes);
+                    });
                   },
                   icon: const Icon(Icons.arrow_back_ios)),
             )),

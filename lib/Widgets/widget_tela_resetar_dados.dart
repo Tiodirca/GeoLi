@@ -132,7 +132,6 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
     } catch (e) {
       debugPrint("BP${e.toString()}");
     }
-    ;
   }
 
   reiniciarDadosRegioes() {

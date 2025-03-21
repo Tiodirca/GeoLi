@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/estado.dart';
@@ -201,7 +203,9 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
             }
 
             if (widget.gestos.isEmpty) {
-              Navigator.pushReplacementNamed(context, nomeRota);
+              Timer(const Duration(seconds: 2), () {
+                Navigator.pushReplacementNamed(context, nomeRota);
+              });
             }
           } else {
             // caso esteja no tutorial e nao seja a regiao correta exibir

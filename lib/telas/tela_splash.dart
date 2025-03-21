@@ -19,7 +19,6 @@ class _TelaSplashScreenState extends State<TelaSplashScreen> {
     Timer(const Duration(seconds: 1), () {
       Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
     });
-    //validarConexao();
   }
 
 

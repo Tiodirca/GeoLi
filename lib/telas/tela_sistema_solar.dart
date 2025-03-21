@@ -666,10 +666,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                                 child: SizedBox(
                                   width: larguraTela,
                                   height: 400,
-                                  child: Wrap(
-                                    crossAxisAlignment:
-                                        WrapCrossAlignment.center,
-                                    alignment: WrapAlignment.center,
+                                  child: Column(
                                     children: [
                                       Text(
                                         Textos.descricaoSistemaSolarDificuldade,
@@ -685,9 +682,9 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                                           btnAcao(Textos.btnDificuldadeFacil,
                                               CaminhosImagens.gestoFacil),
                                           btnAcao(Textos.btnDificuldadeMedio,
-                                              CaminhosImagens.gestoFacil),
+                                              CaminhosImagens.gestoMedio),
                                           btnAcao(Textos.btnDificuldadeDificil,
-                                              CaminhosImagens.gestoFacil),
+                                              CaminhosImagens.gestoDificil),
                                         ],
                                       ),
                                     ],

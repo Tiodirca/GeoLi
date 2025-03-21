@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Uteis/textos.dart';
 
@@ -34,7 +36,6 @@ class _TelaCarregamentoWidgetState extends State<TelaCarregamentoWidget> {
 
   recarregarTela() async {
     String telaAtual = await MetodosAuxiliares.recuperarTelaAtualErroConexao();
-    print(telaAtual);
     if (telaAtual == Constantes.rotaTelaInicial) {
       Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
     } else if (telaAtual == Constantes.rotaTelaInicialRegioes) {
@@ -61,6 +62,16 @@ class _TelaCarregamentoWidgetState extends State<TelaCarregamentoWidget> {
       Navigator.pushReplacementNamed(
           context, Constantes.rotaTelaUsuarioDetalhado);
     }
+  }
+
+  desconetarUsuario() async {
+    await FirebaseAuth.instance.signOut();
+    MetodosAuxiliares.passarUidUsuario("");
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(Constantes.sharedPreferencesEmail, "");
+    prefs.setString(Constantes.sharedPreferencesSenha, "");
+    prefs.setString(Constantes.sharedPreferencesUID, "");
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaLoginCadastro);
   }
 
   @override
@@ -108,41 +119,83 @@ class _TelaCarregamentoWidgetState extends State<TelaCarregamentoWidget> {
                               size: 50,
                             ),
                           ),
-                          SizedBox(
-                            width: 140,
-                            height: 150,
-                            child: FloatingActionButton(
-                              elevation: 0,
-                              heroTag: Textos.btnRecarregarTelaNovamente,
-                              backgroundColor: Colors.white,
-                              onPressed: () {
-                                recarregarTela();
-                              },
-                              shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                      color: widget.corPadrao, width: 1),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(40))),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Image(
-                                    height: 90,
-                                    width: 90,
-                                    image: AssetImage(
-                                        "${CaminhosImagens.btnNovamenteGesto}.png"),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              SizedBox(
+                                width: 100,
+                                height: 120,
+                                child: FloatingActionButton(
+                                  elevation: 0,
+                                  heroTag: Textos.btnSair,
+                                  backgroundColor: Colors.white,
+                                  onPressed: () {
+                                    desconetarUsuario();
+                                  },
+                                  shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          color: PaletaCores.corVermelha,
+                                          width: 1),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(30))),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image(
+                                        height: 70,
+                                        width: 70,
+                                        image: AssetImage(
+                                            "${CaminhosImagens.gestoSair}.png"),
+                                      ),
+                                      Text(
+                                        Textos.btnSair,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black),
+                                      )
+                                    ],
                                   ),
-                                  Text(
-                                    Textos.btnRecarregarTelaNovamente,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black),
-                                  )
-                                ],
+                                ),
                               ),
-                            ),
+                              SizedBox(
+                                width: 140,
+                                height: 150,
+                                child: FloatingActionButton(
+                                  elevation: 0,
+                                  heroTag: Textos.btnRecarregarTelaNovamente,
+                                  backgroundColor: Colors.white,
+                                  onPressed: () {
+                                    recarregarTela();
+                                  },
+                                  shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          color: widget.corPadrao, width: 1),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(40))),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image(
+                                        height: 90,
+                                        width: 90,
+                                        image: AssetImage(
+                                            "${CaminhosImagens.btnNovamenteGesto}.png"),
+                                      ),
+                                      Text(
+                                        Textos.btnRecarregarTelaNovamente,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           )
                         ],
                       ),

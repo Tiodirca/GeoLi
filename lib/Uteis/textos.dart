@@ -2,8 +2,8 @@ class Textos {
   //BOTOES
   static String btnComecarJogo = "Começar";
   static String btnJogarNovamente = "Jogar Novamente";
-  static String btnRecarregarTelaNovamente = "Tentar nova conexao";
-  static String btnProximoNivel = "Próximo Nivel";
+  static String btnRecarregarTelaNovamente = "Tentar nova conexão";
+  static String btnProximoNivel = "Próximo Nível";
   static String btnTodosEstados = "Todos os estados";
   static String btnEstadoBrasileiros = "Estados Brasileiros";
   static String btnSistemaSolar = "Sistema Solar";
@@ -12,7 +12,7 @@ class Textos {
   static String btnExcluir = "Excluir Informações";
   static String btnDificuldadeFacil = "Fácil";
   static String btnDificuldadeMedio = "Médio";
-  static String btnDificuldadeDificil = "Dificil";
+  static String btnDificuldadeDificil = "Difícil";
   static String btnCadastrar = "Cadastrar Conta";
   static String btnAcessar = "Acessar Conta";
   static String btnEntrar = "Entrar na conta";
@@ -20,94 +20,100 @@ class Textos {
   static String btnMudarSenha = "Mudar Senha";
   static String btnCancelarEdicao = "Cancelar Edição";
   static String btnAtualizar = "Atualizar Dados";
-  static String btnExcluirUsuario = "Excluir Usuario";
+  static String btnExcluirUsuario = "Excluir Usuário";
   static String btnSalvarAlteracoes = "Salvar";
+  static String btnReenviarEmail = "Reenviar E-mail";
 
-  // GERAIS
+// GERAIS
   static String nomeApp = "Geo Li";
   static String txtTelaCarregamento = "Aguarde Carregando";
   static String msgAcertou = "Acertou";
   static String msgErrou = "Errado";
   static String campoEmail = "E-mail";
+  static String campoEmailAntigo = "E-mail Antigo";
   static String campoSenha = "Senha";
-  static String campoUsuario = "Nome/Usuario";
+  static String campoUsuario = "Nome/Usuário";
   static String campoSenhaNova = "Senha Nova";
   static String campoSenhaAntiga = "Senha Antiga";
 
-  //ERROS E SUCESSO MENSAGENS
+//ERROS E SUCESSO MENSAGENS
   static String sucessoLogin = "Sucesso ao entrar na conta";
   static String sucessoCadastro = "Sucesso ao fazer Cadastro";
+  static String sucessoAlterarNome = "Sucesso ao alterar o nome";
   static String sucessoDesconectar = "Sucesso ao desconectar conta";
   static String sucessoExcluirDados = "Sucesso ao excluir os dados";
-  static String sucessoEnvioLink = "Verifique seu Email para"
+  static String sucessoEnvioLink =
+      "Acesse o link enviado para o e-mail informado para "
       " concluir a alteração do email";
   static String sucessoAtualizarSenha = "Senha alterada com sucesso";
 
-  //ERROS
+//ERROS
   static String erroFirebaseSemReferencia =
-      "Nao foi possivel encontrar a referencia da coleçao";
+      "Não foi possível encontrar a referência da coleção do firebase";
   static String erroEmailInvalido = "Email não esta correto";
   static String erroEmailNaoCadastradoSenhaIncorreta =
       "E-mail não cadastrado ou Senha Incorreta";
   static String erroSenhaIncorreta = "Senha Incorreta";
   static String erroSenhaCurta = "Digite uma senha de pelo menos 6 caracteres";
-  static String erroEmailUso = "E-mail já em uso,utilize outro";
+  static String erroEmailUso = "E-mail já em uso, utilize outro";
   static String erroExcluirDados = "Erro ao excluir os dados";
-  static String erroSemInternet = "Sem conexao com internet";
+  static String erroSemInternet = "Sem conexão com internet";
   static String erroCampoVazio = "Preencha antes de prosseguir";
   static String erroSemInternetAvisoTelaCarregamento =
-      "Sem conexao com internet,"
+      "Sem conexão com internet,"
       "Conecte-se a uma rede de Internet para continuar jogando.";
 
-  //USUARIO DETALHADO
-  static String telaUsuarioTitulo = "Dados Usuario";
+//USUARIO DETALHADO
+  static String telaUsuarioTitulo = "Dados Usuário";
   static String telaUsuarioDescricao =
-      "Aqui você pode ver as informações de usuario, "
+      "Aqui você pode ver as informações de usuário, "
       "bem como editar e atualiza-las nos banco de dados";
+  static String telaUsuarioConfirmarEmail =
+      "Confirme o email para altera-lo para ";
 
-  //ALERT
+//ALERT
   static String alertTitulo = "Confirmar";
   static String alertDescricaoAlterarEmail =
-      "Digite a senha para fazer a alteracao do Email,"
+      "Digite a senha para fazer a alteração do Email,"
       "será enviado um link no novo email para confirmar a alteração";
   static String alertDescricaoAlterarSenha =
       "Digite a senha antiga para mudar a senha";
   static String alertDescricaoExclusaoUsuario =
-      "Deseja Realmente excluir este Usuario e todas as informações salvas nele ? ";
+      "Deseja Realmente excluir este Usuário e todas as informações salvas nele ? ";
 
-  // LOGIN E CADASTRO
+// LOGIN E CADASTRO
   static String telaLoginCadastroTitulo = "Login/Cadastro";
   static String telaLoginCadastroDescricao =
       "Faça login ou faça o cadastro de um e-mail para poder jogar";
   static String telaLoginCadastroDescricaoBtn =
       "Aperte aqui para mudar a Opção";
 
-  // TELA INICIAL
+// TELA INICIAL
   static String descricaoTelaInicial = "Selecione qual jogo deseja jogar";
   static String descricaoTelaInicialNomeUsuario = "Seja Bem-Vindo : ";
 
-  // TUTORIAIS REGIOES
+// TUTORIAIS REGIOES
   static String tutorialRegioesClickArraste = "Clique/Aperte em cima do gesto e"
       " arraste-o sem soltar até a area indicada";
 
-  //TELA REINICIAR DADOS
+//TELA REINICIAR DADOS
   static String tituloReiniciarDados = "Reiniciar dados";
   static String descricaoReiniciarDados =
       "Ao clicar no botão você irá APAGAR/REINICIAR todo o progresso feito";
   static String descricaoAlertExcluir =
       "Tem certeza que deseja EXCLUIR/REINICIAR as informações ?";
 
-  //TUTORIAIS SISTEMA SOLAR
+//TUTORIAIS SISTEMA SOLAR
   static String tutorialSistemaSolarClickBalao =
       "Clique/Aperte encima do balão jogar";
   static String tutorialSistemaSolarPlanetaSorteado =
       "Aqui é onde o planeta que você deve acertar será sorteado. "
       "Sendo sorteado um novo em caso de acerto";
   static String tutorialSistemaSolarCabecalho =
-      "Aqui você pode ver Pontuação, Vidas,Tempo restante e pausar o jogo";
-  static String tutorialConcluido = "Tutorial Concluido";
+      "Aqui você pode ver Pontuação, Vidas, Tempo restante e pausar o jogo";
+  static String tutorialConcluido = "Tutorial Concluído";
 
-  //TELA SISTEMA SOLAR
+//TELA SISTEMA SOLAR
   static String telaSistemaSolarTitulo = "Sistema Solar";
   static String telaSistemaSolarDescricaoPlanetaSorteado = "Planeta Sorteado";
   static String telaSistemaSolarDescricaoTemporizador = "Tempo";
@@ -119,16 +125,16 @@ class Textos {
   static String descricaoSistemaSolarDificuldade =
       "Selecione uma dificuldade para começar a jogar";
 
-  //TELA PLANETAS DESBLOQUEADOS
+//TELA PLANETAS DESBLOQUEADOS
   static String telaPlanetasDesbloqueadosTitulo = "Planetas Desbloqueados";
   static String telaPlanetasDesbloqueadosDescricao =
-      "Aqui estão os planetas que você já desbloqueou,clique/aperte sobre para ver mais";
+      "Aqui estão os planetas que você já desbloqueou, clique/aperte sobre para ver mais";
   static String telaPlanetasDesbloqueadosQuanti = "Planetas desbloqueados : ";
   static String telaPlanetasDesbloqueadosFalta = "Falta desbloquear : ";
   static String telaPlanetasSemDesbloquear =
       "Jogue para desbloquear os planetas do sistema solar";
 
-  //NOME PLANETAS
+//NOME PLANETAS
   static String nomePlanetaMercurio = "Mercúrio";
   static String nomePlanetaVenus = "Vênus";
   static String nomePlanetaTerra = "Terra";
@@ -139,7 +145,7 @@ class Textos {
   static String nomePlanetaNetuno = "Netuno";
   static String nomePlanetaBuracoNegro = "Buraco Negro";
 
-  //EMBLEMAS TELA INICIAL ESTADOS
+//EMBLEMAS TELA INICIAL ESTADOS
   static String emblemaEstadosAventureiroum = "Aventureiro Um";
   static String emblemaEstadosAventureirodois = "Aventureiro Dois";
   static String emblemaEstadosEntusiastaum = "Entusiasta Um";
@@ -148,23 +154,23 @@ class Textos {
   static String emblemaEstadosIndiana = "Indiana";
   static String emblemasPontos = "Pontos : ";
 
-  //EMBLEMAS TELA INICIAL SISTEMA SOLAR
+//EMBLEMAS TELA INICIAL SISTEMA SOLAR
   static String emblemaSistemaSolarNovato = "Novato";
   static String emblemaSistemaSolarAmador = "Amador";
   static String emblemaSistemaSolarMaster = "Master";
   static String emblemaSistemaSolarMegaMaster = "Mega Master";
-  static String emblemaSistemaSolarSemiProfissional = "Semi-Profissional";
+  static String emblemaSistemaSolarSemiProfissional = "Semiprofissional";
   static String emblemaSistemaSolarProfissional = "Profissional";
   static String emblemaSistemaSolarKakarot = "kakarot";
 
-  //EMBLEMAS TELA PRINCIPAL
+//EMBLEMAS TELA PRINCIPAL
   static String emblemaPatenteAspirante = "Aspirante";
   static String emblemaPatenteCabo = "Cabo";
   static String emblemaPatenteCapitao = "Capitão";
   static String emblemaPatenteCoronel = "Coronel";
   static String emblemaPatenteGeneralBrigada = "General de Brigada";
   static String emblemaPatenteGeneralDivisao = "General de Divisão";
-  static String emblemaPatenteGeneralExercito = "General do Exercito";
+  static String emblemaPatenteGeneralExercito = "General do Exército";
   static String emblemaPatenteMajor = "Major";
   static String emblemaPatenteMarechal = "Marechal";
   static String emblemaPatenteSargento = "Sargento";
@@ -173,21 +179,21 @@ class Textos {
   static String emblemaPatenteTenente = "Tenente";
   static String emblemaPatenteTenenteCoronel = "Tenente Coronel";
 
-  //REGIOES DO BRASIL
+//REGIOES DO BRASIL
   static String tituloTelaRegioes = "Regiões do Brasil";
   static String tituloTelaRegiaoCentro = "Região Centro-Oeste";
   static String tituloTelaRegiaoSul = "Região Sul";
   static String tituloTelaRegiaoSudeste = "Região Sudeste";
   static String tituloTelaRegiaoNorte = "Região Norte";
   static String tituloTelaRegiaoNordeste = "Região Nordeste";
-  static String tituloTelaTodasRegioes = "Todas as regioes do Brasil";
+  static String tituloTelaTodasRegioes = "Todas as regiões do Brasil";
   static String descricaoAreaEstado =
       "Clique encima do gesto e arraste até um dos estados";
   static String descricaoAreaGestos = "Selecione o gesto em libras";
   static String descricaoTelaRegioes =
       "Selecione um dos níveis para jogar ou para desbloquear os próximos níveis";
 
-  //TELA REGIOES DESBLOQUEDAS E MAPA
+//TELA REGIOES DESBLOQUEDAS E MAPA
   static String telaTituloRegioesDesbloqueados = "Regiões Desbloqueadas";
   static String telaDescricaoRegioesDesbloqueados =
       "Aqui estão as regiões que você já desbloqueou";

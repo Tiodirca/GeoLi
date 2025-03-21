@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,7 +38,7 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
         password: campoSenha.text,
       )
           .then((value) {
-        gravarDadosShared();
+        gravarDadosShared(value.user!.uid);
         CriarDadosBanco.criarDadosUsuario(context, campoUsuario.text);
       }, onError: (e) {
         debugPrint("ERRO ON CA${e.toString()}");
@@ -62,10 +63,11 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
           .signInWithEmailAndPassword(
               email: campoEmail.text, password: campoSenha.text)
           .then((value) {
-        gravarDadosShared();
+        gravarDadosShared(value.user!.uid);
         chamarExibirMensagem(Textos.sucessoLogin, Constantes.msgAcerto);
         redirecionarTelaInicial();
       }, onError: (e) {
+
         debugPrint("ERRO ON LO${e.toString()}");
         validarErros(e.toString());
       });
@@ -75,14 +77,17 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
     }
   }
 
-  gravarDadosShared() async {
+  gravarDadosShared(String uidUsuario) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(Constantes.sharedPreferencesEmail, campoEmail.text);
     prefs.setString(Constantes.sharedPreferencesSenha, campoSenha.text);
+    prefs.setString(Constantes.sharedPreferencesUID, uidUsuario);
   }
 
   redirecionarTelaInicial() {
-    Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
+    Timer(const Duration(seconds: 3), () {
+      Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
+    });
   }
 
   chamarExibirMensagem(String mensagem, String tipoMensagem) {

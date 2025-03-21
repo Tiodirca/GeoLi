@@ -29,6 +29,7 @@ class _TelaInicialState extends State<TelaInicial>
   bool exibirTelaResetarJogo = false;
   int contadorConexao = 0;
   String nomeUsuario = "";
+  String emailAlterado = "";
   String caminhoImagemEstado = CaminhosImagens.btnGestoEstadosBrasileiroImagem;
   String caminhoImagemSistemaSolar = CaminhosImagens.btnGestoSistemaSolarImagem;
   Color corPadrao = PaletaCores.corVerde;
@@ -95,10 +96,10 @@ class _TelaInicialState extends State<TelaInicial>
           nomeEmblema: Textos.emblemaPatenteMarechal,
           pontos: 200),
     ]);
-    recuperarUsuario();
+    validarDirecionamentoTela();
   }
 
-  recuperarNomeUsuario(String uidUsuario) async {
+  recuperarDadosUsuario(String uidUsuario) async {
     var db = FirebaseFirestore.instance;
     //instanciano variavel
     db
@@ -111,7 +112,12 @@ class _TelaInicialState extends State<TelaInicial>
       // verificando cada item que esta gravado no banco de dados
       querySnapshot.data()!.forEach((key, value) {
         setState(() {
-          nomeUsuario = value;
+          if (key.toString() == Constantes.fireBaseCampoNomeUsuario) {
+            nomeUsuario = value;
+          } else {
+            emailAlterado = value;
+            validarAlteracaoEmail();
+          }
         });
       });
     }, onError: (e) {
@@ -119,30 +125,76 @@ class _TelaInicialState extends State<TelaInicial>
     });
   }
 
-  recuperarUsuario() async {
-    String email = "jhoe@gmail.com";
-    String senha = "Agosto";
+  // metodo para validar alteracao do email na tela de usuario
+  validarAlteracaoEmail() async {
+    String senha = "";
+    String uid = "";
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    // email = prefs.getString(Constantes.sharedPreferencesEmail) ?? '';
-    // senha = prefs.getString(Constantes.sharedPreferencesSenha) ?? '';
-
-    AuthCredential credential =
-        EmailAuthProvider.credential(email: email, password: senha);
-    FirebaseAuth.instance.signInWithCredential(credential).then((value) async {
-      if (FirebaseAuth.instance.currentUser != null) {
-        String? uid = FirebaseAuth.instance.currentUser?.uid;
-        MetodosAuxiliares.passarUidUsuario(uid!);
-        recuperarPontuacao(Constantes.fireBaseColecaoRegioes,
-            Constantes.fireBaseDocumentoPontosJogadaRegioes, uid);
-        recuperarNomeUsuario(uid);
-      } else {
-        debugPrint("TelaU");
-        redirecionarTelaLogin();
+    senha = prefs.getString(Constantes.sharedPreferencesSenha) ?? '';
+    uid = prefs.getString(Constantes.sharedPreferencesUID) ?? '';
+    // caso  a variavel nao esteja vazio significa que a
+    // alteracao do email foi solicitada
+    if (emailAlterado.isNotEmpty) {
+      //fazendo autenticacao do usuario para confirmar se a alteracao
+      // do email foi concluida via link enviado para o email solitado na tela de usuario
+      AuthCredential credential =
+          EmailAuthProvider.credential(email: emailAlterado, password: senha);
+      try {
+        FirebaseAuth.instance.signInWithCredential(credential).then((value) {
+          // caso a autenticacao seja VERDADEIRA sera feito
+          // a atualizacao no banco de dados
+          prefs.setString(Constantes.sharedPreferencesEmail, emailAlterado);
+          // chamando metodo
+          confirmarAlteracaoEmailBanco(uid);
+        }, onError: (e) {
+          // caso de erro significa que o usuario ainda nao
+          // confirmou a alteracao do email via link
+          debugPrint("Email permanece o mesmo");
+        });
+      } on FirebaseAuthException catch (e) {
+        validarErro(e.toString());
       }
-    }, onError: (e) {
-      debugPrint("ErroTUON${e.toString()}");
-      validarErro(e.toString());
-    });
+    }
+  }
+
+  //metodo para gravar no bando de dados
+  // que o usuario confirmou a alteracao do email
+  confirmarAlteracaoEmailBanco(String uid) {
+    try {
+      // passando que o campo EMAIL
+      // vai receber o valor de VAZIO
+      Map<String, dynamic> dadosAlteracaoEmail = {
+        Constantes.fireBaseCampoNomeUsuario: nomeUsuario,
+        Constantes.fireBaseCampoEmailAlterado: ""
+      };
+      // instanciando Firebase
+      var db = FirebaseFirestore.instance;
+      db
+          .collection(Constantes.fireBaseColecaoUsuarios)
+          .doc(
+            uid,
+          )
+          .set(dadosAlteracaoEmail)
+          .then((value) {}, onError: (e) {
+        debugPrint("AlteracaoEmail${e.toString()}");
+      });
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  validarDirecionamentoTela() async {
+    String uid = "";
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    uid = prefs.getString(Constantes.sharedPreferencesUID) ?? '';
+    if (uid.isNotEmpty) {
+      MetodosAuxiliares.passarUidUsuario(uid);
+      recuperarPontuacao(Constantes.fireBaseColecaoRegioes,
+          Constantes.fireBaseDocumentoPontosJogadaRegioes, uid);
+      recuperarDadosUsuario(uid);
+    } else {
+      redirecionarTelaLogin();
+    }
   }
 
   validarErro(String erro) {

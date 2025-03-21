@@ -66,7 +66,8 @@ class CriarDadosBanco {
   static criarDadosUsuario(BuildContext context, String nomeUsuario) async {
     Map<String, dynamic> dadosPontuacao = {Constantes.pontosJogada: 0};
     Map<String, dynamic> dadosNomeUsuario = {
-      Constantes.fireBaseDocumentoNomeUsuario: nomeUsuario
+      Constantes.fireBaseCampoNomeUsuario: nomeUsuario,
+      Constantes.fireBaseCampoEmailAlterado: ""
     };
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user != null) {
@@ -74,8 +75,6 @@ class CriarDadosBanco {
         //gravando pontuacao de Regioes e Sistema Solar
         gravarDadosFirebase(user.uid, Constantes.fireBaseColecaoRegioes,
             Constantes.fireBaseDocumentoPontosJogadaRegioes, dadosPontuacao);
-        // gravarDadosFirebase(user.uid, Constantes.fireBaseDocumentoDadosUsuario,
-        //     Constantes.fireBaseDocumentoDadosUsuario, dadosNomeUsuario);
         gravarDadosFirebaseUsuario(user.uid, dadosNomeUsuario);
         gravarDadosFirebase(
             user.uid,
@@ -94,7 +93,7 @@ class CriarDadosBanco {
         Constantes.duracaoExibicaoToastJogos,
         Constantes.larguraToastLoginCadastro,
         context);
-    Timer(const Duration(seconds: 1), () {
+    Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
     });
   }

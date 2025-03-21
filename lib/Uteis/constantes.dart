@@ -29,10 +29,12 @@ class Constantes {
 
   static const fireBaseColecaoUsuarios = "Usuarios";
   static const fireBaseDocumentoDadosUsuario = "dadosUsuario";
-  static const fireBaseDocumentoNomeUsuario = "nomeUsuario";
+  static const fireBaseCampoNomeUsuario = "nomeUsuario";
+  static const fireBaseCampoEmailAlterado = "emailAlterado";
 
   static const sharedPreferencesEmail = "email";
   static const sharedPreferencesSenha = "senha";
+  static const sharedPreferencesUID = "uidUsuario";
 
   // NOME DADOS SISTEMA SOLAR
   static const fireBaseColecaoSistemaSolar = "sistemaSolar";

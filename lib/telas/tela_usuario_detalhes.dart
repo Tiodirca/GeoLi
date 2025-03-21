@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,11 +26,13 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
   bool ativarCampoEmail = false;
   bool ativarCampoSenha = false;
   bool ocultarSenhaDigitada = true;
+  bool exibirAlertaVerificacaoEmail = false;
+  bool exibirMensagemSemConexao = false;
   IconData iconeSenhaVisivel = Icons.visibility;
   String emailAuxiliarValidar = "";
+  String emailAlterado = "";
+  String nomeUsuarioSemAlteracao = "";
   late String uidUsuario;
-  bool exibirMensagemSemConexao = false;
-
   final _formKeyFormulario = GlobalKey<FormState>();
   final _formKeySenhaAlerta = GlobalKey<FormState>();
   TextEditingController campoEmail = TextEditingController(text: "");
@@ -46,21 +49,20 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
 
   recuperarUIDUsuario() async {
     uidUsuario = await MetodosAuxiliares.recuperarUid();
-    recuperarEmail();
+    recuperarInformacoesUsuario();
   }
 
-  recuperarEmail() async {
-    if (FirebaseAuth.instance.currentUser != null) {
-      String? emailRecuperado = FirebaseAuth.instance.currentUser?.email;
-      campoEmail.text = emailRecuperado!;
-      emailAuxiliarValidar = campoEmail.text;
-      recuperarNomeUsuario();
-    }
+  recuperarInformacoesUsuario() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String email = "";
+    email = prefs.getString(Constantes.sharedPreferencesEmail) ?? '';
+    campoEmail.text = email;
+    emailAuxiliarValidar = campoEmail.text;
+    recuperarNomeUsuario();
   }
 
   recuperarNomeUsuario() async {
     var db = FirebaseFirestore.instance;
-
     bool retornoConexao = await InternetConnection().hasInternetAccess;
     //instanciano variavel
     if (retornoConexao) {
@@ -76,7 +78,17 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
           // verificando cada item que esta gravado no banco de dados
           querySnapshot.data()!.forEach((key, value) {
             setState(() {
-              campoUsuario.text = value;
+              if (key.toString() == Constantes.fireBaseCampoNomeUsuario) {
+                campoUsuario.text = value;
+                nomeUsuarioSemAlteracao = value;
+              } else {
+                if (value.toString().isNotEmpty) {
+                  setState(() {
+                    exibirAlertaVerificacaoEmail = true;
+                    emailAlterado = value;
+                  });
+                }
+              }
             });
           });
           setState(() {
@@ -107,12 +119,16 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
   }
 
   desconetarUsuario() async {
+    setState(() {
+      exibirTelaCarregamento = true;
+    });
     await FirebaseAuth.instance.signOut();
     chamarExibirMensagens(Textos.sucessoDesconectar, Constantes.msgAcerto);
     MetodosAuxiliares.passarUidUsuario("");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(Constantes.sharedPreferencesEmail, "");
     prefs.setString(Constantes.sharedPreferencesSenha, "");
+    prefs.setString(Constantes.sharedPreferencesUID, "");
     redirecionarTelaLogin();
   }
 
@@ -126,7 +142,16 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
   }
 
   redirecionarTelaLogin() {
-    Navigator.pushReplacementNamed(context, Constantes.rotaTelaLoginCadastro);
+    Timer(const Duration(seconds: 3), () {
+      Navigator.pushReplacementNamed(context, Constantes.rotaTelaLoginCadastro);
+    });
+  }
+
+  recarregarTela() {
+    Timer(const Duration(seconds: 3), () {
+      Navigator.pushReplacementNamed(
+          context, Constantes.rotaTelaUsuarioDetalhado);
+    });
   }
 
   // Metodo para chamar deletar tabela
@@ -191,7 +216,8 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
       exibirTelaCarregamento = true;
     });
     Map<String, dynamic> nomeUsuario = {
-      Constantes.fireBaseDocumentoNomeUsuario: campoUsuario.text
+      Constantes.fireBaseCampoNomeUsuario: campoUsuario.text,
+      Constantes.fireBaseCampoEmailAlterado: emailAlterado
     };
     try {
       // instanciando Firebase
@@ -203,8 +229,8 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
           )
           .set(nomeUsuario)
           .then((value) {
-        Navigator.pushReplacementNamed(
-            context, Constantes.rotaTelaUsuarioDetalhado);
+        chamarExibirMensagens(Textos.sucessoAlterarNome, Constantes.msgAcerto);
+        recarregarTela();
       }, onError: (e) {
         debugPrint("NOME${e.toString()}");
         validarErros(e.toString());
@@ -223,6 +249,8 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
           atualizarSenha();
         } else if (ativarCampoEmail) {
           atualizarEmail();
+        } else if (exibirAlertaVerificacaoEmail) {
+          reenviarEmailAlteracao();
         } else {
           chamarDeletarDadosBancoDados();
         }
@@ -252,14 +280,40 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
     }
   }
 
+  // metodo para atualizar Email do usuario
   atualizarEmail() async {
     if (FirebaseAuth.instance.currentUser != null) {
+      //chamando funcao para enviar link ao email passado
+      // para poder atualizar o email do usuario
       FirebaseAuth.instance.currentUser
           ?.verifyBeforeUpdateEmail(campoEmail.text)
           .then((value) {
+        // em caso de sucesso do envio fazer as seguinte acoes
         chamarExibirMensagens(Textos.sucessoEnvioLink, Constantes.msgAcerto);
-        Navigator.pushReplacementNamed(
-           context, Constantes.rotaTelaUsuarioDetalhado);
+        Map<String, dynamic> dadosAlteracaoEmail = {
+          Constantes.fireBaseCampoNomeUsuario: nomeUsuarioSemAlteracao,
+          Constantes.fireBaseCampoEmailAlterado: campoEmail.text
+        };
+        // gravando no banco de dados que o
+        // campo email foi alterado e gravando o nome do email
+        try {
+          // instanciando Firebase
+          var db = FirebaseFirestore.instance;
+          db
+              .collection(Constantes.fireBaseColecaoUsuarios)
+              .doc(
+                uidUsuario,
+              )
+              .set(dadosAlteracaoEmail)
+              .then((value) {
+            recarregarTela();
+          }, onError: (e) {
+            debugPrint("EMAILALTE${e.toString()}");
+            validarErros(e.toString());
+          });
+        } catch (e) {
+          debugPrint(e.toString());
+        }
       }, onError: (e) {
         debugPrint("EMAIL${e.toString()}");
         validarErros(e.toString());
@@ -267,14 +321,32 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
     }
   }
 
+  //metodo para reenviar o link de alteracao do email
+  reenviarEmailAlteracao() {
+    if (FirebaseAuth.instance.currentUser != null) {
+      FirebaseAuth.instance.currentUser
+          ?.verifyBeforeUpdateEmail(emailAlterado)
+          .then((value) {
+        chamarExibirMensagens(Textos.sucessoEnvioLink, Constantes.msgAcerto);
+      }, onError: (e) {
+        debugPrint("EMAILREE${e.toString()}");
+        validarErros(e.toString());
+      });
+    }
+  }
+
+  // metodo para atualizar
+  // a senha de usuario
   atualizarSenha() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     if (FirebaseAuth.instance.currentUser != null) {
       FirebaseAuth.instance.currentUser
           ?.updatePassword(campoSenhaNova.text)
           .then((value) {
-        chamarExibirMensagens(Textos.sucessoAtualizarSenha, Constantes.msgAcerto);
-        Navigator.pushReplacementNamed(
-           context, Constantes.rotaTelaUsuarioDetalhado);
+        chamarExibirMensagens(
+            Textos.sucessoAtualizarSenha, Constantes.msgAcerto);
+        prefs.setString(Constantes.sharedPreferencesSenha, campoSenhaNova.text);
+        recarregarTela();
       }, onError: (e) {
         debugPrint("SENHA${e.toString()}");
         validarErros(e.toString());
@@ -285,98 +357,168 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
   Widget campos(TextEditingController controle, String nomeCampo,
           bool ativarCampo, String nomeImagem) =>
       Container(
-          width: 500,
+          width: 550,
           margin: EdgeInsets.all(5),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Image(
-                height: 80,
-                width: 80,
+                height: Platform.isAndroid || Platform.isIOS ? 60 : 80,
+                width: Platform.isAndroid || Platform.isIOS ? 60 : 80,
                 image: AssetImage("$nomeImagem.png"),
               ),
               SizedBox(
-                width: Platform.isAndroid || Platform.isIOS ? 200 : 300,
-                height: 80,
-                child: TextFormField(
-                  controller: controle,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return Textos.erroCampoVazio;
-                    }
-                    return null;
-                  },
-                  enabled: ativarCampo,
-                  obscureText: nomeCampo == Textos.campoEmail ||
-                          nomeCampo == Textos.campoUsuario
-                      ? false
-                      : ocultarSenhaDigitada,
-                  decoration: InputDecoration(
-                      suffixIcon: nomeCampo == Textos.campoEmail ||
-                              nomeCampo == Textos.campoUsuario
-                          ? null
-                          : IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  if (ocultarSenhaDigitada) {
-                                    setState(() {
-                                      ocultarSenhaDigitada = false;
-                                      iconeSenhaVisivel = Icons.visibility_off;
-                                    });
-                                  } else {
-                                    setState(() {
-                                      ocultarSenhaDigitada = true;
-                                      iconeSenhaVisivel = Icons.visibility;
-                                    });
-                                  }
-                                });
-                              },
-                              icon: Icon(iconeSenhaVisivel)),
-                      labelText: nomeCampo,
-                      labelStyle: TextStyle(color: Colors.black),
-                      disabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(
-                              width: 1, color: PaletaCores.corVerde)),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(
-                              width: 1, color: PaletaCores.corVerde)),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(
-                              width: 1, color: PaletaCores.corVerde)),
-                      errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(
-                              width: 1, color: PaletaCores.corVermelha)),
-                      focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(
-                              width: 1, color: PaletaCores.corVermelha))),
-                ),
-              ),
-              Visibility(
-                  visible: nomeCampo == Textos.campoEmail ||
-                          nomeCampo == Textos.campoUsuario ||
-                          nomeCampo == Textos.campoSenhaNova
-                      ? true
-                      : false,
-                  child: btnIcone(
-                    Icons.edit,
-                    PaletaCores.corOuro,
-                    nomeCampo,
-                  ))
+                  width: Platform.isAndroid || Platform.isIOS ? 220 : 300,
+                  height: 100,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: controle,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return Textos.erroCampoVazio;
+                          }
+                          return null;
+                        },
+                        enabled: ativarCampo,
+                        obscureText: nomeCampo == Textos.campoEmail ||
+                                nomeCampo == Textos.campoEmailAntigo ||
+                                nomeCampo == Textos.campoUsuario
+                            ? false
+                            : ocultarSenhaDigitada,
+                        decoration: InputDecoration(
+                            suffixIcon: nomeCampo == Textos.campoEmail ||
+                                    nomeCampo == Textos.campoEmailAntigo ||
+                                    nomeCampo == Textos.campoUsuario
+                                ? nomeCampo == Textos.campoEmailAntigo &&
+                                        exibirAlertaVerificacaoEmail == true
+                                    ? Icon(Icons.warning)
+                                    : null
+                                : IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        if (ocultarSenhaDigitada) {
+                                          setState(() {
+                                            ocultarSenhaDigitada = false;
+                                            iconeSenhaVisivel =
+                                                Icons.visibility_off;
+                                          });
+                                        } else {
+                                          setState(() {
+                                            ocultarSenhaDigitada = true;
+                                            iconeSenhaVisivel =
+                                                Icons.visibility;
+                                          });
+                                        }
+                                      });
+                                    },
+                                    icon: Icon(iconeSenhaVisivel)),
+                            labelText: nomeCampo,
+                            labelStyle: TextStyle(color: Colors.black),
+                            disabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: BorderSide(
+                                    width: 1, color: PaletaCores.corVerde)),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: BorderSide(
+                                    width: 1, color: PaletaCores.corVerde)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: BorderSide(
+                                    width: 1, color: PaletaCores.corVerde)),
+                            errorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: BorderSide(
+                                    width: 1, color: PaletaCores.corVermelha)),
+                            focusedErrorBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: BorderSide(
+                                    width: 1, color: PaletaCores.corVermelha))),
+                      ),
+                      Visibility(
+                        visible: exibirAlertaVerificacaoEmail == true &&
+                                    nomeCampo == Textos.campoEmail ||
+                                nomeCampo == Textos.campoEmailAntigo
+                            ? true
+                            : false,
+                        child: Column(
+                          children: [
+                            Text(
+                              style: TextStyle(fontSize: 13),
+                              Textos.telaUsuarioConfirmarEmail,
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              style: TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
+                              emailAlterado,
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  )),
+              Column(
+                children: [
+                  Visibility(
+                      visible: nomeCampo == Textos.campoEmail ||
+                              nomeCampo == Textos.campoEmailAntigo ||
+                              nomeCampo == Textos.campoUsuario ||
+                              nomeCampo == Textos.campoSenhaNova
+                          ? true
+                          : false,
+                      child: btnIcone(
+                        Icons.edit,
+                        PaletaCores.corOuro,
+                        nomeCampo,
+                      )),
+                  Visibility(
+                      visible: exibirAlertaVerificacaoEmail == true &&
+                                  nomeCampo == Textos.campoEmail ||
+                              nomeCampo == Textos.campoEmailAntigo
+                          ? true
+                          : false,
+                      child: Container(
+                        margin: EdgeInsets.all(5),
+                        width: 70,
+                        height: 50,
+                        child: FloatingActionButton(
+                          shape: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black, width: 1),
+                              borderRadius: BorderRadius.circular(15)),
+                          backgroundColor: Colors.white,
+                          elevation: 0,
+                          heroTag: Textos.btnReenviarEmail,
+                          onPressed: () async {
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            campoSenhaConfirmacao.text = prefs.getString(
+                                    Constantes.sharedPreferencesSenha) ??
+                                '';
+                            autenticarUsuario();
+                          },
+                          child: Text(
+                            Textos.btnReenviarEmail,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ),
+                      )),
+                ],
+              )
             ],
           ));
 
   Widget btnIcone(IconData icone, Color cor, String nomeBtn) => Container(
-        margin: EdgeInsets.symmetric(horizontal: 10),
+        margin: EdgeInsets.symmetric(horizontal: 5),
         width: 45,
         height: 45,
         child: FloatingActionButton(
           heroTag: nomeBtn,
+          elevation: 0,
           backgroundColor: Colors.white,
           shape: OutlineInputBorder(
               borderSide: BorderSide(color: cor, width: 1),
@@ -389,11 +531,13 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
                   ativarCampoEmail = false;
                   ativarCampoSenha = false;
                 });
-              } else if (nomeBtn == Textos.campoEmail) {
+              } else if (nomeBtn == Textos.campoEmail ||
+                  nomeBtn == Textos.campoEmailAntigo) {
                 setState(() {
                   ativarCampoEmail = true;
                   ativarCampoUsuario = false;
                   ativarCampoSenha = false;
+                  exibirAlertaVerificacaoEmail = false;
                 });
               } else if (nomeBtn == Textos.campoSenhaNova) {
                 setState(() {
@@ -411,6 +555,9 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
                   ativarCampoUsuario = false;
                   ativarCampoEmail = false;
                   ocultarSenhaDigitada = true;
+                  if (emailAlterado.isNotEmpty) {
+                    exibirAlertaVerificacaoEmail = true;
+                  }
                 }
               });
             }
@@ -515,27 +662,39 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
             style: const TextStyle(color: Colors.black),
           ),
           content: SingleChildScrollView(
-              child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                textAlign: TextAlign.center,
-                decricaoAlerta,
-                style: const TextStyle(color: Colors.black),
-              ),
-              Form(
-                key: _formKeySenhaAlerta,
-                child: campos(campoSenhaConfirmacao, labelSenha, true,
-                    CaminhosImagens.gestoSenha),
-              )
-            ],
-          )),
+              scrollDirection: Axis.horizontal,
+              child: SizedBox(
+                width: Platform.isIOS || Platform.isAndroid ? 300 : 500,
+                height: 200,
+                child: Column(
+                  children: [
+                    Text(
+                      textAlign: TextAlign.center,
+                      decricaoAlerta,
+                      style: const TextStyle(color: Colors.black),
+                    ),
+                    Form(
+                      key: _formKeySenhaAlerta,
+                      child: campos(campoSenhaConfirmacao, labelSenha, true,
+                          CaminhosImagens.gestoSenha),
+                    )
+                  ],
+                ),
+              )),
           actions: <Widget>[
             TextButton(
-              child: const Text(
-                'Cancelar',
-                style: TextStyle(color: Colors.black),
+              child: Column(
+                children: [
+                  Image(
+                    height: 90,
+                    width: 90,
+                    image: AssetImage("${CaminhosImagens.gestoCancelar}.png"),
+                  ),
+                  Text(
+                    'Cancelar',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
               ),
               onPressed: () {
                 setState(() {
@@ -546,9 +705,18 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
               },
             ),
             TextButton(
-              child: const Text(
-                'Confirmar',
-                style: TextStyle(color: Colors.black),
+              child: Column(
+                children: [
+                  Image(
+                    height: 90,
+                    width: 90,
+                    image: AssetImage("${CaminhosImagens.gestoSim}.png"),
+                  ),
+                  Text(
+                    'Sim/Confirmar',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ],
               ),
               onPressed: () {
                 if (_formKeySenhaAlerta.currentState!.validate()) {
@@ -598,7 +766,6 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
             ),
             body: GestureDetector(
               child: Container(
-                  padding: EdgeInsets.all(10),
                   color: Colors.white,
                   width: larguraTela,
                   height: alturaTela,
@@ -614,7 +781,12 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
                         ),
                         campos(campoUsuario, Textos.campoUsuario,
                             ativarCampoUsuario, CaminhosImagens.gestoNome),
-                        campos(campoEmail, Textos.campoEmail, ativarCampoEmail,
+                        campos(
+                            campoEmail,
+                            exibirAlertaVerificacaoEmail == true
+                                ? Textos.campoEmailAntigo
+                                : Textos.campoEmail,
+                            ativarCampoEmail,
                             CaminhosImagens.gestoEmail),
                         campos(campoSenhaNova, Textos.campoSenhaNova,
                             ativarCampoSenha, CaminhosImagens.gestoSenha),
@@ -638,13 +810,15 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
                     ),
                   ))),
               onTap: () {
-                FocusScope.of(context).requestFocus(FocusNode());
+                if(Platform.isAndroid || Platform.isIOS){
+                  FocusScope.of(context).requestFocus(FocusNode());
+                }
               },
             ),
             bottomNavigationBar: Container(
-                width: larguraTela,
-                height: 260,
                 color: Colors.white,
+                width: larguraTela,
+                height: 150,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.end,

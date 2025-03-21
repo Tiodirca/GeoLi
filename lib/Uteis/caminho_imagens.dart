@@ -20,8 +20,11 @@ class CaminhosImagens {
   static const gestoSim = "assets/imagens/acoes_usuario/gesto_sim";
 
   // GESTOS GAMEPLAY
-  static const gestoComecar = "assets/imagens/gesto_comecar";
+
+  static const gestoDificil = "assets/imagens/gesto_dificil";
+  static const gestoMedio = "assets/imagens/gesto_medio";
   static const gestoFacil = "assets/imagens/gesto_facil";
+  static const gestoComecar = "assets/imagens/gesto_comecar";
   static const gestoAcertar = "assets/imagens/gesto_acertar";
   static const gestoErrado = "assets/imagens/gesto_errado";
   static const gestoEmblemas = "assets/imagens/gesto_emblema";

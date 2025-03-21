@@ -49,7 +49,8 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
     return emblemas;
   }
 
-  validarImagemBtn(String nomeBtn) {
+  //metodo para exibir a imagem ao botao correto
+  exibirImagemBtn(String nomeBtn) {
     String caminhoImagem = "";
     if (nomeBtn == Textos.btnRegioesMapa) {
       caminhoImagem = CaminhosImagens.gestoMapa;
@@ -103,7 +104,7 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
                     Image(
                       height: 70,
                       width: 70,
-                      image: AssetImage("${validarImagemBtn(nomeBtn)}.png"),
+                      image: AssetImage("${exibirImagemBtn(nomeBtn)}.png"),
                     ),
                     Text(
                       nomeBtn,
@@ -197,7 +198,7 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
                                 BorderSide(width: 1, color: widget.corBordas)),
                       ),
                       width: larguraTela * 0.9,
-                      height: 440,
+                      height: alturaTela*0.56,
                       child: LayoutBuilder(
                         builder: (context, constraints) {
                           if (exibirMapaRegioes) {
