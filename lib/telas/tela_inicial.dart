@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/emblemas.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
@@ -116,7 +115,7 @@ class _TelaInicialState extends State<TelaInicial>
             nomeUsuario = value;
           } else {
             emailAlterado = value;
-            validarAlteracaoEmail();
+            MetodosAuxiliares.validarAlteracaoEmail(emailAlterado, nomeUsuario);
           }
         });
       });
@@ -124,64 +123,7 @@ class _TelaInicialState extends State<TelaInicial>
       validarErro(e.toString());
     });
   }
-
-  // metodo para validar alteracao do email na tela de usuario
-  validarAlteracaoEmail() async {
-    String senha = "";
-    String uid = "";
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    senha = prefs.getString(Constantes.sharedPreferencesSenha) ?? '';
-    uid = prefs.getString(Constantes.sharedPreferencesUID) ?? '';
-    // caso  a variavel nao esteja vazio significa que a
-    // alteracao do email foi solicitada
-    if (emailAlterado.isNotEmpty) {
-      //fazendo autenticacao do usuario para confirmar se a alteracao
-      // do email foi concluida via link enviado para o email solitado na tela de usuario
-      AuthCredential credential =
-          EmailAuthProvider.credential(email: emailAlterado, password: senha);
-      try {
-        FirebaseAuth.instance.signInWithCredential(credential).then((value) {
-          // caso a autenticacao seja VERDADEIRA sera feito
-          // a atualizacao no banco de dados
-          prefs.setString(Constantes.sharedPreferencesEmail, emailAlterado);
-          // chamando metodo
-          confirmarAlteracaoEmailBanco(uid);
-        }, onError: (e) {
-          // caso de erro significa que o usuario ainda nao
-          // confirmou a alteracao do email via link
-          debugPrint("Email permanece o mesmo");
-        });
-      } on FirebaseAuthException catch (e) {
-        validarErro(e.toString());
-      }
-    }
-  }
-
-  //metodo para gravar no bando de dados
-  // que o usuario confirmou a alteracao do email
-  confirmarAlteracaoEmailBanco(String uid) {
-    try {
-      // passando que o campo EMAIL
-      // vai receber o valor de VAZIO
-      Map<String, dynamic> dadosAlteracaoEmail = {
-        Constantes.fireBaseCampoNomeUsuario: nomeUsuario,
-        Constantes.fireBaseCampoEmailAlterado: ""
-      };
-      // instanciando Firebase
-      var db = FirebaseFirestore.instance;
-      db
-          .collection(Constantes.fireBaseColecaoUsuarios)
-          .doc(
-            uid,
-          )
-          .set(dadosAlteracaoEmail)
-          .then((value) {}, onError: (e) {
-        debugPrint("AlteracaoEmail${e.toString()}");
-      });
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-  }
+  
 
   validarDirecionamentoTela() async {
     String uid = "";

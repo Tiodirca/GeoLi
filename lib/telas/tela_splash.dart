@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import '../Uteis/constantes.dart';
@@ -20,8 +19,6 @@ class _TelaSplashScreenState extends State<TelaSplashScreen> {
       Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
     });
   }
-
-
 
   @override
   void dispose() {

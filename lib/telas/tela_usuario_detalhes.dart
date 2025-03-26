@@ -42,7 +42,6 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     recuperarUIDUsuario();
   }
@@ -76,21 +75,22 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
             .get()
             .then((querySnapshot) async {
           // verificando cada item que esta gravado no banco de dados
-          querySnapshot.data()!.forEach((key, value) {
-            setState(() {
-              if (key.toString() == Constantes.fireBaseCampoNomeUsuario) {
+          querySnapshot.data()!.forEach((key, value) async {
+            if (key.toString() == Constantes.fireBaseCampoNomeUsuario) {
+              setState(() {
                 campoUsuario.text = value;
                 nomeUsuarioSemAlteracao = value;
-              } else {
-                if (value.toString().isNotEmpty) {
-                  setState(() {
-                    exibirAlertaVerificacaoEmail = true;
-                    emailAlterado = value;
-                  });
-                }
+              });
+            } else {
+              if (value.toString().isNotEmpty) {
+                setState(() {
+                  exibirAlertaVerificacaoEmail = true;
+                  emailAlterado = value;
+                });
               }
-            });
+            }
           });
+
           setState(() {
             exibirTelaCarregamento = false;
           });
@@ -230,6 +230,8 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
           .set(nomeUsuario)
           .then((value) {
         chamarExibirMensagens(Textos.sucessoAlterarNome, Constantes.msgAcerto);
+        MetodosAuxiliares.validarAlteracaoEmail(
+            emailAlterado, campoUsuario.text);
         recarregarTela();
       }, onError: (e) {
         debugPrint("NOME${e.toString()}");
@@ -487,7 +489,8 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
                         height: 50,
                         child: FloatingActionButton(
                           shape: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black, width: 1),
+                              borderSide:
+                                  BorderSide(color: Colors.black, width: 1),
                               borderRadius: BorderRadius.circular(15)),
                           backgroundColor: Colors.white,
                           elevation: 0,
@@ -810,7 +813,7 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
                     ),
                   ))),
               onTap: () {
-                if(Platform.isAndroid || Platform.isIOS){
+                if (Platform.isAndroid || Platform.isIOS) {
                   FocusScope.of(context).requestFocus(FocusNode());
                 }
               },
