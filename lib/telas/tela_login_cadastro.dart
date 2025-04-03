@@ -67,7 +67,6 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
         chamarExibirMensagem(Textos.sucessoLogin, Constantes.msgAcerto);
         redirecionarTelaInicial();
       }, onError: (e) {
-
         debugPrint("ERRO ON LO${e.toString()}");
         validarErros(e.toString());
       });
@@ -110,7 +109,7 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
     } else if (erro.contains('email-already-in-use')) {
       chamarExibirMensagem(Textos.erroEmailUso, Constantes.msgErro);
     } else if (erro.contains('An internal error has occurred.')) {
-      chamarExibirMensagem(Textos.erroSemInternet, Constantes.msgErro);
+      chamarExibirMensagem("${Textos.erroInterno} $erro", Constantes.msgErro);
     } else if (erro.contains('Password should be at least 6 characters')) {
       chamarExibirMensagem(Textos.erroSenhaCurta, Constantes.msgErro);
     } else if (erro.contains(

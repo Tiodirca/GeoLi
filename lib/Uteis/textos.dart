@@ -58,6 +58,7 @@ class Textos {
   static String erroEmailUso = "E-mail já em uso, utilize outro";
   static String erroExcluirDados = "Erro ao excluir os dados";
   static String erroSemInternet = "Sem conexão com internet";
+  static String erroInterno = "Erro Interno : ";
   static String erroCampoVazio = "Preencha antes de prosseguir";
   static String erroSemInternetAvisoTelaCarregamento =
       "Sem conexão com internet,"

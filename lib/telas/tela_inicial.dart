@@ -115,15 +115,15 @@ class _TelaInicialState extends State<TelaInicial>
             nomeUsuario = value;
           } else {
             emailAlterado = value;
-            MetodosAuxiliares.validarAlteracaoEmail(emailAlterado, nomeUsuario);
           }
         });
       });
+      //chamando metodo para validar Alteracao do email
+      MetodosAuxiliares.validarAlteracaoEmail(emailAlterado, nomeUsuario);
     }, onError: (e) {
       validarErro(e.toString());
     });
   }
-  
 
   validarDirecionamentoTela() async {
     String uid = "";

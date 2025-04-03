@@ -10,7 +10,6 @@ import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MetodosAuxiliares {
@@ -94,19 +93,6 @@ class MetodosAuxiliares {
       //exibirAcerto = estado.acerto;
     }
     return gestosCentro;
-  }
-
-  static Future<bool> validarConexao() async {
-    bool retornoConexao = await InternetConnection().hasInternetAccess;
-    if (retornoConexao) {
-      print(retornoConexao);
-    } else {
-      print(retornoConexao);
-    }
-    Timer(const Duration(seconds: 10), () {
-      validarConexao();
-    });
-    return retornoConexao;
   }
 
   // metodo para exibir mensagem de retorno ao usuario
@@ -209,7 +195,7 @@ class MetodosAuxiliares {
   }
 
   // metodo para validar alteracao do email na tela de usuario
-  static validarAlteracaoEmail(String emailAlterado,String nomeUsuario) async {
+  static validarAlteracaoEmail(String emailAlterado, String nomeUsuario) async {
     bool retorno = false;
     String senha = "";
     String uid = "";
@@ -229,20 +215,20 @@ class MetodosAuxiliares {
           // a atualizacao no banco de dados
           prefs.setString(Constantes.sharedPreferencesEmail, emailAlterado);
           // chamando metodo
-          confirmarAlteracaoEmailBanco(uid,nomeUsuario);
+          confirmarAlteracaoEmailBanco(uid, nomeUsuario);
           retorno = true;
-          print("RT$retorno");
+          debugPrint("Validar Alteracao Email sucesso : $retorno");
           return retorno;
         }, onError: (e) {
           // caso de erro significa que o usuario ainda nao
           // confirmou a alteracao do email via link
           debugPrint("Email permanece o mesmo");
-          retorno=  false;
+          retorno = false;
           return retorno;
         });
-      } on FirebaseAuthException catch (e) {
+      } on FirebaseAuthException {
         //validarErro(e.toString());
-        retorno =  false;
+        retorno = false;
         return retorno;
       }
     }
@@ -267,9 +253,7 @@ class MetodosAuxiliares {
             uid,
           )
           .set(dadosAlteracaoEmail)
-          .then((value) {
-
-      }, onError: (e) {
+          .then((value) {}, onError: (e) {
         debugPrint("AlteracaoEmail${e.toString()}");
       });
     } catch (e) {
