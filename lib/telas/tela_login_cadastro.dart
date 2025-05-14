@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/criar_dados_banco_firebase.dart';
@@ -256,6 +257,10 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;
     double larguraTela = MediaQuery.of(context).size.width;
+    Timer(Duration(seconds: 2), () {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
+          overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    });
     return LayoutBuilder(
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {

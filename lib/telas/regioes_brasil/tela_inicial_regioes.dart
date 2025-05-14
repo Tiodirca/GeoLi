@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geoli/Modelos/emblemas.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
@@ -263,7 +266,10 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;
     double larguraTela = MediaQuery.of(context).size.width;
-
+    Timer(Duration(seconds: 2), () {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
+          overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    });
     return LayoutBuilder(
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {

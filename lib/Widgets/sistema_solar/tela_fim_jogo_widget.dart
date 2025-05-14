@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
@@ -14,8 +16,10 @@ class TelaFimJogoWidget extends StatelessWidget {
           heroTag: Textos.btnJogarNovamente,
           backgroundColor: Colors.white,
           onPressed: () {
-            Navigator.pushReplacementNamed(
-                context, Constantes.rotaTelaSistemaSolar);
+            Timer(const Duration(seconds: 2), () {
+              Navigator.pushReplacementNamed(
+                  context, Constantes.rotaTelaSistemaSolar);
+            });
           },
           elevation: 0,
           shape: RoundedRectangleBorder(
@@ -27,8 +31,7 @@ class TelaFimJogoWidget extends StatelessWidget {
               Image(
                 height: 110,
                 width: 110,
-                image:
-                    AssetImage("${CaminhosImagens.btnNovamenteGesto}.png"),
+                image: AssetImage("${CaminhosImagens.btnNovamenteGesto}.png"),
               ),
               Text(
                 Textos.btnJogarNovamente,

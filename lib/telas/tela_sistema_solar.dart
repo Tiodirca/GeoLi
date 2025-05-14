@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geoli/Modelos/emblemas.dart';
 import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
@@ -389,8 +390,11 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;
     double larguraTela = MediaQuery.of(context).size.width;
-    //double alturaBarraStatus = MediaQuery.of(context).padding.top;
-    //double alturaAppBar = AppBar().preferredSize.height;
+
+    Timer(Duration(seconds: 2), () {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
+          overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    });
     return LayoutBuilder(
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {
@@ -633,7 +637,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                         color: Colors.white,
                         width: larguraTela,
                         height: alturaTela,
-                        child: Stack(
+                        child: Column(
                           children: [
                             Visibility(
                               visible: !exibirBtnDificuldade,
@@ -665,7 +669,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                                 visible: exibirBtnDificuldade,
                                 child: SizedBox(
                                   width: larguraTela,
-                                  height: 400,
+                                  height: 250,
                                   child: Column(
                                     children: [
                                       Text(
@@ -690,17 +694,13 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                                     ],
                                   ),
                                 )),
-                            Positioned(
-                                top: alturaTela * 0.25,
-                                left: 10,
-                                right: 10,
-                                child: Visibility(
-                                    visible: exibirTelaResetarJogo,
-                                    child: WidgetTelaResetarDados(
-                                      corCard: corPadrao,
-                                      tipoAcao: Constantes
-                                          .resetarAcaoExcluirSistemaSolar,
-                                    )))
+                            Visibility(
+                                visible: exibirTelaResetarJogo,
+                                child: WidgetTelaResetarDados(
+                                  corCard: corPadrao,
+                                  tipoAcao: Constantes
+                                      .resetarAcaoExcluirSistemaSolar,
+                                ))
                           ],
                         ),
                       );

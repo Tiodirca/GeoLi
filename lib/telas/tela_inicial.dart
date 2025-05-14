@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geoli/Modelos/emblemas.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
@@ -264,6 +267,12 @@ class _TelaInicialState extends State<TelaInicial>
     double larguraTela = MediaQuery.of(context).size.width;
     double alturaBarraStatus = MediaQuery.of(context).padding.top;
     double alturaAppBar = AppBar().preferredSize.height;
+
+    Timer(Duration(seconds: 2), () {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
+          overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    });
+
     return LayoutBuilder(
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {

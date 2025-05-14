@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
@@ -137,6 +138,10 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
 
   @override
   Widget build(BuildContext context) {
+    Timer(Duration(seconds: 2), () {
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
+          overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+    });
     return Scaffold(
         appBar: AppBar(
             title: Visibility(
