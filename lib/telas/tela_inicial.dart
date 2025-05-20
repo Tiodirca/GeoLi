@@ -218,7 +218,7 @@ class _TelaInicialState extends State<TelaInicial>
 
   Widget cartao(String nomeImagem, String nome) => Container(
         margin: EdgeInsets.only(bottom: 10),
-        width: 140,
+        width: 150,
         height: 150,
         child: FloatingActionButton(
           elevation: 0,

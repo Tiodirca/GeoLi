@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'Uteis/ScrollBehaviorPersonalizado.dart';
 import 'firebase_options.dart';
 
 import 'Uteis/rotas.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-
+      scrollBehavior: ScrollBehaviorPersonalizado(),
       debugShowCheckedModeBanner: false,
       initialRoute: Constantes.rotaTelaSplashScreen,
       onGenerateRoute: Rotas.generateRoute,

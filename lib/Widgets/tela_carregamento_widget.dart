@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
@@ -74,6 +75,7 @@ class _TelaCarregamentoWidgetState extends State<TelaCarregamentoWidget> {
     Navigator.pushReplacementNamed(context, Constantes.rotaTelaLoginCadastro);
   }
 
+
   @override
   Widget build(BuildContext context) {
     double larguraTela = MediaQuery.of(context).size.width;
@@ -85,9 +87,11 @@ class _TelaCarregamentoWidgetState extends State<TelaCarregamentoWidget> {
         color: Colors.white,
         child: Center(
           child: SizedBox(
-            width: Platform.isAndroid || Platform.isIOS
-                ? larguraTela * 0.9
-                : larguraTela * 0.3,
+            width: kIsWeb
+                ? larguraTela * 0.4
+                : Platform.isAndroid || Platform.isIOS
+                    ? larguraTela * 0.9
+                    : larguraTela * 0.3,
             height: widget.exibirMensagemConexao == true ? 400 : 150,
             child: Card(
               shape: RoundedRectangleBorder(

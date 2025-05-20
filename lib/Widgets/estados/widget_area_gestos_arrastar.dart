@@ -263,6 +263,7 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
       child: Container(
           color: Colors.white,
           height: 160,
+          width: 160,
           child: Card(
               color: Colors.white,
               shape: RoundedRectangleBorder(

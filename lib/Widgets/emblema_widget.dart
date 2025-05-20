@@ -17,7 +17,7 @@ class EmblemaWidget extends StatelessWidget {
     return SizedBox(
       height: 50,
       child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
+        scrollDirection: Axis.horizontal,
         child: Row(
           children: [
             Container(

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
@@ -28,57 +29,63 @@ class AreaTelaRegioesWidget extends StatelessWidget {
       color: Colors.white,
       width: larguraTela,
       height: alturaTela,
-      child: Stack(
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: larguraTela,
-                child: Text(
-                  Textos.descricaoAreaEstado,
-                  style: TextStyle(fontSize: 18),
-                  textAlign: TextAlign.center,
+      child:SingleChildScrollView(
+        child:  Stack(
+          alignment: Alignment.center,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: larguraTela,
+                  child: Text(
+                    Textos.descricaoAreaEstado,
+                    style: TextStyle(fontSize: 18),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
-              ),
-              SizedBox(
-                width: Platform.isAndroid || Platform.isIOS
-                    ? larguraTela
-                    : larguraTela * 0.6,
-                height: alturaTela * 0.6,
-                child: GridView.builder(
-                  itemCount: estadosSorteio.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount:
-                          Platform.isAndroid || Platform.isIOS ? 2 : 5),
-                  itemBuilder: (context, index) {
-                    if (exibirTelaProximoNivel) {
-                      for (var element in estadosSorteio) {
-                        element.key.acerto = true;
+                SizedBox(
+                  width: kIsWeb
+                      ? larguraTela * 0.6
+                      : Platform.isAndroid || Platform.isIOS
+                      ? larguraTela
+                      : larguraTela * 0.6,
+                  height: alturaTela * 0.6,
+                  child: GridView.builder(
+                    itemCount: estadosSorteio.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: kIsWeb
+                            ? 5
+                            : Platform.isAndroid || Platform.isIOS
+                            ? 2
+                            : 5),
+                    itemBuilder: (context, index) {
+                      if (exibirTelaProximoNivel) {
+                        for (var element in estadosSorteio) {
+                          element.key.acerto = true;
+                        }
                       }
-                    }
-                    return Center(
-                        child: WidgetAreaSoltarEstados(
-                      estado: estadosSorteio.elementAt(index).key,
-                      gesto: estadosSorteio.elementAt(index).value,
-                    ));
-                  },
+                      return  WidgetAreaSoltarEstados(
+                        estado: estadosSorteio.elementAt(index).key,
+                        gesto: estadosSorteio.elementAt(index).value,
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Visibility(
-              visible: exibirTelaProximoNivel,
-              child: Positioned(
+              ],
+            ),
+            Visibility(
+                visible: exibirTelaProximoNivel,
                 child: Center(
-                    child: WidgetTelaProximoNivel(
-                  nomeColecao: nomeColecao,
-                  estados: estadosSorteio,
-                )),
-              ))
-        ],
-      ),
+                  child: WidgetTelaProximoNivel(
+                    nomeColecao: nomeColecao,
+                    estados: estadosSorteio,
+                  ),
+                ))
+          ],
+        ),
+      )
     );
   }
 }

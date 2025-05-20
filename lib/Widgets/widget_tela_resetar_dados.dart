@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
@@ -253,62 +254,66 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
     return Container(
         margin: EdgeInsets.all(10),
         color: Colors.transparent,
-        width: Platform.isAndroid || Platform.isIOS
+        width: kIsWeb
+            ? larguraTela
+            : Platform.isAndroid || Platform.isIOS
             ? larguraTela
             : larguraTela * 0.4,
         height: 250,
-        child: Card(
-            color: Colors.white,
-            shape: RoundedRectangleBorder(
-                side: BorderSide(width: 1, color: widget.corCard),
-                borderRadius: BorderRadius.circular(20)),
-            child: Padding(
-              padding: EdgeInsets.all(10),
-              child: Column(
-                children: [
-                  Text(
-                    Textos.tituloReiniciarDados,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    Textos.descricaoReiniciarDados,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 17),
-                  ),
-                  Container(
-                      margin: EdgeInsets.only(top: 10),
-                      width: 130,
-                      height: 130,
-                      child: FloatingActionButton(
-                        elevation: 0,
-                        backgroundColor: Colors.white,
-                        shape: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide:
-                                BorderSide(width: 1, color: widget.corCard)),
-                        onPressed: () {
-                          alertaExclusao(context);
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image(
-                              height: 90,
-                              width: 90,
-                              image: AssetImage(
-                                  "${CaminhosImagens.gestoExcluir}.png"),
-                            ),
-                            Text(
-                              Textos.btnExcluir,
-                              style: TextStyle(
-                                color: PaletaCores.corVermelha,
+        child: SingleChildScrollView(
+          child: Card(
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                  side: BorderSide(width: 1, color: widget.corCard),
+                  borderRadius: BorderRadius.circular(20)),
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  children: [
+                    Text(
+                      Textos.tituloReiniciarDados,
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      Textos.descricaoReiniciarDados,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 17),
+                    ),
+                    Container(
+                        margin: EdgeInsets.only(top: 10),
+                        width: 130,
+                        height: 130,
+                        child: FloatingActionButton(
+                          elevation: 0,
+                          backgroundColor: Colors.white,
+                          shape: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide:
+                              BorderSide(width: 1, color: widget.corCard)),
+                          onPressed: () {
+                            alertaExclusao(context);
+                          },
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image(
+                                height: 90,
+                                width: 90,
+                                image: AssetImage(
+                                    "${CaminhosImagens.gestoExcluir}.png"),
                               ),
-                            )
-                          ],
-                        ),
-                      ))
-                ],
-              ),
-            )));
+                              Text(
+                                Textos.btnExcluir,
+                                style: TextStyle(
+                                  color: PaletaCores.corVermelha,
+                                ),
+                              )
+                            ],
+                          ),
+                        ))
+                  ],
+                ),
+              )),
+        ));
   }
 }

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
@@ -367,12 +368,24 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Image(
-                height: Platform.isAndroid || Platform.isIOS ? 60 : 80,
-                width: Platform.isAndroid || Platform.isIOS ? 60 : 80,
+                height: kIsWeb
+                    ? 80
+                    : Platform.isAndroid || Platform.isIOS
+                        ? 60
+                        : 80,
+                width: kIsWeb
+                    ? 80
+                    : Platform.isAndroid || Platform.isIOS
+                        ? 60
+                        : 80,
                 image: AssetImage("$nomeImagem.png"),
               ),
               SizedBox(
-                  width: Platform.isAndroid || Platform.isIOS ? 220 : 300,
+                  width: kIsWeb
+                      ? 300
+                      : Platform.isAndroid || Platform.isIOS
+                          ? 220
+                          : 300,
                   height: 100,
                   child: Column(
                     children: [
@@ -668,7 +681,9 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
           content: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: SizedBox(
-                width: Platform.isIOS || Platform.isAndroid ? 300 : 500,
+                width: kIsWeb
+                    ? 500
+                    :Platform.isIOS || Platform.isAndroid ? 300 : 500,
                 height: 200,
                 child: Column(
                   children: [

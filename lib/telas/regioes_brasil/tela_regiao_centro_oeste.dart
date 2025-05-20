@@ -37,6 +37,7 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
   @override
   void initState() {
     super.initState();
+    estadosSorteio.clear();
     recuperarUIDUsuario();
   }
 
@@ -55,6 +56,13 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
       if (pontuacao == 0) {
         setState(() {
           carregarEstados();
+          print("xcvxv");
+          //percorrendo a a lista
+          for (var element in estadosSorteio) {
+            //sobre escrevendo o atributo para que caso seja tutorial nao exibir acertos de jogada anterior
+            // ao RESETAR DADOS
+            element.key.acerto = false;
+          }
           exibirTelaCarregamento = false;
           gestos.addAll([ConstantesEstadosGestos.gestoMS]);
           //passando status de tutorial ativo para os WIGETS
@@ -93,6 +101,7 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
   }
 
   realizarBuscaDadosFireBase(String nomeDocumentoRegiao) async {
+    print("fdfs");
     var db = FirebaseFirestore.instance;
     bool retornoConexao = await InternetConnection().hasInternetAccess;
     //instanciano variavel

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
@@ -282,7 +283,8 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
                     Text(
                       textAlign: TextAlign.center,
                       Textos.telaTituloRegioesDesbloqueados,
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                     ),
                     Text(
                       Textos.telaDescricaoRegioesDesbloqueados,
@@ -294,17 +296,19 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
                   builder: (context, constraints) {
                     if (exibirRegiaoGestosDetalhada) {
                       return SizedBox(
-                          width: Platform.isIOS || Platform.isAndroid
+                          width: kIsWeb
                               ? larguraTela * 0.9
-                              : larguraTela * 0.4,
+                              : Platform.isIOS || Platform.isAndroid
+                                  ? larguraTela * 0.9
+                                  : larguraTela * 0.4,
                           height: 380,
                           child: Card(
                             color: Colors.white,
                             shape: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     width: 1,
-                                    color:
-                                    ConstantesEstadosGestos.corPadraoRegioes),
+                                    color: ConstantesEstadosGestos
+                                        .corPadraoRegioes),
                                 borderRadius: BorderRadius.circular(10)),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -321,7 +325,7 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
                                     itemBuilder: (context, index) {
                                       return Row(
                                         mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                                            MainAxisAlignment.spaceEvenly,
                                         children: [
                                           imagemRegiaoGesto(
                                               regioesSelecionadas
@@ -382,9 +386,11 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
                           ),
                           Container(
                             margin: EdgeInsets.only(top: 10),
-                            width: Platform.isIOS || Platform.isAndroid
+                            width: kIsWeb
                                 ? larguraTela * 0.9
-                                : larguraTela * 0.4,
+                                : Platform.isIOS || Platform.isAndroid
+                                    ? larguraTela * 0.9
+                                    : larguraTela * 0.4,
                             height: 180,
                             child: Wrap(
                               alignment: WrapAlignment.center,

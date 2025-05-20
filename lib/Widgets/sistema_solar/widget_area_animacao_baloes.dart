@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes_sistema_solar.dart';
 import 'package:geoli/Uteis/textos.dart';
@@ -236,35 +237,40 @@ class _WidgetAreaAnimacaoBaloesState extends State<WidgetAreaAnimacaoBaloes>
           baloes(
               alturaTela,
               widget.biggest,
-              Platform.isAndroid || Platform.isIOS ? 50 : 200,
+              kIsWeb
+                  ? 200 : Platform.isAndroid || Platform.isIOS ? 50 : 200,
               _controller2,
               1,
               "2"),
           baloes(
               alturaTela,
               widget.biggest,
-              Platform.isAndroid || Platform.isIOS ? 100 : 400,
+              kIsWeb
+                  ? 400 : Platform.isAndroid || Platform.isIOS ? 100 : 400,
               _controller3,
               2,
               "3"),
           baloes(
               alturaTela,
               widget.biggest,
-              Platform.isAndroid || Platform.isIOS ? 150 : 600,
+              kIsWeb
+                  ? 600 : Platform.isAndroid || Platform.isIOS ? 150 : 600,
               _controller4,
               3,
               "4"),
           baloes(
               alturaTela,
               widget.biggest,
-              Platform.isAndroid || Platform.isIOS ? 200 : 800,
+              kIsWeb
+                  ? 800 : Platform.isAndroid || Platform.isIOS ? 200 : 800,
               _controller5,
               4,
               "5"),
           baloes(
               alturaTela,
               widget.biggest,
-              Platform.isAndroid || Platform.isIOS ? 250 : 1000,
+              kIsWeb
+                  ? 1000 :  Platform.isAndroid || Platform.isIOS ? 250 : 1000,
               _controller6,
               5,
               "6"),
@@ -272,76 +278,84 @@ class _WidgetAreaAnimacaoBaloesState extends State<WidgetAreaAnimacaoBaloes>
           baloes(
               alturaTela,
               widget.biggest,
-              Platform.isAndroid || Platform.isIOS ? 50 : 200,
+              kIsWeb
+                  ? 200 : Platform.isAndroid || Platform.isIOS ? 50 : 200,
               _controller8,
               7,
               "8"),
           baloes(
               alturaTela,
               widget.biggest,
-              Platform.isAndroid || Platform.isIOS ? 100 : 400,
+              kIsWeb
+                  ? 400 : Platform.isAndroid || Platform.isIOS ? 100 : 400,
               _controller9,
               0,
               "9"),
           baloes(
               alturaTela,
               widget.biggest,
-              Platform.isAndroid || Platform.isIOS ? 150 : 600,
+              kIsWeb
+                  ? 600 : Platform.isAndroid || Platform.isIOS ? 150 : 600,
               _controller10,
               1,
               "10"),
           baloes(
               alturaTela,
               widget.biggest,
-              Platform.isAndroid || Platform.isIOS ? 200 : 800,
+              kIsWeb
+                  ? 800 :  Platform.isAndroid || Platform.isIOS ? 200 : 800,
               _controller11,
               2,
               "11"),
           baloes(
               alturaTela,
               widget.biggest,
-              Platform.isAndroid || Platform.isIOS ? 250 : 1000,
+              kIsWeb
+                  ? 1000 :  Platform.isAndroid || Platform.isIOS ? 250 : 1000,
               _controller12,
               3,
               "12"),
           baloes(
               alturaTela,
               widget.biggest,
-              Platform.isAndroid || Platform.isIOS ? 50 : 250,
+              kIsWeb
+                  ? 250 :  Platform.isAndroid || Platform.isIOS ? 50 : 250,
               _controller13,
               4,
               "13"),
           baloes(
               alturaTela,
               widget.biggest,
-              Platform.isAndroid || Platform.isIOS ? 150 : 550,
+              kIsWeb
+                  ? 550 : Platform.isAndroid || Platform.isIOS ? 150 : 550,
               _controller14,
               5,
               "14"),
           Visibility(
-            visible: Platform.isAndroid || Platform.isIOS ? true : false,
+            visible:  kIsWeb
+                ? true :  Platform.isAndroid || Platform.isIOS ? true : false,
             child: baloes(
                 alturaTela, widget.biggest, 250, _controller14, 6, "14s"),
           ),
           baloes(
               alturaTela,
               widget.biggest,
-              Platform.isAndroid || Platform.isIOS ? 300 : 1200,
+              kIsWeb
+                  ? 1200 :  Platform.isAndroid || Platform.isIOS ? 300 : 1200,
               _controller,
               7,
               "1s"),
           baloes(
               alturaTela,
               widget.biggest,
-              Platform.isAndroid || Platform.isIOS ? 300 : 1200,
+              kIsWeb
+                  ? 1200 :  Platform.isAndroid || Platform.isIOS ? 300 : 1200,
               _controller7,
               0,
               "7s"),
           LayoutBuilder(
             builder: (context, constraints) {
-              if (Platform.isAndroid || Platform.isIOS) {
-                return Container();
-              } else {
+              if(kIsWeb){
                 return Stack(
                   children: [
                     baloes(alturaTela, widget.biggest, 1400, _controller4, 1,
@@ -354,6 +368,23 @@ class _WidgetAreaAnimacaoBaloesState extends State<WidgetAreaAnimacaoBaloes>
                         "14s"),
                   ],
                 );
+              }else{
+                if ( Platform.isAndroid || Platform.isIOS) {
+                  return Container();
+                } else {
+                  return Stack(
+                    children: [
+                      baloes(alturaTela, widget.biggest, 1400, _controller4, 1,
+                          "4s"),
+                      baloes(alturaTela, widget.biggest, 1300, _controller10, 2,
+                          "10s"),
+                      baloes(alturaTela, widget.biggest, 1050, _controller13, 3,
+                          "13s"),
+                      baloes(alturaTela, widget.biggest, 1400, _controller14, 4,
+                          "14s"),
+                    ],
+                  );
+                }
               }
             },
           ),

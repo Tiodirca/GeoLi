@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geoli/Modelos/emblemas.dart';
@@ -343,7 +344,11 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                     TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               ),
               SizedBox(
-                  height: Platform.isAndroid || Platform.isIOS ? 100 : 120,
+                  height: kIsWeb
+                      ? 120
+                      : Platform.isAndroid || Platform.isIOS
+                          ? 100
+                          : 120,
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       if (exibirTutorial) {
@@ -607,18 +612,22 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 SizedBox(
-                                    width: Platform.isAndroid || Platform.isIOS
+                                    width: kIsWeb
                                         ? larguraTela * 0.8
-                                        : larguraTela * 0.2,
+                                        : Platform.isAndroid || Platform.isIOS
+                                            ? larguraTela * 0.8
+                                            : larguraTela * 0.2,
                                     height: 100,
                                     child: indicadorMsg(
                                       Textos.tutorialSistemaSolarCabecalho,
                                       false,
                                     )),
                                 SizedBox(
-                                  width: Platform.isAndroid || Platform.isIOS
+                                  width: kIsWeb
                                       ? larguraTela * 0.4
-                                      : larguraTela * 0.1,
+                                      : Platform.isAndroid || Platform.isIOS
+                                          ? larguraTela * 0.4
+                                          : larguraTela * 0.1,
                                   child: indicadorMsg(
                                       Textos.tutorialSistemaSolarClickBalao,
                                       true),
@@ -634,76 +643,82 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                           ));
                     } else {
                       return Container(
-                        color: Colors.white,
-                        width: larguraTela,
-                        height: alturaTela,
-                        child: Column(
-                          children: [
-                            Visibility(
-                              visible: !exibirBtnDificuldade,
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    width: larguraTela,
-                                    height: 250,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          Textos.descriacaoSistemaSolar,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 18),
-                                        ),
-                                        btnAcao(Textos.btnComecarJogo,
-                                            CaminhosImagens.gestoComecar),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Visibility(
-                                visible: exibirBtnDificuldade,
-                                child: SizedBox(
-                                  width: larguraTela,
-                                  height: 250,
+                          color: Colors.white,
+                          width: larguraTela,
+                          height: alturaTela,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                Visibility(
+                                  visible: !exibirBtnDificuldade,
                                   child: Column(
                                     children: [
-                                      Text(
-                                        Textos.descricaoSistemaSolarDificuldade,
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.black, fontSize: 18),
-                                      ),
-                                      Wrap(
-                                        crossAxisAlignment:
-                                            WrapCrossAlignment.center,
-                                        alignment: WrapAlignment.center,
-                                        children: [
-                                          btnAcao(Textos.btnDificuldadeFacil,
-                                              CaminhosImagens.gestoFacil),
-                                          btnAcao(Textos.btnDificuldadeMedio,
-                                              CaminhosImagens.gestoMedio),
-                                          btnAcao(Textos.btnDificuldadeDificil,
-                                              CaminhosImagens.gestoDificil),
-                                        ],
-                                      ),
+                                      SizedBox(
+                                        width: larguraTela,
+                                        height: 250,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              Textos.descriacaoSistemaSolar,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 18),
+                                            ),
+                                            btnAcao(Textos.btnComecarJogo,
+                                                CaminhosImagens.gestoComecar),
+                                          ],
+                                        ),
+                                      )
                                     ],
                                   ),
-                                )),
-                            Visibility(
-                                visible: exibirTelaResetarJogo,
-                                child: WidgetTelaResetarDados(
-                                  corCard: corPadrao,
-                                  tipoAcao: Constantes
-                                      .resetarAcaoExcluirSistemaSolar,
-                                ))
-                          ],
-                        ),
-                      );
+                                ),
+                                Visibility(
+                                    visible: exibirBtnDificuldade,
+                                    child: SizedBox(
+                                      width: larguraTela,
+                                      height: 250,
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            Textos
+                                                .descricaoSistemaSolarDificuldade,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 18),
+                                          ),
+                                          Wrap(
+                                            crossAxisAlignment:
+                                                WrapCrossAlignment.center,
+                                            alignment: WrapAlignment.center,
+                                            children: [
+                                              btnAcao(
+                                                  Textos.btnDificuldadeFacil,
+                                                  CaminhosImagens.gestoFacil),
+                                              btnAcao(
+                                                  Textos.btnDificuldadeMedio,
+                                                  CaminhosImagens.gestoMedio),
+                                              btnAcao(
+                                                  Textos.btnDificuldadeDificil,
+                                                  CaminhosImagens.gestoDificil),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    )),
+                                Visibility(
+                                    visible: exibirTelaResetarJogo,
+                                    child: WidgetTelaResetarDados(
+                                      corCard: corPadrao,
+                                      tipoAcao: Constantes
+                                          .resetarAcaoExcluirSistemaSolar,
+                                    ))
+                              ],
+                            ),
+                          ));
                     }
                   }
                 },
@@ -719,8 +734,9 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Row(
-                              mainAxisAlignment:
-                                  Platform.isAndroid || Platform.isIOS
+                              mainAxisAlignment: kIsWeb
+                                  ? MainAxisAlignment.center
+                                  : Platform.isAndroid || Platform.isIOS
                                       ? MainAxisAlignment.start
                                       : MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.end,
@@ -731,12 +747,16 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                               ],
                             ),
                             areaSorteioPlaneta(
-                                Platform.isAndroid || Platform.isIOS
+                                kIsWeb
                                     ? larguraTela * 0.5
-                                    : larguraTela * 0.2,
-                                Platform.isAndroid || Platform.isIOS
-                                    ? 130
-                                    : 150)
+                                    : Platform.isAndroid || Platform.isIOS
+                                        ? larguraTela * 0.5
+                                        : larguraTela * 0.2,
+                                kIsWeb
+                                    ? 150
+                                    : Platform.isAndroid || Platform.isIOS
+                                        ? 130
+                                        : 150)
                           ],
                         ));
                   } else {
@@ -758,10 +778,16 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                   } else {
                     if (exibirJogo) {
                       return areaSorteioPlaneta(
-                          Platform.isAndroid || Platform.isIOS
+                          kIsWeb
                               ? larguraTela * 0.5
-                              : larguraTela * 0.2,
-                          Platform.isAndroid || Platform.isIOS ? 130 : 150);
+                              : Platform.isAndroid || Platform.isIOS
+                                  ? larguraTela * 0.5
+                                  : larguraTela * 0.2,
+                          kIsWeb
+                              ? 150
+                              : Platform.isAndroid || Platform.isIOS
+                                  ? 130
+                                  : 150);
                     } else {
                       return WidgetExibirEmblemas(
                           pontuacaoAtual: pontuacaoTotal,

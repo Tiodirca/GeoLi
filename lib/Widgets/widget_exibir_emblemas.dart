@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/emblemas.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
@@ -124,136 +125,140 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
         width: larguraTela,
         height: exibirTela ? alturaTela * 0.8 : 130,
         duration: const Duration(seconds: 1),
-        child: Column(
-          children: [
-            SizedBox(
-              width: larguraTela,
-              height: 130,
-              child: Card(
-                elevation: 0,
-                color: Colors.white,
-                shape: RoundedRectangleBorder(
-                    borderRadius: const BorderRadius.all(Radius.circular(10))),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    SizedBox(
-                      width: Platform.isAndroid || Platform.isIOS
-                          ? larguraTela * 0.55
-                          : larguraTela * 0.2,
-                      height: 60,
-                      child: ListView.builder(
-                        itemCount: 1,
-                        itemBuilder: (context, index) {
-                          // recuperando a pontuacao atual da tela que esta sendo exibida
-                          // para poder exibir o emblema correspondente a atual pontuacao
-                          MetodosAuxiliares.recuperarPontuacaoAtual().then(
-                            (value) {
-                              setState(() {
-                                // definindo que a variavel
-                                // vai receber o seguinte valor
-                                pontuacaoAtualTela = value;
-                              });
-                            },
-                          );
-                          // retornando o widget passando a variavel para o metodo
-                          return EmblemaWidget(
-                              caminhoImagem:
-                                  exibirEmblemaAtual(pontuacaoAtualTela)
-                                      .caminhoImagem,
-                              nomeEmblema:
-                                  exibirEmblemaAtual(pontuacaoAtualTela)
-                                      .nomeEmblema,
-                              pontos: widget.pontuacaoAtual);
-                        },
-                      ),
-                    ),
-                    btnAcao(true, Textos.btnEmblemas, !exibirTela),
-                    btnAcao(
-                      widget.nomeBtn == Textos.btnRegioesMapa ||
-                              widget.nomeBtn == Textos.btnSistemaSolar
-                          ? true
-                          : false,
-                      widget.nomeBtn,
-                      !exibirTela,
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Visibility(
-              visible: exibirAreaInternaTela,
-              child: Column(
-                children: [
-                  Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border(
-                            top: BorderSide(width: 1, color: widget.corBordas),
-                            left: BorderSide(width: 1, color: widget.corBordas),
-                            right:
-                                BorderSide(width: 1, color: widget.corBordas),
-                            bottom:
-                                BorderSide(width: 1, color: widget.corBordas)),
-                      ),
-                      width: larguraTela * 0.9,
-                      height: alturaTela*0.56,
-                      child: LayoutBuilder(
-                        builder: (context, constraints) {
-                          if (exibirMapaRegioes) {
-                            return MapaRegioesWidget();
-                          }
-                          if (exibirSistemaSolar) {
-                            return PlanetasDesbloqueadosWidget(
-                                corPadrao: widget.corBordas);
-                          } else {
-                            return ListView.builder(
-                              itemCount: widget.listaEmblemas.length,
-                              itemBuilder: (context, index) {
-                                return Card(
-                                  shadowColor: widget.corBordas,
-                                  color: Colors.white,
-                                  child: EmblemaWidget(
-                                      caminhoImagem: widget.listaEmblemas
-                                          .elementAt(index)
-                                          .caminhoImagem,
-                                      nomeEmblema: widget.listaEmblemas
-                                          .elementAt(index)
-                                          .nomeEmblema,
-                                      pontos: widget.listaEmblemas
-                                          .elementAt(index)
-                                          .pontos),
-                                );
-                              },
-                            );
-                          }
-                        },
-                      )),
-                  Container(
-                    margin: EdgeInsets.only(top: 10),
-                    width: 40,
-                    height: 40,
-                    child: FloatingActionButton(
-                      heroTag: exibirAreaInternaTela.toString(),
-                      backgroundColor: Colors.white,
-                      onPressed: () {
-                        setState(() {
-                          exibirTela = false;
-                          exibirAreaInternaTela = false;
-                        });
-                      },
-                      child: Icon(
-                        Icons.close,
-                        size: 30,
-                        color: PaletaCores.corVermelha,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ],
+        child: SingleChildScrollView(
+           child: Column(
+             children: [
+               SizedBox(
+                 width: larguraTela,
+                 height: 130,
+                 child: Card(
+                   elevation: 0,
+                   color: Colors.white,
+                   shape: RoundedRectangleBorder(
+                       borderRadius: const BorderRadius.all(Radius.circular(10))),
+                   child: Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceAround,
+                     crossAxisAlignment: CrossAxisAlignment.end,
+                     children: [
+                       SizedBox(
+                         width: kIsWeb
+                             ? larguraTela * 0.2
+                             : Platform.isAndroid || Platform.isIOS
+                             ? larguraTela * 0.55
+                             : larguraTela * 0.2,
+                         height: 60,
+                         child: ListView.builder(
+                           itemCount: 1,
+                           itemBuilder: (context, index) {
+                             // recuperando a pontuacao atual da tela que esta sendo exibida
+                             // para poder exibir o emblema correspondente a atual pontuacao
+                             MetodosAuxiliares.recuperarPontuacaoAtual().then(
+                                   (value) {
+                                 setState(() {
+                                   // definindo que a variavel
+                                   // vai receber o seguinte valor
+                                   pontuacaoAtualTela = value;
+                                 });
+                               },
+                             );
+                             // retornando o widget passando a variavel para o metodo
+                             return EmblemaWidget(
+                                 caminhoImagem:
+                                 exibirEmblemaAtual(pontuacaoAtualTela)
+                                     .caminhoImagem,
+                                 nomeEmblema:
+                                 exibirEmblemaAtual(pontuacaoAtualTela)
+                                     .nomeEmblema,
+                                 pontos: widget.pontuacaoAtual);
+                           },
+                         ),
+                       ),
+                       btnAcao(true, Textos.btnEmblemas, !exibirTela),
+                       btnAcao(
+                         widget.nomeBtn == Textos.btnRegioesMapa ||
+                             widget.nomeBtn == Textos.btnSistemaSolar
+                             ? true
+                             : false,
+                         widget.nomeBtn,
+                         !exibirTela,
+                       )
+                     ],
+                   ),
+                 ),
+               ),
+               Visibility(
+                 visible: exibirAreaInternaTela,
+                 child: Column(
+                   children: [
+                     Container(
+                         decoration: BoxDecoration(
+                           borderRadius: BorderRadius.circular(20),
+                           border: Border(
+                               top: BorderSide(width: 1, color: widget.corBordas),
+                               left: BorderSide(width: 1, color: widget.corBordas),
+                               right:
+                               BorderSide(width: 1, color: widget.corBordas),
+                               bottom:
+                               BorderSide(width: 1, color: widget.corBordas)),
+                         ),
+                         width: larguraTela * 0.9,
+                         height: alturaTela*0.5,
+                         child: LayoutBuilder(
+                           builder: (context, constraints) {
+                             if (exibirMapaRegioes) {
+                               return MapaRegioesWidget();
+                             }
+                             if (exibirSistemaSolar) {
+                               return PlanetasDesbloqueadosWidget(
+                                   corPadrao: widget.corBordas);
+                             } else {
+                               return ListView.builder(
+                                 itemCount: widget.listaEmblemas.length,
+                                 itemBuilder: (context, index) {
+                                   return Card(
+                                     shadowColor: widget.corBordas,
+                                     color: Colors.white,
+                                     child: EmblemaWidget(
+                                         caminhoImagem: widget.listaEmblemas
+                                             .elementAt(index)
+                                             .caminhoImagem,
+                                         nomeEmblema: widget.listaEmblemas
+                                             .elementAt(index)
+                                             .nomeEmblema,
+                                         pontos: widget.listaEmblemas
+                                             .elementAt(index)
+                                             .pontos),
+                                   );
+                                 },
+                               );
+                             }
+                           },
+                         )),
+                     Container(
+                       margin: EdgeInsets.only(top: 10),
+                       width: 40,
+                       height: 40,
+                       child: FloatingActionButton(
+                         heroTag: exibirAreaInternaTela.toString(),
+                         backgroundColor: Colors.white,
+                         onPressed: () {
+                           setState(() {
+                             exibirTela = false;
+                             exibirAreaInternaTela = false;
+                           });
+                         },
+                         child: Icon(
+                           Icons.close,
+                           size: 30,
+                           color: PaletaCores.corVermelha,
+                         ),
+                       ),
+                     )
+                   ],
+                 ),
+               ),
+             ],
+           ),
         ));
   }
 }

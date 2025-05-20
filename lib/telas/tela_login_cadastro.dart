@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
@@ -136,7 +137,9 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
                 image: AssetImage("$nomeImagem.png"),
               ),
               SizedBox(
-                width: Platform.isAndroid || Platform.isIOS ? 200 : 300,
+                width: kIsWeb
+                    ? 300
+                    :Platform.isAndroid || Platform.isIOS ? 200 : 300,
                 height: 80,
                 child: TextFormField(
                   controller: controle,
