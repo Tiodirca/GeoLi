@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'Uteis/ScrollBehaviorPersonalizado.dart';
-import 'firebase_options.dart';
 
 import 'Uteis/rotas.dart';
+import 'firebase_options.dart';
 
 void main() async {
   runApp(const MyApp());
