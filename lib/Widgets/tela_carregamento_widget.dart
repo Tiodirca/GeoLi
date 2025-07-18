@@ -83,14 +83,10 @@ class _TelaCarregamentoWidgetState extends State<TelaCarregamentoWidget> {
         padding: const EdgeInsets.all(10),
         width: larguraTela,
         height: alturaTela,
-        color: Colors.white,
+        color: Colors.green,
         child: Center(
           child: SizedBox(
-            width: kIsWeb
-                ? MetodosAuxiliares.validarTamanhoTelaCarregamento(larguraTela)
-                : Platform.isAndroid || Platform.isIOS
-                    ? larguraTela * 0.9
-                    : larguraTela * 0.3,
+            width: MetodosAuxiliares.validarTamanhoTelaCarregamento(larguraTela),
             height: widget.exibirMensagemConexao == true ? 400 : 150,
             child: Card(
               shape: RoundedRectangleBorder(
