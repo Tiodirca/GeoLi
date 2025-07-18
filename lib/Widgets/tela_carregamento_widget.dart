@@ -75,7 +75,6 @@ class _TelaCarregamentoWidgetState extends State<TelaCarregamentoWidget> {
     Navigator.pushReplacementNamed(context, Constantes.rotaTelaLoginCadastro);
   }
 
-
   @override
   Widget build(BuildContext context) {
     double larguraTela = MediaQuery.of(context).size.width;
@@ -88,7 +87,7 @@ class _TelaCarregamentoWidgetState extends State<TelaCarregamentoWidget> {
         child: Center(
           child: SizedBox(
             width: kIsWeb
-                ? larguraTela * 0.4
+                ? MetodosAuxiliares.validarTamanhoTelaCarregamento(larguraTela)
                 : Platform.isAndroid || Platform.isIOS
                     ? larguraTela * 0.9
                     : larguraTela * 0.3,

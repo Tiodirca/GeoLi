@@ -29,7 +29,7 @@ class _TelaInicialState extends State<TelaInicial>
   int pontuacaoSistemaSolar = 0;
   int pontuacaoGeral = 0;
   List<Emblemas> emblemasGeral = [];
-  bool exibirTelaCarregamento = true;
+  bool exibirTelaCarregamento = false;
   bool exibirTelaResetarJogo = false;
   int contadorConexao = 0;
   String nomeUsuario = "";

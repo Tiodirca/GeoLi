@@ -313,5 +313,13 @@ class MetodosAuxiliares {
     exibirMensagemTextos(Constantes.tipoNotificacaoErro, erro, context);
   }
 
-
+ static validarTamanhoTelaCarregamento(double largura) {
+    if (largura <= 600) {
+      return 300;
+    } else if (largura > 600 && largura <= 1000) {
+      return 400;
+    } else if (largura > 1000) {
+      return 600;
+    }
+  }
 }
