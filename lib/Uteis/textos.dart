@@ -239,4 +239,12 @@ class Textos {
   static String nomeRegiaoNordestePI = "Piauí - PI";
   static String nomeRegiaoNordesteRN = "Rio Grande do Norte - RN";
   static String nomeRegiaoNordesteSE = "Sergipe - SE";
+
+  //ERROS LOGIN E CADASTRO E DADOS USUARIO
+  static String erroAcaoBloqueada =
+      "Ação bloqueada pelo FireBase, tente novamente mais tarde";
+  static String erroValidarUsuarioEmailNaoCadastrado = "E-mail não cadastrado";
+  static String erroValidarUsuarioSenhaErrada = "Senha Incorreta";
+  static String erroValidarUsuarioEmailErrado = "E-mail está incorreto";
+  static String erroValidarUsuarioEmailEmUso = "E-mail já está sendo utilizado";
 }

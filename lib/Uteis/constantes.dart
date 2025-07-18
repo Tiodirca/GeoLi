@@ -42,6 +42,14 @@ class Constantes {
       "pontosJogadaSistemaSolar";
   static const fireBaseDocumentoPlanetasDesbloqueados = "planetasDesbloqueados";
 
+
+  //INFORMACAO USUARIO
+  static const infoUsuarioUID = "uid";
+  static const infoUsuarioEmail = "email";
+  static const infoUsuarioSenha = "senha";
+  static const infoUsuarioNome = "nomeUsuario";
+  static const fireBaseCampoUsuarioEmailAlterado = "emailAlterado";
+
   static double larguraToastNotificacaoJogos = 200;
   static int duracaoExibicaoToastJogos = 1;
 
@@ -60,6 +68,10 @@ class Constantes {
 
   static const erroConexaoSemIntenet = "sem internet";
   static const erroConexaoExpirada = "conexao expirada";
+
+  //TIPO NOTIFICACAO
+  static const tipoNotificacaoSucesso = "Sucesso";
+  static const tipoNotificacaoErro = "Erro";
 
   static const pontosJogada = "pontosJogada";
   static const msgErro = "Errou";

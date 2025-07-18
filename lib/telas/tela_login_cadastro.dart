@@ -11,6 +11,7 @@ import 'package:geoli/Uteis/criar_dados_banco_firebase.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
+import 'package:geoli/Uteis/validar_login_cadastro_usuario.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -32,95 +33,55 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
   TextEditingController campoSenha = TextEditingController(text: "");
   TextEditingController campoUsuario = TextEditingController(text: "");
 
-  cadastrarUsuario() async {
-    try {
-      FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-        email: campoEmail.text,
-        password: campoSenha.text,
-      )
-          .then((value) {
-        gravarDadosShared(value.user!.uid);
-        CriarDadosBanco.criarDadosUsuario(context, campoUsuario.text);
-      }, onError: (e) {
-        debugPrint("ERRO ON CA${e.toString()}");
-        validarErros(e.toString());
-      });
-    } on FirebaseAuthException catch (e) {
-      debugPrint("ERRO FIRE CA${e.toString()}");
-      validarErros(e.code);
-    } catch (e) {
-      debugPrint("ERRO CA${e.toString()}");
-    }
-  }
-
   @override
   void initState() {
     super.initState();
   }
 
-  fazerLogin() async {
-    try {
-      await FirebaseAuth.instance
-          .signInWithEmailAndPassword(
-              email: campoEmail.text, password: campoSenha.text)
-          .then((value) {
-        gravarDadosShared(value.user!.uid);
-        chamarExibirMensagem(Textos.sucessoLogin, Constantes.msgAcerto);
-        redirecionarTelaInicial();
-      }, onError: (e) {
-        debugPrint("ERRO ON LO${e.toString()}");
-        validarErros(e.toString());
+  chamarValidarLogin() async {
+    String retorno = await ValidarLoginCadastroUsuario.fazerLogin(
+      campoEmail.text,
+      campoSenha.text,
+      context,
+    );
+    if (retorno == Constantes.tipoNotificacaoSucesso) {
+      redirecionarTelaInicial();
+    } else {
+      setState(() {
+        exibirTelaCarregamento = false;
       });
-    } on FirebaseAuthException catch (e) {
-      debugPrint("ERRO FIRE LO${e.toString()}");
-      validarErros(e.code);
+      chamarValidarErro(retorno);
     }
   }
 
-  gravarDadosShared(String uidUsuario) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(Constantes.sharedPreferencesEmail, campoEmail.text);
-    prefs.setString(Constantes.sharedPreferencesSenha, campoSenha.text);
-    prefs.setString(Constantes.sharedPreferencesUID, uidUsuario);
+  chamarValidarCriarCadastro() async {
+    String retorno = await ValidarLoginCadastroUsuario.criarCadastro(
+      campoEmail.text,
+      campoSenha.text,
+      campoUsuario.text,
+      context,
+    );
+    if (retorno == Constantes.tipoNotificacaoSucesso) {
+      print("FOI");
+      redirecionarTelaInicial();
+    } else {
+      setState(() {
+        exibirTelaCarregamento = false;
+        chamarValidarErro(retorno);
+      });
+    }
+  }
+
+  chamarValidarErro(String erro) {
+    MetodosAuxiliares.validarErro(erro, context);
+  }
+
+  redirecionarTelaLoginCadastro() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaLoginCadastro);
   }
 
   redirecionarTelaInicial() {
-    Timer(const Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
-    });
-  }
-
-  chamarExibirMensagem(String mensagem, String tipoMensagem) {
-    MetodosAuxiliares.exibirMensagens(
-        mensagem,
-        tipoMensagem,
-        Constantes.duracaoExibicaoToastLoginCadastro,
-        Constantes.larguraToastLoginCadastro,
-        context);
-  }
-
-  validarErros(String erro) {
-    setState(() {
-      exibirTelaCarregamento = false;
-    });
-    if (erro.contains('invalid-email')) {
-      chamarExibirMensagem(Textos.erroEmailInvalido, Constantes.msgErro);
-    } else if (erro.contains('network-request-failed')) {
-      chamarExibirMensagem(Textos.erroSemInternet, Constantes.msgErro);
-    } else if (erro.contains('email-already-in-use')) {
-      chamarExibirMensagem(Textos.erroEmailUso, Constantes.msgErro);
-    } else if (erro.contains('An internal error has occurred.')) {
-      chamarExibirMensagem("${Textos.erroInterno} $erro", Constantes.msgErro);
-    } else if (erro.contains('Password should be at least 6 characters')) {
-      chamarExibirMensagem(Textos.erroSenhaCurta, Constantes.msgErro);
-    } else if (erro.contains(
-        'The supplied auth credential is incorrect, malformed or has expired')) {
-      chamarExibirMensagem(Textos.erroSenhaIncorreta, Constantes.msgErro);
-    } else if (erro.contains('unknown-error')) {
-      chamarExibirMensagem(
-          Textos.erroEmailNaoCadastradoSenhaIncorreta, Constantes.msgErro);
-    }
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
   }
 
   Widget campos(TextEditingController controle, String nomeCampo,
@@ -139,7 +100,9 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
               SizedBox(
                 width: kIsWeb
                     ? 300
-                    :Platform.isAndroid || Platform.isIOS ? 200 : 300,
+                    : Platform.isAndroid || Platform.isIOS
+                        ? 200
+                        : 300,
                 height: 80,
                 child: TextFormField(
                   controller: controle,
@@ -219,7 +182,7 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
             } else if (nomeBtn == Textos.btnEntrar) {
               if (_formKeyFormulario.currentState!.validate()) {
                 if (exibirDadosCadastro) {
-                  cadastrarUsuario();
+                  chamarValidarCriarCadastro();
                   setState(() {
                     exibirTelaCarregamento = true;
                   });
@@ -227,7 +190,7 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
                   setState(() {
                     exibirTelaCarregamento = true;
                   });
-                  fazerLogin();
+                  chamarValidarLogin();
                 }
               }
             }

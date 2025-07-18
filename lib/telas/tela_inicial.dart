@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geoli/Modelos/emblemas.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
+import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
@@ -31,6 +33,7 @@ class _TelaInicialState extends State<TelaInicial>
   bool exibirTelaResetarJogo = false;
   int contadorConexao = 0;
   String nomeUsuario = "";
+  String uidUsuario = "";
   String emailAlterado = "";
   String caminhoImagemEstado = CaminhosImagens.btnGestoEstadosBrasileiroImagem;
   String caminhoImagemSistemaSolar = CaminhosImagens.btnGestoSistemaSolarImagem;
@@ -98,12 +101,15 @@ class _TelaInicialState extends State<TelaInicial>
           nomeEmblema: Textos.emblemaPatenteMarechal,
           pontos: 200),
     ]);
-    validarDirecionamentoTela();
+    uidUsuario =
+        PassarPegarDados.recuperarInformacoesUsuario().values.elementAt(0);
+    recuperarDadosUsuario(uidUsuario);
+    recuperarPontuacao(Constantes.fireBaseColecaoRegioes,
+        Constantes.fireBaseDocumentoPontosJogadaRegioes, uidUsuario);
   }
 
   recuperarDadosUsuario(String uidUsuario) async {
     var db = FirebaseFirestore.instance;
-    //instanciano variavel
     db
         .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
         .doc(
@@ -119,55 +125,18 @@ class _TelaInicialState extends State<TelaInicial>
           } else {
             emailAlterado = value;
           }
+          exibirTelaCarregamento = false;
         });
       });
       //chamando metodo para validar Alteracao do email
-      MetodosAuxiliares.validarAlteracaoEmail(emailAlterado, nomeUsuario);
+      //MetodosAuxiliares.validarAlteracaoEmail(emailAlterado, nomeUsuario);
     }, onError: (e) {
-      validarErro(e.toString());
+      chamarMensagemErro(e.toString());
     });
   }
 
-  validarDirecionamentoTela() async {
-    String uid = "";
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    uid = prefs.getString(Constantes.sharedPreferencesUID) ?? '';
-    if (uid.isNotEmpty) {
-      MetodosAuxiliares.passarUidUsuario(uid);
-      recuperarPontuacao(Constantes.fireBaseColecaoRegioes,
-          Constantes.fireBaseDocumentoPontosJogadaRegioes, uid);
-      recuperarDadosUsuario(uid);
-    } else {
-      redirecionarTelaLogin();
-    }
-  }
-
-  validarErro(String erro) {
-    if (erro.contains("An internal error has occurred")) {
-      setState(() {
-        exibirMensagemSemConexao = true;
-        MetodosAuxiliares.passarTelaAtualErroConexao(
-            Constantes.rotaTelaInicial);
-        exibirTelaCarregamento = true;
-      });
-    } else if (erro.contains("An email address must be provided.")) {
-      redirecionarTelaLogin();
-    } else {
-      redirecionarTelaLogin();
-    }
-  }
-
-  redirecionarTelaLogin() async {
-    MetodosAuxiliares.passarUidUsuario("");
-    gravarDadosSharedVazio();
-    Navigator.pushReplacementNamed(context, Constantes.rotaTelaLoginCadastro);
-  }
-
-  //metodo para gravar dados vazios no share
-  gravarDadosSharedVazio() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(Constantes.sharedPreferencesEmail, "");
-    prefs.setString(Constantes.sharedPreferencesSenha, "");
+  chamarMensagemErro(String erro) {
+    MetodosAuxiliares.validarErro(erro, context);
   }
 
   // metodo para recuperar a pontuacao
@@ -208,11 +177,11 @@ class _TelaInicialState extends State<TelaInicial>
         }
       }, onError: (e) {
         debugPrint("ErroTONP${e.toString()}");
-        validarErro(e.toString());
+        //validarErro(e.toString());
       });
     } catch (e) {
       debugPrint("ErroTP${e.toString()}");
-      validarErro(e.toString());
+      //validarErro(e.toString());
     }
   }
 
@@ -261,6 +230,10 @@ class _TelaInicialState extends State<TelaInicial>
         ),
       );
 
+  redirecionarTelaLoginCadastro() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaLoginCadastro);
+  }
+
   @override
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;
@@ -307,10 +280,12 @@ class _TelaInicialState extends State<TelaInicial>
                               borderRadius: BorderRadius.circular(15),
                               borderSide:
                                   BorderSide(width: 1, color: Colors.black)),
-                          onPressed: () {
-                            setState(() {
-                              exibirTelaResetarJogo = !exibirTelaResetarJogo;
-                            });
+                          onPressed: () async {
+                            await FirebaseAuth.instance.signOut();
+                            redirecionarTelaLoginCadastro();
+                            // setState(() {
+                            //   exibirTelaResetarJogo = !exibirTelaResetarJogo;
+                            // });
                           },
                           child: Icon(
                             exibirTelaResetarJogo

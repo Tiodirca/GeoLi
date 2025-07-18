@@ -10,6 +10,7 @@ import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
+import 'package:geoli/Uteis/textos.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MetodosAuxiliares {
@@ -260,4 +261,57 @@ class MetodosAuxiliares {
       debugPrint(e.toString());
     }
   }
+
+  static exibirMensagemTextos(
+      String tipoAlerta, String msg, BuildContext context) {
+    if (tipoAlerta == Constantes.tipoNotificacaoSucesso) {
+      ElegantNotification.success(
+        width: 360,
+        title: Text(tipoAlerta),
+        showProgressIndicator: false,
+        animationDuration: const Duration(seconds: 1),
+        toastDuration: const Duration(seconds: 2),
+        description: Text(msg),
+      ).show(context);
+    } else {
+      return ElegantNotification.error(
+        width: 360,
+        title: Text(tipoAlerta),
+        showProgressIndicator: false,
+        animationDuration: const Duration(seconds: 1),
+        toastDuration: const Duration(seconds: 2),
+        description: Text(msg),
+      ).show(context);
+    }
+  }
+
+  static validarErro(String erro, BuildContext context) {
+    if (erro == 'user-not-found') {
+      chamarExibirMensagemErro(
+        Textos.erroValidarUsuarioEmailNaoCadastrado,
+        context,
+      );
+    } else if (erro == 'wrong-password') {
+      chamarExibirMensagemErro(Textos.erroValidarUsuarioSenhaErrada, context);
+      chamarExibirMensagemErro(erro, context);
+    } else if (erro == "invalid-email") {
+      chamarExibirMensagemErro(Textos.erroValidarUsuarioEmailErrado, context);
+    } else if (erro == "unknown-error") {
+      chamarExibirMensagemErro(Textos.erroValidarUsuarioSenhaErrada, context);
+    } else if (erro == "email-already-in-use") {
+      chamarExibirMensagemErro(Textos.erroValidarUsuarioEmailEmUso, context);
+    } else if (erro.contains(
+      "We have blocked all requests from this device due to unusual activity. Try again later.",
+    )) {
+      chamarExibirMensagemErro(Textos.erroAcaoBloqueada, context);
+    } else {
+      chamarExibirMensagemErro("Erro Desconhecido : $erro", context);
+    }
+  }
+
+  static chamarExibirMensagemErro(String erro, BuildContext context) {
+    exibirMensagemTextos(Constantes.tipoNotificacaoErro, erro, context);
+  }
+
+
 }
