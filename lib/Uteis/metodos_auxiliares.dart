@@ -315,11 +315,41 @@ class MetodosAuxiliares {
 
  static validarTamanhoTelaCarregamento(double largura) {
     if (largura <= 600) {
-      return 300;
+      return 300.0;
     } else if (largura > 600 && largura <= 1000) {
-      return 400;
+      return 400.0;
     } else if (largura > 1000) {
-      return 600;
+      return 600.0;
+    }
+  }
+
+  static  validarTamanhoGestos(double largura) {
+    if (largura <= 600) {
+      return 70.0;
+    } else if (largura > 600 && largura <= 1000) {
+      return 90.0;
+    } else if (largura > 1000) {
+      return 100.0;
+    }
+  }
+
+  static validarTamanhoLarguraBotao(double largura) {
+    if (largura <= 600) {
+      return 120.0;
+    } else if (largura > 600 && largura <= 1000) {
+      return 120.0;
+    } else if (largura > 1000) {
+      return 140.0;
+    }
+  }
+
+static validarTamanhoAlturaBotao(double largula) {
+    if (largula <= 600) {
+      return 130.0;
+    } else if (largula > 600 && largula <= 1000) {
+      return 150.0;
+    } else if (largula > 1000) {
+      return 170.0;
     }
   }
 }

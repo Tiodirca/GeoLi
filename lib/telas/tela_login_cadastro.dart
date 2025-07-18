@@ -84,8 +84,18 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
     Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
   }
 
+  validarTamanhoCampos(double largura) {
+    if (largura <= 600) {
+      return 250.0;
+    } else if (largura > 600) {
+      return 300.0;
+    }
+  }
+
+
+
   Widget campos(TextEditingController controle, String nomeCampo,
-          String nomeImagem) =>
+          String nomeImagem,double largura) =>
       Container(
           margin: EdgeInsets.all(5),
           child: Row(
@@ -93,16 +103,12 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image(
-                height: 100,
-                width: 100,
+                height: MetodosAuxiliares.validarTamanhoGestos(largura),
+                width:MetodosAuxiliares.validarTamanhoGestos(largura),
                 image: AssetImage("$nomeImagem.png"),
               ),
               SizedBox(
-                width: kIsWeb
-                    ? 300
-                    : Platform.isAndroid || Platform.isIOS
-                        ? 200
-                        : 300,
+                width: validarTamanhoCampos(largura),
                 height: 80,
                 child: TextFormField(
                   controller: controle,
@@ -160,10 +166,10 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
             ],
           ));
 
-  Widget cartaoBtn(String nomeImagem, String nomeBtn) => Container(
+  Widget cartaoBtn(String nomeImagem, String nomeBtn,double largura) => Container(
         margin: EdgeInsets.all(10),
-        width: 140,
-        height: 170,
+        width: MetodosAuxiliares.validarTamanhoLarguraBotao(largura),
+        height: MetodosAuxiliares.validarTamanhoAlturaBotao(largura),
         child: FloatingActionButton(
           elevation: 0,
           heroTag: nomeBtn,
@@ -197,13 +203,13 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
           },
           shape: RoundedRectangleBorder(
               side: BorderSide(color: PaletaCores.corVerde, width: 2),
-              borderRadius: const BorderRadius.all(Radius.circular(40))),
+              borderRadius: const BorderRadius.all(Radius.circular(30))),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image(
-                height: 120,
-                width: 120,
+                height: MetodosAuxiliares.validarTamanhoGestos(largura),
+                width: MetodosAuxiliares.validarTamanhoGestos(largura),
                 image: AssetImage("$nomeImagem.png"),
               ),
               Text(
@@ -251,7 +257,10 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
                     width: larguraTela,
                     height: alturaTela,
                     child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
                       child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Container(
                             margin: EdgeInsets.only(
@@ -265,35 +274,44 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
                           Visibility(
                               visible: exibirCampos,
                               child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Form(
                                       key: _formKeyFormulario,
-                                      child: Wrap(
-                                        crossAxisAlignment:
-                                            WrapCrossAlignment.center,
-                                        children: [
-                                          Visibility(
-                                              visible: exibirDadosCadastro,
-                                              child: campos(
-                                                  campoUsuario,
-                                                  Textos.campoUsuario,
-                                                  CaminhosImagens.gestoNome)),
-                                          campos(campoEmail, Textos.campoEmail,
-                                              CaminhosImagens.gestoEmail),
-                                          campos(campoSenha, Textos.campoSenha,
-                                              CaminhosImagens.gestoSenha),
-                                        ],
+                                      child: SizedBox(
+                                        width: 500,
+                                        height: 350,
+                                        child: SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Visibility(
+                                                  visible: exibirDadosCadastro,
+                                                  child: campos(
+                                                      campoUsuario,
+                                                      Textos.campoUsuario,
+                                                      CaminhosImagens.gestoNome,larguraTela)),
+                                              campos(campoEmail, Textos.campoEmail,
+                                                  CaminhosImagens.gestoEmail,larguraTela),
+                                              campos(campoSenha, Textos.campoSenha,
+                                                  CaminhosImagens.gestoSenha,larguraTela),
+                                            ],
+                                          ),
+                                        ),
                                       )),
                                   Container(
                                     margin: EdgeInsets.only(top: 10),
                                     child: cartaoBtn(
                                         CaminhosImagens.gestoEntrar,
-                                        Textos.btnEntrar),
+                                        Textos.btnEntrar,larguraTela),
                                   ),
                                   Container(
                                       margin: EdgeInsets.only(top: 10),
-                                      width: 50,
-                                      height: 50,
+                                      width: 40,
+                                      height: 40,
                                       child: FloatingActionButton(
                                         backgroundColor: Colors.white,
                                         onPressed: () {
@@ -319,14 +337,14 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   cartaoBtn(CaminhosImagens.gestoEntrar,
-                                      Textos.btnAcessar),
+                                      Textos.btnAcessar,larguraTela),
                                   cartaoBtn(CaminhosImagens.gestoCadastro,
-                                      Textos.btnCadastrar),
+                                      Textos.btnCadastrar,larguraTela),
                                 ],
                               )),
                         ],
                       ),
-                    )),
+                    ),),
                 onTap: () {
                   if (Platform.isIOS || Platform.isAndroid) {
                     FocusScope.of(context).requestFocus(FocusNode());

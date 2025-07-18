@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geoli/Modelos/emblemas.dart';
@@ -125,7 +126,6 @@ class _TelaInicialState extends State<TelaInicial>
           } else {
             emailAlterado = value;
           }
-          exibirTelaCarregamento = false;
         });
       });
       //chamando metodo para validar Alteracao do email
@@ -185,10 +185,40 @@ class _TelaInicialState extends State<TelaInicial>
     }
   }
 
-  Widget cartao(String nomeImagem, String nome) => Container(
+  validarTamanhoGestos(double largura) {
+    if (largura <= 600) {
+      return 70.0;
+    } else if (largura > 600 && largura <= 1000) {
+      return 90.0;
+    } else if (largura > 1000) {
+      return 100.0;
+    }
+  }
+
+  validarTamanhoLarguraBotao(double largura) {
+    if (largura <= 600) {
+      return 120.0;
+    } else if (largura > 600 && largura <= 1000) {
+      return 120.0;
+    } else if (largura > 1000) {
+      return 140.0;
+    }
+  }
+
+  validarTamanhoAlturaBotao(double largula) {
+    if (largula <= 600) {
+      return 130.0;
+    } else if (largula > 600 && largula <= 1000) {
+      return 150.0;
+    } else if (largula > 1000) {
+      return 170.0;
+    }
+  }
+
+  Widget cartao(String nomeImagem, String nome, double largura) => Container(
         margin: EdgeInsets.only(bottom: 10),
-        width: 150,
-        height: 150,
+        width: kIsWeb ? MetodosAuxiliares.validarTamanhoLarguraBotao(largura) : 140,
+        height: kIsWeb ? MetodosAuxiliares.validarTamanhoAlturaBotao(largura) : 150,
         child: FloatingActionButton(
           elevation: 0,
           heroTag: nome,
@@ -213,8 +243,8 @@ class _TelaInicialState extends State<TelaInicial>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image(
-                height: 90,
-                width: 90,
+                height:  kIsWeb ? MetodosAuxiliares.validarTamanhoGestos(largura) : 90,
+                width:  kIsWeb ? MetodosAuxiliares.validarTamanhoGestos(largura) : 90 ,
                 image: AssetImage("$nomeImagem.png"),
               ),
               Text(
@@ -348,9 +378,9 @@ class _TelaInicialState extends State<TelaInicial>
                               alignment: WrapAlignment.spaceEvenly,
                               children: [
                                 cartao(caminhoImagemEstado,
-                                    Textos.btnEstadoBrasileiros),
+                                    Textos.btnEstadoBrasileiros, larguraTela),
                                 cartao(caminhoImagemSistemaSolar,
-                                    Textos.btnSistemaSolar),
+                                    Textos.btnSistemaSolar, larguraTela),
                               ],
                             ),
                           ),

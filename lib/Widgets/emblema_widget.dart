@@ -12,8 +12,17 @@ class EmblemaWidget extends StatelessWidget {
   final String nomeEmblema;
   final int pontos;
 
-  @override
+  validarTamanhoGestos(double largura) {
+    if (largura <= 600) {
+      return 20.0;
+    } else if (largura > 600 && largura <= 1000) {
+      return 30.0;
+    } else if (largura > 1000) {
+      return 40.0;
+    }
+  }
   Widget build(BuildContext context) {
+    double larguraTela = MediaQuery.of(context).size.width;
     return SizedBox(
       height: 50,
       child: SingleChildScrollView(

@@ -116,6 +116,36 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
                 )),
           ));
 
+  validarTamanhoGestos(double largura) {
+    if (largura <= 600) {
+      return 70.0;
+    } else if (largura > 600 && largura <= 1000) {
+      return 90.0;
+    } else if (largura > 1000) {
+      return 100.0;
+    }
+  }
+
+  validarTamanhoLarguraBotao(double largura) {
+    if (largura <= 600) {
+      return 130.0;
+    } else if (largura > 600 && largura <= 1000) {
+      return 150.0;
+    } else if (largura > 1000) {
+      return 140.0;
+    }
+  }
+
+  validarTamanhoAlturaBotao(double largula) {
+    if (largula <= 600) {
+      return 130.0;
+    } else if (largula > 600 && largula <= 1000) {
+      return 150.0;
+    } else if (largula > 1000) {
+      return 170.0;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;
@@ -142,7 +172,7 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
                      children: [
                        SizedBox(
                          width: kIsWeb
-                             ? larguraTela * 0.2
+                             ? validarTamanhoAlturaBotao(larguraTela)
                              : Platform.isAndroid || Platform.isIOS
                              ? larguraTela * 0.55
                              : larguraTela * 0.2,
