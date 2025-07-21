@@ -9,6 +9,7 @@ import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/constantes_estados_gestos.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
+import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import 'package:geoli/Widgets/widget_exibir_emblemas.dart';
@@ -89,14 +90,15 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
   }
 
   recuperarUIDUsuario() async {
-    uidUsuario = await MetodosAuxiliares.recuperarUid();
+    uidUsuario = await PassarPegarDados.recuperarInformacoesUsuario()
+        .values
+        .elementAt(0);
     recuperarRegioesLiberadas();
     recuperarPontuacao();
   }
 
   recuperarRegioesLiberadas() async {
     var db = FirebaseFirestore.instance;
-
     bool retornoConexao = await InternetConnection().hasInternetAccess;
     //instanciano variavel
     if (retornoConexao) {

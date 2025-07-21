@@ -323,6 +323,22 @@ class MetodosAuxiliares {
     }
   }
 
+  // conforme o tamanho da tela exibir determinda quantidade de colunas
+  static quantidadeColunasGridView(double larguraTela) {
+    int tamanho = 5;
+    //verificando qual o tamanho da tela
+    if (larguraTela <= 800) {
+      tamanho = 2;
+    } else if (larguraTela > 800 && larguraTela <= 1100) {
+      tamanho = 3;
+    } else if (larguraTela > 1100 && larguraTela <= 1300) {
+      tamanho = 4;
+    } else if(larguraTela > 1300){
+      tamanho = 5;
+    }
+    return tamanho;
+  }
+
   static  validarTamanhoGestos(double largura) {
     if (largura <= 600) {
       return 70.0;

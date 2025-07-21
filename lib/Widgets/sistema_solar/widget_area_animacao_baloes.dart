@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes_sistema_solar.dart';
 import 'package:geoli/Uteis/textos.dart';
@@ -66,7 +63,9 @@ class _WidgetAreaAnimacaoBaloesState extends State<WidgetAreaAnimacaoBaloes>
   bool exibirTelaFimJogo = false;
   bool desativarToqueBalao = false;
 
-  Widget baloes(double tamanhoTela, Size biggest, double distacia,
+  double distacia01 = 0.0;
+
+  Widget baloes(double tamanhoTela, double distacia,
           AnimationController controle, int indexPlaneta, String nome) =>
       PositionedTransition(
           rect: RelativeRectTween(
@@ -74,9 +73,10 @@ class _WidgetAreaAnimacaoBaloesState extends State<WidgetAreaAnimacaoBaloes>
                       // passando a Distancia um do outro
                       // o tamanho da tela onde a animacao ira ocorrer
                       Rect.fromLTWH(distacia, tamanhoTela, 80, tamanhoTela),
-                      biggest),
+                      widget.biggest),
                   end: RelativeRect.fromSize(
-                      Rect.fromLTWH(distacia, 0, 80, tamanhoTela), biggest))
+                      Rect.fromLTWH(distacia, 0, 80, tamanhoTela),
+                      widget.biggest))
               .animate(CurvedAnimation(
             parent: controle,
             curve: Curves.linear,
@@ -86,7 +86,8 @@ class _WidgetAreaAnimacaoBaloesState extends State<WidgetAreaAnimacaoBaloes>
               BalaoWidget(
                 desativarBotao: desativarToqueBalao,
                 planeta: widget.planetas.elementAt(indexPlaneta),
-              )
+              ),
+              Text(nome),
             ],
           ));
 
@@ -221,6 +222,132 @@ class _WidgetAreaAnimacaoBaloesState extends State<WidgetAreaAnimacaoBaloes>
     _controller14.stop();
   }
 
+  validarDistanciaEntreBaloes(double larguraTela) {
+    double distancia = 0;
+    //verificando qual o tamanho da tela
+    if (larguraTela <= 400) {
+      distancia = distancia + 50;
+    } else if (larguraTela > 400 && larguraTela <= 800) {
+      distancia = distancia + 100;
+    } else if (larguraTela > 800 && larguraTela <= 1100) {
+      distancia = distancia + 150;
+    } else if (larguraTela > 1100 && larguraTela <= 1300) {
+      distancia = distancia + 200;
+    } else if (larguraTela > 1300) {
+      distancia = distancia + 250;
+    }
+    return distancia;
+  }
+
+  Widget exibicaoBaloesMobile(double alturaTela) => Stack(
+        children: [
+          baloes(alturaTela, 0, _controller, 0, "1"),
+          baloes(alturaTela, 50, _controller2, 1, "2"),
+          baloes(alturaTela, 100, _controller3, 2, "3"),
+          baloes(alturaTela, 150, _controller4, 3, "4"),
+          baloes(alturaTela, 200, _controller5, 4, "5"),
+          baloes(alturaTela, 250, _controller6, 5, "6"),
+          baloes(alturaTela, 0, _controller7, 6, "7"),
+          baloes(alturaTela, 50, _controller8, 7, "8"),
+          baloes(alturaTela, 100, _controller9, 0, "9"),
+          baloes(alturaTela, 150, _controller10, 1, "10"),
+          baloes(alturaTela, 200, _controller11, 2, "11"),
+          baloes(alturaTela, 250, _controller12, 3, "12"),
+          baloes(alturaTela, 50, _controller13, 4, "13"),
+          baloes(alturaTela, 150, _controller14, 5, "14"),
+          baloes(alturaTela, 300, _controller, 6, "1s"),
+          baloes(alturaTela, 300, _controller7, 7, "7s"),
+          baloes(alturaTela, 250, _controller13, 0, "13s"),
+        ],
+      );
+
+  Widget exibicaoFold(double alturaTela) => Stack(
+    children: [
+      //primeira coluna
+      baloes(alturaTela, 0, _controller, 0, "1f"),
+      baloes(alturaTela, 100, _controller2, 1, "2f"),
+      baloes(alturaTela, 200, _controller3, 2, "3f"),
+      baloes(alturaTela, 300, _controller4, 3, "4f"),
+      baloes(alturaTela, 400, _controller5, 4, "5f"),
+      baloes(alturaTela, 500, _controller6, 5, "6f"),
+      //segunda coluna
+      baloes(alturaTela, 0, _controller7, 6, "7"),
+      baloes(alturaTela, 100, _controller8, 7, "8"),
+      baloes(alturaTela, 200, _controller9, 0, "9"),
+      baloes(alturaTela, 300, _controller10, 1, "10"),
+      baloes(alturaTela, 400, _controller11, 2, "11"),
+      baloes(alturaTela, 500, _controller12, 3, "12"),
+      baloes(alturaTela, 100, _controller13, 4, "13"),
+      baloes(alturaTela, 300, _controller14, 5, "14"),
+      baloes(alturaTela, 500, _controller13, 6, "13s"),
+    ],
+  );
+
+  Widget exibicaoTablet(double alturaTela) => Stack(
+        children: [
+          //primeira coluna
+          baloes(alturaTela, 0, _controller, 0, "1"),
+          baloes(alturaTela, 100, _controller2, 1, "2"),
+          baloes(alturaTela, 200, _controller3, 2, "3"),
+          baloes(alturaTela, 300, _controller4, 3, "4"),
+          baloes(alturaTela, 400, _controller5, 4, "5"),
+          baloes(alturaTela, 500, _controller6, 5, "6"),
+          //segunda coluna
+          baloes(alturaTela, 0, _controller7, 6, "7"),
+          baloes(alturaTela, 100, _controller8, 7, "8"),
+          baloes(alturaTela, 200, _controller9, 0, "9"),
+          baloes(alturaTela, 300, _controller10, 1, "10"),
+          baloes(alturaTela, 400, _controller11, 2, "11"),
+          baloes(alturaTela, 500, _controller12, 3, "12"),
+          baloes(alturaTela, 100, _controller13, 4, "13"),
+          baloes(alturaTela, 300, _controller14, 5, "14"),
+          baloes(alturaTela, 500, _controller13, 6, "13s"),
+
+          baloes(alturaTela, 600, _controller, 7, "1s"),
+          baloes(alturaTela, 700, _controller2, 0, "2s"),
+          baloes(alturaTela, 600, _controller7, 1, "7s"),
+          baloes(alturaTela, 700, _controller8, 2, "8s"),
+        ],
+      );
+
+  Widget exibicaoExibicaoDesktop(double alturaTela) => Stack(
+    children: [
+      //primeira coluna
+      baloes(alturaTela, 0, _controller, 0, "1"),
+      baloes(alturaTela, 150, _controller2, 1, "2"),
+      baloes(alturaTela, 300, _controller3, 2, "3"),
+      baloes(alturaTela, 450, _controller4, 3, "4"),
+      baloes(alturaTela, 600, _controller5, 4, "5"),
+      baloes(alturaTela, 750, _controller6, 5, "6"),
+      //segunda coluna
+      baloes(alturaTela, 0, _controller7, 6, "7"),
+      baloes(alturaTela, 150, _controller8, 7, "8"),
+      baloes(alturaTela, 300, _controller9, 0, "9"),
+      baloes(alturaTela, 450, _controller10, 1, "10"),
+      baloes(alturaTela, 600, _controller11, 2, "11"),
+      baloes(alturaTela, 750, _controller12, 3, "12"),
+      baloes(alturaTela, 150, _controller13, 4, "13"),
+      baloes(alturaTela, 450, _controller14, 5, "14"),
+
+      //primeira coluna
+      baloes(alturaTela, 900, _controller, 0, "1"),
+      baloes(alturaTela, 1050, _controller2, 1, "2"),
+      baloes(alturaTela, 1300, _controller3, 2, "3"),
+      baloes(alturaTela, 1450, _controller4, 3, "4"),
+      baloes(alturaTela, 1600, _controller5, 4, "5"),
+      baloes(alturaTela, 1750, _controller6, 5, "6"),
+      //segunda coluna
+      baloes(alturaTela, 900, _controller7, 6, "7"),
+      baloes(alturaTela, 1050, _controller8, 7, "8"),
+      baloes(alturaTela, 1300, _controller9, 0, "9"),
+      baloes(alturaTela, 1450, _controller10, 1, "10"),
+      baloes(alturaTela, 1600, _controller11, 2, "11"),
+      baloes(alturaTela, 1750, _controller12, 3, "12"),
+      baloes(alturaTela, 1150, _controller13, 4, "13"),
+      baloes(alturaTela, 1450, _controller14, 5, "14"),
+    ],
+  );
+
   @override
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;
@@ -233,158 +360,16 @@ class _WidgetAreaAnimacaoBaloesState extends State<WidgetAreaAnimacaoBaloes>
       height: alturaTela,
       child: Stack(
         children: [
-          baloes(alturaTela, widget.biggest, 0, _controller, 0, "1"),
-          baloes(
-              alturaTela,
-              widget.biggest,
-              kIsWeb
-                  ? 200 : Platform.isAndroid || Platform.isIOS ? 50 : 200,
-              _controller2,
-              1,
-              "2"),
-          baloes(
-              alturaTela,
-              widget.biggest,
-              kIsWeb
-                  ? 400 : Platform.isAndroid || Platform.isIOS ? 100 : 400,
-              _controller3,
-              2,
-              "3"),
-          baloes(
-              alturaTela,
-              widget.biggest,
-              kIsWeb
-                  ? 600 : Platform.isAndroid || Platform.isIOS ? 150 : 600,
-              _controller4,
-              3,
-              "4"),
-          baloes(
-              alturaTela,
-              widget.biggest,
-              kIsWeb
-                  ? 800 : Platform.isAndroid || Platform.isIOS ? 200 : 800,
-              _controller5,
-              4,
-              "5"),
-          baloes(
-              alturaTela,
-              widget.biggest,
-              kIsWeb
-                  ? 1000 :  Platform.isAndroid || Platform.isIOS ? 250 : 1000,
-              _controller6,
-              5,
-              "6"),
-          baloes(alturaTela, widget.biggest, 0, _controller7, 6, "7"),
-          baloes(
-              alturaTela,
-              widget.biggest,
-              kIsWeb
-                  ? 200 : Platform.isAndroid || Platform.isIOS ? 50 : 200,
-              _controller8,
-              7,
-              "8"),
-          baloes(
-              alturaTela,
-              widget.biggest,
-              kIsWeb
-                  ? 400 : Platform.isAndroid || Platform.isIOS ? 100 : 400,
-              _controller9,
-              0,
-              "9"),
-          baloes(
-              alturaTela,
-              widget.biggest,
-              kIsWeb
-                  ? 600 : Platform.isAndroid || Platform.isIOS ? 150 : 600,
-              _controller10,
-              1,
-              "10"),
-          baloes(
-              alturaTela,
-              widget.biggest,
-              kIsWeb
-                  ? 800 :  Platform.isAndroid || Platform.isIOS ? 200 : 800,
-              _controller11,
-              2,
-              "11"),
-          baloes(
-              alturaTela,
-              widget.biggest,
-              kIsWeb
-                  ? 1000 :  Platform.isAndroid || Platform.isIOS ? 250 : 1000,
-              _controller12,
-              3,
-              "12"),
-          baloes(
-              alturaTela,
-              widget.biggest,
-              kIsWeb
-                  ? 250 :  Platform.isAndroid || Platform.isIOS ? 50 : 250,
-              _controller13,
-              4,
-              "13"),
-          baloes(
-              alturaTela,
-              widget.biggest,
-              kIsWeb
-                  ? 550 : Platform.isAndroid || Platform.isIOS ? 150 : 550,
-              _controller14,
-              5,
-              "14"),
-          Visibility(
-            visible:  kIsWeb
-                ? true :  Platform.isAndroid || Platform.isIOS ? true : false,
-            child: baloes(
-                alturaTela, widget.biggest, 250, _controller14, 6, "14s"),
-          ),
-          baloes(
-              alturaTela,
-              widget.biggest,
-              kIsWeb
-                  ? 1200 :  Platform.isAndroid || Platform.isIOS ? 300 : 1200,
-              _controller,
-              7,
-              "1s"),
-          baloes(
-              alturaTela,
-              widget.biggest,
-              kIsWeb
-                  ? 1200 :  Platform.isAndroid || Platform.isIOS ? 300 : 1200,
-              _controller7,
-              0,
-              "7s"),
           LayoutBuilder(
             builder: (context, constraints) {
-              if(kIsWeb){
-                return Stack(
-                  children: [
-                    baloes(alturaTela, widget.biggest, 1400, _controller4, 1,
-                        "4s"),
-                    baloes(alturaTela, widget.biggest, 1300, _controller10, 2,
-                        "10s"),
-                    baloes(alturaTela, widget.biggest, 1050, _controller13, 3,
-                        "13s"),
-                    baloes(alturaTela, widget.biggest, 1400, _controller14, 4,
-                        "14s"),
-                  ],
-                );
-              }else{
-                if ( Platform.isAndroid || Platform.isIOS) {
-                  return Container();
-                } else {
-                  return Stack(
-                    children: [
-                      baloes(alturaTela, widget.biggest, 1400, _controller4, 1,
-                          "4s"),
-                      baloes(alturaTela, widget.biggest, 1300, _controller10, 2,
-                          "10s"),
-                      baloes(alturaTela, widget.biggest, 1050, _controller13, 3,
-                          "13s"),
-                      baloes(alturaTela, widget.biggest, 1400, _controller14, 4,
-                          "14s"),
-                    ],
-                  );
-                }
+              if (larguraTela <= 400) {
+                return exibicaoBaloesMobile(alturaTela);
+              } else if (larguraTela > 400 && larguraTela <= 600) {
+                return exibicaoFold(alturaTela);
+              } else if (larguraTela > 600 && larguraTela <= 800) {
+                return exibicaoTablet(alturaTela);
+              } else {
+                return exibicaoExibicaoDesktop(alturaTela);
               }
             },
           ),

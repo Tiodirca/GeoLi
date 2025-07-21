@@ -6,6 +6,7 @@ import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/constantes_estados_gestos.dart';
+import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
 import 'package:geoli/Widgets/estados/area_tela_regioes_widget.dart';
 import 'package:geoli/Widgets/estados/widget_area_gestos_arrastar.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
@@ -48,7 +49,9 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
   }
 
   recuperarUIDUsuario() async {
-    uidUsuario = await MetodosAuxiliares.recuperarUid();
+    uidUsuario = await PassarPegarDados.recuperarInformacoesUsuario()
+        .values
+        .elementAt(0);
     realizarBuscaDadosFireBase(nomeColecao);
   }
 
@@ -156,7 +159,7 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
                   iconSize: 30,
                   enableFeedback: false,
                   onPressed: () {
-                    Timer(const Duration(milliseconds: 2), () {
+                    Timer(const Duration(milliseconds: 1), () {
                       Navigator.pushReplacementNamed(
                           context, Constantes.rotaTelaInicialRegioes);
                     });

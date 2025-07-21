@@ -1,8 +1,5 @@
 import 'dart:async';
-import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
@@ -35,35 +32,35 @@ class _TelaCarregamentoWidgetState extends State<TelaCarregamentoWidget> {
     super.initState();
   }
 
-  recarregarTela() async {
-    String telaAtual = await MetodosAuxiliares.recuperarTelaAtualErroConexao();
-    if (telaAtual == Constantes.rotaTelaInicial) {
-      Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
-    } else if (telaAtual == Constantes.rotaTelaInicialRegioes) {
-      Navigator.pushReplacementNamed(
-          context, Constantes.rotaTelaInicialRegioes);
-    } else if (telaAtual == Constantes.rotaTelaRegiaoCentroOeste) {
-      Navigator.pushReplacementNamed(
-          context, Constantes.rotaTelaRegiaoCentroOeste);
-    } else if (telaAtual == Constantes.rotaTelaRegiaoSul) {
-      Navigator.pushReplacementNamed(context, Constantes.rotaTelaRegiaoSul);
-    } else if (telaAtual == Constantes.rotaTelaRegiaoSudeste) {
-      Navigator.pushReplacementNamed(context, Constantes.rotaTelaRegiaoSudeste);
-    } else if (telaAtual == Constantes.rotaTelaRegiaoNorte) {
-      Navigator.pushReplacementNamed(context, Constantes.rotaTelaRegiaoNorte);
-    } else if (telaAtual == Constantes.rotaTelaRegiaoNordeste) {
-      Navigator.pushReplacementNamed(
-          context, Constantes.rotaTelaRegiaoNordeste);
-    } else if (telaAtual == Constantes.rotaTelaRegiaoTodosEstados) {
-      Navigator.pushReplacementNamed(
-          context, Constantes.rotaTelaRegiaoTodosEstados);
-    } else if (telaAtual == Constantes.rotaTelaSistemaSolar) {
-      Navigator.pushReplacementNamed(context, Constantes.rotaTelaSistemaSolar);
-    } else if (telaAtual == Constantes.rotaTelaUsuarioDetalhado) {
-      Navigator.pushReplacementNamed(
-          context, Constantes.rotaTelaUsuarioDetalhado);
-    }
-  }
+  // recarregarTela() async {
+  //   String telaAtual = await MetodosAuxiliares.recuperarTelaAtualErroConexao();
+  //   if (telaAtual == Constantes.rotaTelaInicial) {
+  //     Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
+  //   } else if (telaAtual == Constantes.rotaTelaInicialRegioes) {
+  //     Navigator.pushReplacementNamed(
+  //         context, Constantes.rotaTelaInicialRegioes);
+  //   } else if (telaAtual == Constantes.rotaTelaRegiaoCentroOeste) {
+  //     Navigator.pushReplacementNamed(
+  //         context, Constantes.rotaTelaRegiaoCentroOeste);
+  //   } else if (telaAtual == Constantes.rotaTelaRegiaoSul) {
+  //     Navigator.pushReplacementNamed(context, Constantes.rotaTelaRegiaoSul);
+  //   } else if (telaAtual == Constantes.rotaTelaRegiaoSudeste) {
+  //     Navigator.pushReplacementNamed(context, Constantes.rotaTelaRegiaoSudeste);
+  //   } else if (telaAtual == Constantes.rotaTelaRegiaoNorte) {
+  //     Navigator.pushReplacementNamed(context, Constantes.rotaTelaRegiaoNorte);
+  //   } else if (telaAtual == Constantes.rotaTelaRegiaoNordeste) {
+  //     Navigator.pushReplacementNamed(
+  //         context, Constantes.rotaTelaRegiaoNordeste);
+  //   } else if (telaAtual == Constantes.rotaTelaRegiaoTodosEstados) {
+  //     Navigator.pushReplacementNamed(
+  //         context, Constantes.rotaTelaRegiaoTodosEstados);
+  //   } else if (telaAtual == Constantes.rotaTelaSistemaSolar) {
+  //     Navigator.pushReplacementNamed(context, Constantes.rotaTelaSistemaSolar);
+  //   } else if (telaAtual == Constantes.rotaTelaUsuarioDetalhado) {
+  //     Navigator.pushReplacementNamed(
+  //         context, Constantes.rotaTelaUsuarioDetalhado);
+  //   }
+  // }
 
   desconetarUsuario() async {
     await FirebaseAuth.instance.signOut();
@@ -83,7 +80,7 @@ class _TelaCarregamentoWidgetState extends State<TelaCarregamentoWidget> {
         padding: const EdgeInsets.all(10),
         width: larguraTela,
         height: alturaTela,
-        color: Colors.green,
+        color: Colors.blueGrey,
         child: Center(
           child: SizedBox(
             width: MetodosAuxiliares.validarTamanhoTelaCarregamento(larguraTela),
@@ -166,7 +163,7 @@ class _TelaCarregamentoWidgetState extends State<TelaCarregamentoWidget> {
                                   heroTag: Textos.btnRecarregarTelaNovamente,
                                   backgroundColor: Colors.white,
                                   onPressed: () {
-                                    recarregarTela();
+                                    //recarregarTela();
                                   },
                                   shape: RoundedRectangleBorder(
                                       side: BorderSide(

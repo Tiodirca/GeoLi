@@ -8,6 +8,7 @@ import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/constantes_estados_gestos.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/estados/area_tela_regioes_widget.dart';
 import 'package:geoli/Widgets/estados/widget_area_gestos_arrastar.dart';
@@ -42,7 +43,9 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
   }
 
   recuperarUIDUsuario() async {
-    uidUsuario = await MetodosAuxiliares.recuperarUid();
+    uidUsuario = await PassarPegarDados.recuperarInformacoesUsuario()
+        .values
+        .elementAt(0);
     validarPrimeiraJogada();
   }
 
@@ -193,7 +196,7 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
                   iconSize: 30,
                   enableFeedback: false,
                   onPressed: () {
-                    Timer(const Duration(seconds: 2), () {
+                    Timer(const Duration(seconds: 1), () {
                       Navigator.pushReplacementNamed(
                           context, Constantes.rotaTelaInicialRegioes);
                     });

@@ -283,7 +283,7 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
                                         width: 500,
                                         height: 350,
                                         child: SingleChildScrollView(
-                                          scrollDirection: Axis.horizontal,
+                                          scrollDirection: Axis.vertical,
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             mainAxisAlignment: MainAxisAlignment.center,

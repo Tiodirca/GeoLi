@@ -6,6 +6,7 @@ import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/constantes_sistema_solar.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
+import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/modelos/planeta.dart';
 import 'package:lottie/lottie.dart';
@@ -54,7 +55,26 @@ class _BalaoWidgetState extends State<BalaoWidget>
   }
 
   recuperarUIDUsuario() async {
-    uidUsuario = await MetodosAuxiliares.recuperarUid();
+    uidUsuario = await PassarPegarDados.recuperarInformacoesUsuario()
+        .values
+        .elementAt(0);
+  }
+
+  tamanhoBalao(double larguraTela) {
+    int tamanho = 200;
+    //verificando qual o tamanho da tela
+    if (larguraTela <= 400) {
+      tamanho = 250;
+    } else if (larguraTela > 400 && larguraTela <= 800) {
+      tamanho = 250;
+    } else if (larguraTela > 800 && larguraTela <= 1100) {
+      tamanho = 300;
+    } else if (larguraTela > 1100 && larguraTela <= 1300) {
+      tamanho = 350;
+    } else if (larguraTela > 1300) {
+      tamanho = 400;
+    }
+    return tamanho;
   }
 
   recuperarStatusTutorial() async {
@@ -66,22 +86,25 @@ class _BalaoWidgetState extends State<BalaoWidget>
     return randomNumber;
   }
 
+  confirmarAcertoTutorial() {
+    MetodosAuxiliares.exibirMensagensDuranteJogo(
+        Textos.tutorialConcluido, Constantes.msgAcerto, context);
+    MetodosAuxiliares.passarStatusTutorial("");
+    atualizarPontuacaoTutorial();
+    setState(() {
+      exibirAnimacaoExplosao = true;
+    });
+    Timer(const Duration(seconds: 1), () {
+      Navigator.pushReplacementNamed(context, Constantes.rotaTelaSistemaSolar);
+    });
+  }
+
   validarAcerto() async {
     String gesto = "";
     gesto = await MetodosAuxiliares.recuperarGestoSorteado();
     // verificando se o status passado esta ativo
     if (status == Constantes.statusTutorialAtivo) {
-      MetodosAuxiliares.exibirMensagensDuranteJogo(
-          Textos.tutorialConcluido, Constantes.msgAcerto, context);
-      MetodosAuxiliares.passarStatusTutorial("");
-      atualizarPontuacaoTutorial();
-      setState(() {
-        exibirAnimacaoExplosao = true;
-      });
-      Timer(const Duration(seconds: 1), () {
-        Navigator.pushReplacementNamed(
-            context, Constantes.rotaTelaSistemaSolar);
-      });
+      confirmarAcertoTutorial();
     } else {
       if (gesto.contains(widget.planeta.nomePlaneta)) {
         setState(() {
@@ -92,7 +115,6 @@ class _BalaoWidgetState extends State<BalaoWidget>
             exibirAnimacaoExplosao = false;
           });
         });
-
         MetodosAuxiliares.confirmarAcerto(Constantes.msgAcerto);
         recuperarPlanetasDesbloqueados();
       } else {
@@ -192,7 +214,7 @@ class _BalaoWidgetState extends State<BalaoWidget>
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
         width: 80,
         height: 170,
         child: Stack(

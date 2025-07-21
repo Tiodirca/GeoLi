@@ -5,7 +5,7 @@ import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/constantes_estados_gestos.dart';
-import 'package:geoli/Uteis/metodos_auxiliares.dart';
+import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
 
 import '../../Uteis/paleta_cores.dart';
 import '../../Uteis/textos.dart';
@@ -44,7 +44,9 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
   }
 
   recuperarUIDUsuario() async {
-    uidUsuario = await MetodosAuxiliares.recuperarUid();
+    uidUsuario = await PassarPegarDados.recuperarInformacoesUsuario()
+        .values
+        .elementAt(0);
     recuperarRegioesLiberadas();
   }
 

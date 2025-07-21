@@ -6,6 +6,7 @@ import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/constantes_sistema_solar.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
+import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import 'package:geoli/Modelos/gestos.dart';
@@ -43,7 +44,9 @@ class _PlanetasDesbloqueadosWidgetState extends State<PlanetasDesbloqueadosWidge
   }
 
   recuperarUIDUsuario() async {
-    uidUsuario = await MetodosAuxiliares.recuperarUid();
+    uidUsuario = await PassarPegarDados.recuperarInformacoesUsuario()
+        .values
+        .elementAt(0);
     recuperarPlanetasDesbloqueados();
   }
 

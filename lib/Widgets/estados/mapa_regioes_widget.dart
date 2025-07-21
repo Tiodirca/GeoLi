@@ -9,6 +9,7 @@ import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/constantes_estados_gestos.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
+import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import 'package:geoli/Modelos/gestos.dart';
@@ -93,7 +94,9 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
   }
 
   recuperarUIDUsuario() async {
-    uidUsuario = await MetodosAuxiliares.recuperarUid();
+    uidUsuario = await PassarPegarDados.recuperarInformacoesUsuario()
+        .values
+        .elementAt(0);
     recuperarRegioesLiberadas();
   }
 
@@ -192,6 +195,60 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
     }
   }
 
+  // conforme o tamanho da tela e
+  // xibir determinda quantidade de colunas
+  tamnhoListaGestosEstadoDetalhado(double larguraTela) {
+    int tamanho = 5;
+    //verificando qual o tamanho da tela
+    if (larguraTela <= 600) {
+      tamanho = 180;
+    } else if (larguraTela > 600 && larguraTela <= 800) {
+      tamanho = 180;
+    } else if (larguraTela > 800 && larguraTela <= 1100) {
+      tamanho = 180;
+    } else if (larguraTela > 1100 && larguraTela <= 1300) {
+      tamanho = 190;
+    } else if (larguraTela > 1300) {
+      tamanho = 200;
+    }
+    return tamanho;
+  }
+
+  tamnhoAreaMapa(double larguraTela) {
+    int tamanho = 5;
+    //verificando qual o tamanho da tela
+    if (larguraTela <= 600) {
+      tamanho = 180;
+    } else if (larguraTela > 600 && larguraTela <= 800) {
+      tamanho = 180;
+    } else if (larguraTela > 800 && larguraTela <= 1100) {
+      tamanho = 180;
+    } else if (larguraTela > 1100 && larguraTela <= 1300) {
+      tamanho = 190;
+    } else if (larguraTela > 1300) {
+      tamanho = 200;
+    }
+    return tamanho;
+  }
+
+  // conforme o tamanho da tela exibir determinda quantidade de colunas
+   tamanhoImagemGestosEstados(double larguraTela) {
+    int tamanho = 170;
+    //verificando qual o tamanho da tela
+    if (larguraTela <= 600) {
+      tamanho = 60;
+    } else if (larguraTela > 600 && larguraTela <= 800) {
+      tamanho = 60;
+    }else if (larguraTela > 800 && larguraTela <= 1100) {
+      tamanho = 60;
+    } else if (larguraTela > 1100 && larguraTela <= 1300) {
+      tamanho = 70;
+    } else if(larguraTela > 1300){
+      tamanho = 80;
+    }
+    return tamanho;
+  }
+
   Widget exibirDetalhesRegiaoDesbloqueada(bool exibir, Estado estado) =>
       Visibility(
           visible: exibir,
@@ -242,12 +299,12 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
                 ),
               )));
 
-  Widget imagemRegiaoGesto(String nome, String caminhoImagem) => Column(
+  Widget imagemRegiaoGesto(String nome, String caminhoImagem,double larguraTela) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image(
-            height: 80,
-            width: 80,
+            height: tamanhoImagemGestosEstados(larguraTela),
+            width: tamanhoImagemGestosEstados(larguraTela),
             image: AssetImage('$caminhoImagem.png'),
           ),
           SizedBox(
@@ -301,7 +358,7 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
                               : Platform.isIOS || Platform.isAndroid
                                   ? larguraTela * 0.9
                                   : larguraTela * 0.4,
-                          height: 380,
+                          height: 300,
                           child: Card(
                             color: Colors.white,
                             shape: OutlineInputBorder(
@@ -319,7 +376,7 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
                                 ),
                                 SizedBox(
                                   width: larguraTela,
-                                  height: 300,
+                                  height: tamnhoListaGestosEstadoDetalhado(larguraTela),
                                   child: ListView.builder(
                                     itemCount: regioesSelecionadas.length,
                                     itemBuilder: (context, index) {
@@ -333,14 +390,14 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
                                                   .nome,
                                               regioesSelecionadas
                                                   .elementAt(index)
-                                                  .caminhoImagem),
+                                                  .caminhoImagem,larguraTela),
                                           imagemRegiaoGesto(
                                               gestosSelecionados
                                                   .elementAt(index)
                                                   .nomeGesto,
                                               gestosSelecionados
                                                   .elementAt(index)
-                                                  .nomeImagem),
+                                                  .nomeImagem,larguraTela),
                                         ],
                                       );
                                     },
@@ -391,7 +448,6 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
                                 : Platform.isIOS || Platform.isAndroid
                                     ? larguraTela * 0.9
                                     : larguraTela * 0.4,
-                            height: 180,
                             child: Wrap(
                               alignment: WrapAlignment.center,
                               children: [

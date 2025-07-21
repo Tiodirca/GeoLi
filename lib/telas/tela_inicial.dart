@@ -15,7 +15,6 @@ import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import 'package:geoli/Widgets/widget_exibir_emblemas.dart';
 import 'package:geoli/Widgets/widget_tela_resetar_dados.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class TelaInicial extends StatefulWidget {
   const TelaInicial({super.key});
@@ -30,7 +29,7 @@ class _TelaInicialState extends State<TelaInicial>
   int pontuacaoSistemaSolar = 0;
   int pontuacaoGeral = 0;
   List<Emblemas> emblemasGeral = [];
-  bool exibirTelaCarregamento = false;
+  bool exibirTelaCarregamento = true;
   bool exibirTelaResetarJogo = false;
   int contadorConexao = 0;
   String nomeUsuario = "";
@@ -105,8 +104,7 @@ class _TelaInicialState extends State<TelaInicial>
     uidUsuario =
         PassarPegarDados.recuperarInformacoesUsuario().values.elementAt(0);
     recuperarDadosUsuario(uidUsuario);
-    recuperarPontuacao(Constantes.fireBaseColecaoRegioes,
-        Constantes.fireBaseDocumentoPontosJogadaRegioes, uidUsuario);
+
   }
 
   recuperarDadosUsuario(String uidUsuario) async {
@@ -126,6 +124,8 @@ class _TelaInicialState extends State<TelaInicial>
           } else {
             emailAlterado = value;
           }
+          recuperarPontuacao(Constantes.fireBaseColecaoRegioes,
+              Constantes.fireBaseDocumentoPontosJogadaRegioes, uidUsuario);
         });
       });
       //chamando metodo para validar Alteracao do email
@@ -168,13 +168,11 @@ class _TelaInicialState extends State<TelaInicial>
                 // a tela de emblemas sem esse metodo o
                 // emblema nao e exibido corretamente
                 MetodosAuxiliares.passarPontuacaoAtual(pontuacaoGeral);
+                exibirTelaCarregamento = false;
               }
             });
           },
         );
-        if (nomeColecao != Constantes.fireBaseColecaoRegioes) {
-          exibirTelaCarregamento = false;
-        }
       }, onError: (e) {
         debugPrint("ErroTONP${e.toString()}");
         //validarErro(e.toString());

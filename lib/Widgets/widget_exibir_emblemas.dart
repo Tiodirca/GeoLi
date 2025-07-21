@@ -138,7 +138,7 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
 
   validarTamanhoAlturaBotao(double largula) {
     if (largula <= 600) {
-      return 130.0;
+      return 140.0;
     } else if (largula > 600 && largula <= 1000) {
       return 150.0;
     } else if (largula > 1000) {

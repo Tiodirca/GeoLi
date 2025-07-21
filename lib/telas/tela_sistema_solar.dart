@@ -12,11 +12,12 @@ import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/constantes_sistema_solar.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
+import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Widgets/gestos_widget.dart';
 import 'package:geoli/Widgets/msg_tutoriais_widget.dart';
-import 'package:geoli/Widgets/sistema_solar/balao_widget.dart';
+import 'package:geoli/Widgets/sistema_solar/area_tutorial_widget.dart';
 import 'package:geoli/Widgets/sistema_solar/widget_area_animacao_baloes.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import 'package:geoli/Widgets/widget_exibir_emblemas.dart';
@@ -53,10 +54,6 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   late String iniciarAnimacao;
   late String uidUsuario;
   Color corPadrao = PaletaCores.corAzul;
-  late final AnimationController _controllerFade =
-      AnimationController(vsync: this);
-  late final Animation<double> _fadeAnimation =
-      Tween<double>(begin: 1, end: 0.0).animate(_controllerFade);
   bool exibirMensagemSemConexao = false;
 
   @override
@@ -101,7 +98,9 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   }
 
   recuperarUIDUsuario() async {
-    uidUsuario = await MetodosAuxiliares.recuperarUid();
+    uidUsuario = await PassarPegarDados.recuperarInformacoesUsuario()
+        .values
+        .elementAt(0);
     recuperarPontuacao();
   }
 
@@ -258,14 +257,6 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
     });
   }
 
-  @override
-  void dispose() {
-    if (pontuacaoTotal == 0) {
-      _controllerFade.dispose();
-    }
-    super.dispose();
-  }
-
   Widget btnAcao(String nomeBtn, String caminhoImagem) => Container(
       margin: EdgeInsets.all(5),
       width: 110,
@@ -286,8 +277,6 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                   exibirTutorial = true;
                   MetodosAuxiliares.passarStatusTutorial(
                       Constantes.statusTutorialAtivo);
-                  _controllerFade.repeat(
-                      count: 1000, period: Duration(milliseconds: 800));
                 }
               } else {
                 if (nomeBtn == Textos.btnDificuldadeFacil) {
@@ -326,9 +315,9 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
             ],
           )));
 
-  Widget areaSorteioPlaneta(double larguraTela, double alturaTela) => SizedBox(
+  Widget areaSorteioPlaneta(double larguraTela) => SizedBox(
         width: larguraTela,
-        height: alturaTela,
+        height: 150,
         child: Card(
           color: Colors.white,
           margin: EdgeInsets.all(0),
@@ -370,26 +359,22 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
         ),
       );
 
-  Widget indicadorMsg(String msg, bool inverter) => Wrap(
-        alignment: WrapAlignment.center,
-        crossAxisAlignment: inverter == true
-            ? WrapCrossAlignment.end
-            : WrapCrossAlignment.start,
-        children: [
-          MsgTutoriaisWidget(corBorda: corPadrao, mensagem: msg),
-          Transform.flip(
-              flipX: inverter,
-              flipY: inverter,
-              child: FadeTransition(
-                opacity: _fadeAnimation,
-                child: Image(
-                  width: 30,
-                  height: 50,
-                  image: AssetImage('${CaminhosImagens.iconeClick}.png'),
-                ),
-              )),
-        ],
-      );
+  tamanhoAreaPlanetaSorteado(double larguraTela) {
+    double tamanho = 200.0;
+    //verificando qual o tamanho da tela
+    if (larguraTela <= 400) {
+      tamanho = 250.0;
+    } else if (larguraTela > 400 && larguraTela <= 800) {
+      tamanho = 250.0;
+    } else if (larguraTela > 800 && larguraTela <= 1100) {
+      tamanho = 300.0;
+    } else if (larguraTela > 1100 && larguraTela <= 1300) {
+      tamanho = 350.0;
+    } else if (larguraTela > 1300) {
+      tamanho = 400.0;
+    }
+    return tamanho;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -603,44 +588,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                     );
                   } else {
                     if (exibirTutorial) {
-                      return Container(
-                          color: Colors.white,
-                          width: larguraTela,
-                          height: alturaTela,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                    width: kIsWeb
-                                        ? larguraTela * 0.8
-                                        : Platform.isAndroid || Platform.isIOS
-                                            ? larguraTela * 0.8
-                                            : larguraTela * 0.2,
-                                    height: 100,
-                                    child: indicadorMsg(
-                                      Textos.tutorialSistemaSolarCabecalho,
-                                      false,
-                                    )),
-                                SizedBox(
-                                  width: kIsWeb
-                                      ? larguraTela * 0.4
-                                      : Platform.isAndroid || Platform.isIOS
-                                          ? larguraTela * 0.4
-                                          : larguraTela * 0.1,
-                                  child: indicadorMsg(
-                                      Textos.tutorialSistemaSolarClickBalao,
-                                      true),
-                                ),
-                                BalaoWidget(
-                                    planeta: Planeta(
-                                        nomePlaneta: Textos.nomePlanetaTerra,
-                                        caminhoImagem:
-                                            CaminhosImagens.planetaTerraImagem),
-                                    desativarBotao: false),
-                              ],
-                            ),
-                          ));
+                      return AreaTutorialWidget(corPadrao: corPadrao);
                     } else {
                       return Container(
                           color: Colors.white,
@@ -723,50 +671,6 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                   }
                 },
               ),
-              bottomNavigationBar: LayoutBuilder(
-                builder: (context, constraints) {
-                  if (exibirTutorial) {
-                    return Container(
-                        color: Colors.white,
-                        width: larguraTela,
-                        height: 260,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Row(
-                              mainAxisAlignment: kIsWeb
-                                  ? MainAxisAlignment.center
-                                  : Platform.isAndroid || Platform.isIOS
-                                      ? MainAxisAlignment.start
-                                      : MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                indicadorMsg(
-                                    Textos.tutorialSistemaSolarPlanetaSorteado,
-                                    true),
-                              ],
-                            ),
-                            areaSorteioPlaneta(
-                                kIsWeb
-                                    ? larguraTela * 0.5
-                                    : Platform.isAndroid || Platform.isIOS
-                                        ? larguraTela * 0.5
-                                        : larguraTela * 0.2,
-                                kIsWeb
-                                    ? 150
-                                    : Platform.isAndroid || Platform.isIOS
-                                        ? 130
-                                        : 150)
-                          ],
-                        ));
-                  } else {
-                    return SizedBox(
-                      width: 0,
-                      height: 0,
-                    );
-                  }
-                },
-              ),
               bottomSheet: LayoutBuilder(
                 builder: (context, constraints) {
                   //verificando se nao esta no tutorial
@@ -777,17 +681,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                     );
                   } else {
                     if (exibirJogo) {
-                      return areaSorteioPlaneta(
-                          kIsWeb
-                              ? larguraTela * 0.5
-                              : Platform.isAndroid || Platform.isIOS
-                                  ? larguraTela * 0.5
-                                  : larguraTela * 0.2,
-                          kIsWeb
-                              ? 150
-                              : Platform.isAndroid || Platform.isIOS
-                                  ? 130
-                                  : 150);
+                      return areaSorteioPlaneta(tamanhoAreaPlanetaSorteado(larguraTela));
                     } else {
                       return WidgetExibirEmblemas(
                           pontuacaoAtual: pontuacaoTotal,

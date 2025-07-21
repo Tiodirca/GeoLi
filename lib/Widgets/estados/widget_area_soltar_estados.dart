@@ -60,12 +60,29 @@ class _WidgetAreaSoltarEstadosState extends State<WidgetAreaSoltarEstados>
     super.dispose();
   }
 
+  // conforme o tamanho da tela exibir determinda quantidade de colunas
+  static tamanhoImagemEstados(double larguraTela) {
+    int tamanho = 170;
+    //verificando qual o tamanho da tela
+    if (larguraTela <= 600) {
+      tamanho = 120;
+    } else if (larguraTela > 600 && larguraTela <= 800) {
+      tamanho = 130;
+    }else if (larguraTela > 800 && larguraTela <= 1100) {
+      tamanho = 140;
+    } else if (larguraTela > 1100 && larguraTela <= 1300) {
+      tamanho = 150;
+    } else if(larguraTela > 1300){
+      tamanho = 160;
+    }
+    return tamanho;
+  }
+
   @override
   Widget build(BuildContext context) {
-    //teste();
+
+    double larguraTela = MediaQuery.of(context).size.width;
     return SizedBox(
-        width: 170,
-        height: 170,
         child: Card(
           elevation: 7,
           color: Colors.white,
@@ -78,8 +95,8 @@ class _WidgetAreaSoltarEstadosState extends State<WidgetAreaSoltarEstados>
                 alignment: Alignment.center,
                 children: [
                   Image(
-                    height: 140,
-                    width: 140,
+                    height: tamanhoImagemEstados(larguraTela),
+                    width: tamanhoImagemEstados(larguraTela),
                     image: AssetImage('${estado.caminhoImagem}.png'),
                   ),
                   Positioned(
