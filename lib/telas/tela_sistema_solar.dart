@@ -16,7 +16,6 @@ import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Widgets/gestos_widget.dart';
-import 'package:geoli/Widgets/msg_tutoriais_widget.dart';
 import 'package:geoli/Widgets/sistema_solar/area_tutorial_widget.dart';
 import 'package:geoli/Widgets/sistema_solar/widget_area_animacao_baloes.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
@@ -110,7 +109,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
     gestoSorteado = gestoPlanetasSistemaSolar
         .elementAt(random.nextInt(gestoPlanetasSistemaSolar.length));
     //chamando metodo para passar o nome do gesto sorteado
-    MetodosAuxiliares.passarGestoSorteado(gestoSorteado.nomeGesto);
+    PassarPegarDados.passarGestoSorteado(gestoSorteado.nomeGesto);
   }
 
   void comecarTempo() {
@@ -161,7 +160,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                 //Passando pontuacao para
                 // a tela de emblemas sem esse metodo
                 // o emblema nao e exibido corretamente
-                MetodosAuxiliares.passarPontuacaoAtual(pontuacaoTotal);
+                PassarPegarDados.passarPontuacaoAtual(pontuacaoTotal);
                 exibirTelaCarregamento = false;
               });
             },
@@ -184,7 +183,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
       setState(() {
         exibirTelaCarregamento = true;
         exibirMensagemSemConexao = true;
-        MetodosAuxiliares.passarTelaAtualErroConexao(
+        PassarPegarDados.passarTelaAtualErroConexao(
             Constantes.rotaTelaSistemaSolar);
       });
     }
@@ -221,7 +220,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   // metodo para verificar se o usuario acertou o planeta que foi sorteado no gesto
   recuperarJogadaPeriodicamente() async {
     //recuperando o valor passado pelo metodo
-    String retorno = await MetodosAuxiliares.recuperarAcerto();
+    String retorno = await PassarPegarDados.recuperarAcerto();
     if (retorno == Constantes.msgAcerto) {
       // mudando estado da lista para mudar a ordem dos planetas na lista
       setState(() {
@@ -246,7 +245,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
       });
     }
     //sobreescrevendo metodo
-    MetodosAuxiliares.confirmarAcerto("");
+    PassarPegarDados.confirmarAcerto("");
   }
 
   liberarBotoes() {
@@ -275,7 +274,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                 exibirBtnDificuldade = true;
                 if (pontuacaoTotal == 0) {
                   exibirTutorial = true;
-                  MetodosAuxiliares.passarStatusTutorial(
+                  PassarPegarDados.passarStatusTutorial(
                       Constantes.statusTutorialAtivo);
                 }
               } else {
@@ -389,7 +388,6 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {
           return TelaCarregamentoWidget(
-            exibirMensagemConexao: exibirMensagemSemConexao,
             corPadrao: corPadrao,
           );
         } else {
@@ -559,7 +557,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                       enableFeedback: false,
                       onPressed: () {
                         if (ativarBtn) {
-                          MetodosAuxiliares.passarPontuacaoAtual(0);
+                          PassarPegarDados.passarPontuacaoAtual(0);
                           if (exibirJogo) {
                             atualizarPontuacao();
                             Navigator.pushReplacementNamed(

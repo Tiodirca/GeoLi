@@ -167,7 +167,7 @@ class _TelaInicialState extends State<TelaInicial>
                 //Passando pontuacao para
                 // a tela de emblemas sem esse metodo o
                 // emblema nao e exibido corretamente
-                MetodosAuxiliares.passarPontuacaoAtual(pontuacaoGeral);
+                PassarPegarDados.passarPontuacaoAtual(pontuacaoGeral);
                 exibirTelaCarregamento = false;
               }
             });
@@ -225,8 +225,8 @@ class _TelaInicialState extends State<TelaInicial>
             if (nome == Textos.btnSistemaSolar) {
               //Zerando metodos para evitar passar
               // informacao incorreta para a tela
-              MetodosAuxiliares.passarPontuacaoAtual(0);
-              MetodosAuxiliares.confirmarAcerto("");
+              PassarPegarDados.passarPontuacaoAtual(0);
+              PassarPegarDados.confirmarAcerto("");
               Navigator.pushReplacementNamed(
                   context, Constantes.rotaTelaSistemaSolar);
             } else if (nome == Textos.btnEstadoBrasileiros) {
@@ -278,7 +278,6 @@ class _TelaInicialState extends State<TelaInicial>
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {
           return TelaCarregamentoWidget(
-            exibirMensagemConexao: exibirMensagemSemConexao,
             corPadrao: corPadrao,
           );
         } else {

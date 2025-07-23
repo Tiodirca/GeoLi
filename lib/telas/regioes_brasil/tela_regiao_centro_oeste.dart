@@ -54,12 +54,11 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
     // recebendo a pontuacao que esta sendo passada na
     // TELA INICIAL REGIOES e do WIDGET AREA GESTOS
     if (retornoConexao) {
-      int pontuacao = await MetodosAuxiliares.recuperarPontuacaoAtual();
+      int pontuacao = await PassarPegarDados.recuperarPontuacaoAtual();
       // Entrar no tutorial de jogo caso a pontuacao seja 0
       if (pontuacao == 0) {
         setState(() {
           carregarEstados();
-          print("xcvxv");
           //percorrendo a a lista
           for (var element in estadosSorteio) {
             //sobre escrevendo o atributo para que caso seja tutorial nao exibir acertos de jogada anterior
@@ -70,8 +69,7 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
           gestos.addAll([ConstantesEstadosGestos.gestoMS]);
           //passando status de tutorial ativo para os WIGETS
           // validar acoes baseado no status passado
-          MetodosAuxiliares.passarStatusTutorial(
-              Constantes.statusTutorialAtivo);
+          PassarPegarDados.passarStatusTutorial(Constantes.statusTutorialAtivo);
         });
       } else {
         gestos.addAll([
@@ -88,8 +86,6 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
     }
   }
 
-
-
   // metodo para adicionar os estados no map auxiliar e
   // depois adicionar numa lista e fazer o sorteio dos itens
   carregarEstados() {
@@ -104,7 +100,6 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
   }
 
   realizarBuscaDadosFireBase(String nomeDocumentoRegiao) async {
-    print("fdfs");
     var db = FirebaseFirestore.instance;
     bool retornoConexao = await InternetConnection().hasInternetAccess;
     //instanciano variavel
@@ -164,7 +159,7 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
       setState(() {
         exibirTelaCarregamento = true;
         exibirMensagemSemConexao = true;
-        MetodosAuxiliares.passarTelaAtualErroConexao(
+        PassarPegarDados.passarTelaAtualErroConexao(
             Constantes.rotaTelaRegiaoCentroOeste);
       });
     }
@@ -196,7 +191,10 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
                   iconSize: 30,
                   enableFeedback: false,
                   onPressed: () {
-                    Timer(const Duration(seconds: 1), () {
+                    setState(() {
+                      exibirTelaCarregamento = true;
+                    });
+                    Timer(Duration(seconds: Constantes.duracaoDelayVoltarTela), () {
                       Navigator.pushReplacementNamed(
                           context, Constantes.rotaTelaInicialRegioes);
                     });
@@ -207,7 +205,6 @@ class _TelaRegiaoCentroOesteState extends State<TelaRegiaoCentroOeste> {
           builder: (context, constraints) {
             if (exibirTelaCarregamento) {
               return TelaCarregamentoWidget(
-                exibirMensagemConexao: exibirMensagemSemConexao,
                 corPadrao: ConstantesEstadosGestos.corPadraoRegioes,
               );
             } else {

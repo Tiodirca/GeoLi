@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/constantes_sistema_solar.dart';
-import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
 import 'package:geoli/Uteis/textos.dart';
@@ -160,8 +159,7 @@ class _PlanetasDesbloqueadosWidgetState extends State<PlanetasDesbloqueadosWidge
           return Container(
             margin: EdgeInsets.all(10),
             child: TelaCarregamentoWidget(
-              corPadrao: widget.corPadrao,
-              exibirMensagemConexao: false,
+              corPadrao: widget.corPadrao
             ),
           );
         } else {

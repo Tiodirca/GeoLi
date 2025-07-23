@@ -103,7 +103,6 @@ class _TelaSplashScreenState extends State<TelaSplashScreen> {
             width: larguraTela,
             height: alturaTela,
             child: TelaCarregamentoWidget(
-              exibirMensagemConexao: false,
               corPadrao: PaletaCores.corVerde,
             ),
           ))),

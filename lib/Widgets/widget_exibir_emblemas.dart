@@ -6,6 +6,7 @@ import 'package:geoli/Modelos/emblemas.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
+import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/emblema_widget.dart';
 import 'package:geoli/Widgets/estados/mapa_regioes_widget.dart';
@@ -182,7 +183,7 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
                            itemBuilder: (context, index) {
                              // recuperando a pontuacao atual da tela que esta sendo exibida
                              // para poder exibir o emblema correspondente a atual pontuacao
-                             MetodosAuxiliares.recuperarPontuacaoAtual().then(
+                             PassarPegarDados.recuperarPontuacaoAtual().then(
                                    (value) {
                                  setState(() {
                                    // definindo que a variavel

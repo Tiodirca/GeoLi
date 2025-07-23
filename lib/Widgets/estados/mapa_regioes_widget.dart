@@ -7,7 +7,6 @@ import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/constantes_estados_gestos.dart';
-import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
 import 'package:geoli/Uteis/textos.dart';
@@ -179,72 +178,39 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
     );
   }
 
-  exibirErroConexao() {
-    if (mounted) {
-      setState(() {
-        exibirTelaCarregamento = true;
-        exibirMensagemSemConexao = true;
-        MetodosAuxiliares.passarTelaAtualErroConexao(Textos.btnRegioesMapa);
-      });
-    }
-  }
-
-  validarErro(String erro) {
-    if (erro.contains("An internal error has occurred")) {
-      exibirErroConexao();
-    }
-  }
-
   // conforme o tamanho da tela e
   // xibir determinda quantidade de colunas
-  tamnhoListaGestosEstadoDetalhado(double larguraTela) {
-    int tamanho = 5;
+  tamanhoListaGestosEstadoDetalhado(double larguraTela) {
+    double tamanho = 5.0;
     //verificando qual o tamanho da tela
     if (larguraTela <= 600) {
-      tamanho = 180;
+      tamanho = 180.0;
     } else if (larguraTela > 600 && larguraTela <= 800) {
-      tamanho = 180;
+      tamanho = 180.0;
     } else if (larguraTela > 800 && larguraTela <= 1100) {
-      tamanho = 180;
+      tamanho = 180.0;
     } else if (larguraTela > 1100 && larguraTela <= 1300) {
-      tamanho = 190;
+      tamanho = 190.0;
     } else if (larguraTela > 1300) {
-      tamanho = 200;
-    }
-    return tamanho;
-  }
-
-  tamnhoAreaMapa(double larguraTela) {
-    int tamanho = 5;
-    //verificando qual o tamanho da tela
-    if (larguraTela <= 600) {
-      tamanho = 180;
-    } else if (larguraTela > 600 && larguraTela <= 800) {
-      tamanho = 180;
-    } else if (larguraTela > 800 && larguraTela <= 1100) {
-      tamanho = 180;
-    } else if (larguraTela > 1100 && larguraTela <= 1300) {
-      tamanho = 190;
-    } else if (larguraTela > 1300) {
-      tamanho = 200;
+      tamanho = 200.0;
     }
     return tamanho;
   }
 
   // conforme o tamanho da tela exibir determinda quantidade de colunas
    tamanhoImagemGestosEstados(double larguraTela) {
-    int tamanho = 170;
+    double tamanho = 170.0;
     //verificando qual o tamanho da tela
     if (larguraTela <= 600) {
-      tamanho = 60;
+      tamanho = 60.0;
     } else if (larguraTela > 600 && larguraTela <= 800) {
-      tamanho = 60;
+      tamanho = 60.0;
     }else if (larguraTela > 800 && larguraTela <= 1100) {
-      tamanho = 60;
+      tamanho = 60.0;
     } else if (larguraTela > 1100 && larguraTela <= 1300) {
-      tamanho = 70;
+      tamanho = 70.0;
     } else if(larguraTela > 1300){
-      tamanho = 80;
+      tamanho = 80.0;
     }
     return tamanho;
   }
@@ -328,7 +294,6 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
           return Container(
             margin: EdgeInsets.all(10),
             child: TelaCarregamentoWidget(
-                exibirMensagemConexao: exibirMensagemSemConexao,
                 corPadrao: ConstantesEstadosGestos.corPadraoRegioes),
           );
         } else {
@@ -376,7 +341,7 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
                                 ),
                                 SizedBox(
                                   width: larguraTela,
-                                  height: tamnhoListaGestosEstadoDetalhado(larguraTela),
+                                  height: tamanhoListaGestosEstadoDetalhado(larguraTela),
                                   child: ListView.builder(
                                     itemCount: regioesSelecionadas.length,
                                     itemBuilder: (context, index) {

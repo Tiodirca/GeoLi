@@ -7,7 +7,6 @@ import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/constantes_estados_gestos.dart';
-import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
 import 'package:geoli/Widgets/gestos_widget.dart';
 import 'package:geoli/Widgets/msg_tutoriais_widget.dart';
@@ -67,7 +66,7 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
   }
 
   verificarStatusTutorial() async {
-    status = await MetodosAuxiliares.recuperarStatusTutorial();
+    status = await PassarPegarDados.recuperarStatusTutorial();
     if (status == Constantes.statusTutorialAtivo) {
       _controllerFade.repeat(count: 1000, period: Duration(milliseconds: 800));
       if (mounted) {
@@ -180,7 +179,7 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
         onDragCompleted: () async {
           // variavel vai receber o retorno do metodo para poder
           // verificar se o usuario acertou o gesto no estado correto
-          String retorno = await MetodosAuxiliares.recuperarAcerto();
+          String retorno = await PassarPegarDados.recuperarAcerto();
           if (retorno == Constantes.msgAcerto) {
             // caso tenha acertado ele ira remover da
             // lista de gestos o gesto que foi acertado
@@ -192,9 +191,9 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
                 atualizarPontuacao();
                 // caso esteja no tutorial fazer acoes
                 if (status == Constantes.statusTutorialAtivo) {
-                  MetodosAuxiliares.passarStatusTutorial("");
+                  PassarPegarDados.passarStatusTutorial("");
                   //chamando metodo passando pontuacao para quando recarregar atela
-                  MetodosAuxiliares.passarPontuacaoAtual(ponto);
+                  PassarPegarDados.passarPontuacaoAtual(ponto);
                 }
                 //removendo o item da lista em caso de acerto
                 widget.gestos.removeWhere(

@@ -155,7 +155,7 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
       setState(() {
         exibirTelaCarregamento = true;
         exibirMensagemSemConexao = true;
-        MetodosAuxiliares.passarTelaAtualErroConexao(
+        PassarPegarDados.passarTelaAtualErroConexao(
             Constantes.rotaTelaRegiaoNorte);
       });
     }
@@ -181,7 +181,10 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
                   iconSize: 30,
                   enableFeedback: false,
                   onPressed: () {
-                    Timer(const Duration(seconds: 1), () {
+                    setState(() {
+                      exibirTelaCarregamento = true;
+                    });
+                    Timer(Duration(seconds: Constantes.duracaoDelayVoltarTela), () {
                       Navigator.pushReplacementNamed(
                           context, Constantes.rotaTelaInicialRegioes);
                     });
@@ -192,7 +195,6 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
           builder: (context, constraints) {
             if (exibirTelaCarregamento) {
               return TelaCarregamentoWidget(
-                exibirMensagemConexao: exibirMensagemSemConexao,
                 corPadrao: ConstantesEstadosGestos.corPadraoRegioes,
               );
             } else {

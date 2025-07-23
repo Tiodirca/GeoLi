@@ -92,6 +92,35 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
     }
   }
 
+  validarTamanhoGestos(double largura) {
+    if (largura <= 600) {
+      return 70.0;
+    } else if (largura > 600 && largura <= 1000) {
+      return 90.0;
+    } else if (largura > 1000) {
+      return 100.0;
+    }
+  }
+
+  validarTamanhoLarguraBotao(double largura) {
+    if (largura <= 600) {
+      return 120.0;
+    } else if (largura > 600 && largura <= 1000) {
+      return 120.0;
+    } else if (largura > 1000) {
+      return 140.0;
+    }
+  }
+
+  validarTamanhoAlturaBotao(double largula) {
+    if (largula <= 600) {
+      return 130.0;
+    } else if (largula > 600 && largula <= 1000) {
+      return 150.0;
+    } else if (largula > 1000) {
+      return 170.0;
+    }
+  }
 
 
   Widget campos(TextEditingController controle, String nomeCampo,
@@ -237,7 +266,6 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {
           return TelaCarregamentoWidget(
-            exibirMensagemConexao: false,
             corPadrao: PaletaCores.corVerde,
           );
         } else {

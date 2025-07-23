@@ -11,9 +11,9 @@ import '../../Uteis/textos.dart';
 class AreaTelaRegioesWidget extends StatelessWidget {
   const AreaTelaRegioesWidget(
       {super.key,
-      required this.estadosSorteio,
-      required this.exibirTelaProximoNivel,
-      required this.nomeColecao});
+        required this.estadosSorteio,
+        required this.exibirTelaProximoNivel,
+        required this.nomeColecao});
 
   final String nomeColecao;
   final bool exibirTelaProximoNivel;
@@ -24,21 +24,35 @@ class AreaTelaRegioesWidget extends StatelessWidget {
   quantidadeColunasGridView(double larguraTela) {
     int tamanho = 5;
     //verificando qual o tamanho da tela
-    if (larguraTela <= 400) {
+    if (larguraTela <= 400.0) {
       tamanho = 2;
-    } else if (larguraTela > 400 && larguraTela <= 800) {
+    } else if (larguraTela > 400.0 && larguraTela <= 800.0) {
       tamanho = 3;
-    } else if (larguraTela > 800 && larguraTela <= 1100) {
+    } else if (larguraTela > 800.0 && larguraTela <= 1100.0) {
       tamanho = 5;
-    } else if (larguraTela > 1100 && larguraTela <= 1300) {
+    } else if (larguraTela > 1100.0 && larguraTela <= 1300.0) {
       tamanho = 6;
-    } else if (larguraTela > 1300) {
+    } else if (larguraTela > 1300.0) {
       tamanho = 7;
     }
     return tamanho;
   }
 
-  @override
+  quantidadeColunasGridViewWindows(double larguraTela) {
+    int tamanho = 5;
+    //verificando qual o tamanho da tela
+    if (larguraTela <= 600.0) {
+      tamanho = 2;
+    } else if (larguraTela > 600.0 && larguraTela <= 900.0) {
+      tamanho = 3;
+    } else if (larguraTela > 900.0 && larguraTela <= 1100.0) {
+      tamanho = 4;
+    } else if (larguraTela > 1100.0) {
+      tamanho = 5;
+    }
+    return tamanho;
+  }
+
   @override
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;
@@ -67,13 +81,17 @@ class AreaTelaRegioesWidget extends StatelessWidget {
                     width: kIsWeb
                         ? larguraTela * 0.9
                         : Platform.isAndroid || Platform.isIOS
-                            ? larguraTela
-                            : larguraTela * 0.6,
+                        ? larguraTela
+                        : larguraTela * 0.6,
                     height: alturaTela * 0.6,
                     child: GridView.builder(
                       itemCount: estadosSorteio.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: quantidadeColunasGridView(
+                        crossAxisCount: kIsWeb
+                            ? quantidadeColunasGridView(
+                          larguraTela,
+                        )
+                            : quantidadeColunasGridViewWindows(
                           larguraTela,
                         ),
                       ),

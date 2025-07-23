@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elegant_notification/elegant_notification.dart';
@@ -14,69 +13,7 @@ import 'package:geoli/Uteis/textos.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MetodosAuxiliares {
-  static String acertou = "";
-  static String nomeGestoPlaneta = "";
-  static int pontuacaoAtual = 0;
-  static String status = "";
-  static String uIDUsuario = "";
-  static String telaAtualErroConexao = "";
 
-  //Metodo para passar se o usuario acertou ou nao
-  static Future<String> confirmarAcerto(String acerto) async {
-    acertou = acerto;
-    return acerto;
-  }
-
-  //Metodo para recuperar acerto
-  static Future<String> recuperarAcerto() async {
-    return acertou;
-  }
-
-  static Future<String> passarTelaAtualErroConexao(String telaAtual) async {
-    telaAtualErroConexao = telaAtual;
-    return telaAtualErroConexao;
-  }
-
-  //Metodo para recuperar acerto
-  static Future<String> recuperarTelaAtualErroConexao() async {
-    return telaAtualErroConexao;
-  }
-
-  static Future<String> passarStatusTutorial(String statusAtual) async {
-    status = statusAtual;
-    return status;
-  }
-
-  static Future<String> recuperarStatusTutorial() async {
-    return status;
-  }
-
-  static Future<int> passarPontuacaoAtual(int pontuacao) async {
-    pontuacaoAtual = pontuacao;
-    return pontuacaoAtual;
-  }
-
-  static Future<int> recuperarPontuacaoAtual() async {
-    return pontuacaoAtual;
-  }
-
-  static Future<String> passarGestoSorteado(String nomeGesto) async {
-    nomeGestoPlaneta = nomeGesto;
-    return nomeGestoPlaneta;
-  }
-
-  static Future<String> recuperarGestoSorteado() async {
-    return nomeGestoPlaneta;
-  }
-
-  static Future<String> recuperarUid() async {
-    return uIDUsuario;
-  }
-
-  static Future<String> passarUidUsuario(String uid) async {
-    uIDUsuario = uid;
-    return uIDUsuario;
-  }
 
   // metodo para remover o gesto ja acertado da lista
   // de gestos quando voltar a jogar
@@ -100,10 +37,11 @@ class MetodosAuxiliares {
   static exibirMensagens(String msg, String tipoAlerta, int duracao,
       double largura, BuildContext context) {
     if (tipoAlerta == Constantes.msgAcerto) {
-      ElegantNotification.success(
+     return ElegantNotification.success(
         position: Alignment.center,
         width: largura,
         showProgressIndicator: false,
+
         borderRadius: BorderRadius.circular(10),
         icon: Icon(
           Icons.check_circle_outline,
@@ -114,6 +52,7 @@ class MetodosAuxiliares {
         animationDuration: const Duration(seconds: 1),
         toastDuration: Duration(seconds: duracao),
         displayCloseButton: false,
+
         animation: AnimationType.fromTop,
         description: Text(msg),
       ).show(context);
@@ -311,32 +250,6 @@ class MetodosAuxiliares {
 
   static chamarExibirMensagemErro(String erro, BuildContext context) {
     exibirMensagemTextos(Constantes.tipoNotificacaoErro, erro, context);
-  }
-
- static validarTamanhoTelaCarregamento(double largura) {
-    if (largura <= 600) {
-      return 300.0;
-    } else if (largura > 600 && largura <= 1000) {
-      return 400.0;
-    } else if (largura > 1000) {
-      return 600.0;
-    }
-  }
-
-  // conforme o tamanho da tela exibir determinda quantidade de colunas
-  static quantidadeColunasGridView(double larguraTela) {
-    int tamanho = 5;
-    //verificando qual o tamanho da tela
-    if (larguraTela <= 800) {
-      tamanho = 2;
-    } else if (larguraTela > 800 && larguraTela <= 1100) {
-      tamanho = 3;
-    } else if (larguraTela > 1100 && larguraTela <= 1300) {
-      tamanho = 4;
-    } else if(larguraTela > 1300){
-      tamanho = 5;
-    }
-    return tamanho;
   }
 
   static  validarTamanhoGestos(double largura) {

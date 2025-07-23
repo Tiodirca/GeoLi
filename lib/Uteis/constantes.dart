@@ -56,6 +56,7 @@ class Constantes {
   static double larguraToastLoginCadastro = 300;
   static int duracaoExibicaoToastLoginCadastro = 2;
 
+  static int duracaoDelayVoltarTela = 2;
   static int duracaoVerificarConexao = 10;
 
   // STATUS DE RESETAR PONTUACOES

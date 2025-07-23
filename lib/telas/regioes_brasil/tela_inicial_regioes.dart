@@ -150,7 +150,7 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
       setState(() {
         exibirTelaCarregamento = true;
         exibirMensagemSemConexao = true;
-        MetodosAuxiliares.passarTelaAtualErroConexao(
+        PassarPegarDados.passarTelaAtualErroConexao(
             Constantes.rotaTelaInicialRegioes);
       });
     }
@@ -194,7 +194,7 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
               // emblema nao e exibido corretamente
               // e para a TELA REGIAO CENTRO OESTE para
               // validar se entrara no tutorial ou nao
-              MetodosAuxiliares.passarPontuacaoAtual(pontos);
+              PassarPegarDados.passarPontuacaoAtual(pontos);
             });
           });
         }, onError: (e) {
@@ -276,7 +276,6 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {
           return TelaCarregamentoWidget(
-            exibirMensagemConexao: exibirMensagemSemConexao,
             corPadrao: ConstantesEstadosGestos.corPadraoRegioes,
           );
         } else {

@@ -78,7 +78,7 @@ class _BalaoWidgetState extends State<BalaoWidget>
   }
 
   recuperarStatusTutorial() async {
-    status = await MetodosAuxiliares.recuperarStatusTutorial();
+    status = await PassarPegarDados.recuperarStatusTutorial();
   }
 
   sortearNumero(int tamanhoLista) {
@@ -89,7 +89,7 @@ class _BalaoWidgetState extends State<BalaoWidget>
   confirmarAcertoTutorial() {
     MetodosAuxiliares.exibirMensagensDuranteJogo(
         Textos.tutorialConcluido, Constantes.msgAcerto, context);
-    MetodosAuxiliares.passarStatusTutorial("");
+    PassarPegarDados.passarStatusTutorial("");
     atualizarPontuacaoTutorial();
     setState(() {
       exibirAnimacaoExplosao = true;
@@ -101,7 +101,7 @@ class _BalaoWidgetState extends State<BalaoWidget>
 
   validarAcerto() async {
     String gesto = "";
-    gesto = await MetodosAuxiliares.recuperarGestoSorteado();
+    gesto = await PassarPegarDados.recuperarGestoSorteado();
     // verificando se o status passado esta ativo
     if (status == Constantes.statusTutorialAtivo) {
       confirmarAcertoTutorial();
@@ -115,10 +115,10 @@ class _BalaoWidgetState extends State<BalaoWidget>
             exibirAnimacaoExplosao = false;
           });
         });
-        MetodosAuxiliares.confirmarAcerto(Constantes.msgAcerto);
+        PassarPegarDados.confirmarAcerto(Constantes.msgAcerto);
         recuperarPlanetasDesbloqueados();
       } else {
-        MetodosAuxiliares.confirmarAcerto(Constantes.msgErro);
+        PassarPegarDados.confirmarAcerto(Constantes.msgErro);
       }
     }
   }
@@ -214,7 +214,7 @@ class _BalaoWidgetState extends State<BalaoWidget>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
         width: 80,
         height: 170,
         child: Stack(

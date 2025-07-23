@@ -10,6 +10,7 @@ import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
+import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
@@ -49,7 +50,9 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
   }
 
   recuperarUIDUsuario() async {
-    uidUsuario = await MetodosAuxiliares.recuperarUid();
+    uidUsuario = await PassarPegarDados.recuperarInformacoesUsuario()
+        .values
+        .elementAt(0);
     recuperarInformacoesUsuario();
   }
 
@@ -114,7 +117,7 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
       setState(() {
         exibirTelaCarregamento = true;
         exibirMensagemSemConexao = true;
-        MetodosAuxiliares.passarTelaAtualErroConexao(
+        PassarPegarDados.passarTelaAtualErroConexao(
             Constantes.rotaTelaUsuarioDetalhado);
       });
     }
@@ -126,7 +129,7 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
     });
     await FirebaseAuth.instance.signOut();
     chamarExibirMensagens(Textos.sucessoDesconectar, Constantes.msgAcerto);
-    MetodosAuxiliares.passarUidUsuario("");
+    //MetodosAuxiliares.passarUidUsuario("");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(Constantes.sharedPreferencesEmail, "");
     prefs.setString(Constantes.sharedPreferencesSenha, "");
@@ -765,7 +768,6 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
       builder: (context, constraints) {
         if (exibirTelaCarregamento) {
           return TelaCarregamentoWidget(
-            exibirMensagemConexao: exibirMensagemSemConexao,
             corPadrao: PaletaCores.corVerde,
           );
         } else {
