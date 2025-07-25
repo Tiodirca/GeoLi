@@ -1,5 +1,7 @@
 class Textos {
   //BOTOES
+  static String versaoAppNumero = "1.2.2";
+  static String versaoAppDescricao = "Versão : ";
   static String btnComecarJogo = "Começar";
   static String btnJogarNovamente = "Jogar Novamente";
   static String btnRecarregarTelaNovamente = "Tentar nova conexão";
@@ -22,6 +24,7 @@ class Textos {
   static String btnAtualizar = "Atualizar Dados";
   static String btnExcluirUsuario = "Excluir Usuário";
   static String btnSalvarAlteracoes = "Salvar";
+  static String btnAutenticar = "Autenticar";
   static String btnReenviarEmail = "Reenviar E-mail";
 
 // GERAIS
@@ -71,6 +74,8 @@ class Textos {
       "bem como editar e atualiza-las nos banco de dados";
   static String telaUsuarioConfirmarEmail =
       "Confirme o email para altera-lo para ";
+  static String telaUsuarioAutenticacao =
+      "Digite a senha para autenticar o usuario para poder fazer a ação";
 
 //ALERT
   static String alertTitulo = "Confirmar";

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -215,8 +214,8 @@ class _TelaInicialState extends State<TelaInicial>
 
   Widget cartao(String nomeImagem, String nome, double largura) => Container(
         margin: EdgeInsets.only(bottom: 10),
-        width: kIsWeb ? MetodosAuxiliares.validarTamanhoLarguraBotao(largura) : 140,
-        height: kIsWeb ? MetodosAuxiliares.validarTamanhoAlturaBotao(largura) : 150,
+        width: MetodosAuxiliares.validarTamanhoLarguraBotao(largura),
+        height:MetodosAuxiliares.validarTamanhoAlturaBotao(largura),
         child: FloatingActionButton(
           elevation: 0,
           heroTag: nome,
@@ -308,11 +307,11 @@ class _TelaInicialState extends State<TelaInicial>
                               borderSide:
                                   BorderSide(width: 1, color: Colors.black)),
                           onPressed: () async {
-                            await FirebaseAuth.instance.signOut();
-                            redirecionarTelaLoginCadastro();
-                            // setState(() {
-                            //   exibirTelaResetarJogo = !exibirTelaResetarJogo;
-                            // });
+                            // await FirebaseAuth.instance.signOut();
+                            // redirecionarTelaLoginCadastro();
+                            setState(() {
+                              exibirTelaResetarJogo = !exibirTelaResetarJogo;
+                            });
                           },
                           child: Icon(
                             exibirTelaResetarJogo

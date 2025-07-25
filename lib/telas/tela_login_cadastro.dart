@@ -1,19 +1,16 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
 import 'package:geoli/Uteis/constantes.dart';
-import 'package:geoli/Uteis/criar_dados_banco_firebase.dart';
+import 'package:geoli/Uteis/estilo.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Uteis/validar_login_cadastro_usuario.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class TelaLoginCadastro extends StatefulWidget {
   const TelaLoginCadastro({super.key});
@@ -27,6 +24,7 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
   bool exibirDadosCadastro = false;
   bool exibirCampos = false;
   bool ocultarSenhaDigitada = true;
+  Estilo estilo = Estilo();
   IconData iconeSenhaVisivel = Icons.visibility;
   final _formKeyFormulario = GlobalKey<FormState>();
   TextEditingController campoEmail = TextEditingController(text: "");
@@ -62,7 +60,6 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
       context,
     );
     if (retorno == Constantes.tipoNotificacaoSucesso) {
-      print("FOI");
       redirecionarTelaInicial();
     } else {
       setState(() {
@@ -84,47 +81,8 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
     Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
   }
 
-  validarTamanhoCampos(double largura) {
-    if (largura <= 600) {
-      return 250.0;
-    } else if (largura > 600) {
-      return 300.0;
-    }
-  }
-
-  validarTamanhoGestos(double largura) {
-    if (largura <= 600) {
-      return 70.0;
-    } else if (largura > 600 && largura <= 1000) {
-      return 90.0;
-    } else if (largura > 1000) {
-      return 100.0;
-    }
-  }
-
-  validarTamanhoLarguraBotao(double largura) {
-    if (largura <= 600) {
-      return 120.0;
-    } else if (largura > 600 && largura <= 1000) {
-      return 120.0;
-    } else if (largura > 1000) {
-      return 140.0;
-    }
-  }
-
-  validarTamanhoAlturaBotao(double largula) {
-    if (largula <= 600) {
-      return 130.0;
-    } else if (largula > 600 && largula <= 1000) {
-      return 150.0;
-    } else if (largula > 1000) {
-      return 170.0;
-    }
-  }
-
-
   Widget campos(TextEditingController controle, String nomeCampo,
-          String nomeImagem,double largura) =>
+          String nomeImagem, double largura) =>
       Container(
           margin: EdgeInsets.all(5),
           child: Row(
@@ -133,11 +91,11 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
             children: [
               Image(
                 height: MetodosAuxiliares.validarTamanhoGestos(largura),
-                width:MetodosAuxiliares.validarTamanhoGestos(largura),
+                width: MetodosAuxiliares.validarTamanhoGestos(largura),
                 image: AssetImage("$nomeImagem.png"),
               ),
               SizedBox(
-                width: validarTamanhoCampos(largura),
+                width: MetodosAuxiliares.tamanhoCamposEditText(largura),
                 height: 80,
                 child: TextFormField(
                   controller: controle,
@@ -152,50 +110,36 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
                     return null;
                   },
                   decoration: InputDecoration(
-                      labelText: nomeCampo,
-                      suffixIcon: nomeCampo == Textos.campoEmail ||
-                              nomeCampo == Textos.campoUsuario
-                          ? null
-                          : IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  if (ocultarSenhaDigitada) {
-                                    setState(() {
-                                      ocultarSenhaDigitada = false;
-                                      iconeSenhaVisivel = Icons.visibility_off;
-                                    });
-                                  } else {
-                                    setState(() {
-                                      ocultarSenhaDigitada = true;
-                                      iconeSenhaVisivel = Icons.visibility;
-                                    });
-                                  }
-                                });
-                              },
-                              icon: Icon(iconeSenhaVisivel)),
-                      labelStyle: TextStyle(color: Colors.black),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(
-                              width: 1, color: PaletaCores.corVerde)),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(
-                              width: 1, color: PaletaCores.corVerde)),
-                      errorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(
-                              width: 1, color: PaletaCores.corVermelha)),
-                      focusedErrorBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(
-                              width: 1, color: PaletaCores.corVermelha))),
+                    labelText: nomeCampo,
+                    suffixIcon: nomeCampo == Textos.campoEmail ||
+                            nomeCampo == Textos.campoUsuario
+                        ? null
+                        : IconButton(
+                            onPressed: () {
+                              setState(() {
+                                if (ocultarSenhaDigitada) {
+                                  setState(() {
+                                    ocultarSenhaDigitada = false;
+                                    iconeSenhaVisivel = Icons.visibility_off;
+                                  });
+                                } else {
+                                  setState(() {
+                                    ocultarSenhaDigitada = true;
+                                    iconeSenhaVisivel = Icons.visibility;
+                                  });
+                                }
+                              });
+                            },
+                            icon: Icon(iconeSenhaVisivel)),
+                    labelStyle: TextStyle(color: Colors.black),
+                  ),
                 ),
               )
             ],
           ));
 
-  Widget cartaoBtn(String nomeImagem, String nomeBtn,double largura) => Container(
+  Widget cartaoBtn(String nomeImagem, String nomeBtn, double largura) =>
+      Container(
         margin: EdgeInsets.all(10),
         width: MetodosAuxiliares.validarTamanhoLarguraBotao(largura),
         height: MetodosAuxiliares.validarTamanhoAlturaBotao(largura),
@@ -262,25 +206,27 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
           overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
     });
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        if (exibirTelaCarregamento) {
-          return TelaCarregamentoWidget(
-            corPadrao: PaletaCores.corVerde,
-          );
-        } else {
-          return Scaffold(
-              appBar: AppBar(
-                leading: Container(),
-                backgroundColor: PaletaCores.corVerde,
-                title: Text(
-                  Textos.telaLoginCadastroTitulo,
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.white),
+    return Theme(
+        data: estilo.estiloGeral,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            if (exibirTelaCarregamento) {
+              return TelaCarregamentoWidget(
+                corPadrao: PaletaCores.corVerde,
+              );
+            } else {
+              return Scaffold(
+                appBar: AppBar(
+                  leading: Container(),
+                  backgroundColor: PaletaCores.corVerde,
+                  title: Text(
+                    Textos.telaLoginCadastroTitulo,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
                 ),
-              ),
-              body: GestureDetector(
-                child: Container(
+                body: GestureDetector(
+                  child: Container(
                     color: Colors.white,
                     width: larguraTela,
                     height: alturaTela,
@@ -313,19 +259,28 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
                                         child: SingleChildScrollView(
                                           scrollDirection: Axis.vertical,
                                           child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
                                             children: [
                                               Visibility(
                                                   visible: exibirDadosCadastro,
                                                   child: campos(
                                                       campoUsuario,
                                                       Textos.campoUsuario,
-                                                      CaminhosImagens.gestoNome,larguraTela)),
-                                              campos(campoEmail, Textos.campoEmail,
-                                                  CaminhosImagens.gestoEmail,larguraTela),
-                                              campos(campoSenha, Textos.campoSenha,
-                                                  CaminhosImagens.gestoSenha,larguraTela),
+                                                      CaminhosImagens.gestoNome,
+                                                      larguraTela)),
+                                              campos(
+                                                  campoEmail,
+                                                  Textos.campoEmail,
+                                                  CaminhosImagens.gestoEmail,
+                                                  larguraTela),
+                                              campos(
+                                                  campoSenha,
+                                                  Textos.campoSenha,
+                                                  CaminhosImagens.gestoSenha,
+                                                  larguraTela),
                                             ],
                                           ),
                                         ),
@@ -334,7 +289,8 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
                                     margin: EdgeInsets.only(top: 10),
                                     child: cartaoBtn(
                                         CaminhosImagens.gestoEntrar,
-                                        Textos.btnEntrar,larguraTela),
+                                        Textos.btnEntrar,
+                                        larguraTela),
                                   ),
                                   Container(
                                       margin: EdgeInsets.only(top: 10),
@@ -365,22 +321,38 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   cartaoBtn(CaminhosImagens.gestoEntrar,
-                                      Textos.btnAcessar,larguraTela),
+                                      Textos.btnAcessar, larguraTela),
                                   cartaoBtn(CaminhosImagens.gestoCadastro,
-                                      Textos.btnCadastrar,larguraTela),
+                                      Textos.btnCadastrar, larguraTela),
                                 ],
                               )),
                         ],
                       ),
-                    ),),
-                onTap: () {
-                  if (Platform.isIOS || Platform.isAndroid) {
-                    FocusScope.of(context).requestFocus(FocusNode());
-                  }
-                },
-              ));
-        }
-      },
-    );
+                    ),
+                  ),
+                  onTap: () {
+                    if (Platform.isIOS || Platform.isAndroid) {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                    }
+                  },
+                ),
+                bottomSheet: Container(
+                  color: Colors.white,
+                  width: larguraTela,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(Textos.versaoAppDescricao),
+                      Text(
+                        Textos.versaoAppNumero,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+          },
+        ));
   }
 }

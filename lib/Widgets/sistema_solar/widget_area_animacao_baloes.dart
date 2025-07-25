@@ -222,22 +222,7 @@ class _WidgetAreaAnimacaoBaloesState extends State<WidgetAreaAnimacaoBaloes>
     _controller14.stop();
   }
 
-  validarDistanciaEntreBaloes(double larguraTela) {
-    double distancia = 0;
-    //verificando qual o tamanho da tela
-    if (larguraTela <= 400) {
-      distancia = distancia + 50;
-    } else if (larguraTela > 400 && larguraTela <= 800) {
-      distancia = distancia + 100;
-    } else if (larguraTela > 800 && larguraTela <= 1100) {
-      distancia = distancia + 150;
-    } else if (larguraTela > 1100 && larguraTela <= 1300) {
-      distancia = distancia + 200;
-    } else if (larguraTela > 1300) {
-      distancia = distancia + 250;
-    }
-    return distancia;
-  }
+
 
   Widget exibicaoBaloesMobile(double alturaTela) => Stack(
         children: [

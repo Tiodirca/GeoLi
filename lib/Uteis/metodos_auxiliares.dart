@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elegant_notification/elegant_notification.dart';
 import 'package:elegant_notification/resources/arrays.dart';
@@ -13,8 +12,6 @@ import 'package:geoli/Uteis/textos.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MetodosAuxiliares {
-
-
   // metodo para remover o gesto ja acertado da lista
   // de gestos quando voltar a jogar
   static removerGestoLista(
@@ -37,11 +34,10 @@ class MetodosAuxiliares {
   static exibirMensagens(String msg, String tipoAlerta, int duracao,
       double largura, BuildContext context) {
     if (tipoAlerta == Constantes.msgAcerto) {
-     return ElegantNotification.success(
+      return ElegantNotification.success(
         position: Alignment.center,
         width: largura,
         showProgressIndicator: false,
-
         borderRadius: BorderRadius.circular(10),
         icon: Icon(
           Icons.check_circle_outline,
@@ -52,7 +48,6 @@ class MetodosAuxiliares {
         animationDuration: const Duration(seconds: 1),
         toastDuration: Duration(seconds: duracao),
         displayCloseButton: false,
-
         animation: AnimationType.fromTop,
         description: Text(msg),
       ).show(context);
@@ -252,7 +247,7 @@ class MetodosAuxiliares {
     exibirMensagemTextos(Constantes.tipoNotificacaoErro, erro, context);
   }
 
-  static  validarTamanhoGestos(double largura) {
+  static validarTamanhoGestos(double largura) {
     if (largura <= 600) {
       return 70.0;
     } else if (largura > 600 && largura <= 1000) {
@@ -262,23 +257,46 @@ class MetodosAuxiliares {
     }
   }
 
-  static validarTamanhoLarguraBotao(double largura) {
-    if (largura <= 600) {
-      return 120.0;
-    } else if (largura > 600 && largura <= 1000) {
-      return 120.0;
-    } else if (largura > 1000) {
-      return 140.0;
+  static validarTamanhoLarguraBotao(double larguraTela) {
+    double tamanhoCampo = 100.0;
+    if (larguraTela <= 400) {
+      tamanhoCampo = 130.0;
+    } else if (larguraTela > 400 && larguraTela <= 800) {
+      tamanhoCampo = 140.0;
+    } else if (larguraTela > 800 && larguraTela <= 1100) {
+      tamanhoCampo = 150.0;
+    } else if (larguraTela > 1100) {
+      tamanhoCampo = 150.0;
     }
+    return tamanhoCampo;
   }
 
-static validarTamanhoAlturaBotao(double largula) {
-    if (largula <= 600) {
-      return 130.0;
-    } else if (largula > 600 && largula <= 1000) {
-      return 150.0;
-    } else if (largula > 1000) {
-      return 170.0;
+  static validarTamanhoAlturaBotao(double larguraTela) {
+    double tamanhoCampo = 100.0;
+    if (larguraTela <= 400) {
+      tamanhoCampo = 150.0;
+    } else if (larguraTela > 400 && larguraTela <= 800) {
+      tamanhoCampo = 160.0;
+    } else if (larguraTela > 800 && larguraTela <= 1100) {
+      tamanhoCampo = 160.0;
+    } else if (larguraTela > 1100) {
+      tamanhoCampo = 170.0;
     }
+    return tamanhoCampo;
+  }
+
+  static tamanhoCamposEditText(double larguraTela) {
+    double tamanhoCampo = 200.0;
+    //verificando qual o tamanho da tela
+    if (larguraTela <= 400) {
+      tamanhoCampo = 200.0;
+    } else if (larguraTela > 400 && larguraTela <= 800) {
+      tamanhoCampo = 250.0;
+    } else if (larguraTela > 800 && larguraTela <= 1100) {
+      tamanhoCampo = 280.0;
+    } else if (larguraTela > 1100) {
+      tamanhoCampo = 300.0;
+    }
+    return tamanhoCampo;
   }
 }
