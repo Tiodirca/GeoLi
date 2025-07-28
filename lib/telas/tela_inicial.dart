@@ -11,6 +11,7 @@ import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
+import 'package:geoli/Uteis/validar_tamanho_itens_tela.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import 'package:geoli/Widgets/widget_exibir_emblemas.dart';
 import 'package:geoli/Widgets/widget_tela_resetar_dados.dart';
@@ -103,7 +104,6 @@ class _TelaInicialState extends State<TelaInicial>
     uidUsuario =
         PassarPegarDados.recuperarInformacoesUsuario().values.elementAt(0);
     recuperarDadosUsuario(uidUsuario);
-
   }
 
   recuperarDadosUsuario(String uidUsuario) async {
@@ -174,48 +174,20 @@ class _TelaInicialState extends State<TelaInicial>
         );
       }, onError: (e) {
         debugPrint("ErroTONP${e.toString()}");
-        //validarErro(e.toString());
+        chamarMensagemErro(e.toString());
       });
     } catch (e) {
       debugPrint("ErroTP${e.toString()}");
-      //validarErro(e.toString());
-    }
-  }
-
-  validarTamanhoGestos(double largura) {
-    if (largura <= 600) {
-      return 70.0;
-    } else if (largura > 600 && largura <= 1000) {
-      return 90.0;
-    } else if (largura > 1000) {
-      return 100.0;
-    }
-  }
-
-  validarTamanhoLarguraBotao(double largura) {
-    if (largura <= 600) {
-      return 120.0;
-    } else if (largura > 600 && largura <= 1000) {
-      return 120.0;
-    } else if (largura > 1000) {
-      return 140.0;
-    }
-  }
-
-  validarTamanhoAlturaBotao(double largula) {
-    if (largula <= 600) {
-      return 130.0;
-    } else if (largula > 600 && largula <= 1000) {
-      return 150.0;
-    } else if (largula > 1000) {
-      return 170.0;
+      chamarMensagemErro(e.toString());
     }
   }
 
   Widget cartao(String nomeImagem, String nome, double largura) => Container(
         margin: EdgeInsets.only(bottom: 10),
-        width: MetodosAuxiliares.validarTamanhoLarguraBotao(largura),
-        height:MetodosAuxiliares.validarTamanhoAlturaBotao(largura),
+        width: ValidarTamanhoItensTela
+            .validarTamanhoLarguraBotoesLoginCadastroTelaInicial(largura),
+        height: ValidarTamanhoItensTela
+            .validarTamanhoAlturaBotoesLoginCadastroTelaInicial(largura),
         child: FloatingActionButton(
           elevation: 0,
           heroTag: nome,
@@ -240,8 +212,12 @@ class _TelaInicialState extends State<TelaInicial>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image(
-                height:  kIsWeb ? MetodosAuxiliares.validarTamanhoGestos(largura) : 90,
-                width:  kIsWeb ? MetodosAuxiliares.validarTamanhoGestos(largura) : 90 ,
+                height: kIsWeb
+                    ?  ValidarTamanhoItensTela.validarTamanhoGestos(largura)
+                    : 90,
+                width: kIsWeb
+                    ? ValidarTamanhoItensTela.validarTamanhoGestos(largura)
+                    : 90,
                 image: AssetImage("$nomeImagem.png"),
               ),
               Text(

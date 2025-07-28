@@ -15,6 +15,7 @@ class Estilo {
             fontWeight: FontWeight.bold,
           ),
         ),
+
         inputDecorationTheme: InputDecorationTheme(
           errorStyle: const TextStyle(fontSize: 13, color: Colors.red),
           hintStyle: const TextStyle(

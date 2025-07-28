@@ -10,6 +10,7 @@ import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Uteis/validar_login_cadastro_usuario.dart';
+import 'package:geoli/Uteis/validar_tamanho_itens_tela.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 
 class TelaLoginCadastro extends StatefulWidget {
@@ -90,12 +91,13 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image(
-                height: MetodosAuxiliares.validarTamanhoGestos(largura),
-                width: MetodosAuxiliares.validarTamanhoGestos(largura),
+                height: ValidarTamanhoItensTela.validarTamanhoGestos(largura),
+                width: ValidarTamanhoItensTela.validarTamanhoGestos(largura),
                 image: AssetImage("$nomeImagem.png"),
               ),
               SizedBox(
-                width: MetodosAuxiliares.tamanhoCamposEditText(largura),
+                width: ValidarTamanhoItensTela.validarTamanhoCamposEditText(
+                    largura),
                 height: 80,
                 child: TextFormField(
                   controller: controle,
@@ -141,8 +143,8 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
   Widget cartaoBtn(String nomeImagem, String nomeBtn, double largura) =>
       Container(
         margin: EdgeInsets.all(10),
-        width: MetodosAuxiliares.validarTamanhoLarguraBotao(largura),
-        height: MetodosAuxiliares.validarTamanhoAlturaBotao(largura),
+        width: ValidarTamanhoItensTela.validarTamanhoLarguraBotoesLoginCadastroTelaInicial(largura),
+        height: ValidarTamanhoItensTela.validarTamanhoAlturaBotoesLoginCadastroTelaInicial(largura),
         child: FloatingActionButton(
           elevation: 0,
           heroTag: nomeBtn,
@@ -181,8 +183,8 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image(
-                height: MetodosAuxiliares.validarTamanhoGestos(largura),
-                width: MetodosAuxiliares.validarTamanhoGestos(largura),
+                height: ValidarTamanhoItensTela.validarTamanhoGestos(largura),
+                width: ValidarTamanhoItensTela.validarTamanhoGestos(largura),
                 image: AssetImage("$nomeImagem.png"),
               ),
               Text(
@@ -220,7 +222,9 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
                   leading: Container(),
                   backgroundColor: PaletaCores.corVerde,
                   title: Text(
-                    Textos.telaLoginCadastroTitulo,
+                    exibirCampos
+                        ? Textos.telaLoginCadastroTitulo
+                        : Textos.nomeApp,
                     style: TextStyle(
                         fontWeight: FontWeight.bold, color: Colors.white),
                   ),
@@ -245,87 +249,99 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
                               textAlign: TextAlign.center,
                             ),
                           ),
-                          Visibility(
-                              visible: exibirCampos,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Form(
-                                      key: _formKeyFormulario,
-                                      child: SizedBox(
-                                        width: 500,
-                                        height: 350,
-                                        child: SingleChildScrollView(
-                                          scrollDirection: Axis.vertical,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Visibility(
-                                                  visible: exibirDadosCadastro,
-                                                  child: campos(
-                                                      campoUsuario,
-                                                      Textos.campoUsuario,
-                                                      CaminhosImagens.gestoNome,
-                                                      larguraTela)),
-                                              campos(
-                                                  campoEmail,
-                                                  Textos.campoEmail,
-                                                  CaminhosImagens.gestoEmail,
-                                                  larguraTela),
-                                              campos(
-                                                  campoSenha,
-                                                  Textos.campoSenha,
-                                                  CaminhosImagens.gestoSenha,
-                                                  larguraTela),
-                                            ],
+                          LayoutBuilder(
+                            builder: (context, constraints) {
+                              if (exibirCampos) {
+                                return Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Form(
+                                        key: _formKeyFormulario,
+                                        child: SizedBox(
+                                          width: larguraTela,
+                                          height: 350,
+                                          child: SingleChildScrollView(
+                                            scrollDirection: Axis.vertical,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Visibility(
+                                                    visible:
+                                                        exibirDadosCadastro,
+                                                    child: campos(
+                                                        campoUsuario,
+                                                        Textos.campoUsuario,
+                                                        CaminhosImagens
+                                                            .gestoNome,
+                                                        larguraTela)),
+                                                campos(
+                                                    campoEmail,
+                                                    Textos.campoEmail,
+                                                    CaminhosImagens.gestoEmail,
+                                                    larguraTela),
+                                                campos(
+                                                    campoSenha,
+                                                    Textos.campoSenha,
+                                                    CaminhosImagens.gestoSenha,
+                                                    larguraTela),
+                                              ],
+                                            ),
                                           ),
+                                        )),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.only(top: 10),
+                                          child: cartaoBtn(
+                                              CaminhosImagens.gestoEntrar,
+                                              Textos.btnEntrar,
+                                              larguraTela),
                                         ),
-                                      )),
-                                  Container(
-                                    margin: EdgeInsets.only(top: 10),
-                                    child: cartaoBtn(
-                                        CaminhosImagens.gestoEntrar,
-                                        Textos.btnEntrar,
-                                        larguraTela),
-                                  ),
-                                  Container(
-                                      margin: EdgeInsets.only(top: 10),
-                                      width: 40,
-                                      height: 40,
-                                      child: FloatingActionButton(
-                                        backgroundColor: Colors.white,
-                                        onPressed: () {
-                                          setState(() {
-                                            exibirCampos = false;
-                                            campoSenha.clear();
-                                            campoUsuario.clear();
-                                            campoEmail.clear();
-                                            ocultarSenhaDigitada = true;
-                                          });
-                                        },
-                                        child: Icon(
-                                          size: 30,
-                                          Icons.close,
-                                          color: PaletaCores.corVermelha,
-                                        ),
-                                      ))
-                                ],
-                              )),
-                          Visibility(
-                              visible: !exibirCampos,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  cartaoBtn(CaminhosImagens.gestoEntrar,
-                                      Textos.btnAcessar, larguraTela),
-                                  cartaoBtn(CaminhosImagens.gestoCadastro,
-                                      Textos.btnCadastrar, larguraTela),
-                                ],
-                              )),
+                                        Container(
+                                            margin: EdgeInsets.only(
+                                                top: 10, bottom: 10),
+                                            width: 40,
+                                            height: 40,
+                                            child: FloatingActionButton(
+                                              backgroundColor: Colors.white,
+                                              onPressed: () {
+                                                setState(() {
+                                                  exibirCampos = false;
+                                                  campoSenha.clear();
+                                                  campoUsuario.clear();
+                                                  campoEmail.clear();
+                                                  ocultarSenhaDigitada = true;
+                                                });
+                                              },
+                                              child: Icon(
+                                                size: 30,
+                                                Icons.close,
+                                                color: PaletaCores.corVermelha,
+                                              ),
+                                            ))
+                                      ],
+                                    )
+                                  ],
+                                );
+                              } else {
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    cartaoBtn(CaminhosImagens.gestoEntrar,
+                                        Textos.btnAcessar, larguraTela),
+                                    cartaoBtn(CaminhosImagens.gestoCadastro,
+                                        Textos.btnCadastrar, larguraTela),
+                                  ],
+                                );
+                              }
+                            },
+                          ),
                         ],
                       ),
                     ),

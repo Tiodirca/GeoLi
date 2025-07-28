@@ -59,6 +59,12 @@ class Constantes {
   static int duracaoDelayVoltarTela = 2;
   static int duracaoVerificarConexao = 10;
 
+  //TIPO AUTENTICACAO DADOS USUARIO
+  static const acaoAutenticarExcluirConta = "ExcluirConta";
+  static const acaoAutenticarAlterarEmail = "AlterarEmail";
+  static const acaoAutenticarAlterarSenha = "AlterarSenha";
+  static const acaoAutenticarReenviarEmail = "reenviarEmail";
+
   // STATUS DE RESETAR PONTUACOES
   static const resetarAcaoExcluirTudo = "excluirTudo";
   static const resetarAcaoExcluirRegioes = "excluirRegioes";

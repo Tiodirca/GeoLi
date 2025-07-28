@@ -1,6 +1,6 @@
 class Textos {
   //BOTOES
-  static String versaoAppNumero = "1.2.2";
+  static String versaoAppNumero = "1.2.4";
   static String versaoAppDescricao = "Versão : ";
   static String btnComecarJogo = "Começar";
   static String btnJogarNovamente = "Jogar Novamente";
@@ -25,6 +25,7 @@ class Textos {
   static String btnExcluirUsuario = "Excluir Usuário";
   static String btnSalvarAlteracoes = "Salvar";
   static String btnAutenticar = "Autenticar";
+  static String btnAlterarSenha = "Alterar Senha";
   static String btnReenviarEmail = "Reenviar E-mail";
 
 // GERAIS
@@ -33,39 +34,9 @@ class Textos {
   static String msgAcertou = "Acertou";
   static String msgErrou = "Errado";
   static String campoEmail = "E-mail";
-  static String campoEmailAntigo = "E-mail Antigo";
   static String campoSenha = "Senha";
   static String campoUsuario = "Nome/Usuário";
   static String campoSenhaNova = "Senha Nova";
-  static String campoSenhaAntiga = "Senha Antiga";
-
-//ERROS E SUCESSO MENSAGENS
-  static String sucessoLogin = "Sucesso ao entrar na conta";
-  static String sucessoCadastro = "Sucesso ao fazer Cadastro";
-  static String sucessoAlterarNome = "Sucesso ao alterar o nome";
-  static String sucessoDesconectar = "Sucesso ao desconectar conta";
-  static String sucessoExcluirDados = "Sucesso ao excluir os dados";
-  static String sucessoEnvioLink =
-      "Acesse o link enviado para o e-mail informado para "
-      " concluir a alteração do email";
-  static String sucessoAtualizarSenha = "Senha alterada com sucesso";
-
-//ERROS
-  static String erroFirebaseSemReferencia =
-      "Não foi possível encontrar a referência da coleção do firebase";
-  static String erroEmailInvalido = "Email não esta correto";
-  static String erroEmailNaoCadastradoSenhaIncorreta =
-      "E-mail não cadastrado ou Senha Incorreta";
-  static String erroSenhaIncorreta = "Senha Incorreta";
-  static String erroSenhaCurta = "Digite uma senha de pelo menos 6 caracteres";
-  static String erroEmailUso = "E-mail já em uso, utilize outro";
-  static String erroExcluirDados = "Erro ao excluir os dados";
-  static String erroSemInternet = "Sem conexão com internet";
-  static String erroInterno = "Erro Interno : ";
-  static String erroCampoVazio = "Preencha antes de prosseguir";
-  static String erroSemInternetAvisoTelaCarregamento =
-      "Sem conexão com internet,"
-      "Conecte-se a uma rede de Internet para continuar jogando.";
 
 //USUARIO DETALHADO
   static String telaUsuarioTitulo = "Dados Usuário";
@@ -75,24 +46,16 @@ class Textos {
   static String telaUsuarioConfirmarEmail =
       "Confirme o email para altera-lo para ";
   static String telaUsuarioAutenticacao =
-      "Digite a senha para autenticar o usuario para poder fazer a ação";
-
-//ALERT
-  static String alertTitulo = "Confirmar";
-  static String alertDescricaoAlterarEmail =
-      "Digite a senha para fazer a alteração do Email,"
-      "será enviado um link no novo email para confirmar a alteração";
-  static String alertDescricaoAlterarSenha =
-      "Digite a senha antiga para mudar a senha";
-  static String alertDescricaoExclusaoUsuario =
-      "Deseja Realmente excluir este Usuário e todas as informações salvas nele ? ";
+      "Digite a senha atual para autenticar o usuario para poder fazer a ação desejada";
+  static String telaUsuarioDescricaoSenhaNova =
+      "Digite a nova senha que você deseja que a conta tenha";
 
 // LOGIN E CADASTRO
   static String telaLoginCadastroTitulo = "Login/Cadastro";
   static String telaLoginCadastroDescricao =
       "Faça login ou faça o cadastro de um e-mail para poder jogar";
   static String telaLoginCadastroDescricaoBtn =
-      "Aperte aqui para mudar a Opção";
+      "Aperte aqui para mudar a opção";
 
 // TELA INICIAL
   static String descricaoTelaInicial = "Selecione qual jogo deseja jogar";
@@ -252,4 +215,33 @@ class Textos {
   static String erroValidarUsuarioSenhaErrada = "Senha Incorreta";
   static String erroValidarUsuarioEmailErrado = "E-mail está incorreto";
   static String erroValidarUsuarioEmailEmUso = "E-mail já está sendo utilizado";
+  static String erroFirebaseSemReferencia =
+      "Não foi possível encontrar a referência da coleção do firebase";
+  static String erroCampoVazio = "Preencha antes de prosseguir";
+
+  //ERROS E SUCESSO MENSAGENS
+  static String sucessoLogin = "Sucesso ao entrar na conta";
+  static String sucessoCadastro = "Sucesso ao fazer Cadastro";
+  static String sucessoAlterarNome = "Sucesso ao alterar o nome";
+  static String sucessoDesconectar = "Sucesso ao desconectar conta";
+  static String sucessoExcluirDados = "Sucesso ao excluir os dados";
+  static String sucessoEnvioLink =
+      "Acesse o link enviado para o e-mail informado para "
+      " concluir a alteração do email";
+  static String sucessoAtualizarSenha = "Senha alterada com sucesso";
+
+  //ALERTA EXCLUSAO
+  static String tituloAlertaExclusao = "Excluir Item";
+  static String descricaoAlertaExclusao =
+      "Deseja realmente excluir este item ?";
+
+  //ALERTA ALTERAR SENHA
+  static String tituloAlertaAlterarSenha = "Alterar Senha";
+  static String descricaoAlertaAlterarSenha =
+      "Deseja realmente alterar a senha desta conta ?";
+
+  //ALERTA ALTERAR EMAIL
+  static String tituloAlertaAlterarEmail = "Alterar E-mail";
+  static String descricaoAlertaAlterarEmail =
+      "Deseja realmente alterar para o seguinte e-mail ?";
 }
