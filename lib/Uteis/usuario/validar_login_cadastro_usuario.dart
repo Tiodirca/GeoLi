@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:geoli/Uteis/constantes.dart';
-import 'package:geoli/Uteis/criar_dados_banco_firebase.dart';
+import 'package:geoli/Uteis/variaveis_constantes/constantes.dart';
+import 'package:geoli/Uteis/usuario/criar_dados_banco_firebase.dart';
 import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,7 @@ class ValidarLoginCadastroUsuario {
     try {
       String retorno = "";
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: email,
+        email: email.replaceAll(" ", ""),
         password: senha,
       );
       if (credential.user != null) {
@@ -44,7 +44,7 @@ class ValidarLoginCadastroUsuario {
     try {
       String retorno = "";
       final credential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: senha);
+          .createUserWithEmailAndPassword(email: email.replaceAll(" ", ""), password: senha);
       if (credential.user != null) {
         //passando as informacoes
         // para a proxima tela
@@ -72,7 +72,7 @@ class ValidarLoginCadastroUsuario {
 passarInformacoes(String uid, String email, senha, String usuario) {
   Map dados = {};
   dados[Constantes.infoUsuarioUID] = uid;
-  dados[Constantes.infoUsuarioEmail] = email;
+  dados[Constantes.infoUsuarioEmail] = email.replaceAll(" ", "");
   dados[Constantes.infoUsuarioNome] = usuario;
   gravarSenhaUsuario(senha);
   PassarPegarDados.passarInformacoesUsuario(dados);

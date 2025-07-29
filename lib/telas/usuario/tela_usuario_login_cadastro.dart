@@ -4,23 +4,24 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
-import 'package:geoli/Uteis/constantes.dart';
+import 'package:geoli/Uteis/variaveis_constantes/constantes.dart';
 import 'package:geoli/Uteis/estilo.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
-import 'package:geoli/Uteis/validar_login_cadastro_usuario.dart';
+import 'package:geoli/Uteis/usuario/validar_login_cadastro_usuario.dart';
 import 'package:geoli/Uteis/validar_tamanho_itens_tela.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 
-class TelaLoginCadastro extends StatefulWidget {
-  const TelaLoginCadastro({super.key});
+class TelaUsuarioLoginCadastro extends StatefulWidget {
+  const TelaUsuarioLoginCadastro({super.key});
 
   @override
-  State<TelaLoginCadastro> createState() => _TelaLoginCadastroState();
+  State<TelaUsuarioLoginCadastro> createState() =>
+      _TelaUsuarioLoginCadastroState();
 }
 
-class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
+class _TelaUsuarioLoginCadastroState extends State<TelaUsuarioLoginCadastro> {
   bool exibirTelaCarregamento = false;
   bool exibirDadosCadastro = false;
   bool exibirCampos = false;
@@ -143,8 +144,10 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
   Widget cartaoBtn(String nomeImagem, String nomeBtn, double largura) =>
       Container(
         margin: EdgeInsets.all(10),
-        width: ValidarTamanhoItensTela.validarTamanhoLarguraBotoesLoginCadastroTelaInicial(largura),
-        height: ValidarTamanhoItensTela.validarTamanhoAlturaBotoesLoginCadastroTelaInicial(largura),
+        width: ValidarTamanhoItensTela
+            .validarTamanhoLarguraBotoesLoginCadastroTelaInicial(largura),
+        height: ValidarTamanhoItensTela
+            .validarTamanhoAlturaBotoesLoginCadastroTelaInicial(largura),
         child: FloatingActionButton(
           elevation: 0,
           heroTag: nomeBtn,
@@ -353,19 +356,21 @@ class _TelaLoginCadastroState extends State<TelaLoginCadastro> {
                   },
                 ),
                 bottomSheet: Container(
-                  color: Colors.white,
-                  width: larguraTela,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(Textos.versaoAppDescricao),
-                      Text(
-                        Textos.versaoAppNumero,
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                    color: Colors.white,
+                    width: larguraTela,
+                    child: Padding(
+                      padding: EdgeInsetsGeometry.only(right: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(Textos.versaoAppDescricao),
+                          Text(
+                            Textos.versaoAppNumero,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
+                    )),
               );
             }
           },

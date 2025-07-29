@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
-import 'package:geoli/Uteis/constantes.dart';
+import 'package:geoli/Uteis/variaveis_constantes/constantes.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -246,5 +246,4 @@ class MetodosAuxiliares {
   static chamarExibirMensagemErro(String erro, BuildContext context) {
     exibirMensagemTextos(Constantes.tipoNotificacaoErro, erro, context);
   }
-
 }

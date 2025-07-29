@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:geoli/Uteis/constantes.dart';
+import 'package:geoli/Uteis/variaveis_constantes/constantes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'Uteis/ScrollBehaviorPersonalizado.dart';
 

@@ -6,11 +6,11 @@ import 'package:flutter/services.dart';
 import 'package:geoli/Modelos/emblemas.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
-import 'package:geoli/Uteis/constantes.dart';
-import 'package:geoli/Uteis/constantes_estados_gestos.dart';
+import 'package:geoli/Uteis/variaveis_constantes/constantes.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
 import 'package:geoli/Uteis/textos.dart';
+import 'package:geoli/Uteis/variaveis_constantes/constantes_estados_gestos.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import 'package:geoli/Widgets/widget_exibir_emblemas.dart';
 import 'package:geoli/Widgets/widget_tela_resetar_dados.dart';
@@ -99,20 +99,18 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
 
   recuperarRegioesLiberadas() async {
     var db = FirebaseFirestore.instance;
-    bool retornoConexao = await InternetConnection().hasInternetAccess;
-    //instanciano variavel
-    if (retornoConexao) {
-      try {
-        db
-            .collection(
-                Constantes.fireBaseColecaoUsuarios) // passando a colecao
-            .doc(uidUsuario)
-            .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-            .doc(Constantes
-                .fireBaseDocumentoLiberarEstados) // passando documento
-            .get()
-            .then((querySnapshot) async {
-          // verificando cada item que esta gravado no banco de dados
+    try {
+      db
+          .collection(
+          Constantes.fireBaseColecaoUsuarios) // passando a colecao
+          .doc(uidUsuario)
+          .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
+          .doc(Constantes
+          .fireBaseDocumentoLiberarEstados) // passando documento
+          .get()
+          .then((querySnapshot) async {
+        // verificando cada item que esta gravado no banco de dados
+        if (querySnapshot.data() != null) {
           querySnapshot.data()!.forEach((key, value) {
             setState(() {
               // verificando se o nome da KEY e igual ao nome passado
@@ -132,60 +130,40 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
           setState(() {
             exibirTelaCarregamento = false;
           });
-        }, onError: (e) {
-          debugPrint("ErroONTIR${e.toString()}");
-          validarErro(e.toString());
-        });
-      } catch (e) {
-        debugPrint("ErroTIR${e.toString()}");
-        validarErro(e.toString());
-      }
-    } else {
-      exibirErroConexao();
-    }
-  }
-
-  exibirErroConexao() {
-    if (mounted) {
-      setState(() {
-        exibirTelaCarregamento = true;
-        exibirMensagemSemConexao = true;
-        PassarPegarDados.passarTelaAtualErroConexao(
-            Constantes.rotaTelaInicialRegioes);
+        } else {
+          redirecionarTelaLoginCadastro();
+        }
+      }, onError: (e) {
+        debugPrint("ErroONTIR${e.toString()}");
+        chamarValidarErro(e.toString());
       });
+    } catch (e) {
+      debugPrint("ErroTIR${e.toString()}");
+      chamarValidarErro(e.toString());
     }
   }
 
-  validarErro(String erro) {
-    if (erro.contains("An internal error has occurred")) {
-      exibirErroConexao();
-    } else if (erro.contains("a document path must be a non-empty strin")) {
-      MetodosAuxiliares.exibirMensagens(
-          Textos.erroFirebaseSemReferencia,
-          Constantes.msgErro,
-          Constantes.duracaoExibicaoToastLoginCadastro,
-          Constantes.larguraToastLoginCadastro,
-          context);
-    }
+  chamarValidarErro(String erro) {
+    MetodosAuxiliares.validarErro(erro, context);
+  }
+
+  redirecionarTelaLoginCadastro() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaLoginCadastro);
   }
 
   recuperarPontuacao() async {
     var db = FirebaseFirestore.instance;
-    //instanciano variavel
-
-    bool retornoConexao = await InternetConnection().hasInternetAccess;
-    if (retornoConexao) {
-      try {
-        db
-            .collection(
-                Constantes.fireBaseColecaoUsuarios) // passando a colecao
-            .doc(uidUsuario)
-            .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-            .doc(Constantes
-                .fireBaseDocumentoPontosJogadaRegioes) // passando documento
-            .get()
-            .then((querySnapshot) async {
-          // verificando cada item que esta gravado no banco de dados
+    try {
+      db
+          .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+          .doc(uidUsuario)
+          .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
+          .doc(Constantes
+              .fireBaseDocumentoPontosJogadaRegioes) // passando documento
+          .get()
+          .then((querySnapshot) async {
+        // verificando cada item que esta gravado no banco de dados
+        if (querySnapshot.data() != null) {
           querySnapshot.data()!.forEach((key, value) {
             setState(() {
               pontos = value;
@@ -197,16 +175,16 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
               PassarPegarDados.passarPontuacaoAtual(pontos);
             });
           });
-        }, onError: (e) {
-          debugPrint("ErroTRON${e.toString()}");
-          validarErro(e.toString());
-        });
-      } catch (e) {
-        debugPrint("ErroTR${e.toString()}");
-        validarErro(e.toString());
-      }
-    } else {
-      exibirErroConexao();
+        } else {
+          redirecionarTelaLoginCadastro();
+        }
+      }, onError: (e) {
+        debugPrint("ErroTRON${e.toString()}");
+        chamarValidarErro(e.toString());
+      });
+    } catch (e) {
+      debugPrint("ErroTR${e.toString()}");
+      chamarValidarErro(e.toString());
     }
   }
 

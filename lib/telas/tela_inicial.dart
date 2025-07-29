@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geoli/Modelos/emblemas.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
-import 'package:geoli/Uteis/constantes.dart';
+import 'package:geoli/Uteis/variaveis_constantes/constantes.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
 import 'package:geoli/Uteis/textos.dart';
@@ -116,20 +116,23 @@ class _TelaInicialState extends State<TelaInicial>
         .get()
         .then((querySnapshot) async {
       // verificando cada item que esta gravado no banco de dados
-      querySnapshot.data()!.forEach((key, value) {
-        setState(() {
-          if (key.toString() == Constantes.fireBaseCampoNomeUsuario) {
-            nomeUsuario = value;
-          } else {
-            emailAlterado = value;
-          }
-          recuperarPontuacao(Constantes.fireBaseColecaoRegioes,
-              Constantes.fireBaseDocumentoPontosJogadaRegioes, uidUsuario);
+      if (querySnapshot.data() != null) {
+        querySnapshot.data()!.forEach((key, value) {
+          setState(() {
+            if (key.toString() == Constantes.fireBaseCampoNomeUsuario) {
+              nomeUsuario = value;
+            } else {
+              emailAlterado = value;
+            }
+            recuperarPontuacao(Constantes.fireBaseColecaoRegioes,
+                Constantes.fireBaseDocumentoPontosJogadaRegioes, uidUsuario);
+          });
         });
-      });
-      //chamando metodo para validar Alteracao do email
-      //MetodosAuxiliares.validarAlteracaoEmail(emailAlterado, nomeUsuario);
+      } else {
+        redirecionarTelaLoginCadastro();
+      }
     }, onError: (e) {
+      debugPrint("egfdgdfg ${e.toString()}");
       chamarMensagemErro(e.toString());
     });
   }
@@ -213,7 +216,7 @@ class _TelaInicialState extends State<TelaInicial>
             children: [
               Image(
                 height: kIsWeb
-                    ?  ValidarTamanhoItensTela.validarTamanhoGestos(largura)
+                    ? ValidarTamanhoItensTela.validarTamanhoGestos(largura)
                     : 90,
                 width: kIsWeb
                     ? ValidarTamanhoItensTela.validarTamanhoGestos(largura)

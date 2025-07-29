@@ -5,8 +5,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
-import 'package:geoli/Uteis/constantes.dart';
+import 'package:geoli/Uteis/variaveis_constantes/constantes.dart';
 import 'package:geoli/Uteis/estilo.dart';
+import 'package:geoli/Uteis/exclusao_dados.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
@@ -44,6 +45,7 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
       TextEditingController(text: "");
   TextEditingController campoSenhaNova = TextEditingController(text: "");
   TextEditingController campoUsuario = TextEditingController(text: "");
+  String tipoAutenticacao = "";
 
   @override
   void initState() {
@@ -199,9 +201,42 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
     redirecionarTelaLogin();
   }
 
-  chamarExibirMensagens(String tipoMensagem, String tipoExibicao) {
+  chamarDeletarDadosUsuario() async {
+    bool retornoRegioes = await ExclusaoDados.chamarDeletarItemAItem(
+      Constantes.fireBaseColecaoRegioes,
+      uidUsuario,
+    );
+    bool retornoSistemaSolar = await ExclusaoDados.chamarDeletarItemAItem(
+      Constantes.fireBaseColecaoSistemaSolar,
+      uidUsuario,
+    );
+    bool retornoExclusaoUsuario =
+        await ExclusaoDados.excluirInformacoesUsuario(uidUsuario);
+    if (retornoRegioes && retornoSistemaSolar && retornoExclusaoUsuario) {
+      chamarDeletarUsuario();
+    } else {}
+  }
+
+  chamarDeletarUsuario() {
+    if (FirebaseAuth.instance.currentUser != null) {
+      //chama deletar usuario
+      FirebaseAuth.instance.currentUser?.delete().then(
+        (value) {
+          desconectarUsuario();
+        },
+        onError: (e) {
+          setState(() {
+            chamarValidarErro(e.toString());
+            exibirTelaCarregamento = false;
+          });
+        },
+      );
+    }
+  }
+
+  chamarExibirMensagens(String mensagem, String tipoExibicao) {
     MetodosAuxiliares.exibirMensagens(
-        tipoMensagem,
+        mensagem,
         tipoExibicao,
         Constantes.duracaoExibicaoToastLoginCadastro,
         Constantes.larguraToastLoginCadastro,
@@ -252,6 +287,201 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
 
   chamarValidarErro(String erro) {
     MetodosAuxiliares.validarErro(erro, context);
+  }
+
+  //metodo para reenviar o link de alteracao do email
+  reenviarEmailAlteracao() {
+    if (FirebaseAuth.instance.currentUser != null) {
+      FirebaseAuth.instance.currentUser
+          ?.verifyBeforeUpdateEmail(emailAlterado)
+          .then(
+        (value) {
+          chamarExibirMensagens(Textos.sucessoEnvioLink, Constantes.msgAcerto);
+          setState(() {
+            exibirTelaCarregamento = false;
+          });
+        },
+        onError: (e) {
+          debugPrint("Reenvio de Email ${e.toString()}");
+          chamarValidarErro("Reenvio de Email : ${e.toString()}");
+        },
+      );
+    }
+  }
+
+  validarAcaoBotaoIcone(String nomeBotao) {
+    if (nomeBotao == Textos.campoEmail) {
+      setState(() {
+        exibirOcultarBtnSalvar = true;
+        ativarCampoEmail = true;
+        ativarCampoUsuario = false;
+      });
+    } else if (nomeBotao == Textos.campoUsuario) {
+      setState(() {
+        exibirOcultarBtnSalvar = true;
+        ativarCampoEmail = false;
+        ativarCampoUsuario = true;
+      });
+    } else if (nomeBotao == Textos.btnCancelarEdicao) {
+      setState(() {
+        exibirOcultarBtnSalvar = false;
+        ativarCampoEmail = false;
+        exibirAuteracaoSenha = false;
+        ativarCampoUsuario = false;
+        exibirTelaAutenticacao = false;
+        campoSenhaAutenticacao.text = "";
+        campoSenhaNova.text = "";
+        campoUsuario.text = nomeUsuarioSemAlteracao;
+      });
+    }
+  }
+
+  validarAcaoBotaoSalvarAlteracoes() {
+    if (ativarCampoUsuario) {
+      if (chaveFormularioUsuarioEmail.currentState!.validate()) {
+        atualizarNomeUsuario();
+      }
+    } else if (ativarCampoEmail) {
+      // Validacao quando for ALTERAR EMAIL
+      if (chaveFormularioUsuarioEmail.currentState!.validate()) {
+        alerta(
+            Textos.tituloAlertaAlterarEmail,
+            Textos.descricaoAlertaAlterarEmail,
+            Constantes.acaoAutenticarAlterarEmail);
+      }
+    } else if (exibirAuteracaoSenha) {
+      if (chaveFormularioSenhaNova.currentState!.validate()) {
+        alerta(
+            Textos.tituloAlertaAlterarSenha,
+            Textos.descricaoAlertaAlterarSenha,
+            Constantes.acaoAutenticarAlterarSenha);
+      }
+    }
+  }
+
+  chamarAutenticarUsuario() {
+    setState(() {
+      exibirTelaCarregamento = true;
+    });
+    AuthCredential credential = EmailAuthProvider.credential(
+      email: emailSemAlteracao,
+      password: campoSenhaAutenticacao.text,
+    );
+    FirebaseAuth.instance.signInWithCredential(credential).then(
+      (value) {
+        setState(() {
+          exibirTelaAutenticacao = false;
+          campoSenhaAutenticacao.clear();
+          validarAcaoAutenticacao();
+        });
+      },
+      onError: (e) {
+        setState(() {
+          chamarValidarErro(e.toString());
+          debugPrint(e.toString());
+          exibirTelaCarregamento = false;
+        });
+      },
+    );
+  }
+
+  validarAcaoAutenticacao() {
+    if (tipoAutenticacao == Constantes.acaoAutenticarExcluirConta) {
+      chamarDeletarDadosUsuario();
+    } else if (tipoAutenticacao == Constantes.acaoAutenticarAlterarSenha) {
+      chamarAlterarSenha();
+    } else if (tipoAutenticacao == Constantes.acaoAutenticarAlterarEmail) {
+      chamarAlterarEmail();
+    } else if (tipoAutenticacao == Constantes.acaoAutenticarReenviarEmail) {
+      reenviarEmailAlteracao();
+    }
+  }
+
+  //metodo para alterar o email da conta do usuario
+  chamarAlterarEmail() {
+    if (FirebaseAuth.instance.currentUser != null) {
+      FirebaseAuth.instance.currentUser
+          ?.verifyBeforeUpdateEmail(campoEmail.text)
+          .then(
+        (value) async {
+          bool retorno = await gravarEmailAlteradoValidacao(uidUsuario);
+          if (retorno) {
+            chamarExibirMensagens(
+                Textos.sucessoEnvioLink, Constantes.msgAcerto);
+            recarregarTela();
+          } else {
+            setState(() {
+              exibirTelaCarregamento = false;
+            });
+          }
+        },
+        onError: (e) {
+          setState(() {
+            exibirTelaCarregamento = false;
+            chamarValidarErro(e.toString());
+          });
+          debugPrint("Email ${e.toString()}");
+        },
+      );
+    }
+  }
+
+  Future<bool> gravarEmailAlteradoValidacao(String uid) async {
+    bool retorno = false;
+    try {
+      Map<String, dynamic> dadosUsuario = {
+        Constantes.fireBaseCampoNomeUsuario: nomeUsuarioSemAlteracao,
+        Constantes.fireBaseCampoEmailAlterado: campoEmail.text
+      };
+      var db = FirebaseFirestore.instance;
+      await db
+          .collection(Constantes.fireBaseColecaoUsuarios)
+          .doc(
+            uidUsuario,
+          )
+          .set(dadosUsuario)
+          .then(
+        (value) {
+          retorno = true;
+        },
+        onError: (e) {
+          retorno = false;
+          debugPrint(e.toString());
+        },
+      );
+    } catch (e) {
+      retorno = false;
+      debugPrint(e.toString());
+    }
+    return retorno;
+  }
+
+  //metodo para alterar a senha da conta do usuario
+  chamarAlterarSenha() {
+    if (FirebaseAuth.instance.currentUser != null) {
+      FirebaseAuth.instance.currentUser
+          ?.updatePassword(campoSenhaNova.text)
+          .then(
+        (value) {
+          gravarSenhaUsuario(campoSenhaNova.text);
+          chamarExibirMensagens(
+              Textos.sucessoAtualizarSenha, Constantes.msgAcerto);
+          recarregarTela();
+        },
+        onError: (e) {
+          setState(() {
+            exibirTelaCarregamento = false;
+            chamarValidarErro(e.toString());
+          });
+          debugPrint("SENHA ${e.toString()}");
+        },
+      );
+    }
+  }
+
+  gravarSenhaUsuario(String senha) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(Constantes.infoUsuarioSenha, senha);
   }
 
   Widget camposInfoUsuario(
@@ -348,185 +578,6 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
         ),
       );
 
-  validarAcaoBotaoIcone(String nomeBotao) {
-    if (nomeBotao == Textos.campoEmail) {
-      setState(() {
-        exibirOcultarBtnSalvar = true;
-        ativarCampoEmail = true;
-        ativarCampoUsuario = false;
-      });
-    } else if (nomeBotao == Textos.campoUsuario) {
-      setState(() {
-        exibirOcultarBtnSalvar = true;
-        ativarCampoEmail = false;
-        ativarCampoUsuario = true;
-      });
-    } else if (nomeBotao == Textos.btnCancelarEdicao) {
-      setState(() {
-        exibirOcultarBtnSalvar = false;
-        ativarCampoEmail = false;
-        exibirAuteracaoSenha = false;
-        ativarCampoUsuario = false;
-        exibirTelaAutenticacao = false;
-        campoSenhaAutenticacao.text = "";
-        campoSenhaNova.text = "";
-        campoUsuario.text = nomeUsuarioSemAlteracao;
-      });
-    }
-  }
-
-  validarAcaoBotaoSalvarAlteracoes() {
-    if (ativarCampoUsuario) {
-      if (chaveFormularioUsuarioEmail.currentState!.validate()) {
-        atualizarNomeUsuario();
-      }
-    } else if (ativarCampoEmail) {
-      // Validacao quando for ALTERAR EMAIL
-      if (chaveFormularioUsuarioEmail.currentState!.validate()) {
-        alerta(
-            Textos.tituloAlertaAlterarEmail,
-            Textos.descricaoAlertaAlterarEmail,
-            Constantes.acaoAutenticarAlterarEmail);
-      }
-    } else if (exibirAuteracaoSenha) {
-      if (chaveFormularioSenhaNova.currentState!.validate()) {
-        alerta(
-            Textos.tituloAlertaAlterarSenha,
-            Textos.descricaoAlertaAlterarSenha,
-            Constantes.acaoAutenticarAlterarSenha);
-      }
-    }
-  }
-
-  chamarAutenticarUsuario() {
-    setState(() {
-      exibirTelaCarregamento = true;
-    });
-    AuthCredential credential = EmailAuthProvider.credential(
-      email: emailSemAlteracao,
-      password: campoSenhaAutenticacao.text,
-    );
-    FirebaseAuth.instance.signInWithCredential(credential).then(
-      (value) {
-        setState(() {
-          exibirTelaAutenticacao = false;
-          campoSenhaAutenticacao.clear();
-          if (ativarCampoEmail) {
-            validarAcaoAutenticacao(Constantes.acaoAutenticarAlterarEmail);
-          } else if (exibirAuteracaoSenha) {
-            validarAcaoAutenticacao(Constantes.acaoAutenticarAlterarSenha);
-          }
-        });
-      },
-      onError: (e) {
-        setState(() {
-          chamarValidarErro(e.toString());
-          debugPrint(e.toString());
-          exibirTelaCarregamento = false;
-        });
-      },
-    );
-  }
-
-  validarAcaoAutenticacao(String tipoAcaoAutenticar) {
-    if (tipoAcaoAutenticar == Constantes.acaoAutenticarExcluirConta) {
-      //chamarDeletarDados();
-    } else if (tipoAcaoAutenticar == Constantes.acaoAutenticarAlterarSenha) {
-      chamarAlterarSenha();
-    } else if (tipoAcaoAutenticar == Constantes.acaoAutenticarAlterarEmail) {
-      chamarAlterarEmail();
-    } else if (tipoAcaoAutenticar == Constantes.acaoAutenticarReenviarEmail) {
-      //reenviarEmailAlteracao();
-    }
-  }
-
-  //metodo para alterar o email da conta do usuario
-  chamarAlterarEmail() {
-    if (FirebaseAuth.instance.currentUser != null) {
-      FirebaseAuth.instance.currentUser
-          ?.verifyBeforeUpdateEmail(campoEmail.text)
-          .then(
-        (value) async {
-          bool retorno = await gravarEmailAlteradoValidacao(uidUsuario);
-          if (retorno) {
-            chamarExibirMensagens(
-                Textos.sucessoEnvioLink, Constantes.msgAcerto);
-            recarregarTela();
-          } else {
-            setState(() {
-              exibirTelaCarregamento = false;
-            });
-          }
-        },
-        onError: (e) {
-          setState(() {
-            exibirTelaCarregamento = false;
-            chamarValidarErro(e.toString());
-          });
-          debugPrint("Email ${e.toString()}");
-        },
-      );
-    }
-  }
-
-  Future<bool> gravarEmailAlteradoValidacao(String uid) async {
-    bool retorno = false;
-    try {
-      Map<String, dynamic> dadosUsuario = {
-        Constantes.fireBaseCampoNomeUsuario: nomeUsuarioSemAlteracao,
-        Constantes.fireBaseCampoEmailAlterado: campoEmail.text
-      };
-      var db = FirebaseFirestore.instance;
-      await db
-          .collection(Constantes.fireBaseColecaoUsuarios)
-          .doc(
-            uidUsuario,
-          )
-          .set(dadosUsuario)
-          .then(
-        (value) {
-          retorno = true;
-        },
-        onError: (e) {
-          retorno = false;
-          debugPrint(e.toString());
-        },
-      );
-    } catch (e) {
-      retorno = false;
-      debugPrint(e.toString());
-    }
-    return retorno;
-  }
-
-  //metodo para alterar a senha da conta do usuario
-  chamarAlterarSenha() {
-    if (FirebaseAuth.instance.currentUser != null) {
-      FirebaseAuth.instance.currentUser
-          ?.updatePassword(campoSenhaNova.text)
-          .then(
-        (value) {
-          gravarSenhaUsuario(campoSenhaNova.text);
-          chamarExibirMensagens(
-              Textos.sucessoAtualizarSenha, Constantes.msgAcerto);
-          recarregarTela();
-        },
-        onError: (e) {
-          setState(() {
-            exibirTelaCarregamento = false;
-            chamarValidarErro(e.toString());
-          });
-          debugPrint("SENHA ${e.toString()}");
-        },
-      );
-    }
-  }
-
-  gravarSenhaUsuario(String senha) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(Constantes.infoUsuarioSenha, senha);
-  }
-
   Widget botaoIcone(IconData icone, Color cor, String nomeBotao) => Container(
         margin: EdgeInsets.symmetric(horizontal: 5),
         width: 45,
@@ -574,8 +625,17 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
                 exibirOcultarBtnSalvar = true;
               });
             } else if (nomeBtn == Textos.btnExcluirUsuario) {
+              alerta(
+                  Textos.tituloAlertaExclusaoUsuario,
+                  Textos.descricaoAlertaExclusaoUsuario,
+                  Constantes.acaoAutenticarExcluirConta);
             } else if (nomeBtn == Textos.btnSair) {
               desconectarUsuario();
+            } else if (nomeBtn == Textos.btnReenviarEmail) {
+              setState(() {
+                tipoAutenticacao = Constantes.acaoAutenticarReenviarEmail;
+                exibirTelaAutenticacao = true;
+              });
             }
           },
           shape: RoundedRectangleBorder(
@@ -607,7 +667,7 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
   Future<void> alerta(
     String tituloAlerta,
     String descricaoAlerta,
-    String tipoAutenticacao,
+    String autenticacao,
   ) async {
     return showDialog<void>(
       context: context,
@@ -629,7 +689,7 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
                 Wrap(
                   children: [
                     Text(
-                      tipoAutenticacao == Constantes.acaoAutenticarAlterarSenha
+                      autenticacao == Constantes.acaoAutenticarAlterarSenha
                           ? emailSemAlteracao
                           : campoEmail.text,
                       style: const TextStyle(fontWeight: FontWeight.bold),
@@ -651,6 +711,7 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
               onPressed: () {
                 setState(() {
                   exibirTelaAutenticacao = true;
+                  tipoAutenticacao = autenticacao;
                 });
                 Navigator.of(context).pop();
               },
@@ -823,11 +884,27 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
                                         ],
                                       );
                                     } else {
-                                      return cartaoBtn(
-                                          CaminhosImagens.gestoSenha,
-                                          Textos.btnAlterarSenha,
-                                          PaletaCores.corAzul,
-                                          larguraTela);
+                                      return Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          cartaoBtn(
+                                              CaminhosImagens.gestoSenha,
+                                              Textos.btnAlterarSenha,
+                                              PaletaCores.corAzul,
+                                              larguraTela),
+                                          Visibility(
+                                            visible: emailAlterado.isNotEmpty
+                                                ? true
+                                                : false,
+                                            child: cartaoBtn(
+                                                CaminhosImagens.gestoEmail,
+                                                Textos.btnReenviarEmail,
+                                                PaletaCores.corAzul,
+                                                larguraTela),
+                                          )
+                                        ],
+                                      );
                                     }
                                   },
                                 ))

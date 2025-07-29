@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:geoli/Uteis/constantes_sistema_solar.dart';
 import 'package:geoli/Uteis/textos.dart';
+import 'package:geoli/Uteis/variaveis_constantes/constantes_sistema_solar.dart';
 import 'package:geoli/Widgets/sistema_solar/balao_widget.dart';
 import 'package:geoli/Widgets/sistema_solar/tela_fim_jogo_widget.dart';
 import 'package:geoli/modelos/planeta.dart';

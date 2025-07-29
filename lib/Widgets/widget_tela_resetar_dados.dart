@@ -4,12 +4,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
-import 'package:geoli/Uteis/constantes.dart';
-import 'package:geoli/Uteis/constantes_estados_gestos.dart';
-import 'package:geoli/Uteis/constantes_sistema_solar.dart';
+import 'package:geoli/Uteis/variaveis_constantes/constantes.dart';
+import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
 import 'package:geoli/Uteis/textos.dart';
+import 'package:geoli/Uteis/variaveis_constantes/constantes_estados_gestos.dart';
+import 'package:geoli/Uteis/variaveis_constantes/constantes_sistema_solar.dart';
+import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import 'package:geoli/modelos/planeta.dart';
 
 class WidgetTelaResetarDados extends StatefulWidget {
@@ -24,6 +26,7 @@ class WidgetTelaResetarDados extends StatefulWidget {
 }
 
 class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
+  bool exibirTelaCarregamento = false;
   Map<String, bool> dadosBloquearNiveisRegioes = {
     Textos.nomeRegiaoSul: false,
     Textos.nomeRegiaoSudeste: false,
@@ -89,28 +92,38 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
         .elementAt(0);
   }
 
-  // metodo para cadastrar item
-  gravarDadosResetados(String nomeColecao, String nomeDocumento,
-      Map<String, dynamic> dados) async {
+  // metodo para zerar todas as informacoes
+  // no banco de dados do usuario
+  Future<bool> gravarBancoDadosInformacoesResetados(String nomeColecao,
+      String nomeDocumento, Map<String, dynamic> dados) async {
+    bool retorno = false;
     try {
       // instanciando Firebase
       var db = FirebaseFirestore.instance;
-      db
+      await db
           .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
           .doc(uidUsuario)
           .collection(nomeColecao) // passando a colecao
           .doc(nomeDocumento) //passando o documento
           .set(dados)
-          .then((value) {}, onError: (e) {
+          .then((value) {
+        retorno = true;
+      }, onError: (e) {
+        retorno = false;
+        chamarValidarErro(e.toString());
         debugPrint("GRON${e.toString()}");
       });
     } catch (e) {
+      retorno = false;
+      chamarValidarErro(e.toString());
       debugPrint("GR${e.toString()}");
     }
+    return retorno;
   }
 
   // metodo para gravar no banco de dados que o planeta foi bloqueado
-  bloquearPlanetas() {
+  Future<bool> bloquearPlanetasDesbloqueados() async {
+    bool retorno = false;
     List<Planeta> planetas = ConstantesSistemaSolar.adicinarPlanetas();
     Map<String, bool> dados = {};
     // percorrendo a lista para poder jogar os dados dentro de um map
@@ -121,7 +134,7 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
     try {
       // instanciando Firebase
       var db = FirebaseFirestore.instance;
-      db
+      await db
           .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
           .doc(uidUsuario)
           .collection(
@@ -129,31 +142,124 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
           .doc(Constantes
               .fireBaseDocumentoPlanetasDesbloqueados) //passando o documento
           .set(dados)
-          .then((value) {}, onError: (e) {
+          .then((value) {
+        retorno = true;
+      }, onError: (e) {
+        retorno = false;
+        chamarValidarErro(e.toString());
         debugPrint("BPON${e.toString()}");
       });
     } catch (e) {
+      retorno = false;
+      chamarValidarErro(e.toString());
       debugPrint("BP${e.toString()}");
     }
+    return retorno;
   }
 
-  reiniciarDadosRegioes() {
-    gravarDadosResetados(Constantes.fireBaseColecaoRegioes,
-        Constantes.fireBaseDocumentoPontosJogadaRegioes, dadosPontuacao);
-    gravarDadosResetados(Constantes.fireBaseColecaoRegioes,
-        Constantes.fireBaseDocumentoLiberarEstados, dadosBloquearNiveisRegioes);
-    gravarDadosResetados(Constantes.fireBaseColecaoRegioes,
-        Constantes.fireBaseDocumentoRegiaoCentroOeste, dadosRegiaoCentroOeste);
-    gravarDadosResetados(Constantes.fireBaseColecaoRegioes,
-        Constantes.fireBaseDocumentoRegiaoSul, dadosRegiaoSul);
-    gravarDadosResetados(Constantes.fireBaseColecaoRegioes,
-        Constantes.fireBaseDocumentoRegiaoSudeste, dadosRegiaoSudeste);
-    gravarDadosResetados(Constantes.fireBaseColecaoRegioes,
-        Constantes.fireBaseDocumentoRegiaoNorte, dadosRegiaoNorte);
-    gravarDadosResetados(Constantes.fireBaseColecaoRegioes,
-        Constantes.fireBaseDocumentoRegiaoNordeste, dadosRegiaoNordeste);
-    gravarDadosResetados(Constantes.fireBaseColecaoRegioes,
-        Constantes.fireBaseDocumentoRegiaoTodosEstados, dadosTodasRegioes);
+  chamarValidarErro(String erro) {
+    MetodosAuxiliares.validarErro(erro, context);
+  }
+
+  Future<bool> reiniciarDadosRegioes() async {
+    bool retorno = false;
+    bool retornoPontuacao = await gravarBancoDadosInformacoesResetados(
+        Constantes.fireBaseColecaoRegioes,
+        Constantes.fireBaseDocumentoPontosJogadaRegioes,
+        dadosPontuacao);
+    bool retornoBloqueioNiveis = await gravarBancoDadosInformacoesResetados(
+        Constantes.fireBaseColecaoRegioes,
+        Constantes.fireBaseDocumentoLiberarEstados,
+        dadosBloquearNiveisRegioes);
+    bool retornoCentroOeste = await gravarBancoDadosInformacoesResetados(
+        Constantes.fireBaseColecaoRegioes,
+        Constantes.fireBaseDocumentoRegiaoCentroOeste,
+        dadosRegiaoCentroOeste);
+    bool retornoSul = await gravarBancoDadosInformacoesResetados(
+        Constantes.fireBaseColecaoRegioes,
+        Constantes.fireBaseDocumentoRegiaoSul,
+        dadosRegiaoSul);
+    bool retornoSudeste = await gravarBancoDadosInformacoesResetados(
+        Constantes.fireBaseColecaoRegioes,
+        Constantes.fireBaseDocumentoRegiaoSudeste,
+        dadosRegiaoSudeste);
+    bool retornoNorte = await gravarBancoDadosInformacoesResetados(
+        Constantes.fireBaseColecaoRegioes,
+        Constantes.fireBaseDocumentoRegiaoNorte,
+        dadosRegiaoNorte);
+    bool retornoNordeste = await gravarBancoDadosInformacoesResetados(
+        Constantes.fireBaseColecaoRegioes,
+        Constantes.fireBaseDocumentoRegiaoNordeste,
+        dadosRegiaoNordeste);
+    bool retornoTodasRegioes = await gravarBancoDadosInformacoesResetados(
+        Constantes.fireBaseColecaoRegioes,
+        Constantes.fireBaseDocumentoRegiaoTodosEstados,
+        dadosTodasRegioes);
+
+    if (retornoPontuacao &&
+        retornoBloqueioNiveis &&
+        retornoCentroOeste &&
+        retornoSul &&
+        retornoSudeste &&
+        retornoNorte &&
+        retornoNordeste &&
+        retornoTodasRegioes) {
+      retorno = true;
+    } else {
+      retorno = false;
+    }
+    return retorno;
+  }
+
+  Future<bool> reiniciarDadosSistemaSolar() async {
+    bool retorno = false;
+    bool retornoBloqueioPlanetas = await bloquearPlanetasDesbloqueados();
+    bool retornoGravarInformacacoes =
+        await gravarBancoDadosInformacoesResetados(
+            Constantes.fireBaseColecaoSistemaSolar,
+            Constantes.fireBaseDocumentoPontosJogadaSistemaSolar,
+            dadosPontuacao);
+    if (retornoBloqueioPlanetas && retornoGravarInformacacoes) {
+      retorno = true;
+    } else {
+      retorno = false;
+    }
+    return retorno;
+  }
+
+  recarregarTelaRegioes() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicialRegioes);
+  }
+
+  recarregarTelaInicial() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
+  }
+
+  recarregarTelaSistemaSolar() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaSistemaSolar);
+  }
+
+  validarTipoAcaoAlertaExclusao() async {
+    setState(() {
+      exibirTelaCarregamento = true;
+    });
+    if (widget.tipoAcao == Constantes.resetarAcaoExcluirTudo) {
+      bool retornoSistemaSolar = await reiniciarDadosSistemaSolar();
+      bool retornoRegioes = await reiniciarDadosRegioes();
+      if (retornoSistemaSolar && retornoRegioes) {
+        recarregarTelaInicial();
+      }
+    } else if (widget.tipoAcao == Constantes.resetarAcaoExcluirSistemaSolar) {
+      bool retorno = await reiniciarDadosSistemaSolar();
+      if (retorno) {
+        recarregarTelaSistemaSolar();
+      }
+    } else {
+      bool retorno = await reiniciarDadosRegioes();
+      if (retorno) {
+        recarregarTelaRegioes();
+      }
+    }
   }
 
   Future<void> alertaExclusao(BuildContext context) async {
@@ -214,33 +320,8 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
               ),
               onPressed: () {
                 setState(() {
-                  if (widget.tipoAcao == Constantes.resetarAcaoExcluirTudo) {
-                    gravarDadosResetados(
-                        Constantes.fireBaseColecaoSistemaSolar,
-                        Constantes.fireBaseDocumentoPontosJogadaSistemaSolar,
-                        dadosPontuacao);
-                    reiniciarDadosRegioes();
-                    bloquearPlanetas();
-                    Future.delayed(Duration(seconds: 1), () {
-                      Navigator.pushReplacementNamed(
-                          context, Constantes.rotaTelaInicial);
-                    });
-                  } else if (widget.tipoAcao ==
-                      Constantes.resetarAcaoExcluirSistemaSolar) {
-                    bloquearPlanetas();
-                    gravarDadosResetados(
-                        Constantes.fireBaseColecaoSistemaSolar,
-                        Constantes.fireBaseDocumentoPontosJogadaSistemaSolar,
-                        dadosPontuacao);
-                    Navigator.pushReplacementNamed(
-                        context, Constantes.rotaTelaSistemaSolar);
-                  } else {
-                    reiniciarDadosRegioes();
-                    Future.delayed(Duration(seconds: 0), () {
-                      Navigator.pushReplacementNamed(
-                          context, Constantes.rotaTelaInicialRegioes);
-                    });
-                  }
+                  Navigator.of(context).pop();
+                  validarTipoAcaoAlertaExclusao();
                 });
               },
             ),
@@ -259,63 +340,72 @@ class _WidgetTelaResetarDadosState extends State<WidgetTelaResetarDados> {
         width: kIsWeb
             ? larguraTela
             : Platform.isAndroid || Platform.isIOS
-            ? larguraTela
-            : larguraTela * 0.4,
+                ? larguraTela
+                : larguraTela * 0.4,
         height: 250,
-        child: SingleChildScrollView(
-          child: Card(
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                  side: BorderSide(width: 1, color: widget.corCard),
-                  borderRadius: BorderRadius.circular(20)),
-              child: Padding(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    Text(
-                      Textos.tituloReiniciarDados,
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      Textos.descricaoReiniciarDados,
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 17),
-                    ),
-                    Container(
-                        margin: EdgeInsets.only(top: 10),
-                        width: 130,
-                        height: 130,
-                        child: FloatingActionButton(
-                          elevation: 0,
-                          backgroundColor: Colors.white,
-                          shape: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide:
-                              BorderSide(width: 1, color: widget.corCard)),
-                          onPressed: () {
-                            alertaExclusao(context);
-                          },
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image(
-                                height: 90,
-                                width: 90,
-                                image: AssetImage(
-                                    "${CaminhosImagens.gestoExcluir}.png"),
-                              ),
-                              Text(
-                                Textos.btnExcluir,
-                                style: TextStyle(
-                                  color: PaletaCores.corVermelha,
-                                ),
-                              )
-                            ],
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            if (exibirTelaCarregamento) {
+              return TelaCarregamentoWidget(corPadrao: widget.corCard);
+            } else {
+              return SingleChildScrollView(
+                child: Card(
+                    color: Colors.white,
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(width: 1, color: widget.corCard),
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Padding(
+                      padding: EdgeInsets.all(10),
+                      child: Column(
+                        children: [
+                          Text(
+                            Textos.tituloReiniciarDados,
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
                           ),
-                        ))
-                  ],
-                ),
-              )),
+                          Text(
+                            Textos.descricaoReiniciarDados,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 17),
+                          ),
+                          Container(
+                              margin: EdgeInsets.only(top: 10),
+                              width: 130,
+                              height: 130,
+                              child: FloatingActionButton(
+                                elevation: 0,
+                                backgroundColor: Colors.white,
+                                shape: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                        width: 1, color: widget.corCard)),
+                                onPressed: () {
+                                  alertaExclusao(context);
+                                },
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image(
+                                      height: 90,
+                                      width: 90,
+                                      image: AssetImage(
+                                          "${CaminhosImagens.gestoExcluir}.png"),
+                                    ),
+                                    Text(
+                                      Textos.btnExcluir,
+                                      style: TextStyle(
+                                        color: PaletaCores.corVermelha,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ))
+                        ],
+                      ),
+                    )),
+              );
+            }
+          },
         ));
   }
 }

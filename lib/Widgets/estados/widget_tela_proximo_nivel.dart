@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
-import 'package:geoli/Uteis/constantes.dart';
-import 'package:geoli/Uteis/constantes_estados_gestos.dart';
+import 'package:geoli/Uteis/variaveis_constantes/constantes.dart';
+import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
+import 'package:geoli/Uteis/variaveis_constantes/constantes_estados_gestos.dart';
 
 import '../../Uteis/paleta_cores.dart';
 import '../../Uteis/textos.dart';
@@ -58,22 +59,30 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
     }
   }
 
-  resetarDados() async {
+  Future<bool> resetarDadosBancoDados() async {
+    bool retorno = false;
     try {
       // instanciando Firebase
       var db = FirebaseFirestore.instance;
-      db
+      await db
           .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
           .doc(uidUsuario)
           .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
           .doc(widget.nomeColecao) //passando o documento
           .set(dados)
-          .then((value) {}, onError: (e) {
+          .then((value) {
+        retorno = true;
+      }, onError: (e) {
+        retorno = false;
+        chamarValidarErro(e.toString());
         debugPrint("RDON${e.toString()}");
       });
     } catch (e) {
+      retorno = false;
+      chamarValidarErro(e.toString());
       debugPrint("RD${e.toString()}");
     }
+    return retorno;
   }
 
   recuperarRegioesLiberadas() async {
@@ -101,22 +110,25 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
             liberarTodosEstados = value;
           }
         });
-        validarLiberarProximoNivel("");
-        liberarProximoNivel();
+        validarLiberarProximoNivel();
+        liberarProximoNivelBancoDados();
       }, onError: (e) {
+        chamarValidarErro(e.toString());
         debugPrint("RLON${e.toString()}");
       });
     } catch (e) {
+      chamarValidarErro(e.toString());
       debugPrint("RL${e.toString()}");
     }
   }
 
   // metodo para cadastrar item
-  liberarProximoNivel() async {
+  Future<bool> liberarProximoNivelBancoDados() async {
+    bool retorno = false;
     try {
       // instanciando Firebase
       var db = FirebaseFirestore.instance;
-      db
+      await db
           .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
           .doc(uidUsuario)
           .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
@@ -128,55 +140,93 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
         Textos.nomeRegiaoNorte: liberarRegiaoNorte,
         Textos.nomeRegiaoNordeste: liberarRegiaoNordeste,
         Constantes.nomeTodosEstados: liberarTodosEstados,
-      }).then((value) {}, onError: (e) {
-        debugPrint("LPON${e.toString()}");
+      }).then((value) {
+        retorno = true;
+      }, onError: (e) {
+        retorno = false;
+        debugPrint("LPON ${e.toString()}");
       });
     } catch (e) {
+      retorno = false;
       debugPrint("LP${e.toString()}");
     }
+    return retorno;
   }
 
-  validarLiberarProximoNivel(String nomeBtn) async {
+  validarLiberarProximoNivel() async {
     if (mounted) {
       setState(() {
         if (widget.nomeColecao ==
             Constantes.fireBaseDocumentoRegiaoCentroOeste) {
           liberarRegiaoSul = true;
-          if (nomeBtn == Textos.btnProximoNivel) {
-            Navigator.pushReplacementNamed(
-                context, Constantes.rotaTelaRegiaoSul);
-          }
         } else if (widget.nomeColecao ==
             Constantes.fireBaseDocumentoRegiaoSul) {
           liberarRegiaoSudeste = true;
-          if (nomeBtn == Textos.btnProximoNivel) {
-            Navigator.pushReplacementNamed(
-                context, Constantes.rotaTelaRegiaoSudeste);
-          }
         } else if (widget.nomeColecao ==
             Constantes.fireBaseDocumentoRegiaoSudeste) {
           liberarRegiaoNorte = true;
-          if (nomeBtn == Textos.btnProximoNivel) {
-            Navigator.pushReplacementNamed(
-                context, Constantes.rotaTelaRegiaoNorte);
-          }
         } else if (widget.nomeColecao ==
             Constantes.fireBaseDocumentoRegiaoNorte) {
           liberarRegiaoNordeste = true;
-          if (nomeBtn == Textos.btnProximoNivel) {
-            Navigator.pushReplacementNamed(
-                context, Constantes.rotaTelaRegiaoNordeste);
-          }
         } else if (widget.nomeColecao ==
             Constantes.fireBaseDocumentoRegiaoNordeste) {
           liberarTodosEstados = true;
-          if (nomeBtn == Textos.btnProximoNivel) {
-            Navigator.pushReplacementNamed(
-                context, Constantes.rotaTelaRegiaoTodosEstados);
-          }
         }
       });
     }
+  }
+
+  redirecionarTelaParaProximoNivel() async {
+    if (mounted) {
+      setState(() {
+        if (widget.nomeColecao ==
+            Constantes.fireBaseDocumentoRegiaoCentroOeste) {
+          Navigator.pushReplacementNamed(context, Constantes.rotaTelaRegiaoSul);
+        } else if (widget.nomeColecao ==
+            Constantes.fireBaseDocumentoRegiaoSul) {
+          Navigator.pushReplacementNamed(
+              context, Constantes.rotaTelaRegiaoSudeste);
+        } else if (widget.nomeColecao ==
+            Constantes.fireBaseDocumentoRegiaoSudeste) {
+          Navigator.pushReplacementNamed(
+              context, Constantes.rotaTelaRegiaoNorte);
+        } else if (widget.nomeColecao ==
+            Constantes.fireBaseDocumentoRegiaoNorte) {
+          Navigator.pushReplacementNamed(
+              context, Constantes.rotaTelaRegiaoNordeste);
+        } else if (widget.nomeColecao ==
+            Constantes.fireBaseDocumentoRegiaoNordeste) {
+          Navigator.pushReplacementNamed(
+              context, Constantes.rotaTelaRegiaoTodosEstados);
+        }
+      });
+    }
+  }
+
+  redirecionarTelaJogarNovamente() {
+    if (widget.nomeColecao == Constantes.fireBaseDocumentoRegiaoCentroOeste) {
+      Navigator.pushReplacementNamed(
+          context, Constantes.rotaTelaRegiaoCentroOeste);
+    } else if (widget.nomeColecao == Constantes.fireBaseDocumentoRegiaoSul) {
+      Navigator.pushReplacementNamed(context, Constantes.rotaTelaRegiaoSul);
+    } else if (widget.nomeColecao ==
+        Constantes.fireBaseDocumentoRegiaoSudeste) {
+      Navigator.pushReplacementNamed(context, Constantes.rotaTelaRegiaoSudeste);
+    } else if (widget.nomeColecao == Constantes.fireBaseDocumentoRegiaoNorte) {
+      Navigator.pushReplacementNamed(context, Constantes.rotaTelaRegiaoNorte);
+    } else if (widget.nomeColecao ==
+        Constantes.fireBaseDocumentoRegiaoNordeste) {
+      Navigator.pushReplacementNamed(
+          context, Constantes.rotaTelaRegiaoNordeste);
+    } else if (widget.nomeColecao ==
+        Constantes.fireBaseDocumentoRegiaoTodosEstados) {
+      Navigator.pushReplacementNamed(
+          context, Constantes.rotaTelaRegiaoTodosEstados);
+    }
+  }
+
+  redirecionarTelaInicial() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
   }
 
   Widget cardOpcoes(
@@ -187,42 +237,20 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
         child: FloatingActionButton(
           heroTag: nomeOpcao,
           backgroundColor: Colors.white,
-          onPressed: () {
+          onPressed: () async {
             if (nomeOpcao == Textos.btnJogarNovamente) {
-              if (widget.nomeColecao ==
-                  Constantes.fireBaseDocumentoRegiaoCentroOeste) {
-                resetarDados();
-                Navigator.pushReplacementNamed(
-                    context, Constantes.rotaTelaRegiaoCentroOeste);
-              } else if (widget.nomeColecao ==
-                  Constantes.fireBaseDocumentoRegiaoSul) {
-                resetarDados();
-                Navigator.pushReplacementNamed(
-                    context, Constantes.rotaTelaRegiaoSul);
-              } else if (widget.nomeColecao ==
-                  Constantes.fireBaseDocumentoRegiaoSudeste) {
-                resetarDados();
-                Navigator.pushReplacementNamed(
-                    context, Constantes.rotaTelaRegiaoSudeste);
-              } else if (widget.nomeColecao ==
-                  Constantes.fireBaseDocumentoRegiaoNorte) {
-                resetarDados();
-                Navigator.pushReplacementNamed(
-                    context, Constantes.rotaTelaRegiaoNorte);
-              } else if (widget.nomeColecao ==
-                  Constantes.fireBaseDocumentoRegiaoNordeste) {
-                resetarDados();
-                Navigator.pushReplacementNamed(
-                    context, Constantes.rotaTelaRegiaoNordeste);
-              } else if (widget.nomeColecao ==
-                  Constantes.fireBaseDocumentoRegiaoTodosEstados) {
-                resetarDados();
-                Navigator.pushReplacementNamed(
-                    context, Constantes.rotaTelaRegiaoTodosEstados);
+              bool retorno = await resetarDadosBancoDados();
+              if (retorno) {
+                redirecionarTelaJogarNovamente();
               }
             } else {
-              validarLiberarProximoNivel(Textos.btnProximoNivel);
-              liberarProximoNivel();
+              validarLiberarProximoNivel();
+              bool retorno = await liberarProximoNivelBancoDados();
+              if (retorno) {
+                redirecionarTelaParaProximoNivel();
+              } else {
+                redirecionarTelaInicial();
+              }
             }
           },
           elevation: 0,
@@ -246,6 +274,10 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
           ),
         ),
       );
+
+  chamarValidarErro(String erro) {
+    MetodosAuxiliares.validarErro(erro, context);
+  }
 
   @override
   Widget build(BuildContext context) {

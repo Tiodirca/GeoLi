@@ -73,9 +73,6 @@ class Constantes {
   //STATUS TUTORIAL
   static const statusTutorialAtivo = "Tutorial Ativo";
 
-  static const erroConexaoSemIntenet = "sem internet";
-  static const erroConexaoExpirada = "conexao expirada";
-
   //TIPO NOTIFICACAO
   static const tipoNotificacaoSucesso = "Sucesso";
   static const tipoNotificacaoErro = "Erro";

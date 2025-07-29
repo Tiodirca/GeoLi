@@ -1,10 +1,9 @@
 class Textos {
   //BOTOES
-  static String versaoAppNumero = "1.2.4";
+  static String versaoAppNumero = "1.2.6";
   static String versaoAppDescricao = "Versão : ";
   static String btnComecarJogo = "Começar";
   static String btnJogarNovamente = "Jogar Novamente";
-  static String btnRecarregarTelaNovamente = "Tentar nova conexão";
   static String btnProximoNivel = "Próximo Nível";
   static String btnTodosEstados = "Todos os estados";
   static String btnEstadoBrasileiros = "Estados Brasileiros";
@@ -220,20 +219,17 @@ class Textos {
   static String erroCampoVazio = "Preencha antes de prosseguir";
 
   //ERROS E SUCESSO MENSAGENS
-  static String sucessoLogin = "Sucesso ao entrar na conta";
-  static String sucessoCadastro = "Sucesso ao fazer Cadastro";
   static String sucessoAlterarNome = "Sucesso ao alterar o nome";
   static String sucessoDesconectar = "Sucesso ao desconectar conta";
-  static String sucessoExcluirDados = "Sucesso ao excluir os dados";
   static String sucessoEnvioLink =
       "Acesse o link enviado para o e-mail informado para "
       " concluir a alteração do email";
   static String sucessoAtualizarSenha = "Senha alterada com sucesso";
 
   //ALERTA EXCLUSAO
-  static String tituloAlertaExclusao = "Excluir Item";
-  static String descricaoAlertaExclusao =
-      "Deseja realmente excluir este item ?";
+  static String tituloAlertaExclusaoUsuario = "Excluir Usuario";
+  static String descricaoAlertaExclusaoUsuario =
+      "Deseja realmente excluir este usuario ?";
 
   //ALERTA ALTERAR SENHA
   static String tituloAlertaAlterarSenha = "Alterar Senha";

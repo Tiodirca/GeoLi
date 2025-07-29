@@ -2,11 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:geoli/Uteis/constantes.dart';
+import 'package:geoli/Uteis/variaveis_constantes/constantes.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
-import 'package:geoli/Uteis/constantes_estados_gestos.dart';
 import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
+import 'package:geoli/Uteis/variaveis_constantes/constantes_estados_gestos.dart';
 import 'package:geoli/Widgets/estados/area_tela_regioes_widget.dart';
 import 'package:geoli/Widgets/estados/widget_area_gestos_arrastar.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
@@ -145,49 +145,47 @@ class _TelaRegiaoSulState extends State<TelaRegiaoSul> {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky,
           overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom]);
     });
-    return Scaffold(
-        appBar: AppBar(
-            title: Visibility(
-                visible: !exibirTelaCarregamento,
-                child: Text(Textos.tituloTelaRegiaoSul)),
-            backgroundColor: Colors.white,
-            leading: Visibility(
-              visible: !exibirTelaCarregamento,
-              child: IconButton(
-                  color: Colors.black,
-                  //setando tamanho do icone
-                  iconSize: 30,
-                  enableFeedback: false,
-                  onPressed: () {
-                    setState(() {
-                      exibirTelaCarregamento = true;
-                    });
-                    Timer(Duration(seconds: Constantes.duracaoDelayVoltarTela), () {
-                      Navigator.pushReplacementNamed(
-                          context, Constantes.rotaTelaInicialRegioes);
-                    });
-                  },
-                  icon: const Icon(Icons.arrow_back_ios)),
-            )),
-        body: LayoutBuilder(
-          builder: (context, constraints) {
-            if (exibirTelaCarregamento) {
-              return TelaCarregamentoWidget(
-                corPadrao: ConstantesEstadosGestos.corPadraoRegioes,
-              );
-            } else {
-              return AreaTelaRegioesWidget(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        if (exibirTelaCarregamento) {
+          return TelaCarregamentoWidget(
+            corPadrao: ConstantesEstadosGestos.corPadraoRegioes,
+          );
+        } else {
+          return Scaffold(
+              appBar: AppBar(
+                title: Text(Textos.tituloTelaRegiaoSul),
+                backgroundColor: Colors.white,
+                leading: IconButton(
+                    color: Colors.black,
+                    //setando tamanho do icone
+                    iconSize: 30,
+                    enableFeedback: false,
+                    onPressed: () {
+                      setState(() {
+                        exibirTelaCarregamento = true;
+                      });
+                      Timer(
+                          Duration(seconds: Constantes.duracaoDelayVoltarTela),
+                              () {
+                            Navigator.pushReplacementNamed(
+                                context, Constantes.rotaTelaInicialRegioes);
+                          });
+                    },
+                    icon: const Icon(Icons.arrow_back_ios)),
+              ),
+              body: AreaTelaRegioesWidget(
                   nomeColecao: nomeColecao,
                   estadosSorteio: estadosSorteio,
-                  exibirTelaProximoNivel: exibirTelaProximoNivel);
-            }
-          },
-        ),
-        bottomNavigationBar: WidgetAreaGestosArrastar(
-          nomeColecao: nomeColecao,
-          gestos: gestos,
-          estadoGestoMap: estadoGestoMap,
-          exibirTelaCarregamento: exibirTelaCarregamento,
-        ));
+                  exibirTelaProximoNivel: exibirTelaProximoNivel),
+              bottomNavigationBar: WidgetAreaGestosArrastar(
+                nomeColecao: nomeColecao,
+                gestos: gestos,
+                estadoGestoMap: estadoGestoMap,
+                exibirTelaCarregamento: exibirTelaCarregamento,
+              ));
+        }
+      },
+    );
   }
 }

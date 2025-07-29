@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
-import 'package:geoli/Uteis/constantes.dart';
-import 'package:geoli/Uteis/constantes_estados_gestos.dart';
-import 'package:geoli/Uteis/constantes_sistema_solar.dart';
+import 'package:geoli/Uteis/variaveis_constantes/constantes.dart';
 import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
 import 'package:geoli/Uteis/textos.dart';
+import 'package:geoli/Uteis/variaveis_constantes/constantes_estados_gestos.dart';
+import 'package:geoli/Uteis/variaveis_constantes/constantes_sistema_solar.dart';
 import 'package:geoli/modelos/planeta.dart';
 
 class CriarDadosBanco {

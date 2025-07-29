@@ -3,11 +3,11 @@ class ValidarTamanhoItensTela{
   static validarTamanhoLarguraBotaoTelaUsuario(double larguraTela) {
     double tamanhoCampo = 100.0;
     if (larguraTela <= 400) {
-      tamanhoCampo = 120.0;
-    } else if (larguraTela > 400 && larguraTela <= 1100) {
-      tamanhoCampo = 120.0;
-    } else if (larguraTela > 1100) {
       tamanhoCampo = 130.0;
+    } else if (larguraTela > 400 && larguraTela <= 1100) {
+      tamanhoCampo = 140.0;
+    } else if (larguraTela > 1100) {
+      tamanhoCampo = 140.0;
     }
     return tamanhoCampo;
   }
@@ -15,7 +15,7 @@ class ValidarTamanhoItensTela{
   static validarTamanhoAlturaBotaoTelaUsuario(double larguraTela) {
     double tamanhoCampo = 100.0;
     if (larguraTela <= 400) {
-      tamanhoCampo = 100.0;
+      tamanhoCampo = 110.0;
     } else if (larguraTela > 400 && larguraTela <= 1100) {
       tamanhoCampo = 120.0;
     } else if (larguraTela > 1100) {

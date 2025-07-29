@@ -9,12 +9,12 @@ import 'package:flutter/services.dart';
 import 'package:geoli/Modelos/emblemas.dart';
 import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
-import 'package:geoli/Uteis/constantes.dart';
-import 'package:geoli/Uteis/constantes_sistema_solar.dart';
+import 'package:geoli/Uteis/variaveis_constantes/constantes.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
 import 'package:geoli/Uteis/textos.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
+import 'package:geoli/Uteis/variaveis_constantes/constantes_sistema_solar.dart';
 import 'package:geoli/Widgets/gestos_widget.dart';
 import 'package:geoli/Widgets/sistema_solar/area_tutorial_widget.dart';
 import 'package:geoli/Widgets/sistema_solar/widget_area_animacao_baloes.dart';
@@ -155,14 +155,16 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
             .then((querySnapshot) async {
           querySnapshot.data()!.forEach(
             (key, value) {
-              setState(() {
-                pontuacaoTotal = value;
-                //Passando pontuacao para
-                // a tela de emblemas sem esse metodo
-                // o emblema nao e exibido corretamente
-                PassarPegarDados.passarPontuacaoAtual(pontuacaoTotal);
-                exibirTelaCarregamento = false;
-              });
+              if(mounted){
+                setState(() {
+                  pontuacaoTotal = value;
+                  //Passando pontuacao para
+                  // a tela de emblemas sem esse metodo
+                  // o emblema nao e exibido corretamente
+                  PassarPegarDados.passarPontuacaoAtual(pontuacaoTotal);
+                  exibirTelaCarregamento = false;
+                });
+              }
             },
           );
         }, onError: (e) {

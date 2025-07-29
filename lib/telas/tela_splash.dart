@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
-import '../Uteis/constantes.dart';
+import '../Uteis/variaveis_constantes/constantes.dart';
 
 class TelaSplashScreen extends StatefulWidget {
   const TelaSplashScreen({super.key});
