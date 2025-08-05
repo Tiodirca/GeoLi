@@ -81,4 +81,21 @@ class ValidarTamanhoItensTela{
     return tamanhoCampo;
   }
 
+  static  tamanhoAreaPlanetaSorteadoSistemaSolar(double larguraTela) {
+    double tamanho = 200.0;
+    //verificando qual o tamanho da tela
+    if (larguraTela <= 400) {
+      tamanho = 250.0;
+    } else if (larguraTela > 400 && larguraTela <= 800) {
+      tamanho = 250.0;
+    } else if (larguraTela > 800 && larguraTela <= 1100) {
+      tamanho = 300.0;
+    } else if (larguraTela > 1100 && larguraTela <= 1300) {
+      tamanho = 350.0;
+    } else if (larguraTela > 1300) {
+      tamanho = 400.0;
+    }
+    return tamanho;
+  }
+
 }

@@ -13,7 +13,6 @@ import 'package:geoli/Uteis/variaveis_constantes/constantes_estados_gestos.dart'
 import 'package:geoli/Widgets/estados/area_tela_regioes_widget.dart';
 import 'package:geoli/Widgets/estados/widget_area_gestos_arrastar.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 class TelaRegiaoNordeste extends StatefulWidget {
   const TelaRegiaoNordeste({super.key});
@@ -83,91 +82,91 @@ class _TelaRegiaoNordesteState extends State<TelaRegiaoNordeste> {
   }
 
   realizarBuscaDadosFireBase(String nomeDocumentoRegiao) async {
-    bool retornoConexao = await InternetConnection().hasInternetAccess;
     var db = FirebaseFirestore.instance;
     //instanciano variavel
-    if (retornoConexao) {
-      try {
-        db
-            .collection(
-                Constantes.fireBaseColecaoUsuarios) // passando a colecao
-            .doc(uidUsuario)
-            .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-            .doc(nomeDocumentoRegiao) // passando documento
-            .get()
-            .then((querySnapshot) async {
-          // verificando cada item que esta gravado no banco de dados
-          querySnapshot.data()!.forEach(
-            (key, value) {
-              // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
-              setState(() {
-                if (ConstantesEstadosGestos.estadoAL.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoAL, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoBA.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoBA, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoCE.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoCE, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoMA.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoMA, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoPB.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoPB, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoPE.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoPE, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoPI.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoPI, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoRN.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoRN, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoSE.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoSE, value, gestos);
+    try {
+      db
+          .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+          .doc(uidUsuario)
+          .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
+          .doc(nomeDocumentoRegiao) // passando documento
+          .get()
+          .then((querySnapshot) async {
+        // verificando cada item que esta gravado no banco de dados
+        if(mounted){
+          if (querySnapshot.data() != null) {
+            querySnapshot.data()!.forEach(
+                  (key, value) {
+                // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
+                setState(() {
+                  if (ConstantesEstadosGestos.estadoAL.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoAL, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoBA.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoBA, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoCE.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoCE, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoMA.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoMA, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoPB.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoPB, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoPE.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoPE, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoPI.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoPI, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoRN.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoRN, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoSE.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoSE, value, gestos);
+                  }
+                });
+              },
+            );
+            setState(
+                  () {
+                if (gestos.isEmpty) {
+                  exibirTelaProximoNivel = true;
                 }
-              });
-            },
-          );
-          setState(
-            () {
-              if (gestos.isEmpty) {
-                exibirTelaProximoNivel = true;
-              }
-              exibirTelaCarregamento = false;
-            },
-          );
-        }, onError: (e) {
-          debugPrint("ErroONNN${e.toString()}");
-          validarErro(e.toString());
-        });
-      } catch (e) {
-        debugPrint("ErroNN${e.toString()}");
-        validarErro(e.toString());
-      }
-    } else {
-      exibirErroConexao();
+                exibirTelaCarregamento = false;
+              },
+            );
+          } else {
+            redirecionarTelaLoginCadastro();
+          }
+        }
+      }, onError: (e) {
+        debugPrint("ErroONNN${e.toString()}");
+        chamarValidarErro(e.toString());
+      }).timeout(
+        Duration(seconds: Constantes.fireBaseDuracaoTimeOut),
+        onTimeout: () {
+          chamarValidarErro(Textos.erroUsuarioSemInternet);
+          redirecionarTelaInicial();
+        },
+      );
+    } catch (e) {
+      debugPrint("Erro${e.toString()}");
+      chamarValidarErro(e.toString());
     }
   }
 
-  validarErro(String erro) {
-    if (erro.contains("An internal error has occurred")) {
-      exibirErroConexao();
-    }
+  redirecionarTelaInicial() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
+  }
+  chamarValidarErro(String erro) {
+    MetodosAuxiliares.validarErro(erro, context);
   }
 
-  exibirErroConexao() {
-    if (mounted) {
-      setState(() {
-        exibirTelaCarregamento = true;
-        exibirMensagemSemConexao = true;
-        PassarPegarDados.passarTelaAtualErroConexao(
-            Constantes.rotaTelaRegiaoNordeste);
-      });
-    }
+  redirecionarTelaLoginCadastro() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaLoginCadastro);
   }
 
   @override
@@ -198,10 +197,10 @@ class _TelaRegiaoNordesteState extends State<TelaRegiaoNordeste> {
                       });
                       Timer(
                           Duration(seconds: Constantes.duracaoDelayVoltarTela),
-                              () {
-                            Navigator.pushReplacementNamed(
-                                context, Constantes.rotaTelaInicialRegioes);
-                          });
+                          () {
+                        Navigator.pushReplacementNamed(
+                            context, Constantes.rotaTelaInicialRegioes);
+                      });
                     },
                     icon: const Icon(Icons.arrow_back_ios)),
               ),

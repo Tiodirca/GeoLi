@@ -14,7 +14,6 @@ import 'package:geoli/Uteis/variaveis_constantes/constantes_estados_gestos.dart'
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import 'package:geoli/Widgets/widget_exibir_emblemas.dart';
 import 'package:geoli/Widgets/widget_tela_resetar_dados.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 class TelaInicialRegioes extends StatefulWidget {
   const TelaInicialRegioes({super.key});
@@ -101,37 +100,37 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
     var db = FirebaseFirestore.instance;
     try {
       db
-          .collection(
-          Constantes.fireBaseColecaoUsuarios) // passando a colecao
+          .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
           .doc(uidUsuario)
           .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-          .doc(Constantes
-          .fireBaseDocumentoLiberarEstados) // passando documento
+          .doc(Constantes.fireBaseDocumentoLiberarEstados) // passando documento
           .get()
           .then((querySnapshot) async {
         // verificando cada item que esta gravado no banco de dados
-        if (querySnapshot.data() != null) {
-          querySnapshot.data()!.forEach((key, value) {
-            setState(() {
-              // verificando se o nome da KEY e igual ao nome passado
-              if (regiaoSul.nome == key) {
-                regiaoSul.acerto = value;
-              } else if (regiaoSudeste.nome == key) {
-                regiaoSudeste.acerto = value;
-              } else if (regiaoNorte.nome == key) {
-                regiaoNorte.acerto = value;
-              } else if (regiaoNordeste.nome == key) {
-                regiaoNordeste.acerto = value;
-              } else if (Constantes.nomeTodosEstados == key) {
-                todasRegioes.acerto = value;
-              }
+        if (mounted) {
+          if (querySnapshot.data() != null) {
+            querySnapshot.data()!.forEach((key, value) {
+              setState(() {
+                // verificando se o nome da KEY e igual ao nome passado
+                if (regiaoSul.nome == key) {
+                  regiaoSul.acerto = value;
+                } else if (regiaoSudeste.nome == key) {
+                  regiaoSudeste.acerto = value;
+                } else if (regiaoNorte.nome == key) {
+                  regiaoNorte.acerto = value;
+                } else if (regiaoNordeste.nome == key) {
+                  regiaoNordeste.acerto = value;
+                } else if (Constantes.nomeTodosEstados == key) {
+                  todasRegioes.acerto = value;
+                }
+              });
             });
-          });
-          setState(() {
-            exibirTelaCarregamento = false;
-          });
-        } else {
-          redirecionarTelaLoginCadastro();
+            setState(() {
+              exibirTelaCarregamento = false;
+            });
+          } else {
+            redirecionarTelaLoginCadastro();
+          }
         }
       }, onError: (e) {
         debugPrint("ErroONTIR${e.toString()}");
@@ -181,11 +180,21 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
       }, onError: (e) {
         debugPrint("ErroTRON${e.toString()}");
         chamarValidarErro(e.toString());
-      });
+      }).timeout(
+        Duration(seconds: Constantes.fireBaseDuracaoTimeOut),
+        onTimeout: () {
+          chamarValidarErro(Textos.erroUsuarioSemInternet);
+          redirecionarTelaInicial();
+        },
+      );
     } catch (e) {
-      debugPrint("ErroTR${e.toString()}");
+      debugPrint("Erro${e.toString()}");
       chamarValidarErro(e.toString());
     }
+  }
+
+  redirecionarTelaInicial() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
   }
 
   Widget cartaoRegiao(String nomeImagem, String nomeRegiao) => Container(

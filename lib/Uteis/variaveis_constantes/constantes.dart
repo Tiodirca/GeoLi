@@ -42,7 +42,8 @@ class Constantes {
       "pontosJogadaSistemaSolar";
   static const fireBaseDocumentoPlanetasDesbloqueados = "planetasDesbloqueados";
 
-
+  static int fireBaseDuracaoTimeOut = 20;
+  static int fireBaseDuracaoTimeOutTelaProximoNivel = 5;
   //INFORMACAO USUARIO
   static const infoUsuarioUID = "uid";
   static const infoUsuarioEmail = "email";

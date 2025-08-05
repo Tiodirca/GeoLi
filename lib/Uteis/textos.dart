@@ -1,6 +1,6 @@
 class Textos {
   //BOTOES
-  static String versaoAppNumero = "1.2.6";
+  static String versaoAppNumero = "1.2.7";
   static String versaoAppDescricao = "Versão : ";
   static String btnComecarJogo = "Começar";
   static String btnJogarNovamente = "Jogar Novamente";
@@ -29,6 +29,7 @@ class Textos {
 
 // GERAIS
   static String nomeApp = "Geo Li";
+  static String telaEmblemasArrastar = "Arraste para baixo para poder ver mais";
   static String txtTelaCarregamento = "Aguarde Carregando";
   static String msgAcertou = "Acertou";
   static String msgErrou = "Errado";
@@ -217,6 +218,10 @@ class Textos {
   static String erroFirebaseSemReferencia =
       "Não foi possível encontrar a referência da coleção do firebase";
   static String erroCampoVazio = "Preencha antes de prosseguir";
+  static String erroUsuarioDesconectado =
+      "Você foi desconectado, pois seu usuario foi excluido da base de dados";
+  static String erroUsuarioSemInternet = "Você está sem internet, por isso"
+      " será redirecionado para outra tela";
 
   //ERROS E SUCESSO MENSAGENS
   static String sucessoAlterarNome = "Sucesso ao alterar o nome";

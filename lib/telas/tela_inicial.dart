@@ -117,28 +117,38 @@ class _TelaInicialState extends State<TelaInicial>
         .then((querySnapshot) async {
       // verificando cada item que esta gravado no banco de dados
       if (querySnapshot.data() != null) {
-        querySnapshot.data()!.forEach((key, value) {
-          setState(() {
-            if (key.toString() == Constantes.fireBaseCampoNomeUsuario) {
-              nomeUsuario = value;
-            } else {
-              emailAlterado = value;
-            }
-            recuperarPontuacao(Constantes.fireBaseColecaoRegioes,
-                Constantes.fireBaseDocumentoPontosJogadaRegioes, uidUsuario);
+        if (mounted) {
+          querySnapshot.data()!.forEach((key, value) {
+            setState(() {
+              if (key.toString() == Constantes.fireBaseCampoNomeUsuario) {
+                nomeUsuario = value;
+              } else {
+                emailAlterado = value;
+              }
+              recuperarPontuacao(Constantes.fireBaseColecaoRegioes,
+                  Constantes.fireBaseDocumentoPontosJogadaRegioes, uidUsuario);
+            });
           });
-        });
+        }
       } else {
         redirecionarTelaLoginCadastro();
       }
     }, onError: (e) {
       debugPrint("egfdgdfg ${e.toString()}");
-      chamarMensagemErro(e.toString());
-    });
+      chamarValidarErro(e.toString());
+    }).timeout(
+      Duration(seconds: Constantes.fireBaseDuracaoTimeOut),
+      onTimeout: () {
+        chamarValidarErro(Textos.erroUsuarioSemInternet);
+        Timer(const Duration(seconds: 2), () {
+          redirecionarTelaLoginCadastro();
+        });
+      },
+    );
   }
 
-  chamarMensagemErro(String erro) {
-    MetodosAuxiliares.validarErro(erro, context);
+  recarregarTela() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
   }
 
   // metodo para recuperar a pontuacao
@@ -154,35 +164,43 @@ class _TelaInicialState extends State<TelaInicial>
           .doc(nomeDocumento) // passando documento
           .get()
           .then((querySnapshot) async {
-        querySnapshot.data()!.forEach(
-          (key, value) {
-            setState(() {
-              if (nomeColecao == Constantes.fireBaseColecaoRegioes) {
-                pontuacaoEstados = value;
-                recuperarPontuacao(
-                    Constantes.fireBaseColecaoSistemaSolar,
-                    Constantes.fireBaseDocumentoPontosJogadaSistemaSolar,
-                    uidUsuario);
-              } else {
-                pontuacaoSistemaSolar = value;
-                pontuacaoGeral = pontuacaoEstados + pontuacaoSistemaSolar;
-                //Passando pontuacao para
-                // a tela de emblemas sem esse metodo o
-                // emblema nao e exibido corretamente
-                PassarPegarDados.passarPontuacaoAtual(pontuacaoGeral);
-                exibirTelaCarregamento = false;
-              }
-            });
-          },
-        );
+        if (querySnapshot.data() != null) {
+          querySnapshot.data()!.forEach(
+            (key, value) {
+              setState(() {
+                if (nomeColecao == Constantes.fireBaseColecaoRegioes) {
+                  pontuacaoEstados = value;
+                  recuperarPontuacao(
+                      Constantes.fireBaseColecaoSistemaSolar,
+                      Constantes.fireBaseDocumentoPontosJogadaSistemaSolar,
+                      uidUsuario);
+                } else {
+                  pontuacaoSistemaSolar = value;
+                  pontuacaoGeral = pontuacaoEstados + pontuacaoSistemaSolar;
+                  //Passando pontuacao para
+                  // a tela de emblemas sem esse metodo o
+                  // emblema nao e exibido corretamente
+                  PassarPegarDados.passarPontuacaoAtual(pontuacaoGeral);
+                  exibirTelaCarregamento = false;
+                }
+              });
+            },
+          );
+        } else {
+          redirecionarTelaLoginCadastro();
+        }
       }, onError: (e) {
         debugPrint("ErroTONP${e.toString()}");
-        chamarMensagemErro(e.toString());
+        chamarValidarErro(e.toString());
       });
     } catch (e) {
       debugPrint("ErroTP${e.toString()}");
-      chamarMensagemErro(e.toString());
+      chamarValidarErro(e.toString());
     }
+  }
+
+  chamarValidarErro(String erro) {
+    MetodosAuxiliares.validarErro(erro, context);
   }
 
   Widget cartao(String nomeImagem, String nome, double largura) => Container(

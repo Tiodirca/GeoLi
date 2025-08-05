@@ -78,33 +78,47 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
           .get()
           .then((querySnapshot) async {
         // verificando cada item que esta gravado no banco de dados
-        querySnapshot.data()!.forEach((key, value) async {
-          if (key.toString() == Constantes.fireBaseCampoNomeUsuario) {
-            setState(() {
-              campoUsuario.text = value;
-              nomeUsuarioSemAlteracao = value;
-            });
-          } else {
-            if (value.toString().isNotEmpty) {
+        if (querySnapshot.data() != null) {
+          querySnapshot.data()!.forEach((key, value) async {
+            if (key.toString() == Constantes.fireBaseCampoNomeUsuario) {
               setState(() {
-                emailAlterado = value;
-                validarConfirmacaoAlteracaoEmail(uidUsuario, emailAlterado);
+                campoUsuario.text = value;
+                nomeUsuarioSemAlteracao = value;
               });
             } else {
-              setState(() {
-                exibirTelaCarregamento = false;
-              });
+              if (value.toString().isNotEmpty) {
+                setState(() {
+                  emailAlterado = value;
+                  validarConfirmacaoAlteracaoEmail(uidUsuario, emailAlterado);
+                });
+              } else {
+                setState(() {
+                  exibirTelaCarregamento = false;
+                });
+              }
             }
-          }
-        });
+          });
+        } else {
+          redirecionarTelaLogin();
+        }
       }, onError: (e) {
         debugPrint("RPON${e.toString()}");
-        MetodosAuxiliares.validarErro(e.toString(), context);
-      });
+        chamarValidarErro(e.toString());
+      }).timeout(
+        Duration(seconds: Constantes.fireBaseDuracaoTimeOutTelaProximoNivel),
+        onTimeout: () {
+          chamarValidarErro(Textos.erroUsuarioSemInternet);
+          redirecionarTelaInicial();
+        },
+      );
     } catch (e) {
-      debugPrint("RP${e.toString()}");
-      MetodosAuxiliares.validarErro(e.toString(), context);
+      debugPrint("Erro${e.toString()}");
+      chamarValidarErro(e.toString());
     }
+  }
+
+  redirecionarTelaInicial() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
   }
 
   validarConfirmacaoAlteracaoEmail(String uid, String emailAlteracao) async {
@@ -175,12 +189,14 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
             exibirTelaCarregamento = false;
           });
           debugPrint(e.toString());
+          chamarValidarErro(e.toString());
         },
       );
     } catch (e) {
       setState(() {
         exibirTelaCarregamento = false;
       });
+      chamarValidarErro(e.toString());
       debugPrint(e.toString());
     }
   }
@@ -281,6 +297,7 @@ class _TelaUsuarioDetalhesState extends State<TelaUsuarioDetalhes> {
         chamarValidarErro(e.toString());
       });
     } catch (e) {
+      chamarValidarErro(e.toString());
       debugPrint(e.toString());
     }
   }

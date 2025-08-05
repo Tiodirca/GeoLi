@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
+import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/variaveis_constantes/constantes.dart';
 import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
 import 'package:geoli/Uteis/variaveis_constantes/constantes_estados_gestos.dart';
@@ -53,9 +54,9 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
 
   recuperarUIDUsuario() async {
     uidUsuario = await PassarPegarDados.recuperarInformacoesUsuario()
-      .values
-      .elementAt(0);
-    recuperarPontuacao();
+        .values
+        .elementAt(0);
+    verificarStatusTutorial();
     validarRegiao(widget.nomeColecao);
   }
 
@@ -74,6 +75,8 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
           exibirMsgTutorial = true;
         });
       }
+    } else {
+      recuperarPontuacao();
     }
   }
 
@@ -91,16 +94,19 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
           .get()
           .then((querySnapshot) async {
         if (mounted) {
-          querySnapshot.data()!.forEach(
-            (key, value) {
-              if (mounted) {
-                setState(() {
-                  ponto = value;
-                  verificarStatusTutorial();
-                });
-              }
-            },
-          );
+          if (querySnapshot.data() != null) {
+            querySnapshot.data()!.forEach(
+              (key, value) {
+                if (mounted) {
+                  setState(() {
+                    ponto = value;
+                  });
+                }
+              },
+            );
+          } else {
+            redirecionarTelaLoginCadastro();
+          }
         }
       }, onError: (e) {
         debugPrint(e.toString());
@@ -108,6 +114,14 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
     } catch (e) {
       debugPrint(e.toString());
     }
+  }
+
+  chamarValidarErro(String erro) {
+    MetodosAuxiliares.validarErro(erro, context);
+  }
+
+  redirecionarTelaLoginCadastro() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaLoginCadastro);
   }
 
   atualizarPontuacao() async {
@@ -123,14 +137,25 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
               .fireBaseDocumentoPontosJogadaRegioes) //passando o documento
           .set({Constantes.pontosJogada: ponto}).then((value) {}, onError: (e) {
         debugPrint("ATPON:${e.toString()}");
-      });
+      }).timeout(
+        Duration(seconds: Constantes.fireBaseDuracaoTimeOut),
+        onTimeout: () {
+          chamarValidarErro(Textos.erroUsuarioSemInternet);
+          redirecionarTelaInicial();
+        },
+      );
     } catch (e) {
-      debugPrint("ATP:${e.toString()}");
+      debugPrint("Erro${e.toString()}");
+      chamarValidarErro(e.toString());
     }
   }
 
-  // metodo para fazer atualizacao no banco de dado
-  // toda vez que o usuario acertar o estado correto
+  redirecionarTelaInicial() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
+  }
+
+// metodo para fazer atualizacao no banco de dado
+// toda vez que o usuario acertar o estado correto
   atualizarDadosBanco() async {
     Map<String, dynamic> dados = {};
     widget.estadoGestoMap.forEach(
@@ -150,9 +175,16 @@ class _WidgetAreaGestosArrastarState extends State<WidgetAreaGestosArrastar>
           .set(dados)
           .then((value) {}, onError: (e) {
         debugPrint("ADON:${e.toString()}");
-      });
+      }).timeout(
+        Duration(seconds: Constantes.fireBaseDuracaoTimeOut),
+        onTimeout: () {
+          chamarValidarErro(Textos.erroUsuarioSemInternet);
+          redirecionarTelaInicial();
+        },
+      );
     } catch (e) {
-      debugPrint("AD:${e.toString()}");
+      debugPrint("Erro${e.toString()}");
+      chamarValidarErro(e.toString());
     }
   }
 

@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/estado.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
+import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/variaveis_constantes/constantes.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
@@ -146,6 +147,14 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
     );
   }
 
+  chamarValidarErro(String erro) {
+    MetodosAuxiliares.validarErro(erro, context);
+  }
+
+  redirecionarTelaLoginCadastro() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaLoginCadastro);
+  }
+
   recuperarRegioesLiberadas() async {
     var db = FirebaseFirestore.instance;
     //instanciano variavel
@@ -159,26 +168,40 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
       (querySnapshot) async {
         // verificando cada item que esta gravado no banco de dados
         if (mounted) {
-          querySnapshot.data()!.forEach((key, value) {
-            if (Textos.nomeRegiaoSul == key) {
-              liberarRegiaoSul = value;
-            } else if (Textos.nomeRegiaoSudeste == key) {
-              liberarRegiaoSudeste = value;
-            } else if (Textos.nomeRegiaoNorte == key) {
-              liberarRegiaoNorte = value;
-            } else if (Textos.nomeRegiaoNordeste == key) {
-              liberarRegiaoNordeste = value;
-            } else if (Constantes.nomeTodosEstados == key) {
-              liberarTodosEstados = value;
-            }
-          });
+          if (querySnapshot.data() != null) {
+            querySnapshot.data()!.forEach((key, value) {
+              if (Textos.nomeRegiaoSul == key) {
+                liberarRegiaoSul = value;
+              } else if (Textos.nomeRegiaoSudeste == key) {
+                liberarRegiaoSudeste = value;
+              } else if (Textos.nomeRegiaoNorte == key) {
+                liberarRegiaoNorte = value;
+              } else if (Textos.nomeRegiaoNordeste == key) {
+                liberarRegiaoNordeste = value;
+              } else if (Constantes.nomeTodosEstados == key) {
+                liberarTodosEstados = value;
+              }
+            });
+          } else {
+            redirecionarTelaLoginCadastro();
+          }
         }
         validarRegioesDesbloqueadas();
+      },
+    ).timeout(
+      Duration(seconds: Constantes.fireBaseDuracaoTimeOut),
+      onTimeout: () {
+        chamarValidarErro(Textos.erroUsuarioSemInternet);
+        redirecionarTelaInicial();
       },
     );
   }
 
-  // conforme o tamanho da tela e
+  redirecionarTelaInicial() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
+  }
+
+// conforme o tamanho da tela e
   // xibir determinda quantidade de colunas
   tamanhoListaGestosEstadoDetalhado(double larguraTela) {
     double tamanho = 5.0;
@@ -198,18 +221,18 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
   }
 
   // conforme o tamanho da tela exibir determinda quantidade de colunas
-   tamanhoImagemGestosEstados(double larguraTela) {
+  tamanhoImagemGestosEstados(double larguraTela) {
     double tamanho = 170.0;
     //verificando qual o tamanho da tela
     if (larguraTela <= 600) {
       tamanho = 60.0;
     } else if (larguraTela > 600 && larguraTela <= 800) {
       tamanho = 60.0;
-    }else if (larguraTela > 800 && larguraTela <= 1100) {
+    } else if (larguraTela > 800 && larguraTela <= 1100) {
       tamanho = 60.0;
     } else if (larguraTela > 1100 && larguraTela <= 1300) {
       tamanho = 70.0;
-    } else if(larguraTela > 1300){
+    } else if (larguraTela > 1300) {
       tamanho = 80.0;
     }
     return tamanho;
@@ -265,7 +288,9 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
                 ),
               )));
 
-  Widget imagemRegiaoGesto(String nome, String caminhoImagem,double larguraTela) => Column(
+  Widget imagemRegiaoGesto(
+          String nome, String caminhoImagem, double larguraTela) =>
+      Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Image(
@@ -341,7 +366,8 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
                                 ),
                                 SizedBox(
                                   width: larguraTela,
-                                  height: tamanhoListaGestosEstadoDetalhado(larguraTela),
+                                  height: tamanhoListaGestosEstadoDetalhado(
+                                      larguraTela),
                                   child: ListView.builder(
                                     itemCount: regioesSelecionadas.length,
                                     itemBuilder: (context, index) {
@@ -355,14 +381,16 @@ class _MapaRegioesWidgetState extends State<MapaRegioesWidget> {
                                                   .nome,
                                               regioesSelecionadas
                                                   .elementAt(index)
-                                                  .caminhoImagem,larguraTela),
+                                                  .caminhoImagem,
+                                              larguraTela),
                                           imagemRegiaoGesto(
                                               gestosSelecionados
                                                   .elementAt(index)
                                                   .nomeGesto,
                                               gestosSelecionados
                                                   .elementAt(index)
-                                                  .nomeImagem,larguraTela),
+                                                  .nomeImagem,
+                                              larguraTela),
                                         ],
                                       );
                                     },

@@ -97,29 +97,43 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
           .get()
           .then((querySnapshot) async {
         // verificando cada item que esta gravado no banco de dados
-        querySnapshot.data()!.forEach((key, value) {
-          if (Textos.nomeRegiaoSul == key) {
-            liberarRegiaoSul = value;
-          } else if (Textos.nomeRegiaoSudeste == key) {
-            liberarRegiaoSudeste = value;
-          } else if (Textos.nomeRegiaoNorte == key) {
-            liberarRegiaoNorte = value;
-          } else if (Textos.nomeRegiaoNordeste == key) {
-            liberarRegiaoNordeste = value;
-          } else if (Constantes.nomeTodosEstados == key) {
-            liberarTodosEstados = value;
-          }
-        });
-        validarLiberarProximoNivel();
-        liberarProximoNivelBancoDados();
+        if (querySnapshot.data() != null) {
+          querySnapshot.data()!.forEach((key, value) {
+            if (Textos.nomeRegiaoSul == key) {
+              liberarRegiaoSul = value;
+            } else if (Textos.nomeRegiaoSudeste == key) {
+              liberarRegiaoSudeste = value;
+            } else if (Textos.nomeRegiaoNorte == key) {
+              liberarRegiaoNorte = value;
+            } else if (Textos.nomeRegiaoNordeste == key) {
+              liberarRegiaoNordeste = value;
+            } else if (Constantes.nomeTodosEstados == key) {
+              liberarTodosEstados = value;
+            }
+          });
+          validarLiberarProximoNivel();
+          liberarProximoNivelBancoDados();
+        } else {
+          redirecionarTelaLoginCadastro();
+        }
       }, onError: (e) {
         chamarValidarErro(e.toString());
         debugPrint("RLON${e.toString()}");
-      });
+      }).timeout(
+        Duration(seconds: Constantes.fireBaseDuracaoTimeOut),
+        onTimeout: () {
+          chamarValidarErro(Textos.erroUsuarioSemInternet);
+          redirecionarTelaInicial();
+        },
+      );
     } catch (e) {
+      debugPrint("Erro${e.toString()}");
       chamarValidarErro(e.toString());
-      debugPrint("RL${e.toString()}");
     }
+  }
+
+  redirecionarTelaLoginCadastro() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaLoginCadastro);
   }
 
   // metodo para cadastrar item
@@ -145,7 +159,13 @@ class _WidgetTelaProximoNivelState extends State<WidgetTelaProximoNivel> {
       }, onError: (e) {
         retorno = false;
         debugPrint("LPON ${e.toString()}");
-      });
+      }).timeout(
+        Duration(seconds: Constantes.fireBaseDuracaoTimeOutTelaProximoNivel),
+        onTimeout: () {
+          chamarValidarErro(Textos.erroUsuarioSemInternet);
+          redirecionarTelaInicial();
+        },
+      );
     } catch (e) {
       retorno = false;
       debugPrint("LP${e.toString()}");

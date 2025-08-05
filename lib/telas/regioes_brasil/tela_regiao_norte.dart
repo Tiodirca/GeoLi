@@ -13,7 +13,6 @@ import 'package:geoli/Uteis/variaveis_constantes/constantes_estados_gestos.dart'
 import 'package:geoli/Widgets/estados/area_tela_regioes_widget.dart';
 import 'package:geoli/Widgets/estados/widget_area_gestos_arrastar.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 class TelaRegiaoNorte extends StatefulWidget {
   const TelaRegiaoNorte({super.key});
@@ -34,7 +33,6 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     carregarEstados();
     gestos.addAll([
@@ -58,8 +56,6 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
     realizarBuscaDadosFireBase(nomeColecao);
   }
 
-
-
   carregarEstados() {
     estadoGestoMap[ConstantesEstadosGestos.estadoAC] =
         ConstantesEstadosGestos.gestoAC;
@@ -80,85 +76,86 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
   }
 
   realizarBuscaDadosFireBase(String nomeDocumentoRegiao) async {
-    bool retornoConexao = await InternetConnection().hasInternetAccess;
     var db = FirebaseFirestore.instance;
     //instanciano variavel
-    if (retornoConexao) {
-      try {
-        db
-            .collection(
-                Constantes.fireBaseColecaoUsuarios) // passando a colecao
-            .doc(uidUsuario)
-            .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-            .doc(nomeDocumentoRegiao) // passando documento
-            .get()
-            .then((querySnapshot) async {
-          // verificando cada item que esta gravado no banco de dados
-          querySnapshot.data()!.forEach(
-            (key, value) {
-              // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
-              setState(() {
-                if (ConstantesEstadosGestos.estadoAC.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoAC, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoAP.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoAP, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoAM.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoAM, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoPA.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoPA, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoRO.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoRO, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoRR.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoRR, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoTO.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoTO, value, gestos);
+    try {
+      db
+          .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+          .doc(uidUsuario)
+          .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
+          .doc(nomeDocumentoRegiao) // passando documento
+          .get()
+          .then((querySnapshot) async {
+        // verificando cada item que esta gravado no banco de dados
+        if (mounted) {
+          if (querySnapshot.data() != null) {
+            querySnapshot.data()!.forEach(
+              (key, value) {
+                // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
+                setState(() {
+                  if (ConstantesEstadosGestos.estadoAC.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoAC, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoAP.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoAP, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoAM.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoAM, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoPA.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoPA, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoRO.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoRO, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoRR.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoRR, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoTO.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoTO, value, gestos);
+                  }
+                });
+              },
+            );
+            setState(
+              () {
+                if (gestos.isEmpty) {
+                  exibirTelaProximoNivel = true;
                 }
-              });
-            },
-          );
-          setState(
-            () {
-              if (gestos.isEmpty) {
-                exibirTelaProximoNivel = true;
-              }
-              exibirTelaCarregamento = false;
-            },
-          );
-        }, onError: (e) {
-          debugPrint("ErroONN${e.toString()}");
-          validarErro(e.toString());
-        });
-      } catch (e) {
-        debugPrint("ErroN${e.toString()}");
-        validarErro(e.toString());
-      }
-    } else {
-      exibirErroConexao();
+                exibirTelaCarregamento = false;
+              },
+            );
+          } else {
+            redirecionarTelaLoginCadastro();
+          }
+        }
+      }, onError: (e) {
+        debugPrint("ErroONN${e.toString()}");
+        chamarValidarErro(e.toString());
+      }).timeout(
+        Duration(seconds: Constantes.fireBaseDuracaoTimeOut),
+        onTimeout: () {
+          chamarValidarErro(Textos.erroUsuarioSemInternet);
+          redirecionarTelaInicial();
+        },
+      );
+    } catch (e) {
+      debugPrint("Erro${e.toString()}");
+      chamarValidarErro(e.toString());
     }
   }
 
-  validarErro(String erro) {
-    if (erro.contains("An internal error has occurred")) {
-      exibirErroConexao();
-    }
+  redirecionarTelaInicial() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
   }
 
-  exibirErroConexao() {
-    if (mounted) {
-      setState(() {
-        exibirTelaCarregamento = true;
-        exibirMensagemSemConexao = true;
-        PassarPegarDados.passarTelaAtualErroConexao(
-            Constantes.rotaTelaRegiaoNorte);
-      });
-    }
+  chamarValidarErro(String erro) {
+    MetodosAuxiliares.validarErro(erro, context);
+  }
+
+  redirecionarTelaLoginCadastro() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaLoginCadastro);
   }
 
   @override
@@ -189,10 +186,10 @@ class _TelaRegiaoNorteState extends State<TelaRegiaoNorte> {
                       });
                       Timer(
                           Duration(seconds: Constantes.duracaoDelayVoltarTela),
-                              () {
-                            Navigator.pushReplacementNamed(
-                                context, Constantes.rotaTelaInicialRegioes);
-                          });
+                          () {
+                        Navigator.pushReplacementNamed(
+                            context, Constantes.rotaTelaInicialRegioes);
+                      });
                     },
                     icon: const Icon(Icons.arrow_back_ios)),
               ),

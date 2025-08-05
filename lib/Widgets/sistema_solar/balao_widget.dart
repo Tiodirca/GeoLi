@@ -169,28 +169,51 @@ class _BalaoWidgetState extends State<BalaoWidget>
               .fireBaseDocumentoPlanetasDesbloqueados) // passando documento
           .get()
           .then((querySnapshot) async {
-        querySnapshot.data()!.forEach(
-          (key, value) {
-            setState(() {
-              // percorendo a lista
-              for (var element in planetas) {
-                //verificando se o nome do elemento e igual ao nome do item na lista
-                if (element.nomePlaneta == key) {
-                  // caso for o campo do elemento vai receber o valor que esta no banco
-                  element.desbloqueado = value;
+        if (querySnapshot.data() != null) {
+          querySnapshot.data()!.forEach(
+            (key, value) {
+              setState(() {
+                // percorendo a lista
+                for (var element in planetas) {
+                  //verificando se o nome do elemento e igual ao nome do item na lista
+                  if (element.nomePlaneta == key) {
+                    // caso for o campo do elemento vai receber o valor que esta no banco
+                    element.desbloqueado = value;
+                  }
                 }
-              }
-            });
-          },
-        );
-        // chamando metodo
-        desbloquearPlaneta(widget.planeta.nomePlaneta);
+              });
+            },
+          );
+          // chamando metodo
+          desbloquearPlaneta(widget.planeta.nomePlaneta);
+        } else {
+          redirecionarTelaLoginCadastro();
+        }
       }, onError: (e) {
         debugPrint("RPON${e.toString()}");
-      });
+      }).timeout(
+        Duration(seconds: Constantes.fireBaseDuracaoTimeOut),
+        onTimeout: () {
+          chamarValidarErro(Textos.erroUsuarioSemInternet);
+          redirecionarTelaInicial();
+        },
+      );
     } catch (e) {
-      debugPrint("RP${e.toString()}");
+      debugPrint("Erro${e.toString()}");
+      chamarValidarErro(e.toString());
     }
+  }
+
+  redirecionarTelaInicial() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
+  }
+
+  chamarValidarErro(String erro) {
+    MetodosAuxiliares.validarErro(erro, context);
+  }
+
+  redirecionarTelaLoginCadastro() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaLoginCadastro);
   }
 
   atualizarPontuacaoTutorial() async {
@@ -206,9 +229,16 @@ class _BalaoWidgetState extends State<BalaoWidget>
               .fireBaseDocumentoPontosJogadaSistemaSolar) //passando o documento
           .set({Constantes.pontosJogada: 1}).then((value) {}, onError: (e) {
         debugPrint("ATPONB${e.toString()}");
-      });
+      }).timeout(
+        Duration(seconds: Constantes.fireBaseDuracaoTimeOut),
+        onTimeout: () {
+          chamarValidarErro(Textos.erroUsuarioSemInternet);
+          redirecionarTelaInicial();
+        },
+      );
     } catch (e) {
-      debugPrint("ATPB${e.toString()}");
+      debugPrint("Erro${e.toString()}");
+      chamarValidarErro(e.toString());
     }
   }
 

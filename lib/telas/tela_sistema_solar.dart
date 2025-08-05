@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:geoli/Modelos/emblemas.dart';
 import 'package:geoli/Modelos/gestos.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
+import 'package:geoli/Uteis/validar_tamanho_itens_tela.dart';
 import 'package:geoli/Uteis/variaveis_constantes/constantes.dart';
 import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
@@ -22,7 +23,6 @@ import 'package:geoli/Widgets/tela_carregamento_widget.dart';
 import 'package:geoli/Widgets/widget_exibir_emblemas.dart';
 import 'package:geoli/Widgets/widget_tela_resetar_dados.dart';
 import 'package:geoli/modelos/planeta.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 class TelaSistemaSolar extends StatefulWidget {
   const TelaSistemaSolar({super.key});
@@ -140,22 +140,20 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   // metodo para recuperar a pontuacao
   recuperarPontuacao() async {
     var db = FirebaseFirestore.instance;
-    bool retornoConexao = await InternetConnection().hasInternetAccess;
-    if (retornoConexao) {
-      try {
-        db
-            .collection(
-                Constantes.fireBaseColecaoUsuarios) // passando a colecao
-            .doc(uidUsuario)
-            .collection(
-                Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
-            .doc(Constantes
-                .fireBaseDocumentoPontosJogadaSistemaSolar) // passando documento
-            .get()
-            .then((querySnapshot) async {
+    try {
+      db
+          .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+          .doc(uidUsuario)
+          .collection(
+              Constantes.fireBaseColecaoSistemaSolar) // passando a colecao
+          .doc(Constantes
+              .fireBaseDocumentoPontosJogadaSistemaSolar) // passando documento
+          .get()
+          .then((querySnapshot) async {
+        if (querySnapshot.data() != null) {
           querySnapshot.data()!.forEach(
             (key, value) {
-              if(mounted){
+              if (mounted) {
                 setState(() {
                   pontuacaoTotal = value;
                   //Passando pontuacao para
@@ -167,34 +165,35 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
               }
             },
           );
-        }, onError: (e) {
-          debugPrint("RPSON${e.toString()}");
-          validarErro(e.toString());
-        });
-      } catch (e) {
-        debugPrint("RPS${e.toString()}");
-        validarErro(e.toString());
-      }
-    } else {
-      exibirErroConexao();
+        } else {
+          redirecionarTelaLoginCadastro();
+        }
+      }, onError: (e) {
+        debugPrint("RPSON${e.toString()}");
+        chamarValidarErro(e.toString());
+      }).timeout(
+        Duration(seconds: Constantes.fireBaseDuracaoTimeOutTelaProximoNivel),
+        onTimeout: () {
+          chamarValidarErro(Textos.erroUsuarioSemInternet);
+          redirecionarTelaInicial();
+        },
+      );
+    } catch (e) {
+      debugPrint("Erro${e.toString()}");
+      chamarValidarErro(e.toString());
     }
   }
 
-  exibirErroConexao() {
-    if (mounted) {
-      setState(() {
-        exibirTelaCarregamento = true;
-        exibirMensagemSemConexao = true;
-        PassarPegarDados.passarTelaAtualErroConexao(
-            Constantes.rotaTelaSistemaSolar);
-      });
-    }
+  redirecionarTelaInicial() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
   }
 
-  validarErro(String erro) {
-    if (erro.contains("An internal error has occurred")) {
-      exibirErroConexao();
-    }
+  chamarValidarErro(String erro) {
+    MetodosAuxiliares.validarErro(erro, context);
+  }
+
+  redirecionarTelaLoginCadastro() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaLoginCadastro);
   }
 
   //atualizar pontuacao no banco de dados
@@ -212,10 +211,18 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
               .fireBaseDocumentoPontosJogadaSistemaSolar) //passando o documento
           .set({Constantes.pontosJogada: pontuacaoTotal}).then((value) {},
               onError: (e) {
+        chamarValidarErro(e.toString());
         debugPrint("ATPONSS${e.toString()}");
-      });
+      }).timeout(
+        Duration(seconds: Constantes.fireBaseDuracaoTimeOutTelaProximoNivel),
+        onTimeout: () {
+          chamarValidarErro(Textos.erroUsuarioSemInternet);
+          redirecionarTelaInicial();
+        },
+      );
     } catch (e) {
-      debugPrint("ATPSS${e.toString()}");
+      debugPrint("Erro${e.toString()}");
+      chamarValidarErro(e.toString());
     }
   }
 
@@ -359,23 +366,6 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
           ),
         ),
       );
-
-  tamanhoAreaPlanetaSorteado(double larguraTela) {
-    double tamanho = 200.0;
-    //verificando qual o tamanho da tela
-    if (larguraTela <= 400) {
-      tamanho = 250.0;
-    } else if (larguraTela > 400 && larguraTela <= 800) {
-      tamanho = 250.0;
-    } else if (larguraTela > 800 && larguraTela <= 1100) {
-      tamanho = 300.0;
-    } else if (larguraTela > 1100 && larguraTela <= 1300) {
-      tamanho = 350.0;
-    } else if (larguraTela > 1300) {
-      tamanho = 400.0;
-    }
-    return tamanho;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -681,7 +671,8 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                     );
                   } else {
                     if (exibirJogo) {
-                      return areaSorteioPlaneta(tamanhoAreaPlanetaSorteado(larguraTela));
+                      return areaSorteioPlaneta(ValidarTamanhoItensTela
+                          .tamanhoAreaPlanetaSorteadoSistemaSolar(larguraTela));
                     } else {
                       return WidgetExibirEmblemas(
                           pontuacaoAtual: pontuacaoTotal,

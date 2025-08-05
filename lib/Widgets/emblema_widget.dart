@@ -21,8 +21,8 @@ class EmblemaWidget extends StatelessWidget {
       return 40.0;
     }
   }
+  @override
   Widget build(BuildContext context) {
-    double larguraTela = MediaQuery.of(context).size.width;
     return SizedBox(
       height: 50,
       child: SingleChildScrollView(

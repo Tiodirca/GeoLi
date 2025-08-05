@@ -12,7 +12,6 @@ import 'package:geoli/Uteis/variaveis_constantes/constantes_estados_gestos.dart'
 import 'package:geoli/Widgets/estados/area_tela_regioes_widget.dart';
 import 'package:geoli/Widgets/estados/widget_area_gestos_arrastar.dart';
 import 'package:geoli/Widgets/tela_carregamento_widget.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 import '../../Uteis/textos.dart';
 
@@ -85,143 +84,144 @@ class _TelaTodasRegioesState extends State<TelaTodasRegioes> {
   }
 
   realizarBuscaDadosFireBase(String nomeDocumentoRegiao) async {
-    bool retornoConexao = await InternetConnection().hasInternetAccess;
     var db = FirebaseFirestore.instance;
     //instanciano variavel
-    if (retornoConexao) {
-      try {
-        db
-            .collection(
-                Constantes.fireBaseColecaoUsuarios) // passando a colecao
-            .doc(uidUsuario)
-            .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
-            .doc(nomeDocumentoRegiao) // passando documento
-            .get()
-            .then((querySnapshot) async {
-          // verificando cada item que esta gravado no banco de dados
-          querySnapshot.data()!.forEach(
-            (key, value) {
-              // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
-              setState(() {
-                if (ConstantesEstadosGestos.estadoMT.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoMT, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoMS.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoMS, value, gestos);
-                  ConstantesEstadosGestos.estadoMS.acerto = value;
-                } else if (ConstantesEstadosGestos.estadoGO.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoGO, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoSC.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoSC, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoRS.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoRS, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoPR.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoPR, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoRJ.nome == key) {
-                  gestos = MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoRJ, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoSP.nome == key) {
-                  gestos = MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoSP, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoES.nome == key) {
-                  gestos = MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoES, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoMG.nome == key) {
-                  gestos = MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoMG, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoAC.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoAC, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoAP.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoAP, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoAM.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoAM, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoPA.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoPA, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoRO.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoRO, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoRR.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoRR, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoTO.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoTO, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoAL.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoAL, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoBA.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoBA, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoCE.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoCE, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoMA.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoMA, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoPB.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoPB, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoPE.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoPE, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoPI.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoPI, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoRN.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoRN, value, gestos);
-                } else if (ConstantesEstadosGestos.estadoSE.nome == key) {
-                  MetodosAuxiliares.removerGestoLista(
-                      ConstantesEstadosGestos.estadoSE, value, gestos);
+    try {
+      db
+          .collection(Constantes.fireBaseColecaoUsuarios) // passando a colecao
+          .doc(uidUsuario)
+          .collection(Constantes.fireBaseColecaoRegioes) // passando a colecao
+          .doc(nomeDocumentoRegiao) // passando documento
+          .get()
+          .then((querySnapshot) async {
+        // verificando cada item que esta gravado no banco de dados
+        if (mounted) {
+          if (querySnapshot.data() != null) {
+            querySnapshot.data()!.forEach(
+              (key, value) {
+                // caso o valor da CHAVE for o mesmo que o nome do ESTADO entrar na condicao
+                setState(() {
+                  if (ConstantesEstadosGestos.estadoMT.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoMT, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoMS.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoMS, value, gestos);
+                    ConstantesEstadosGestos.estadoMS.acerto = value;
+                  } else if (ConstantesEstadosGestos.estadoGO.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoGO, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoSC.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoSC, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoRS.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoRS, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoPR.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoPR, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoRJ.nome == key) {
+                    gestos = MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoRJ, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoSP.nome == key) {
+                    gestos = MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoSP, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoES.nome == key) {
+                    gestos = MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoES, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoMG.nome == key) {
+                    gestos = MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoMG, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoAC.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoAC, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoAP.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoAP, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoAM.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoAM, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoPA.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoPA, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoRO.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoRO, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoRR.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoRR, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoTO.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoTO, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoAL.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoAL, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoBA.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoBA, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoCE.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoCE, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoMA.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoMA, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoPB.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoPB, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoPE.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoPE, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoPI.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoPI, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoRN.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoRN, value, gestos);
+                  } else if (ConstantesEstadosGestos.estadoSE.nome == key) {
+                    MetodosAuxiliares.removerGestoLista(
+                        ConstantesEstadosGestos.estadoSE, value, gestos);
+                  }
+                });
+              },
+            );
+            setState(
+              () {
+                if (gestos.isEmpty) {
+                  exibirTelaProximoNivel = true;
                 }
-              });
-            },
-          );
-          setState(
-            () {
-              if (gestos.isEmpty) {
-                exibirTelaProximoNivel = true;
-              }
-              exibirTelaCarregamento = false;
-            },
-          );
-        }, onError: (e) {
-          debugPrint("ErroONT${e.toString()}");
-          validarErro(e.toString());
-        });
-      } catch (e) {
-        debugPrint("ErroT${e.toString()}");
-        validarErro(e.toString());
-      }
-    } else {
-      exibirErroConexao();
+                exibirTelaCarregamento = false;
+              },
+            );
+          } else {
+            redirecionarTelaLoginCadastro();
+          }
+        }
+      }, onError: (e) {
+        debugPrint("ErroONT${e.toString()}");
+        chamarValidarErro(e.toString());
+      }).timeout(
+        Duration(seconds: Constantes.fireBaseDuracaoTimeOut),
+        onTimeout: () {
+          chamarValidarErro(Textos.erroUsuarioSemInternet);
+          redirecionarTelaInicial();
+        },
+      );
+    } catch (e) {
+      debugPrint("Erro${e.toString()}");
+      chamarValidarErro(e.toString());
     }
   }
 
-  validarErro(String erro) {
-    if (erro.contains("An internal error has occurred")) {
-      exibirErroConexao();
-    }
+  redirecionarTelaInicial() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaInicial);
   }
 
-  exibirErroConexao() {
-    if (mounted) {
-      setState(() {
-        exibirTelaCarregamento = true;
-        exibirMensagemSemConexao = true;
-        PassarPegarDados.passarTelaAtualErroConexao(
-            Constantes.rotaTelaRegiaoTodosEstados);
-      });
-    }
+  chamarValidarErro(String erro) {
+    MetodosAuxiliares.validarErro(erro, context);
+  }
+
+  redirecionarTelaLoginCadastro() {
+    Navigator.pushReplacementNamed(context, Constantes.rotaTelaLoginCadastro);
   }
 
   @override
@@ -252,10 +252,10 @@ class _TelaTodasRegioesState extends State<TelaTodasRegioes> {
                       });
                       Timer(
                           Duration(seconds: Constantes.duracaoDelayVoltarTela),
-                              () {
-                            Navigator.pushReplacementNamed(
-                                context, Constantes.rotaTelaInicialRegioes);
-                          });
+                          () {
+                        Navigator.pushReplacementNamed(
+                            context, Constantes.rotaTelaInicialRegioes);
+                      });
                     },
                     icon: const Icon(Icons.arrow_back_ios)),
               ),
