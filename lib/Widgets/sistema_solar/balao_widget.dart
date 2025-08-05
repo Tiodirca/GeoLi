@@ -111,9 +111,11 @@ class _BalaoWidgetState extends State<BalaoWidget>
           exibirAnimacaoExplosao = true;
         });
         Timer(const Duration(seconds: 1), () {
-          setState(() {
-            exibirAnimacaoExplosao = false;
-          });
+          if (mounted) {
+            setState(() {
+              exibirAnimacaoExplosao = false;
+            });
+          }
         });
         PassarPegarDados.confirmarAcerto(Constantes.msgAcerto);
         recuperarPlanetasDesbloqueados();
