@@ -1,6 +1,6 @@
 class Textos {
   //BOTOES
-  static String versaoAppNumero = "1.2.8";
+  static String versaoAppNumero = "1.2.9";
   static String versaoAppDescricao = "Versão : ";
   static String btnComecarJogo = "Começar";
   static String btnJogarNovamente = "Jogar Novamente";
