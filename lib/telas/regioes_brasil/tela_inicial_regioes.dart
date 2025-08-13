@@ -57,6 +57,15 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
   late String uidUsuario;
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    if (mounted) {
+      PassarPegarDados.passarOcultarTelaEmblemas(false);
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
     recuperarUIDUsuario();
@@ -251,6 +260,22 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
         ),
       );
 
+  verificarOcultarTelaResetarJogo() async {
+    Timer(Duration(seconds: 2), () async {
+      bool retorno = await PassarPegarDados.recuperarOcultarTelaEmblemas();
+      if (retorno == false) {
+        if (mounted) {
+          setState(() {
+            exibirTelaResetarJogo = false;
+            verificarOcultarTelaResetarJogo();
+          });
+        }
+      } else {
+        verificarOcultarTelaResetarJogo();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;
@@ -266,6 +291,7 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
             corPadrao: ConstantesEstadosGestos.corPadraoRegioes,
           );
         } else {
+          verificarOcultarTelaResetarJogo();
           return Scaffold(
             appBar: AppBar(
               backgroundColor: ConstantesEstadosGestos.corPadraoRegioes,
@@ -298,6 +324,8 @@ class _TelaInicialRegioesState extends State<TelaInicialRegioes> {
                     onPressed: () {
                       setState(() {
                         exibirTelaResetarJogo = !exibirTelaResetarJogo;
+                        PassarPegarDados.passarOcultarTelaEmblemas(
+                            exibirTelaResetarJogo);
                       });
                     },
                     child: Icon(

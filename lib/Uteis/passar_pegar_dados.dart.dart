@@ -1,6 +1,6 @@
 class PassarPegarDados {
   static Map informacoesUsuario = {};
-
+  static bool ocultarTelaEmblemas = false;
   static String acertou = "";
   static String nomeGestoPlaneta = "";
   static int pontuacaoAtual = 0;
@@ -63,5 +63,14 @@ class PassarPegarDados {
 
   static Future<String> recuperarGestoSorteado() async {
     return nomeGestoPlaneta;
+  }
+
+  static Future<bool> passarOcultarTelaEmblemas(bool ocultar) async {
+    ocultarTelaEmblemas = ocultar;
+    return ocultarTelaEmblemas;
+  }
+
+  static Future<bool> recuperarOcultarTelaEmblemas() async {
+    return ocultarTelaEmblemas;
   }
 }

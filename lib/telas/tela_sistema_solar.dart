@@ -56,6 +56,14 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
   bool exibirMensagemSemConexao = false;
 
   @override
+  void dispose() {
+    super.dispose();
+    if (mounted) {
+      PassarPegarDados.passarOcultarTelaEmblemas(false);
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
     planetas = ConstantesSistemaSolar.adicinarPlanetas();
@@ -281,6 +289,8 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
             setState(() {
               if (nomeBtn == Textos.btnComecarJogo) {
                 exibirBtnDificuldade = true;
+                PassarPegarDados.passarOcultarTelaEmblemas(
+                    true);
                 if (pontuacaoTotal == 0) {
                   exibirTutorial = true;
                   PassarPegarDados.passarStatusTutorial(
@@ -367,6 +377,24 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
         ),
       );
 
+  verificarOcultarTelaResetarJogo() async {
+    Timer(Duration(seconds: 2), () async {
+      if(!exibirJogo){
+        bool retorno = await PassarPegarDados.recuperarOcultarTelaEmblemas();
+        if (retorno == false) {
+          if (mounted) {
+            setState(() {
+              exibirTelaResetarJogo = false;
+              verificarOcultarTelaResetarJogo();
+            });
+          }
+        } else {
+          verificarOcultarTelaResetarJogo();
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;
@@ -383,6 +411,7 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
             corPadrao: corPadrao,
           );
         } else {
+          verificarOcultarTelaResetarJogo();
           return Scaffold(
               key: _scaffoldKey,
               appBar: AppBar(
@@ -530,6 +559,8 @@ class _TelaSistemaSolarState extends State<TelaSistemaSolar>
                             onPressed: () {
                               setState(() {
                                 exibirTelaResetarJogo = !exibirTelaResetarJogo;
+                                PassarPegarDados.passarOcultarTelaEmblemas(
+                                    exibirTelaResetarJogo);
                               });
                             },
                             child: Icon(

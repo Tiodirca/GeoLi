@@ -63,7 +63,6 @@ class _WidgetAreaAnimacaoBaloesState extends State<WidgetAreaAnimacaoBaloes>
   bool exibirTelaFimJogo = false;
   bool desativarToqueBalao = false;
 
-  double distacia01 = 0.0;
 
   Widget baloes(double tamanhoTela, double distacia,
           AnimationController controle, int indexPlaneta, String nome) =>

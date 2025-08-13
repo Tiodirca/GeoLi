@@ -41,6 +41,14 @@ class _TelaInicialState extends State<TelaInicial>
   bool exibirMensagemSemConexao = false;
 
   @override
+  void dispose() {
+    super.dispose();
+    if (mounted) {
+      PassarPegarDados.passarOcultarTelaEmblemas(false);
+    }
+  }
+
+  @override
   void initState() {
     super.initState();
     emblemasGeral.addAll([
@@ -258,6 +266,22 @@ class _TelaInicialState extends State<TelaInicial>
     Navigator.pushReplacementNamed(context, Constantes.rotaTelaLoginCadastro);
   }
 
+  verificarOcultarTelaResetarJogo() async {
+    Timer(Duration(seconds: 2), () async {
+      bool retorno = await PassarPegarDados.recuperarOcultarTelaEmblemas();
+      if (retorno == false) {
+        if (mounted) {
+          setState(() {
+            exibirTelaResetarJogo = false;
+            verificarOcultarTelaResetarJogo();
+          });
+        }
+      } else {
+        verificarOcultarTelaResetarJogo();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;
@@ -277,6 +301,7 @@ class _TelaInicialState extends State<TelaInicial>
             corPadrao: corPadrao,
           );
         } else {
+          verificarOcultarTelaResetarJogo();
           return Scaffold(
               appBar: AppBar(
                 leading: Container(),
@@ -304,10 +329,10 @@ class _TelaInicialState extends State<TelaInicial>
                               borderSide:
                                   BorderSide(width: 1, color: Colors.black)),
                           onPressed: () async {
-                            // await FirebaseAuth.instance.signOut();
-                            // redirecionarTelaLoginCadastro();
                             setState(() {
                               exibirTelaResetarJogo = !exibirTelaResetarJogo;
+                              PassarPegarDados.passarOcultarTelaEmblemas(
+                                  exibirTelaResetarJogo);
                             });
                           },
                           child: Icon(

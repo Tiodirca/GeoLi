@@ -1,10 +1,10 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:geoli/Modelos/emblemas.dart';
 import 'package:geoli/Uteis/caminho_imagens.dart';
-import 'package:geoli/Uteis/metodos_auxiliares.dart';
 import 'package:geoli/Uteis/paleta_cores.dart';
 import 'package:geoli/Uteis/passar_pegar_dados.dart.dart';
 import 'package:geoli/Uteis/textos.dart';
@@ -81,6 +81,7 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
                 onPressed: () {
                   setState(() {
                     exibirTela = true;
+                    PassarPegarDados.passarOcultarTelaEmblemas(false);
                     //definindo Delay para evitar dar erro de tamanho
                     Future.delayed(Duration(seconds: 1)).then(
                       (value) {
@@ -145,6 +146,20 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
     } else if (largula > 1000) {
       return 170.0;
     }
+  }
+
+  verificarOcultarTelaEmblemas() async {
+    Timer(Duration(seconds: 1), () async {
+      bool retorno = await PassarPegarDados.recuperarOcultarTelaEmblemas();
+      if (retorno) {
+        if (mounted) {
+          setState(() {
+            exibirTela = false;
+            exibirAreaInternaTela = false;
+          });
+        }
+      }
+    });
   }
 
   @override
@@ -249,6 +264,7 @@ class _WidgetExibirEmblemasState extends State<WidgetExibirEmblemas> {
                         height: alturaTela * 0.5,
                         child: LayoutBuilder(
                           builder: (context, constraints) {
+                            verificarOcultarTelaEmblemas();
                             if (exibirMapaRegioes) {
                               return MapaRegioesWidget();
                             }
