@@ -255,80 +255,80 @@ class _WidgetAreaAnimacaoBaloesState extends State<WidgetAreaAnimacaoBaloes>
       baloes(alturaTela, 400, _controller5, 4, "5f"),
       baloes(alturaTela, 500, _controller6, 5, "6f"),
       //segunda coluna
-      baloes(alturaTela, 0, _controller7, 6, "7"),
-      baloes(alturaTela, 100, _controller8, 7, "8"),
-      baloes(alturaTela, 200, _controller9, 0, "9"),
-      baloes(alturaTela, 300, _controller10, 1, "10"),
-      baloes(alturaTela, 400, _controller11, 2, "11"),
-      baloes(alturaTela, 500, _controller12, 3, "12"),
-      baloes(alturaTela, 100, _controller13, 4, "13"),
-      baloes(alturaTela, 300, _controller14, 5, "14"),
-      baloes(alturaTela, 500, _controller13, 6, "13s"),
+      baloes(alturaTela, 0, _controller7, 6, "7f"),
+      baloes(alturaTela, 100, _controller8, 7, "8f"),
+      baloes(alturaTela, 200, _controller9, 0, "9f"),
+      baloes(alturaTela, 300, _controller10, 1, "10f"),
+      baloes(alturaTela, 400, _controller11, 2, "11f"),
+      baloes(alturaTela, 500, _controller12, 3, "12f"),
+      baloes(alturaTela, 100, _controller13, 4, "13f"),
+      baloes(alturaTela, 300, _controller14, 5, "14f"),
+      baloes(alturaTela, 500, _controller13, 6, "13f"),
     ],
   );
 
   Widget exibicaoTablet(double alturaTela) => Stack(
         children: [
           //primeira coluna
-          baloes(alturaTela, 0, _controller, 0, "1"),
-          baloes(alturaTela, 100, _controller2, 1, "2"),
-          baloes(alturaTela, 200, _controller3, 2, "3"),
-          baloes(alturaTela, 300, _controller4, 3, "4"),
-          baloes(alturaTela, 400, _controller5, 4, "5"),
-          baloes(alturaTela, 500, _controller6, 5, "6"),
+          baloes(alturaTela, 0, _controller, 0, "1v"),
+          baloes(alturaTela, 100, _controller2, 1, "2v"),
+          baloes(alturaTela, 200, _controller3, 2, "3v"),
+          baloes(alturaTela, 300, _controller4, 3, "4v"),
+          baloes(alturaTela, 400, _controller5, 4, "5v"),
+          baloes(alturaTela, 500, _controller6, 5, "6v"),
           //segunda coluna
-          baloes(alturaTela, 0, _controller7, 6, "7"),
-          baloes(alturaTela, 100, _controller8, 7, "8"),
-          baloes(alturaTela, 200, _controller9, 0, "9"),
-          baloes(alturaTela, 300, _controller10, 1, "10"),
-          baloes(alturaTela, 400, _controller11, 2, "11"),
-          baloes(alturaTela, 500, _controller12, 3, "12"),
-          baloes(alturaTela, 100, _controller13, 4, "13"),
-          baloes(alturaTela, 300, _controller14, 5, "14"),
-          baloes(alturaTela, 500, _controller13, 6, "13s"),
+          baloes(alturaTela, 0, _controller7, 6, "7v"),
+          baloes(alturaTela, 100, _controller8, 7, "8v"),
+          baloes(alturaTela, 200, _controller9, 0, "9v"),
+          baloes(alturaTela, 300, _controller10, 1, "10v"),
+          baloes(alturaTela, 400, _controller11, 2, "11v"),
+          baloes(alturaTela, 500, _controller12, 3, "12v"),
+          baloes(alturaTela, 100, _controller13, 4, "13v"),
+          baloes(alturaTela, 300, _controller14, 5, "14v"),
+          baloes(alturaTela, 500, _controller13, 6, "13v"),
 
-          baloes(alturaTela, 600, _controller, 7, "1s"),
-          baloes(alturaTela, 700, _controller2, 0, "2s"),
-          baloes(alturaTela, 600, _controller7, 1, "7s"),
-          baloes(alturaTela, 700, _controller8, 2, "8s"),
+          baloes(alturaTela, 600, _controller, 7, "1v"),
+          baloes(alturaTela, 700, _controller2, 0, "2v"),
+          baloes(alturaTela, 600, _controller7, 1, "7v"),
+          baloes(alturaTela, 700, _controller8, 2, "8v"),
         ],
       );
 
   Widget exibicaoExibicaoDesktop(double alturaTela) => Stack(
     children: [
       //primeira coluna
-      baloes(alturaTela, 0, _controller, 0, "1"),
-      baloes(alturaTela, 150, _controller2, 1, "2"),
-      baloes(alturaTela, 300, _controller3, 2, "3"),
-      baloes(alturaTela, 450, _controller4, 3, "4"),
-      baloes(alturaTela, 600, _controller5, 4, "5"),
-      baloes(alturaTela, 750, _controller6, 5, "6"),
+      baloes(alturaTela, 0, _controller, 0, "1d"),
+      baloes(alturaTela, 150, _controller2, 1, "2d"),
+      baloes(alturaTela, 300, _controller3, 2, "3d"),
+      baloes(alturaTela, 450, _controller4, 3, "4d"),
+      baloes(alturaTela, 600, _controller5, 4, "5d"),
+      baloes(alturaTela, 750, _controller6, 5, "6d"),
       //segunda coluna
-      baloes(alturaTela, 0, _controller7, 6, "7"),
-      baloes(alturaTela, 150, _controller8, 7, "8"),
-      baloes(alturaTela, 300, _controller9, 0, "9"),
-      baloes(alturaTela, 450, _controller10, 1, "10"),
-      baloes(alturaTela, 600, _controller11, 2, "11"),
-      baloes(alturaTela, 750, _controller12, 3, "12"),
-      baloes(alturaTela, 150, _controller13, 4, "13"),
-      baloes(alturaTela, 450, _controller14, 5, "14"),
+      baloes(alturaTela, 0, _controller7, 6, "7d"),
+      baloes(alturaTela, 150, _controller8, 7, "8d"),
+      baloes(alturaTela, 300, _controller9, 0, "9d"),
+      baloes(alturaTela, 450, _controller10, 1, "10d"),
+      baloes(alturaTela, 600, _controller11, 2, "11d"),
+      baloes(alturaTela, 750, _controller12, 3, "12d"),
+      baloes(alturaTela, 150, _controller13, 4, "13d"),
+      baloes(alturaTela, 450, _controller14, 5, "14d"),
 
       //primeira coluna
-      baloes(alturaTela, 900, _controller, 0, "1"),
-      baloes(alturaTela, 1050, _controller2, 1, "2"),
-      baloes(alturaTela, 1300, _controller3, 2, "3"),
-      baloes(alturaTela, 1450, _controller4, 3, "4"),
-      baloes(alturaTela, 1600, _controller5, 4, "5"),
-      baloes(alturaTela, 1750, _controller6, 5, "6"),
+      baloes(alturaTela, 900, _controller, 0, "1d"),
+      baloes(alturaTela, 1050, _controller2, 1, "2d"),
+      baloes(alturaTela, 1300, _controller3, 2, "3d"),
+      baloes(alturaTela, 1450, _controller4, 3, "4d"),
+      baloes(alturaTela, 1600, _controller5, 4, "5d"),
+      baloes(alturaTela, 1750, _controller6, 5, "6d"),
       //segunda coluna
-      baloes(alturaTela, 900, _controller7, 6, "7"),
-      baloes(alturaTela, 1050, _controller8, 7, "8"),
-      baloes(alturaTela, 1300, _controller9, 0, "9"),
-      baloes(alturaTela, 1450, _controller10, 1, "10"),
-      baloes(alturaTela, 1600, _controller11, 2, "11"),
-      baloes(alturaTela, 1750, _controller12, 3, "12"),
-      baloes(alturaTela, 1150, _controller13, 4, "13"),
-      baloes(alturaTela, 1450, _controller14, 5, "14"),
+      baloes(alturaTela, 900, _controller7, 6, "7d"),
+      baloes(alturaTela, 1050, _controller8, 7, "8d"),
+      baloes(alturaTela, 1300, _controller9, 0, "9d"),
+      baloes(alturaTela, 1450, _controller10, 1, "10d"),
+      baloes(alturaTela, 1600, _controller11, 2, "11d"),
+      baloes(alturaTela, 1750, _controller12, 3, "12d"),
+      baloes(alturaTela, 1150, _controller13, 4, "13d"),
+      baloes(alturaTela, 1450, _controller14, 5, "14d"),
     ],
   );
 
@@ -346,11 +346,11 @@ class _WidgetAreaAnimacaoBaloesState extends State<WidgetAreaAnimacaoBaloes>
         children: [
           LayoutBuilder(
             builder: (context, constraints) {
-              if (larguraTela <= 400) {
+              if (larguraTela <= 450) {
                 return exibicaoBaloesMobile(alturaTela);
-              } else if (larguraTela > 400 && larguraTela <= 600) {
+              } else if (larguraTela > 450 && larguraTela <= 700) {
                 return exibicaoFold(alturaTela);
-              } else if (larguraTela > 600 && larguraTela <= 800) {
+              } else if (larguraTela > 700 && larguraTela <= 900) {
                 return exibicaoTablet(alturaTela);
               } else {
                 return exibicaoExibicaoDesktop(alturaTela);

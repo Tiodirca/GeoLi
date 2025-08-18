@@ -24,9 +24,9 @@ class AreaTelaRegioesWidget extends StatelessWidget {
   quantidadeColunasGridView(double larguraTela) {
     int tamanho = 5;
     //verificando qual o tamanho da tela
-    if (larguraTela <= 400.0) {
+    if (larguraTela <= 450.0) {
       tamanho = 2;
-    } else if (larguraTela > 400.0 && larguraTela <= 800.0) {
+    } else if (larguraTela > 450.0 && larguraTela <= 800.0) {
       tamanho = 3;
     } else if (larguraTela > 800.0 && larguraTela <= 1100.0) {
       tamanho = 5;
