@@ -41,50 +41,46 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyA2OeU2MaCnPBvxlvVCcV5214LdzC9XuIw',
-    appId: '1:343904983445:web:eb241f4457298d2a66be9c',
-    messagingSenderId: '343904983445',
-    projectId: 'geolibackend',
-    authDomain: 'geolibackend.firebaseapp.com',
-    storageBucket: 'geolibackend.firebasestorage.app',
-    measurementId: 'G-YYLK8Q9RBG',
+    apiKey: 'AIzaSyDbC8YGIvy_E-wgzsPVzq8iYVa2XCq7c2g',
+    appId: '1:249614335655:web:cffc444347d55d72f7a582',
+    messagingSenderId: '249614335655',
+    projectId: 'geoli-f398c',
+    authDomain: 'geoli-f398c.firebaseapp.com',
+    storageBucket: 'geoli-f398c.firebasestorage.app',
+    measurementId: 'G-3M8VHYHCKZ',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCVCsHy2CG9Kwh6jAxujK9Wvr2In1PFGKw',
-    appId: '1:343904983445:android:4e51233192493d6566be9c',
-    messagingSenderId: '343904983445',
-    projectId: 'geolibackend',
-    storageBucket: 'geolibackend.firebasestorage.app',
+    apiKey: 'AIzaSyDH03hhNQ19X1mqXPkyrPyKZjNo3nA_vzY',
+    appId: '1:249614335655:android:a25666a70deaf502f7a582',
+    messagingSenderId: '249614335655',
+    projectId: 'geoli-f398c',
+    storageBucket: 'geoli-f398c.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAtcNtHw7W-rvvmknWR-42NHSOmmQ9bEmo',
-    appId: '1:343904983445:ios:838fa88d88eb510766be9c',
-    messagingSenderId: '343904983445',
-    projectId: 'geolibackend',
-    storageBucket: 'geolibackend.firebasestorage.app',
-    iosClientId: '343904983445-3bvvin2n9maiag48oh1gh23e39uqsajj.apps.googleusercontent.com',
+    apiKey: 'AIzaSyC8viHhtjJElIiidpSR5LYs8P1iqikpoT4',
+    appId: '1:249614335655:ios:e018d937db4b399ef7a582',
+    messagingSenderId: '249614335655',
+    projectId: 'geoli-f398c',
+    storageBucket: 'geoli-f398c.firebasestorage.app',
     iosBundleId: 'com.example.geoli',
   );
-
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyAtcNtHw7W-rvvmknWR-42NHSOmmQ9bEmo',
-    appId: '1:343904983445:ios:838fa88d88eb510766be9c',
-    messagingSenderId: '343904983445',
-    projectId: 'geolibackend',
-    storageBucket: 'geolibackend.firebasestorage.app',
-    iosClientId: '343904983445-3bvvin2n9maiag48oh1gh23e39uqsajj.apps.googleusercontent.com',
+    apiKey: 'AIzaSyC8viHhtjJElIiidpSR5LYs8P1iqikpoT4',
+    appId: '1:249614335655:ios:e018d937db4b399ef7a582',
+    messagingSenderId: '249614335655',
+    projectId: 'geoli-f398c',
+    storageBucket: 'geoli-f398c.firebasestorage.app',
     iosBundleId: 'com.example.geoli',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyA2OeU2MaCnPBvxlvVCcV5214LdzC9XuIw',
-    appId: '1:343904983445:web:2e3d2c76b2fc278766be9c',
-    messagingSenderId: '343904983445',
-    projectId: 'geolibackend',
-    authDomain: 'geolibackend.firebaseapp.com',
-    storageBucket: 'geolibackend.firebasestorage.app',
-    measurementId: 'G-TSKC6GM4X4',
+    apiKey: 'AIzaSyDbC8YGIvy_E-wgzsPVzq8iYVa2XCq7c2g',
+    appId: '1:249614335655:web:29572aea375cee77f7a582',
+    messagingSenderId: '249614335655',
+    projectId: 'geoli-f398c',
+    authDomain: 'geoli-f398c.firebaseapp.com',
+    storageBucket: 'geoli-f398c.firebasestorage.app',
+    measurementId: 'G-DBQC7RX9X9',
   );
 }
